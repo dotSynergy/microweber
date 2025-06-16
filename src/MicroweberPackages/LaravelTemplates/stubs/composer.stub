@@ -8,6 +8,7 @@
             "email": "$AUTHOR_EMAIL$"
         }
     ],
+    "target-dir" : "$STUDLY_NAME$",
     "extra": {
         "laravel": {
             "providers": [],

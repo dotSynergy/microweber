@@ -16,6 +16,12 @@
         >
 
             <div class="modules-list modules-list-defaultModules py-3">
+                <button type="button" class="close-modal-button" @click="showModal = false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
 
                 <div class="modules-list-search-block input-icon px-3 mx-md-3 position-relative">
                     <span class="input-icon-addon me-5 " style="position: absolute; z-index: 10; left: 10px; margin-right: auto; justify-content: start;">
@@ -312,6 +318,30 @@ export default {
 }
 </script>
 
+<style>
+.close-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
 
+.close-modal-button:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.modules-list {
+    position: relative;
+}
+</style>
 
 

@@ -335,8 +335,14 @@ export default {
     transition: background-color 0.2s;
 }
 
+
+
 .close-modal-button:hover {
     background-color: rgba(0,0,0,0.1);
+}
+
+.modules-list {
+    padding-top: 40px;
 }
 
 .modules-list {

@@ -32,40 +32,38 @@ description: Modern slider with rounded corners and left-aligned content
                         @if(isset($slide->settings['imageBackgroundFilter']))
                             @switch($slide->settings['imageBackgroundFilter'])
                                 @case('blur')
-filter: blur(5px);
-                        @break
-                    @case('mediumBlur')
-filter: blur(10px);
-                        @break
-                    @case('maxBlur')
-filter: blur(20px);
-                        @break
-                    @case('grayscale')
-filter: grayscale(100%);
-                        @break
-                    @case('hue-rotate')
-filter: hue-rotate(180deg);
-                        @break
-                    @case('invert')
-filter: invert(100%);
-                        @break
-                    @case('sepia')
-filter: sepia(100%);
-                    @break
-                @endswitch
-                @endif
-}
+                                filter: blur(5px);
+                                                        @break
+                                                    @case('mediumBlur')
+                                filter: blur(10px);
+                                                        @break
+                                                    @case('maxBlur')
+                                filter: blur(20px);
+                                                        @break
+                                                    @case('grayscale')
+                                filter: grayscale(100%);
+                                                        @break
+                                                    @case('hue-rotate')
+                                filter: hue-rotate(180deg);
+                                                        @break
+                                                    @case('invert')
+                                filter: invert(100%);
+                                                        @break
+                                                    @case('sepia')
+                                filter: sepia(100%);
+                                                    @break
+                                                @endswitch
+                                                @endif
+                                }
 
-
-
-                    .module-slider-header-section-title {
+                    #js-slider-{{ $params['id']' }} .module-slider-header-section-title {
                         color: {{ $slide->settings['titleColor'] ?? '#000000' }};
-                        font-size: {{ $slide->settings['titleFontSize'] ?? '24' }}px;
+                        font-size: {{ $slide->settings['titleFontSize'] ?? '52' }}px;
                         @media screen and (max-width: 991px) {
-                            font-size: min(3rem, {{ $slide->settings['titleFontSize'] ?? '24' }}px);
+                            font-size: min(3rem, {{ $slide->settings['titleFontSize'] ?? '52' }}px);
                         }
                         @media screen and (max-width: 600px) {
-                            font-size: min(2.5rem, {{ $slide->settings['titleFontSize'] ?? '24' }}px)!important;
+                            font-size: min(2.5rem, {{ $slide->settings['titleFontSize'] ?? '36' }}px)!important;
                         }
                         @media screen and (max-width: 400px) {
                             font-size: min(2rem, {{ $slide->settings['titleFontSize'] ?? '24' }}px)!important;
@@ -73,12 +71,12 @@ filter: sepia(100%);
                         overflow-wrap: break-word;
                     }
 
-                    .module-slider-header-section-p {
+                    #js-slider-{{ $params['id']' }} .module-slider-header-section-p {
                         color: {{ $slide->settings['descriptionColor'] ?? '#666666' }};
                         font-size: {{ $slide->settings['descriptionFontSize'] ?? '16' }}px;
                     }
 
-                    .slider-button {
+                    #js-slider-{{ $params['id']' }} .slider-button {
                         display: inline-block;
                         padding: 8px 20px;
                         background-color: {{ $slide->settings['buttonBackgroundColor'] ?? '#007bff' }};
@@ -89,7 +87,7 @@ filter: sepia(100%);
                         transition: all 0.3s ease;
                     }
 
-                    .slider-button:hover {
+                    #js-slider-{{ $params['id']' }} .slider-button:hover {
                         background-color: {{ $slide->settings['buttonBackgroundHoverColor'] ?? '#0056b3' }};
                         color: {{ $slide->settings['buttonTextHoverColor'] ?? '#ffffff' }};
                         text-decoration: none;

@@ -97,9 +97,15 @@ filter: sepia(100%);
                         align-items: center;
                     }
                 </style>
+
+
+
+            @dump($slide->media)
+
+
                 <div class="swiper-slide">
                     <div class="js-slide-image-swiper-module js-slide-image-{{ $slide->id }}"
-                         style="background-image: url('{{ thumbnail($slide->media, 1200) }}');">
+                         style="background-image: url('{{ $slide->media ?? $slide->image }}');">
                     </div>
 
 
@@ -160,4 +166,3 @@ filter: sepia(100%);
     });
 
 </script>
-

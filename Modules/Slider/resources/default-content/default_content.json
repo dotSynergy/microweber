@@ -1,0 +1,44 @@
+{
+    "slides": [
+        {
+            "name": "Welcome to Our Website",
+            "description": "Discover amazing products and services",
+            "media": "modules/slider/img/default-slide-1.jpg",
+            "position": 0,
+            "settings": {
+                "alignItems": "center",
+                "titleColor": "#000000",
+                "titleFontSize": "24",
+                "descriptionColor": "#666666",
+                "descriptionFontSize": "16"
+            }
+        },
+        {
+            "name": "Special Offers",
+            "description": "Check out our latest deals and promotions",
+            "media": "modules/slider/img/default-slide-2.jpg",
+            "position": 1,
+            "settings": {
+                "alignItems": "center",
+                "titleColor": "#000000",
+                "titleFontSize": "24",
+                "descriptionColor": "#666666",
+                "descriptionFontSize": "16"
+            }
+        },
+        {
+            "name": "Quality Service",
+            "description": "We're dedicated to providing the best experience",
+            "media": "modules/slider/img/default-slide-3.jpg",
+            "position": 2,
+            "settings": {
+                "alignItems": "center",
+                "titleColor": "#000000",
+                "titleFontSize": "24",
+                "descriptionColor": "#666666",
+                "descriptionFontSize": "16"
+            }
+        }
+    ]
+}
+

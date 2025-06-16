@@ -10,7 +10,7 @@
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
-                "titleFontSize": "54",
+                "titleFontSize": "52",
                 "descriptionColor": "#666666",
                 "descriptionFontSize": "16",
                 "buttonBackgroundColor": "#007bff",
@@ -34,7 +34,7 @@
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
-                "titleFontSize": "24",
+                "titleFontSize": "52",
                 "descriptionColor": "#666666",
                 "descriptionFontSize": "16",
                 "buttonBackgroundColor": "#007bff",
@@ -58,7 +58,7 @@
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
-                "titleFontSize": "24",
+                "titleFontSize": "52",
                 "descriptionColor": "#666666",
                 "descriptionFontSize": "16",
                 "buttonBackgroundColor": "#007bff",

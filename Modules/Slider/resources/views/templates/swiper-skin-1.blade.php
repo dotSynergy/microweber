@@ -16,11 +16,11 @@ description: Modern slider with rounded corners and left-aligned content
             @foreach($slides as $slide)
 
                 <style>
-                    #js-slider-{{ $params['id'] ?? 'default' }} .swiper-slide {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} {
                         text-align: {{ $slide->settings['alignItems'] ?? 'center' }};
                     }
 
-                    #js-slider-{{ $params['id'] ?? 'default' }} .js-slide-image-swiper-module {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .js-slide-image-swiper-module {
                         background-size: cover;
                         background-repeat: no-repeat;
                         background-position: center center;
@@ -56,7 +56,7 @@ description: Modern slider with rounded corners and left-aligned content
                                                 @endif
                                 }
 
-                    #js-slider-{{ $params['id'] }} .module-slider-header-section-title {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .module-slider-header-section-title {
                         color: {{ $slide->settings['titleColor'] ?? '#000000' }};
                         font-size: {{ $slide->settings['titleFontSize'] ?? '52' }}px;
                         @media screen and (max-width: 991px) {
@@ -71,12 +71,12 @@ description: Modern slider with rounded corners and left-aligned content
                         overflow-wrap: break-word;
                     }
 
-                    #js-slider-{{ $params['id'] }} .module-slider-header-section-p {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .module-slider-header-section-p {
                         color: {{ $slide->settings['descriptionColor'] ?? '#666666' }};
                         font-size: {{ $slide->settings['descriptionFontSize'] ?? '16' }}px;
                     }
 
-                    #js-slider-{{ $params['id'] }} .slider-button {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .slider-button {
                         display: inline-block;
                         padding: 8px 20px;
                         background-color: {{ $slide->settings['buttonBackgroundColor'] ?? '#007bff' }};
@@ -87,14 +87,14 @@ description: Modern slider with rounded corners and left-aligned content
                         transition: all 0.3s ease;
                     }
 
-                    #js-slider-{{ $params['id'] }} .slider-button:hover {
+                    #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .slider-button:hover {
                         background-color: {{ $slide->settings['buttonBackgroundHoverColor'] ?? '#0056b3' }};
                         color: {{ $slide->settings['buttonTextHoverColor'] ?? '#ffffff' }};
                         text-decoration: none;
                     }
                 </style>
 
-                <div class="swiper-slide">
+                <div class="swiper-slide swiper-slide-{{ $slide->id }}">
 
                     <div class="js-slide-image-swiper-module js-slide-image-{{ $slide->id }}"
                          style="background-image: url('{{ thumbnail($slide->media, 1200) }}');

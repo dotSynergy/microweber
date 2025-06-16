@@ -88,7 +88,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 ->suffix('px')
                 ->numeric()
                 ->minValue(8)
-                ->maxValue(64)
+
                 ->default(16)
                 ->visible(fn($get) => $get('settings.showButton')),
             ColorPicker::make('settings.titleColor')
@@ -98,7 +98,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 ->suffix('px')
                 ->numeric()
                 ->minValue(8)
-                ->maxValue(64)
+
                 ->default(24),
             ColorPicker::make('settings.descriptionColor')
                 ->label('Description Color'),
@@ -107,7 +107,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 ->suffix('px')
                 ->numeric()
                 ->minValue(8)
-                ->maxValue(64)
+
                 ->default(16),
             ColorPicker::make('settings.imageBackgroundColor')
                 ->label('Image Background Color'),

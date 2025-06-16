@@ -1,6 +1,7 @@
 {
     "name": "nwidart/bootstrap",
     "description": "",
+    "type": "microweber-template",
     "authors": [
         {
             "name": "Nicolas Widart",

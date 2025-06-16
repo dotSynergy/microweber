@@ -100,7 +100,7 @@ filter: sepia(100%);
 
 
 
-            @dump($slide->media)
+ 
 
 
                 <div class="swiper-slide">

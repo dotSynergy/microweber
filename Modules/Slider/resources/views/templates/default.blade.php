@@ -13,6 +13,10 @@ description: Modern slider with Swiper.js integration
         @if($slides && $slides->count() > 0)
             @foreach($slides as $slide)
 
+
+
+
+
                 <style>
                     .swiper-slide {
                         text-align: {{ $slide->settings['alignItems'] ?? 'center' }};
@@ -140,7 +144,7 @@ filter: sepia(100%);
 </div>
 
 <script>
-    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}')
+    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
 
 </script>
 

@@ -129,7 +129,7 @@ filter: sepia(100%);
 </div>
 
 <script>
-    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}')
+    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
 
 </script>
 

@@ -4,41 +4,73 @@
             "name": "Welcome to Our Website",
             "description": "Discover amazing products and services",
             "media": "{SITE_URL}modules/slider/img/default-slide-1.jpg",
+            "button_text": "Learn More",
+            "link": "#",
             "position": 0,
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
-                "titleFontSize": "24",
+                "titleFontSize": "54",
                 "descriptionColor": "#666666",
-                "descriptionFontSize": "16"
+                "descriptionFontSize": "16",
+                "buttonBackgroundColor": "#007bff",
+                "buttonBackgroundHoverColor": "#0056b3",
+                "buttonBorderColor": "transparent",
+                "buttonTextColor": "#ffffff",
+                "buttonTextHoverColor": "#ffffff",
+                "buttonFontSize": "16",
+                "imageBackgroundColor": "#ffffff",
+                "imageBackgroundOpacity": "1",
+                "imageBackgroundFilter": "none"
             }
         },
         {
             "name": "Special Offers",
             "description": "Check out our latest deals and promotions",
             "media": "{SITE_URL}modules/slider/img/default-slide-2.jpg",
+            "button_text": "View Offers",
+            "link": "#",
             "position": 1,
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
                 "titleFontSize": "24",
                 "descriptionColor": "#666666",
-                "descriptionFontSize": "16"
+                "descriptionFontSize": "16",
+                "buttonBackgroundColor": "#007bff",
+                "buttonBackgroundHoverColor": "#0056b3",
+                "buttonBorderColor": "transparent",
+                "buttonTextColor": "#ffffff",
+                "buttonTextHoverColor": "#ffffff",
+                "buttonFontSize": "16",
+                "imageBackgroundColor": "",
+                "imageBackgroundOpacity": "1",
+                "imageBackgroundFilter": "none"
             }
         },
         {
             "name": "Quality Service",
             "description": "We're dedicated to providing the best experience",
             "media": "{SITE_URL}modules/slider/img/default-slide-3.jpg",
+            "button_text": "Contact Us",
+            "link": "#",
             "position": 2,
             "settings": {
                 "alignItems": "center",
                 "titleColor": "#000000",
                 "titleFontSize": "24",
                 "descriptionColor": "#666666",
-                "descriptionFontSize": "16"
+                "descriptionFontSize": "16",
+                "buttonBackgroundColor": "#007bff",
+                "buttonBackgroundHoverColor": "#0056b3",
+                "buttonBorderColor": "transparent",
+                "buttonTextColor": "#ffffff",
+                "buttonTextHoverColor": "#ffffff",
+                "buttonFontSize": "16",
+                "imageBackgroundColor": "",
+                "imageBackgroundOpacity": "1",
+                "imageBackgroundFilter": "none"
             }
         }
     ]
 }
-

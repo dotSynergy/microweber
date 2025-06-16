@@ -138,7 +138,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
     {
         return $table
             ->query(Slider::query()->where('rel_id', $this->rel_id)->where('rel_type', $this->rel_type))
-            ->defaultSort('position', 'asc')            ->columns([
+            ->defaultSort('position', 'asc')->columns([
                 ImageColumn::make('media')
                     ->label('Image')
                     ->circular(),
@@ -151,7 +151,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 TextColumn::make('button_text')
                     ->label('Button')
                     ->limit(20),
-            ])            ->filters([
+            ])->filters([
                 // ...
             ])
             ->headerActions([
@@ -218,7 +218,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                                     $messagesForImages = [];
                                     $imagePrompt = 'Create a beautiful, professional slide image for: ' . $resp['name'] . '. ' . $resp['description'];
                                     $messagesForImages[] = ['role' => 'user', 'content' => $imagePrompt];
-                                    
+
                                     try {
                                         $response = AiImages::generateImage($messagesForImages);
                                         if ($response && isset($response['url']) && $response['url']) {
@@ -234,7 +234,7 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                         }
 
                         $this->resetTable();
-                    }),                CreateAction::make('create')
+                    }), CreateAction::make('create')
                     ->slideOver()
                     ->form($this->editFormArray())
             ])

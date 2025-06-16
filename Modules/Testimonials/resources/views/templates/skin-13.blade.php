@@ -11,7 +11,8 @@ description: Skin-13
 @endphp
 
 <script>
-    @php print get_asset('/Modules/Slider/resources/assets/js/slider-v2.js'); @endphp
+    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
+
 </script>
 <script>
     $(document).ready(function () {

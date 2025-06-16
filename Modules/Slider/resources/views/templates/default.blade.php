@@ -14,15 +14,18 @@ description: Modern slider with Swiper.js integration
             @foreach($slides as $slide)
 
 
+         
+
+
 
 
 
                 <style>
-                    .swiper-slide {
+                    #js-slider-{{ $params['id'] ?? 'default' }} .swiper-slide {
                         text-align: {{ $slide->settings['alignItems'] ?? 'center' }};
                     }
 
-                    .js-slide-image-swiper-module {
+                    #js-slider-{{ $params['id'] ?? 'default' }} .js-slide-image-swiper-module {
                         background-size: cover;
                         background-repeat: no-repeat;
                         background-position: center center;
@@ -144,8 +147,9 @@ description: Modern slider with Swiper.js integration
 </div>
 
 <script>
+if (!window.SliderV2) {
     mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
-
+}
 </script>
 
 

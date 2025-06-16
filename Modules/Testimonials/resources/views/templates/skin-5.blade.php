@@ -16,8 +16,9 @@
 @endphp
 
 <script>
+if (!window.SliderV2) {
     mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
-
+}
 </script>
 <script>
 $(document).ready(function () {

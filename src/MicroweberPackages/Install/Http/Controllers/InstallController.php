@@ -261,6 +261,7 @@ class InstallController extends Controller
                     $input['db_name'] = str_replace(':.', '.', $input['db_host']);
                     // unset($input['db_host']);
                 }
+
                 $input['db_name'] = str_replace('\\', '/', $input['db_name']);
 
                 Config::set("database.connections.$dbDriver.database", $input['db_name']);
@@ -299,6 +300,9 @@ class InstallController extends Controller
 
                 } else {
                     $envToSave['DB_DATABASE'] = $input['db_name'];
+                    if (!is_file($input['db_name'])) {
+                        touch($input['db_name']);
+                    }
                 }
 
 
@@ -448,6 +452,8 @@ class InstallController extends Controller
 //                    // do nothing
 //                }
 //            }
+
+
 
 
             \Illuminate\Support\Facades\Cache::flush();
@@ -811,6 +817,8 @@ class InstallController extends Controller
         if (extension_loaded('pdo_sqlite') and $domain) {
             // $sqlite_path = normalize_path(storage_path() . DS . $domain . '.sqlite', false);
             $sqlite_path = database_path('database.sqlite');
+
+
             $viewData['config']['db_name_sqlite'] = $sqlite_path;
         }
         if (Config::get('microweber.pre_configured')) {

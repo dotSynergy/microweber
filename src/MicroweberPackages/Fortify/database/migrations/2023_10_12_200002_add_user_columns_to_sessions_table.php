@@ -12,6 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
+        if(!Schema::hasTable('sessions')) {
+            return;
+        }
+
         Schema::table('sessions', function (Blueprint $table) {
             if (!Schema::hasColumn('sessions', 'user_id')) {
                 $table->integer('user_id')->nullable();

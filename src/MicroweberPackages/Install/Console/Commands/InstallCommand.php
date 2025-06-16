@@ -132,19 +132,19 @@ class InstallCommand extends Command
 
         if (!$templateFound) {
             // Search in composer json
-            $availTemplates = scandir(templates_dir());
-            foreach ($availTemplates as $templateFolderName) {
-                $templateComposerFile = templates_dir() . $templateFolderName . DS . 'composer.json';
-                if (is_file($templateComposerFile)) {
-                    $templateComposerContent = file_get_contents($templateComposerFile);
-                    $templateComposerContent = json_decode($templateComposerContent, true);
-                    if (isset($templateComposerContent['name'])) {
-                        if ($input['default_template'] == $templateComposerContent['name']) {
-                            $templateFound = $templateFolderName;
-                        }
-                    }
-                }
-            }
+           //$availTemplates = scandir(templates_dir());
+//            foreach ($availTemplates as $templateFolderName) {
+//                $templateComposerFile = templates_dir() . $templateFolderName . DS . 'composer.json';
+//                if (is_file($templateComposerFile)) {
+//                    $templateComposerContent = file_get_contents($templateComposerFile);
+//                    $templateComposerContent = json_decode($templateComposerContent, true);
+//                    if (isset($templateComposerContent['name'])) {
+//                        if ($input['default_template'] == $templateComposerContent['name']) {
+//                            $templateFound = $templateFolderName;
+//                        }
+//                    }
+//                }
+//            }
         }
 
         $input['default_template'] = $templateFound;
@@ -154,6 +154,7 @@ class InstallCommand extends Command
         $this->info('Environment: ' . app()->environment());
 
         $this->installer->command_line_logger = $this;
+
         $result = $this->installer->index($input);
 
         if (strpos($result, 'Could not connect to the database.') !== false) {

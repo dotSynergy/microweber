@@ -7,7 +7,7 @@ description slider
 @endphp
 <script>
 if (!window.SliderV2) {
-    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}',true)
+    mw.require('{{ asset('modules/slider/js/slider-v2.js') }}',true)
 }
 </script>
 <script>

@@ -1,6 +1,7 @@
 {
     "name": "$VENDOR$/$LOWER_NAME$",
     "description": "",
+    "type": "microweber-template",
     "authors": [
         {
             "name": "$AUTHOR_NAME$",

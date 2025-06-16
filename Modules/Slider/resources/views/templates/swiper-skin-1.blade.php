@@ -129,8 +129,13 @@ filter: sepia(100%);
 </div>
 
 <script>
-<?php print get_asset('/Modules/Slider/resources/assets/js/slider-v2.js'); ?>
-document.addEventListener('DOMContentLoaded', function() {
+    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}')
+
+</script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
     new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
         loop: true,
         navigation: {},

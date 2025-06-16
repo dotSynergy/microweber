@@ -1,5 +1,4 @@
-if(!window.SliderV2) {
-
+if (!window.SliderV2) {
 
 
     class SliderV2 {
@@ -34,7 +33,7 @@ if(!window.SliderV2) {
 
                 if (itemValue == itemId) {
 
-                     return true;
+                    return true;
                 }
             });
 
@@ -45,14 +44,13 @@ if(!window.SliderV2) {
 
         slideTo(index) {
             if (this.driver == 'swiper') {
-                if(this.driverInstance && this.driverInstance.slideTo) {
+                if (this.driverInstance && this.driverInstance.slideTo) {
                     this.driverInstance.slideTo(index);
                 }
             }
         }
 
-        runSwiper()
-        {
+        runSwiper() {
             mw.lib.require('swiper');
             console.log("module", mw.settings);
 
@@ -82,7 +80,6 @@ if(!window.SliderV2) {
             }
 
 
-
             swiperConfig.navigation = {};
 
             if (this.config.navigation) {
@@ -103,4 +100,4 @@ if(!window.SliderV2) {
 
     window.SliderV2 = SliderV2;
 
-    }
+}

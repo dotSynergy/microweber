@@ -100,12 +100,12 @@ filter: sepia(100%);
 
 
 
- 
+
 
 
                 <div class="swiper-slide">
                     <div class="js-slide-image-swiper-module js-slide-image-{{ $slide->id }}"
-                         style="background-image: url('{{ $slide->media ?? $slide->image }}');">
+                         style="background-image: url('{{ thumbnail($slide->media, 1200) }}');">
                     </div>
 
 
@@ -140,7 +140,12 @@ filter: sepia(100%);
 </div>
 
 <script>
-<?php  print get_asset('/Modules/Slider/resources/assets/js/slider-v2.js'); ?>
+    mw.require('{{ asset('modules/slider/js/slider-v2.js', Request::secure() ) }}')
+
+</script>
+
+
+<script>
 
 
 
@@ -166,3 +171,5 @@ filter: sepia(100%);
     });
 
 </script>
+
+

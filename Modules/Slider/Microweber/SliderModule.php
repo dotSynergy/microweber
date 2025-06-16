@@ -60,7 +60,6 @@ class SliderModule extends BaseModule
 
         return array_map(function ($slide) {
             $slide['media'] = app()->url_manager->replace_site_url_back($slide['media']);
-
             $sliderModel = new Slider();
             $slide['rel_id'] = $this->getRelId();
             $slide['rel_type'] = $this->getRelType();

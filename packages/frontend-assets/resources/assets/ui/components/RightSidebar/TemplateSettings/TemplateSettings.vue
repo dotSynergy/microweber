@@ -791,6 +791,12 @@ export default {
 
                 // Apply bulk updates using setPropertyForSelectorBulk
                 if (window.mw?.top()?.app?.cssEditor && Object.keys(updatesBySelector).length > 0) {
+
+
+                    window.mw?.top().app.registerAskUserToStay(true);
+
+
+
                     for (const selector in updatesBySelector) {
                         if (updatesBySelector.hasOwnProperty(selector)) {
                             const properties = updatesBySelector[selector];

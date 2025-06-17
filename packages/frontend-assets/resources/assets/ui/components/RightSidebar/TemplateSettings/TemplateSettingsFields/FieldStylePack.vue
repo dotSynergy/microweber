@@ -408,14 +408,14 @@ export default {
                         }
 
                         .style-pack-opener:after {
-                            content: '⌄';
+                            content: '>';
                             position: absolute;
                             right: 15px;
                             top: 50%;
                             transform: translateY(-50%);
                             font-size: 24px;
-                            color: var(--text-color);
-                            opacity: 0.7;
+                            color: #000;
+                            opacity: 1;
                         }
 
                         .style-pack-container.expanded .style-pack-item {
@@ -513,9 +513,10 @@ export default {
                         .click-to-expand {
                             text-align: center;
                             font-size: 12px;
-                            color: var(--text-color);
+
                             opacity: 0.7;
                             margin-top: 5px;
+                            color: #000;
                         }
 
                     </style>
@@ -687,14 +688,14 @@ export default {
                 innerDiv.appendChild(labelDiv);
             }
 
-            // Add "Click to expand" text
-            const expandText = iframeDoc.createElement('div');
-            expandText.className = 'click-to-expand';
-            expandText.textContent = 'Click to see style options';
-            innerDiv.appendChild(expandText);
-
-            openerDiv.appendChild(innerDiv);
-            return openerDiv;
+            // // Add "Click to expand" text
+            // const expandText = iframeDoc.createElement('div');
+            // expandText.className = 'click-to-expand';
+            // expandText.textContent = 'Click to see style options';
+            // innerDiv.appendChild(expandText);
+            //
+            // openerDiv.appendChild(innerDiv);
+            // return openerDiv;
         },
 
         updateIframeContent() {

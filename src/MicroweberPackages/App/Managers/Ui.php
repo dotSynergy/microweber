@@ -329,7 +329,7 @@ class Ui
         if ($this->disable_powered_by_link != false) {
             return;
         }
-        $link = '<span class="mw-powered-by"><a class="tblr-body-color" href="https://microweber.com/" title="Create website">Create a website</a> with <a class="tblr-body-color" href="https://microweber.org" target="_blank" title="Website Builder">Microweber</a></span>';
+        $link = '<span class="mw-powered-by"><a class="tblr-body-color" href="https://microweber.com/" title="Ai Website Builder">Create a website</a> with <a class="tblr-body-color" href="https://microweber.org" target="_blank" title="Ai Website Builder">Microweber</a></span>';
         if ($this->powered_by_link != false) {
             $link = $this->powered_by_link;
         }

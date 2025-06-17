@@ -411,10 +411,10 @@ export default {
                         .style-pack-opener:after {
                            content: '>';
                             position: absolute;
-                            right: 9px;
-                            bottom: -19px;
+                            right: 18px;
+                            bottom: -22px;
                             transform: translateY(-50%);
-                            font-size: 26px;
+                            font-size: 30px;
                             color: #000;
                             opacity: 0.7;
                             transition: all 0.3s ease;

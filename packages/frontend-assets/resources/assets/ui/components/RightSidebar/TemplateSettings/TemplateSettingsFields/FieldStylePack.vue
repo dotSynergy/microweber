@@ -389,7 +389,7 @@ export default {
                             border: 1px solid var(--border-color);
                             margin-bottom: 10px;
                             background-color: var(--background-color);
-                            zoon: 87%;
+                            zoom: 87%;
 
                             &:hover {
                                 background-color: var(--background-color-hover);

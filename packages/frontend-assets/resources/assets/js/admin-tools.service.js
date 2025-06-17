@@ -15,7 +15,7 @@ export class AdminColorThemeService extends MicroweberBaseClass {
         this.storage = this.settings.storage;
     }
     get #theme () {
-        return this.isSystem() ? this.getSystem() : this.storage.getItem("theme");
+        return this.isSystem() ? this.getSystem() : this.storage.getItem("theme") || 'light';
     }
 
 

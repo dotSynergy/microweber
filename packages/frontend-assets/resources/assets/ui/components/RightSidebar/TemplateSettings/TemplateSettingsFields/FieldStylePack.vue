@@ -63,6 +63,9 @@ export default {
         }
     },
     data() {
+        // Set stylePacksExpanded to true by default if this is the Predefined styles selection
+        const isPredefinedStyles = this.setting.title === "Predefined styles selection";
+
         return {
             iframe: null,
             isDarkMode: false,
@@ -71,7 +74,7 @@ export default {
             previousStylePack: null, // Track the previously selected style pack
             fontsLoaded: false,
             fontsToLoad: [],
-            stylePacksExpanded: false, // Track if the style packs are expanded in opener mode
+            stylePacksExpanded: isPredefinedStyles, // Set to true for predefined styles
             uniqueId: 'style-pack-' + Math.random().toString(36).substr(2, 9), // Generate unique ID for this component
             selectedStylePackProperties: null, // Store selected style pack properties for opener
         }
@@ -386,6 +389,7 @@ export default {
                             border: 1px solid var(--border-color);
                             margin-bottom: 10px;
                             background-color: var(--background-color);
+                            zoom: 87%;
 
                             &:hover {
                                 background-color: var(--background-color-hover);

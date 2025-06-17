@@ -401,6 +401,7 @@ export default {
                             margin-bottom: 10px;
                             background-color: var(--background-color);
                             position: relative;
+                            zoom: 90%;
 
                             &:hover {
                                 background-color: var(--background-color-hover);
@@ -415,7 +416,25 @@ export default {
                             transform: translateY(-50%);
                             font-size: 26px;
                             color: #000;
-                            opacity: 07;
+                            opacity: 0.7;
+                            transition: all 0.3s ease;
+                        }
+
+                        .style-pack-opener:hover:after {
+                            transform: translateY(-50%) translateX(3px);
+                            color: #007bff;
+                            opacity: 1;
+                            text-shadow: 0 0 5px rgba(0,123,255,0.3);
+                            animation: arrow-pulse 1s infinite alternate;
+                        }
+
+                        @keyframes arrow-pulse {
+                            0% {
+                                transform: translateY(-50%) translateX(0px);
+                            }
+                            100% {
+                                transform: translateY(-50%) translateX(5px);
+                            }
                         }
 
                         .style-pack-container.expanded .style-pack-item {

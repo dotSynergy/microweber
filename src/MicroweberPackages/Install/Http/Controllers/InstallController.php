@@ -312,9 +312,12 @@ class InstallController extends Controller
                 $envToSave['FORCE_HTTPS'] = true;
                 Config::set("microweber.force_https", true);
             }
-            if (isset($input['app_debug']) and $input['app_debug'] == 1) {
+            if (isset($input['app_debug']) && $input['app_debug'] !== null && $input['app_debug'] !== '') {
+                $envToSave['APP_DEBUG'] = $input['app_debug'];
+                Config::set('app.debug', $input['app_debug']);
+            } else if (isset($input['app_debug']) && $input['app_debug'] == 1) {
                 $envToSave['APP_DEBUG'] = true;
-                Config::set("app.debug", true);
+                Config::set('app.debug', true);
             }
 
 
@@ -390,7 +393,10 @@ class InstallController extends Controller
                 Config::set('microweber.admin_url', $input['admin_url']);
                 $envToSave['MW_ADMIN_URL'] = $input['admin_url'];
             }
-            if (!is_cli()) {
+            if (isset($input['app_url']) && !empty($input['app_url'])) {
+                $envToSave['APP_URL'] = $input['app_url'];
+                Config::set('app.url', $input['app_url']);
+            } else if (!is_cli()) {
                 Config::set('app.url', site_url());
                 $envToSave['APP_URL'] = site_url();
             }

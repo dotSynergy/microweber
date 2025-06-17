@@ -32,7 +32,9 @@ class InstallCommand extends Command
                                     {--default-content=}
                                     {--template=}
                                     {--config-only=}
-                                    {--language=}';
+                                    {--language=}
+                                    {--app-url=}
+                                    {--app-debug=}';
 
     public function __construct(InstallController $installer)
     {
@@ -77,6 +79,8 @@ class InstallCommand extends Command
             'default_template' => $this->option('template'),
             'config_only' => $this->option('config-only'),
             'site_lang' => $this->option('language'),
+            'app_url' => $this->option('app-url'),
+            'app_debug' => $this->option('app-debug'),
         );
 
 
@@ -103,6 +107,7 @@ class InstallCommand extends Command
         if (!$input['db_name']) {
             $input['db_name'] = getenv('DB_NAME');
         }
+
 
         if (!$input['db_driver']) {
             $input['db_driver'] = (getenv('DB_ENGINE') ?: 'sqlite');

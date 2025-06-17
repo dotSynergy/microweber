@@ -394,7 +394,7 @@ export default {
 
                         .style-pack-opener {
                             cursor: pointer;
-                            padding: 27px 22px 22px;
+                            padding: 27px 28px 22px;
                             border-radius: 8px;
                             transition: all 0.2s;
                             border: 1px solid var(--border-color);
@@ -408,14 +408,14 @@ export default {
                         }
 
                         .style-pack-opener:after {
-                            content: '>';
+                           content: '>';
                             position: absolute;
-                            right: 15px;
-                            top: 50%;
+                            right: 9px;
+                            bottom: -19px;
                             transform: translateY(-50%);
-                            font-size: 24px;
+                            font-size: 26px;
                             color: #000;
-                            opacity: 1;
+                            opacity: 07;
                         }
 
                         .style-pack-container.expanded .style-pack-item {
@@ -693,9 +693,9 @@ export default {
             // expandText.className = 'click-to-expand';
             // expandText.textContent = 'Click to see style options';
             // innerDiv.appendChild(expandText);
-            //
-            // openerDiv.appendChild(innerDiv);
-            // return openerDiv;
+
+            openerDiv.appendChild(innerDiv);
+            return openerDiv;
         },
 
         updateIframeContent() {

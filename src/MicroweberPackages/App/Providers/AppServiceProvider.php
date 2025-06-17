@@ -177,7 +177,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //  return;
         //app()->usePublicPath(base_path());
-
+        if (is_https() or (Config::get('microweber.force_https') && !is_cli())) {
+            URL::forceScheme("https");
+        }
 
         //  \Illuminate\Support\Facades\Vite::useBuildDirectory('build');
 
@@ -251,9 +253,7 @@ class AppServiceProvider extends ServiceProvider
             define('ADMIN_PREFIX', mw_admin_prefix_url_legacy());
         }
 
-        if (is_https() or (Config::get('microweber.force_https') && !is_cli())) {
-             URL::forceScheme("https");
-        }
+
 
         //  URL::forceRootUrl( site_url());
 //

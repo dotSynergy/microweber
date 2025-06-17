@@ -394,13 +394,14 @@ export default {
 
                         .style-pack-opener {
                             cursor: pointer;
-                            padding: 27px 22px 22px;
+                            padding: 27px 28px 22px;
                             border-radius: 8px;
                             transition: all 0.2s;
                             border: 1px solid var(--border-color);
                             margin-bottom: 10px;
                             background-color: var(--background-color);
                             position: relative;
+                            zoom: 90%;
 
                             &:hover {
                                 background-color: var(--background-color-hover);
@@ -408,14 +409,32 @@ export default {
                         }
 
                         .style-pack-opener:after {
-                            content: '⌄';
+                           content: '>';
                             position: absolute;
-                            right: 15px;
-                            top: 50%;
+                            right: 18px;
+                            bottom: -22px;
                             transform: translateY(-50%);
-                            font-size: 24px;
-                            color: var(--text-color);
+                            font-size: 30px;
+                            color: #000;
                             opacity: 0.7;
+                            transition: all 0.3s ease;
+                        }
+
+                        .style-pack-opener:hover:after {
+                            transform: translateY(-50%) translateX(3px);
+                            color: #007bff;
+                            opacity: 1;
+                            text-shadow: 0 0 5px rgba(0,123,255,0.3);
+                            animation: arrow-pulse 1s infinite alternate;
+                        }
+
+                        @keyframes arrow-pulse {
+                            0% {
+                                transform: translateY(-50%) translateX(0px);
+                            }
+                            100% {
+                                transform: translateY(-50%) translateX(5px);
+                            }
                         }
 
                         .style-pack-container.expanded .style-pack-item {
@@ -513,9 +532,10 @@ export default {
                         .click-to-expand {
                             text-align: center;
                             font-size: 12px;
-                            color: var(--text-color);
+
                             opacity: 0.7;
                             margin-top: 5px;
+                            color: #000;
                         }
 
                     </style>
@@ -687,11 +707,11 @@ export default {
                 innerDiv.appendChild(labelDiv);
             }
 
-            // Add "Click to expand" text
-            const expandText = iframeDoc.createElement('div');
-            expandText.className = 'click-to-expand';
-            expandText.textContent = 'Click to see style options';
-            innerDiv.appendChild(expandText);
+            // // Add "Click to expand" text
+            // const expandText = iframeDoc.createElement('div');
+            // expandText.className = 'click-to-expand';
+            // expandText.textContent = 'Click to see style options';
+            // innerDiv.appendChild(expandText);
 
             openerDiv.appendChild(innerDiv);
             return openerDiv;

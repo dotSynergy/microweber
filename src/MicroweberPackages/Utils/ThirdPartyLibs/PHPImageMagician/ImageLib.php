@@ -2263,7 +2263,9 @@ class ImageLib
           //  $fileContent = file_get_contents($this->fileName);
 
             $image = \Intervention\Image\Laravel\Facades\Image::read($this->fileName);
-            ob_end_clean();
+
+
+            //ob_end_clean();
 
             return response()->make($image->encode(), 200, $headers);
 

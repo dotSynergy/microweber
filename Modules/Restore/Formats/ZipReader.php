@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Restore\Formats;
 
 use Illuminate\Support\Facades\File;
@@ -10,7 +11,8 @@ class ZipReader extends DefaultReader
 {
     public $language = false;
 
-    public function setLanguage($abr) {
+    public function setLanguage($abr)
+    {
         $this->language = strtolower($abr); // 'bg';
     }
 
@@ -27,24 +29,25 @@ class ZipReader extends DefaultReader
         }
     }
 
-	/**
-	 * Read data from file
-	 * @return []
-	 */
-	public function readData()
-	{
-		$filesForImporting = array();
+    /**
+     * Read data from file
+     * @return []
+     */
+    public function readData()
+    {
+        $filesForImporting = array();
 
-		$this->_checkPathsExists();
+        $this->_checkPathsExists();
 
-		RestoreLogger::setLogInfo('Unzipping '.basename($this->file).' in userfiles...');
+        RestoreLogger::setLogInfo('Unzipping ' . basename($this->file) . ' in userfiles...');
 
-		$backupLocation = backup_location() . 'temp_backup_zip/'.md5($this->file . filemtime($this->file)).'/';
+        $backupLocation = backup_location() . 'temp_backup_zip/' . md5($this->file . filemtime($this->file)) . '/';
 
         if (!is_dir($backupLocation)) {
 
             // Clear old backup
-            rmdir_recursive($backupLocation);
+            mkdir_recursive($backupLocation);
+
 
             $zipExtract = new ZipArchiveExtractor($this->file);
             if (config('microweber.allow_php_files_upload')) {
@@ -65,11 +68,10 @@ class ZipReader extends DefaultReader
         $files = array();
 
         $backupLocation = normalize_path($backupLocation, false);
-        if(!is_dir($backupLocation)) {
+        if (!is_dir($backupLocation)) {
             RestoreLogger::setLogInfo('The zip file has no files to import.');
             return;
         }
-
 
 
         $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($backupLocation));
@@ -87,68 +89,78 @@ class ZipReader extends DefaultReader
             }
         }
 
-		if ($backupLocation != false and is_dir($backupLocation)) {
+        if ($backupLocation != false and is_dir($backupLocation)) {
 
-            if (is_dir($backupLocation . DS. 'userfiles' . DS.'media')) {
+            if (is_dir($backupLocation . DS . 'userfiles' . DS . 'media')) {
                 RestoreLogger::setLogInfo('Media restored!');
             }
 
-			$copy = $this->_cloneDirectory($backupLocation, userfiles_path());
+            $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
 
-		}
+        }
 
-		$mwContentJsonFile = $backupLocation. 'mw_content.json';
+        $mwContentJsonFile = $backupLocation . 'mw_content.json';
 
-		if (is_file($mwContentJsonFile)) {
-			$filesForImporting[] = array("file"=>$mwContentJsonFile, "reader"=>"json");
-		}
+        if (is_file($mwContentJsonFile)) {
+            $filesForImporting[] = array("file" => $mwContentJsonFile, "reader" => "json");
+        }
 
-		// Find data to import
-		$tables = $this->_getTableList();
-		$supportedReaders =  $this->_getSupportedReaders();
-		$backupFiles = scandir($backupLocation);
-
-		foreach ($backupFiles as $filename) {
-			$file = $backupLocation .DS. $filename;
+        // Find data to import
+        $tables = $this->_getTableList();
+        $supportedReaders = $this->_getSupportedReaders();
+        $backupFiles = scandir($backupLocation);
+        $mainBackupFile = $backupLocation . DS . 'backup.json';
+        foreach ($backupFiles as $filename) {
+            $file = $backupLocation . DS . $filename;
             $file = normalize_path($file, false);
 
 
-			if (!is_file($file)) {
-				continue;
-			}
+            if (!is_file($file)) {
+                continue;
+            }
 
 
-			$fileExtension = get_file_extension($file);
-			$importToTable = str_replace('.'.$fileExtension, false, $filename);
+            $fileExtension = get_file_extension($file);
+            $importToTable = str_replace('.' . $fileExtension, false, $filename);
 
-			$addToImport = false;
+            $addToImport = false;
 
             if (strpos($importToTable, 'backup_') !== false) {
                 $addToImport = true;
             }
 
-			if (strpos($importToTable, 'backup_export') !== false) {
-				$addToImport = true;
-			}
+            if (strpos($importToTable, 'backup_export') !== false) {
+                $addToImport = true;
+            }
+
 
             if (strpos($importToTable, 'mw_content') !== false && strpos($importToTable, '_lang') !== false) {
                 $addToImport = true;
             }
 
-			if (in_array($fileExtension, $supportedReaders) && in_array($importToTable, $tables)) {
-				$addToImport = true;
-			}
+            if (in_array($fileExtension, $supportedReaders) && in_array($importToTable, $tables)) {
+                $addToImport = true;
+            }
+            if ($addToImport) {
 
-			if ($addToImport) {
-				$filesForImporting[] = array("file"=>$file, "importToTable"=> $importToTable, "reader"=>$fileExtension);
-			}
 
-		}
+                $filesForImporting[] = array("file" => $file, "importToTable" => $importToTable, "reader" => $fileExtension);
+            }
 
-		if (empty($filesForImporting)) {
-			RestoreLogger::setLogInfo('The zip file has no files to import.');
-			return;
-		}
+        }
+
+        if($mainBackupFile){
+            if (is_file($mainBackupFile)) {
+                $filesForImporting[] = array("file" => $mainBackupFile, "reader" => "json");
+            }
+        }
+
+
+
+        if (empty($filesForImporting)) {
+            RestoreLogger::setLogInfo('The zip file has no files to import.');
+            return;
+        }
 
         $detectedLanguages = array();
         foreach ($filesForImporting as $file) {
@@ -159,7 +171,7 @@ class ZipReader extends DefaultReader
 
         if (!$this->language && !empty($detectedLanguages)) {
             RestoreLogger::setLogInfo('Its detected other languages in this import.');
-            return array('must_choice_language' => true, 'detected_languages'=>$detectedLanguages);
+            return array('must_choice_language' => true, 'detected_languages' => $detectedLanguages);
         }
 
         if ($this->language) {
@@ -188,124 +200,128 @@ class ZipReader extends DefaultReader
             }
         }
 
-		// Decode files in zip
-		$readedData = array();
-		foreach ($filesForImporting as $file) {
+        // Decode files in zip
+        $readedData = array();
+        foreach ($filesForImporting as $file) {
 
-			$readerClass = 'Modules\\Restore\\Formats\\' . ucfirst($file['reader']) . 'Reader';
-			$reader = new $readerClass($file['file']);
-			$data = $reader->readData();
+            $readerClass = 'Modules\\Restore\\Formats\\' . ucfirst($file['reader']) . 'Reader';
+            $reader = new $readerClass($file['file']);
+            $data = $reader->readData();
 
-			if (strpos($importToTable, 'backup_export') !== false) {
-				$readedData = $data;
-			} else if (strpos($importToTable, 'mw_content') !== false) {
+            if (strpos($importToTable, 'backup_export') !== false) {
+                $readedData = $data;
+            } else if (strpos($importToTable, 'mw_content') !== false) {
                 $readedData = $data;
             } else if (strpos($importToTable, 'backup_') !== false) {
                 $readedData = $data;
             } else {
-				if (!empty($data)) {
-					if (isset($file['importToTable'])) {
-						$readedData[$file['importToTable']] = $data;
-					}
-				}
-			}
+                if (!empty($data)) {
+                    if (isset($file['importToTable'])) {
+                        $readedData[$file['importToTable']] = $data;
+                    } else {
+                        $readedData = $data;
+                    }
+                }
+            }
 
-		}
+        }
 
-		if (empty($readedData)) {
-			RestoreLogger::setLogInfo('The files in zip are empty. Nothing to import.');
-			return;
-		}
+        if (empty($readedData)) {
+            RestoreLogger::setLogInfo('The files in zip are empty. Nothing to import.');
+            return;
+        }
 
-		return $readedData;
-	}
+        return $readedData;
+    }
 
-	private function _getSupportedReaders() {
+    private function _getSupportedReaders()
+    {
 
-		$readers = array();
-		$readersFolder = normalize_path(__DIR__);
-		$readersList = scandir($readersFolder);
+        $readers = array();
+        $readersFolder = normalize_path(__DIR__);
+        $readersList = scandir($readersFolder);
 
-		foreach ($readersList as $file) {
-			if (!is_file($readersFolder . $file)) {
-				continue;
-			}
+        foreach ($readersList as $file) {
+            if (!is_file($readersFolder . $file)) {
+                continue;
+            }
 
-			$ext = str_replace('Reader.php', false, $file);
-			$ext = strtolower($ext);
+            $ext = str_replace('Reader.php', false, $file);
+            $ext = strtolower($ext);
 
-			if ($ext == 'default' || $ext == 'zip') {
-				continue;
-			}
+            if ($ext == 'default' || $ext == 'zip') {
+                continue;
+            }
 
-			$readers[] = $ext;
+            $readers[] = $ext;
 
-		}
+        }
 
-		return $readers;
-	}
+        return $readers;
+    }
 
-	private function _getTableList() {
+    private function _getTableList()
+    {
 
-		$readyTables = array();
+        $readyTables = array();
 
-		$tables = mw()->database_manager->get_tables_list();
-		foreach ($tables as $table) {
-			$readyTables[] = str_replace(mw()->database_manager->get_prefix(), false, $table);
-		}
+        $tables = mw()->database_manager->get_tables_list();
+        foreach ($tables as $table) {
+            $readyTables[] = str_replace(mw()->database_manager->get_prefix(), false, $table);
+        }
 
-		return $readyTables;
-	}
+        return $readyTables;
+    }
 
-	/**
-	 * Remove dir recursive
-	 * @param string $dir
-	 */
-	private function _removeFilesFromPath($dir)
-	{
-		if (!is_dir($dir)) {
-			return;
-		}
+    /**
+     * Remove dir recursive
+     * @param string $dir
+     */
+    private function _removeFilesFromPath($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
 
-		try {
+        try {
             $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($files as $fileinfo) {
                 $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
                 @$todo($fileinfo->getRealPath());
             }
         } catch (\Exception $e) {
-		    // Cant remove files from this path
+            // Cant remove files from this path
         }
 
-		@rmdir($dir);
-	}
+        @rmdir($dir);
+    }
 
-	private function _checkPathsExists() {
+    private function _checkPathsExists()
+    {
 
-		if (userfiles_path()) {
-			if (!is_dir(userfiles_path())) {
-				mkdir_recursive(userfiles_path());
-			}
-		}
+        if (userfiles_path()) {
+            if (!is_dir(userfiles_path())) {
+                mkdir_recursive(userfiles_path());
+            }
+        }
 
-		if (media_base_path()) {
-			if (!is_dir(media_base_path())) {
-				mkdir_recursive(media_base_path());
-			}
-		}
-	}
+        if (media_base_path()) {
+            if (!is_dir(media_base_path())) {
+                mkdir_recursive(media_base_path());
+            }
+        }
+    }
 
-	/**
-	 * Clone directory by path and destination
-	 * @param stringh $source
-	 * @param stringh $destination
-	 */
-	private function _cloneDirectory($source, $destination)
-	{
+    /**
+     * Clone directory by path and destination
+     * @param stringh $source
+     * @param stringh $destination
+     */
+    private function _cloneDirectory($source, $destination)
+    {
 
-     return   File::copyDirectory($source, $destination);
+        return File::copyDirectory($source, $destination);
 
 
-
-	}
+    }
 }

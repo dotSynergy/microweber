@@ -146,6 +146,8 @@ class Restore
         }
 
         $readContent = $this->readContent();
+
+
         $content = [];
         $contentData = [];
         if (isset($readContent['data'])) {

@@ -198,7 +198,6 @@ class LaravelModule extends Module
     public function registerProviders(): void
     {
 
-
         $providers = $this->get('providers', []);
 
 
@@ -279,6 +278,7 @@ class LaravelModule extends Module
 
     public function getRelativePath(): string
     {
+
         $path = normalize_path($this->getPath());
         $basePath = normalize_path(base_path());
 

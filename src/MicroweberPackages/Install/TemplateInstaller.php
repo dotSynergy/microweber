@@ -128,6 +128,32 @@ class TemplateInstaller
                 $manager->setLanguage($this->language);
             }
             $logData = $manager->start();
+
+
+
+            $userFilesPathStorage = public_path('storage');
+            if(is_link($userFilesPathStorage)) {
+                $userFilesPathStorage = realpath($userFilesPathStorage);
+                if ($userFilesPathStorage === false) {
+                    $this->logger->setLogInfo('Error resolving symlink for storage path: ' . public_path('storage'));
+                    return array();
+                }
+            } else {
+                $userFilesPathStorage = normalize_path($userFilesPathStorage, true);
+            }
+            //unzip to $userFilesPathStorage
+
+            $zip = new \ZipArchive();
+            if ($zip->open($default_content_file) === true) {
+                $zip->extractTo($userFilesPathStorage);
+                $zip->close();
+                $this->log('Unzipped default content to: ' . $userFilesPathStorage);
+            } else {
+                $this->log('Failed to open zip file: ' . $default_content_file);
+            }
+
+
+
             if (isset($logData['error'])) {
                 $this->log('Error on template content install:' .$logData['error']);
             }

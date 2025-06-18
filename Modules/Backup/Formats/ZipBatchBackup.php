@@ -647,6 +647,17 @@ class ZipBatchBackup extends DefaultBackup
         }
 
         $userFilesPathStorage = public_path('storage');
+        if(is_link($userFilesPathStorage)) {
+            $userFilesPathStorage = realpath($userFilesPathStorage);
+            if ($userFilesPathStorage === false) {
+                $this->logger->setLogInfo('Error resolving symlink for storage path: ' . public_path('storage'));
+                return array();
+            }
+        } else {
+            $userFilesPathStorage = normalize_path($userFilesPathStorage, true);
+        }
+
+
         $userFilesScanned = $this->_getDirContents($userFilesPathStorage);
 
         $userFilesReady = array();

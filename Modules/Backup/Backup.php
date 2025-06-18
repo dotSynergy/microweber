@@ -23,7 +23,8 @@ class Backup
     public $logger;
     public $sessionId;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->logger = new BackupLogger();
     }
 
@@ -76,7 +77,7 @@ class Backup
 
         if (!$this->sessionId) {
             throw new \Exception('SessionId is missing.');
-         }
+        }
 
         SessionStepper::setSessionId($this->sessionId);
 
@@ -97,7 +98,7 @@ class Backup
             if (empty($data)) {
                 return array("error" => "Empty content data.");
             }
-            cache_save($data, $readyDataCacheId,$readyDataCacheGroup);
+            cache_save($data, $readyDataCacheId, $readyDataCacheGroup);
         } else {
             $data = cache_get($readyDataCacheId, $readyDataCacheGroup);
         }
@@ -133,7 +134,7 @@ class Backup
             $backup->setType($this->type);
             $backup->setFilenameForJsonBackup('backup');  // This will create backup.json
             $backup = $backup->start();
-            cache_save($backup, $exportedDataCacheId,$readyDataCacheGroup);
+            cache_save($backup, $exportedDataCacheId, $readyDataCacheGroup);
         } else {
             $backup = cache_get($exportedDataCacheId, $readyDataCacheGroup);
         }
@@ -161,7 +162,7 @@ class Backup
             $backupWithZip = true;
             unset($backup['files']);
         }
-        if($backupMediaUserFiles){
+        if ($backupMediaUserFiles) {
             $backupWithZip = true;
         }
 
@@ -190,11 +191,11 @@ class Backup
             }
 
             if ($this->backupModules) {
-              $zipExport->setBackupModules($this->backupModules);
+                $zipExport->setBackupModules($this->backupModules);
             }
 
             if ($this->backupTemplates) {
-             $zipExport->setBackupTemplates($this->backupTemplates);
+                $zipExport->setBackupTemplates($this->backupTemplates);
             }
 
             if ($this->backupOnlyTemplate) {
@@ -208,9 +209,9 @@ class Backup
             $zipExportReady = $zipExport->start();
 
             // For single-step operations or when export is done
-            if ((isset($zipExportReady['done']) && $zipExportReady['done'] === true) || 
+            if ((isset($zipExportReady['done']) && $zipExportReady['done'] === true) ||
                 (isset($zipExportReady['data']) && !empty($zipExportReady['data']))) {
-                
+
                 // Handle different response formats consistently
                 if (isset($zipExportReady['download']) && !empty($zipExportReady['download'])) {
                     // Format 1: Direct properties at top level
@@ -228,10 +229,10 @@ class Backup
                     );
                 } else if (isset($zipExportReady['data']) && is_array($zipExportReady['data'])) {
                     // Format 2: Properties inside data array
-                    $downloadUrl = isset($zipExportReady['data']['downloadUrl']) ? 
-                        $zipExportReady['data']['downloadUrl'] : 
+                    $downloadUrl = isset($zipExportReady['data']['downloadUrl']) ?
+                        $zipExportReady['data']['downloadUrl'] :
                         (isset($zipExportReady['data']['download']) ? $zipExportReady['data']['download'] : '');
-                    
+
                     $result = array(
                         'success' => 'Items are exported',
                         'export_type' => $this->type,
@@ -248,7 +249,7 @@ class Backup
                         'data' => $zipExportReady
                     );
                 }
-                
+
                 // Clean up cache directory if backup was successful
                 if (isset($result['filepath']) && is_file($result['filepath']) && is_dir($exportCacheLocation)) {
                     // Delete unused zipped files
@@ -257,15 +258,15 @@ class Backup
                         rmdir($exportCacheLocation);
                     }
                 }
-                
+
                 return $result;
             }
-            
+
             // For multi-step operations that are still in progress
             return $zipExportReady;
         }
 
-        if (  isset($backup['files'])) {
+        if (isset($backup['files'])) {
 
             $exportSingleFile = false;
 
@@ -416,7 +417,7 @@ class Backup
             return;
         }
 
-        $dbGetQuery=DB::table($table)
+        $dbGetQuery = DB::table($table)
             ->select('*');
         if ($table == 'media') {
             $dbGetQuery->where('media_type', '!=', 'media_tn_temp');
@@ -427,7 +428,7 @@ class Backup
 //            };
 
         }
-     //   $dbGet = db_get($table, $exportFilter);
+        //   $dbGet = db_get($table, $exportFilter);
 
         $tableContent = [];
 
@@ -446,10 +447,7 @@ class Backup
         }
 
 
-
-
-
-      //  $dbGet = $dbGetQuery->toArray();
+        //  $dbGet = $dbGetQuery->toArray();
         return $tableContent;
     }
 

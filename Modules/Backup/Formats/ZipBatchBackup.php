@@ -647,47 +647,57 @@ class ZipBatchBackup extends DefaultBackup
         }
 
         $userFilesPathStorage = public_path('storage');
+        $userFilesScanned = $this->_getDirContents($userFilesPathStorage);
 
-        $userFilesPathStorage = realpath($userFilesPathStorage);
+        $userFilesReady = array();
 
-
-        $userFilesPathCheckIfReal = userfiles_path();
-        $userFilesPathCheckIfReal = realpath($userFilesPathCheckIfReal);
-
-        if (!str_starts_with($userFilesPathCheckIfReal, $userFilesPathStorage)) {
-            $userFilesPath = userfiles_path();
-            $userFilesScanned = $this->_getDirContents($userFilesPath);
-
-            $userFilesReady = array();
-
-            foreach ($userFilesScanned as $filePath) {
-                $dataFile = str_replace($userFilesPath, 'userfiles/', $filePath);
-                $userFilesReady[] = array(
-                    'filename' => $dataFile,
-                    'filepath' => $filePath
-                );
-            }
-        } else {
-
-            $userFilesPath = $userFilesPathStorage;
-            $userFilesPath = normalize_path($userFilesPath);
-
-            $userFilesScanned = $this->_getDirContents($userFilesPath);
-
-            $userFilesReady = array();
-            $userFilesPath = str_replace('\\', '/', $userFilesPath);
-            foreach ($userFilesScanned as $filePath) {
-
-
-                $dataFile = str_replace($userFilesPath, 'storage/', $filePath);
-                $userFilesReady[] = array(
-                    'filename' => $dataFile,
-                    'filepath' => $filePath
-                );
-            }
-
+        foreach ($userFilesScanned as $filePath) {
+            $dataFile = str_replace($userFilesPathStorage, '', $filePath);
+            $userFilesReady[] = array(
+                'filename' => $dataFile,
+                'filepath' => $filePath
+            );
         }
 
+       // $userFilesPathStorage = realpath($userFilesPathStorage);
+
+
+        /*   $userFilesPathCheckIfReal = userfiles_path();
+           $userFilesPathCheckIfReal = realpath($userFilesPathCheckIfReal);
+
+           if (!str_starts_with($userFilesPathCheckIfReal, $userFilesPathStorage)) {
+               $userFilesPath = userfiles_path();
+               $userFilesScanned = $this->_getDirContents($userFilesPath);
+
+               $userFilesReady = array();
+
+               foreach ($userFilesScanned as $filePath) {
+                   $dataFile = str_replace($userFilesPath, 'userfiles/', $filePath);
+                   $userFilesReady[] = array(
+                       'filename' => $dataFile,
+                       'filepath' => $filePath
+                   );
+               }
+           } else {
+
+               $userFilesPath = $userFilesPathStorage;
+               $userFilesPath = normalize_path($userFilesPath);
+
+               $userFilesScanned = $this->_getDirContents($userFilesPath);
+
+               $userFilesReady = array();
+               $userFilesPath = str_replace('\\', '/', $userFilesPath);
+               foreach ($userFilesScanned as $filePath) {
+
+
+                   $dataFile = str_replace($userFilesPath, 'storage/', $filePath);
+                   $userFilesReady[] = array(
+                       'filename' => $dataFile,
+                       'filepath' => $filePath
+                   );
+               }
+
+           }*/
 
 
         $this->logger->setLogInfo('Found ' . count($userFilesReady) . ' user files for backup');

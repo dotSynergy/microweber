@@ -57,8 +57,7 @@ export class LiveEditWidgetsService extends BaseComponent{
         this.quickEditComponentBox.boxContent.innerHTML = '';
         this.quickEditComponentBox.boxContent.appendChild(this.quickEditComponent.editor());
 
-        console.log(this.quickEditComponent.editor())
-        console.log(this.quickEditComponentBox.boxContent)
+
 
         this.quickEditComponentBox.show();
         this.status.quickEditComponent = true;

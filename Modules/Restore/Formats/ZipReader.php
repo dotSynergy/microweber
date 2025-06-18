@@ -3,6 +3,7 @@
 namespace Modules\Restore\Formats;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use MicroweberPackages\Restore\Formats\stringh;
 use MicroweberPackages\Utils\Zip\ZipArchiveExtractor;
 use Modules\Restore\Loggers\RestoreLogger;
@@ -33,7 +34,7 @@ class ZipReader extends DefaultReader
      * Read data from file
      * @return []
      */
-    public function readData()
+    public function extractZipData()
     {
         $filesForImporting = array();
 
@@ -94,8 +95,21 @@ class ZipReader extends DefaultReader
             if (is_dir($backupLocation . DS . 'userfiles' . DS . 'media')) {
                 RestoreLogger::setLogInfo('Media restored!');
             }
+            //check if storrage folder sxists
 
-            $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
+
+            $backupLocationStorage = $backupLocation . DS . 'storage';
+
+            if (is_dir($backupLocationStorage)) {
+                $copy = $this->mergePublicStorageDirectories($backupLocationStorage, public_path('storage') . DS);
+            } else {
+                $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
+            }
+
+            //  $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
+
+
+            // $copy = $this->_cloneDirectory($backupLocation, storage_path('public'));
 
         }
 
@@ -149,12 +163,11 @@ class ZipReader extends DefaultReader
 
         }
 
-        if($mainBackupFile){
+        if ($mainBackupFile) {
             if (is_file($mainBackupFile)) {
                 $filesForImporting[] = array("file" => $mainBackupFile, "reader" => "json");
             }
         }
-
 
 
         if (empty($filesForImporting)) {
@@ -313,15 +326,81 @@ class ZipReader extends DefaultReader
     }
 
     /**
+     * Merge directories in public storage
+     * @param string $sourceDir Source directory path
+     * @param string $destinationDir Destination directory path
+     * @return int Number of files copied
+     */
+    public function mergePublicStorageDirectories($sourceDir, $destinationDir)
+    {
+        $filesCopied = 0;
+
+        try {
+            if (!is_dir($sourceDir)) {
+                RestoreLogger::setLogInfo('Source directory does not exist: ' . $sourceDir);
+                return $filesCopied;
+            }
+
+            // Make sure destination directory exists
+            if (!is_dir($destinationDir)) {
+                mkdir_recursive($destinationDir);
+            }
+
+            // Create recursive directory iterator
+            $sourceDir = rtrim($sourceDir, '/\\') . DS;
+            $destinationDir = rtrim($destinationDir, '/\\') . DS;
+
+            RestoreLogger::setLogInfo('Starting directory merge from ' . $sourceDir . ' to ' . $destinationDir);
+
+            // Use recursive iterator to get all files
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($sourceDir, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            foreach ($iterator as $item) {
+                $relativePath = substr($item->getPathname(), strlen($sourceDir));
+                $targetPath = $destinationDir . $relativePath;
+
+                if ($item->isDir()) {
+                    // Create directory if it doesn't exist
+                    if (!is_dir($targetPath)) {
+                        mkdir_recursive($targetPath);
+                    }
+                } else {
+                    // Create parent directory if necessary
+                    $targetDir = dirname($targetPath);
+                    if (!is_dir($targetDir)) {
+                        mkdir_recursive($targetDir);
+                    }
+
+                    // Copy file
+                    if (copy($item->getPathname(), $targetPath)) {
+                        $filesCopied++;
+
+                        // Log every 100 files to avoid excessive logging
+                        if ($filesCopied % 100 === 0) {
+                            RestoreLogger::setLogInfo('Copied ' . $filesCopied . ' files so far...');
+                        }
+                    }
+                }
+            }
+
+            RestoreLogger::setLogInfo('Successfully copied ' . $filesCopied . ' files from ' . $sourceDir . ' to ' . $destinationDir);
+        } catch (\Exception $e) {
+            RestoreLogger::setLogInfo('Error merging directories: ' . $e->getMessage());
+        }
+
+        return $filesCopied;
+    }
+
+    /**
      * Clone directory by path and destination
      * @param stringh $source
      * @param stringh $destination
      */
     private function _cloneDirectory($source, $destination)
     {
-
         return File::copyDirectory($source, $destination);
-
-
     }
 }

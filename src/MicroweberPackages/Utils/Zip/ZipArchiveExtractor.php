@@ -65,6 +65,8 @@ class ZipArchiveExtractor
                     }
                 }
             }
+
+
             if (!$isFilenameInvalid and $canIUnzipTheFile) {
                 $targetFileSave = $path . $zipFileBasename;
 
@@ -72,8 +74,19 @@ class ZipArchiveExtractor
                     mkdir_recursive(dirname($targetFileSave));
                 }
 
-                @file_put_contents($targetFileSave, $this->zipInstance->getFromIndex($i));
+               @file_put_contents($targetFileSave, $this->zipInstance->getFromIndex($i));
+//                if ($this->zipInstance->extractTo($targetFileSave, $zipFileBasename)) {
+//                    if ($this->logger) {
+//                        $this->logger::setLogInfo('Unzipped file: ' . $zipFileBasename);
+//                    }
+//                } else {
+//                    if ($this->logger) {
+//                        $this->logger::setLogInfo('Failed to unzip file: ' . $zipFileBasename);
+//                    }
+//                }
             }
+
+          //  dd($this->logger::getLog());
         }
 
         if (empty($selectedFilesForUnzip)) {

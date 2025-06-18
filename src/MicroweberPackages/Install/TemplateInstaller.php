@@ -129,10 +129,14 @@ class TemplateInstaller
             }
             $logData = $manager->start();
 
+ 
+
+            /*
+
 
 
             $userFilesPathStorage = public_path('storage');
-            if(is_link($userFilesPathStorage)) {
+            if (is_link($userFilesPathStorage)) {
                 $userFilesPathStorage = realpath($userFilesPathStorage);
                 if ($userFilesPathStorage === false) {
                     $this->logger->setLogInfo('Error resolving symlink for storage path: ' . public_path('storage'));
@@ -142,10 +146,34 @@ class TemplateInstaller
                 $userFilesPathStorage = normalize_path($userFilesPathStorage, true);
             }
             //unzip to $userFilesPathStorage
-
+$filesInPublicStorage = [];
             $zip = new \ZipArchive();
             if ($zip->open($default_content_file) === true) {
-                $zip->extractTo($userFilesPathStorage);
+
+                //check if zip has storage folder so we will extract only it
+                $storageFolderExists = false;
+                // Check if the zip file contains a 'storage/' folder
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+
+
+
+                    if (strpos($filename, 'storage/') === 0) {
+                        $storageFolderExists = true;
+                        $filesInPublicStorage []= $filename;
+                    }
+
+                }
+                dump($userFilesPathStorage,$filesInPublicStorage);
+
+
+
+                if ($storageFolderExists) {
+                    // Extract only the 'storage/' folder
+                    $zip->extractTo($userFilesPathStorage, $filesInPublicStorage);
+                }
+
+
                 $zip->close();
                 $this->log('Unzipped default content to: ' . $userFilesPathStorage);
             } else {
@@ -153,10 +181,9 @@ class TemplateInstaller
             }
 
 
-
             if (isset($logData['error'])) {
-                $this->log('Error on template content install:' .$logData['error']);
-            }
+                $this->log('Error on template content install:' . $logData['error']);
+            }*/
 
             // ob_get_clean();
             return true;

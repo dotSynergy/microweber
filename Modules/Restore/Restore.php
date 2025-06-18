@@ -234,7 +234,7 @@ class Restore
 
         $reader = new ZipReader($file);
         $reader->setLanguage($this->language);
-        $data = $reader->readData();
+        $data = $reader->extractZipData();
 
         if ($data) {
             if (isset($data['must_choice_language']) && $data['must_choice_language']) {

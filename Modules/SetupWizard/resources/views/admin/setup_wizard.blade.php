@@ -61,7 +61,24 @@
                             <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
                             </div>
                             <div class="template-info">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $template['name'] }}</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $template['name'] }}</h3>
+
+                                <!-- Categories display -->
+                                @if(!empty($template['categories']) && is_array($template['categories']))
+                                    <div class="template-categories flex flex-wrap gap-1.5 mb-3">
+                                        @php
+                                            $categoriesToRemove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+                                            $filteredCategories = array_filter($template['categories'], function($cat) use ($categoriesToRemove) {
+                                                return !in_array(strtolower($cat), $categoriesToRemove);
+                                            });
+                                        @endphp
+
+                                        @foreach($filteredCategories as $cat)
+                                            <span class="px-2 py-0.5 text-xs bg-gray-200 text-gray-700 rounded-full">{{ $cat }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
+
                                 @if(isset($template['description']))
                                     <div class="template-description mb-4">
                                         <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>
@@ -129,7 +146,7 @@
                 body: JSON.stringify({template: template})
             })
                 .then(response => response.json())
-                .then(data => {
+                .then data => {
                     mw.spinner({element: document.body}).hide();
                     if (data.error) {
                         mw.notification.error(data.error);

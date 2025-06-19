@@ -78,7 +78,22 @@ mw.app.templateSettingsWidget = new mw.controlBox({
     closeButton: true,
     title: mw.lang('Template settings')
 });
+
+mw.app.templateSettingsWidgetSetupWizard = new mw.controlBox({
+    content: `<div id="template-settings-teleport-setup-wizard-content"></div>`,
+    position:  'right',
+    id: `template-settings-teleport-setup-wizard`,
+    closeButton: true,
+    title: mw.lang('Setup wizard')
+});
+mw.top().app.on('showSetupWizard', async function () {
+    mw.app.templateSettingsWidgetSetupWizard.show();
+});
+
+
+
 mw.app.templateSettingsWidget.box.style.width = 'var(--sidebar-end-size)';
+mw.app.templateSettingsWidgetSetupWizard.box.style.width = 'var(--sidebar-end-size)';
 
     const guiEditor = new (mw.top()).controlBox({
         content: ``,

@@ -1,7 +1,6 @@
 <template>
 
 
-
     <div class="p-3">
         <div v-if="isLoading" class="text-center">
             <div class="spinner-border" role="status">
@@ -12,9 +11,13 @@
         <div v-else-if="currentError" class="alert alert-danger">
             {{ currentError }}
         </div>
-        <div v-else>            <!-- Navigation path -->
+        <div v-else>
 
-            <div class="mw-template-settings-back-button-sticky" v-if="currentPath && currentPath !== '/' && !isSingleSettingMode">
+
+            <!-- Navigation path -->
+
+            <div class="mw-template-settings-back-button-sticky"
+                 v-if="currentPath && currentPath !== '/' && !isSingleSettingMode">
                 <FieldBackButton
                     v-if="!hasActiveStylePackOpener"
                     :current-path="currentPath"
@@ -25,7 +28,8 @@
 
             </div>
             <!-- Choose where to edit dropdown -->
-            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper mt-3 mb-3" v-show="!isSingleSettingMode">
+            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper mt-3 mb-3"
+                 v-show="!isSingleSettingMode">
                 <label for="css_vars_design_apply_mode" class="live-edit-label">Choose where to edit</label>
                 <select class="form-control-live-edit-input form-select" v-model="applyMode"
                         @change="handleApplyModeChange">
@@ -45,7 +49,8 @@
 
             <!-- AI Design Button -->
             <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
-                                 @batch-update="handleBatchUpdate"/>            <!-- Main settings list when at root path -->
+                                 @batch-update="handleBatchUpdate"/>
+            <!-- Main settings list when at root path -->
             <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
                 <span
                     class="fs-2 font-weight-bold settings-main-group d-flex align-items-center justify-content-between">
@@ -53,7 +58,9 @@
                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Reset stylesheet settings" class="reset-template-settings-and-stylesheet-button"
                             @click="resetAllDesignSelectorsValuesSettings">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                             fill="currentColor"><path
+                            d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
                     </button>
                 </span>
 
@@ -107,7 +114,8 @@
                     </div>
                     <!-- Option 2: Children are found via subItems (URL matching), and no direct .settings array -->
                     <div v-else-if="subItems && subItems.length > 0">
-                        <div v-for="(subItemFromFlatList, index) in subItems" :key="'sub_item_'+index" class="my-3">                            <nested-settings-item
+                        <div v-for="(subItemFromFlatList, index) in subItems" :key="'sub_item_'+index" class="my-3">
+                            <nested-settings-item
                                 :setting="subItemFromFlatList"
                                 :root-selector="getRootSelector()"
                                 :is-single-setting-mode="isSingleSettingMode"
@@ -125,7 +133,7 @@
             <!-- Style Editor iframe holder -->
             <div v-if="showStyleSettings === 'styleEditor'" class="mt-3">
 
-                <div class="mw-template-settings-back-button-sticky" >
+                <div class="mw-template-settings-back-button-sticky">
 
                     <FieldBackButton
                         :current-path="currentPath"
@@ -156,7 +164,6 @@
             />
         </div>
     </div>
-
 
 
 </template>
@@ -227,7 +234,8 @@ export default {
             activeStylePackOpener: null,
             hasActiveStylePackOpener: false,
 
-        };    }, computed: {
+        };
+    }, computed: {
         displayedStyleSettingVars() {
             let vars = this.styleSettingVars;
 
@@ -324,7 +332,7 @@ export default {
 
             return findFirstUrlInSettings(this.displayedStyleSettingVars);
         },
-    },    mounted() {
+    }, mounted() {
         this.fetchData().then(() => {
             this.initializeStyleValues();
             if (this.isLayoutMode) {
@@ -389,7 +397,7 @@ export default {
                 this.initializeStyleValues();
             },
             deep: true
-        },        currentPath() {
+        }, currentPath() {
             // When path changes, the relevant rootSelector might change, so re-evaluating values might be needed
             // if not all values are pre-cached. For now, initializeStyleValues fetches all.
         },
@@ -407,7 +415,9 @@ export default {
             },
             immediate: false
         }
-    }, methods: {
+    },
+
+    methods: {
         fetchExistingLayoutSelectors() {
             let selectors = [];
             const layoutElement = this.getActiveLayoutElement();
@@ -756,7 +766,10 @@ export default {
                     }
                 });
             }
-        }, updateSettingFieldValues(selector, property, value) {
+        },
+
+
+        updateSettingFieldValues(selector, property, value) {
             // Find and update any setting fieldSettings.value that matches this selector and property
             const itemsToProcess = this.flattenStyleSettings(this.displayedStyleSettingVars);
             itemsToProcess.forEach(item => {
@@ -793,7 +806,9 @@ export default {
                         item.fieldSettings.value = value;
                     }
                 }
-            });        }, navigateTo(path) {
+            });
+        },
+        navigateTo(path) {
             // Prevent navigation when in single setting mode
             if (this.isSingleSettingMode) {
                 return;
@@ -805,6 +820,8 @@ export default {
                     return; // Stop navigation if we collapsed a style pack
                 }
             }
+
+            console.log('Navigating to ' + path)
 
             this.currentPath = path;
         },
@@ -867,7 +884,6 @@ export default {
 
 
                     window.mw?.top().app.registerAskUserToStay(true);
-
 
 
                     for (const selector in updatesBySelector) {
@@ -1255,7 +1271,7 @@ export default {
         },
 
         handleStylePackExpandedState(data) {
-            const { id, isExpanded } = data;
+            const {id, isExpanded} = data;
 
             // Store the expanded state by id
             this.stylePacksExpandedState[id] = isExpanded;
@@ -1272,6 +1288,9 @@ export default {
 
         collapseActiveStylePack() {
             if (this.hasActiveStylePackOpener && this.nestedItems) {
+
+                console.log('Closing style pack');
+
                 for (const item of this.nestedItems) {
                     if (item && typeof item.collapseStylePack === 'function') {
                         if (item.collapseStylePack()) {

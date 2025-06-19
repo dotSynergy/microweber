@@ -39,6 +39,7 @@
             @foreach($templates as $template)
                 <div class="template-item" data-categories="{{ json_encode($template['categories']) }}">
                     <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
+
                     </div>
                     <div class="template-info">
                         <h3>{{ $template['name'] }}</h3>
@@ -88,7 +89,7 @@
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
-                        window.location.href = "{{ admin_url() }}";
+                        window.location.href = "{{ admin_url('live-edit') }}";
                     }
                 })
                 .catch(error => {
@@ -135,7 +136,8 @@
             background-size: cover;
             background-position: top center;
             background-repeat: no-repeat;
-            transition: background-position 3s ease-in-out;
+            transition: background-position 2s ease-in-out;
+            display: block;
         }
 
         .template-preview:hover {

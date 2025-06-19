@@ -4,10 +4,12 @@
         <div v-if="setting.fieldType">
             <!-- Display title/description for the field itself, if not a styleEditor button -->
             <div v-if="setting.fieldType === 'info' && setting.title">
-<!--                 &lt;!&ndash; Using h5 or similar for field titles to distinguish from main group titles (h4 in parent) &ndash;&gt;-->
-<!--                 <h5>{{ setting.title }}</h5>-->
-<!--                 &lt;!&ndash; Description should only be shown if this is the active view in the parent component &ndash;&gt;-->
-                 <p v-if="setting.description && isActive" class="text-muted small mt-0 mb-2">{{ setting.description }}</p>
+                <!--                 &lt;!&ndash; Using h5 or similar for field titles to distinguish from main group titles (h4 in parent) &ndash;&gt;-->
+                <!--                 <h5>{{ setting.title }}</h5>-->
+                <!--                 &lt;!&ndash; Description should only be shown if this is the active view in the parent component &ndash;&gt;-->
+                <p v-if="setting.description && isActive" class="text-muted small mt-0 mb-2">{{
+                        setting.description
+                    }}</p>
             </div>
             <component
                 :is="getComponentType(setting.fieldType)"
@@ -29,21 +31,19 @@
         </div>
 
         <!-- Case 2: The setting is a navigable group (not a field, but has a URL and title) -->
-        <div v-else-if="setting.url && setting.title && setting.title !== 'Main'">
-            <a @click="$emit('navigate', setting.url)"
+        <div v-else-if="setting.url && setting.title && setting.title !== 'Main'" v-show="!isSingleSettingMode">
+            <a v-if="!isSingleSettingMode" @click="$emit('navigate', setting.url)"
                class="mw-admin-action-links mw-adm-liveedit-tabs settings-main-group">
                 {{ setting.title }}
             </a>
+            <div v-else class="mw-admin-action-links mw-adm-liveedit-tabs settings-main-group disabled-navigation">
+                {{ setting.title }}
+            </div>
             <!-- Only show description when this item is the current path (active) -->
             <p v-if="setting.description && isActive" class="text-muted small mt-0 mb-2">{{ setting.description }}</p>
         </div>
 
-        <!-- Fallback: If it's not a field and not a URL-based link, but has a title (e.g. a static title/description item) -->
-<!--        <div v-else-if="setting.title">-->
-<!--            <h5>{{ setting.title }}</h5>-->
-<!--            &lt;!&ndash; Only show description when this item is active &ndash;&gt;-->
-<!--            <p v-if="setting.description && isActive" class="text-muted small mt-0 mb-2">{{ setting.description }}</p>-->
-<!--        </div>-->
+
     </div>
 </template>
 
@@ -80,12 +80,15 @@ export default {
         setting: {
             type: Object,
             required: true
-        },
-        rootSelector: { // This is the root selector for the current group/context
+        }, rootSelector: { // This is the root selector for the current group/context
             type: String,
             default: ''
         },
         isActive: {
+            type: Boolean,
+            default: false
+        },
+        isSingleSettingMode: {
             type: Boolean,
             default: false
         }
@@ -116,7 +119,7 @@ export default {
                 }
             }
             return baseSelector || effectiveRootSelector || '';
-        },        currentValue() {
+        }, currentValue() {
             if (!this.setting.fieldSettings?.property) {
                 return this.setting.fieldSettings?.value || '';
             }
@@ -139,16 +142,26 @@ export default {
     methods: {
         getComponentType(fieldType) {
             switch (fieldType) {
-                case 'colorPicker': return 'field-color-picker';
-                case 'rangeSlider': return 'field-range-slider';
-                case 'dropdown': return 'field-dropdown';
-                case 'fontFamily': return 'field-font-family';
-                case 'clearAll': return 'field-clear-all';
-                case 'colorPalette': return 'field-color-palette';
-                case 'button': return 'field-button';
-                case 'infoBox': return 'field-info-box';
-                case 'styleEditor': return 'field-style-editor';
-                case 'stylePack': return 'field-style-pack';
+                case 'colorPicker':
+                    return 'field-color-picker';
+                case 'rangeSlider':
+                    return 'field-range-slider';
+                case 'dropdown':
+                    return 'field-dropdown';
+                case 'fontFamily':
+                    return 'field-font-family';
+                case 'clearAll':
+                    return 'field-clear-all';
+                case 'colorPalette':
+                    return 'field-color-palette';
+                case 'button':
+                    return 'field-button';
+                case 'infoBox':
+                    return 'field-info-box';
+                case 'styleEditor':
+                    return 'field-style-editor';
+                case 'stylePack':
+                    return 'field-style-pack';
                 default:
                     console.warn('Unknown fieldType:', fieldType, 'for setting:', this.setting.title);
                     return null;
@@ -198,7 +211,7 @@ export default {
             }
             return false;
         }
-    },    mounted() {
+    }, mounted() {
         // Register this component to receive CSS property change notifications from TemplateSettings
         if (this.templateSettings && typeof this.templateSettings.registerPropertyChangeListener === 'function') {
             this.templateSettings.registerPropertyChangeListener(this.onCssPropertyChanged);
@@ -212,3 +225,11 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.disabled-navigation {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+</style>

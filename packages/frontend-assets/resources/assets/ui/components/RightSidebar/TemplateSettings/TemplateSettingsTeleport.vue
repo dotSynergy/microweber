@@ -2,7 +2,7 @@
     <Teleport defer :to="teleportTarget">
 
 
-        <TemplateSettings></TemplateSettings>
+        <TemplateSettings :setting="setting"></TemplateSettings>
 
     </Teleport>
 </template>
@@ -22,6 +22,11 @@ export default {
         teleportTarget: {
             type: String,
             default: '#template-settings-teleport-widget-content'
+        },
+        setting: {
+            type: String,
+            default: null,
+            required: false
         }
     }
 };

@@ -12,10 +12,9 @@
         <div v-else-if="currentError" class="alert alert-danger">
             {{ currentError }}
         </div>
-        <div v-else>
-            <!-- Navigation path -->
+        <div v-else>            <!-- Navigation path -->
 
-            <div class="mw-template-settings-back-button-sticky" v-if="currentPath && currentPath !== '/'">
+            <div class="mw-template-settings-back-button-sticky" v-if="currentPath && currentPath !== '/' && !isSingleSettingMode">
                 <FieldBackButton
                     v-if="!hasActiveStylePackOpener"
                     :current-path="currentPath"
@@ -26,7 +25,7 @@
 
             </div>
             <!-- Choose where to edit dropdown -->
-            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper mt-3 mb-3">
+            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper mt-3 mb-3" v-show="!isSingleSettingMode">
                 <label for="css_vars_design_apply_mode" class="live-edit-label">Choose where to edit</label>
                 <select class="form-control-live-edit-input form-select" v-model="applyMode"
                         @change="handleApplyModeChange">
@@ -45,13 +44,9 @@
 
 
             <!-- AI Design Button -->
-            <FieldAiChangeDesign v-if="hasStyleSettings" :is-ai-available="isAIAvailable"
-                                 @batch-update="handleBatchUpdate"/>
-
-
-
-            <!-- Main settings list when at root path -->
-            <div v-if="currentPath === '/' && hasStyleSettings" class="mt-5">
+            <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
+                                 @batch-update="handleBatchUpdate"/>            <!-- Main settings list when at root path -->
+            <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
                 <span
                     class="fs-2 font-weight-bold settings-main-group d-flex align-items-center justify-content-between">
                     Styles
@@ -80,13 +75,16 @@
                 <!-- If currentSetting itself is a field, render it using NestedSettingsItem -->
                 <!-- NestedSettingsItem will also handle currentSetting.settings if it exists (for complex fields) -->
                 <div v-if="currentSetting.fieldType">
+
                     <nested-settings-item
                         :setting="currentSetting"
                         :root-selector="getRootSelector()"
+                        :is-single-setting-mode="isSingleSettingMode"
                         @navigate="navigateTo"
                         @update="handleSettingUpdate"
                         @batch-update="handleBatchUpdate"
                         @open-style-editor="handleStyleEditorOpen"/>
+
                 </div>
                 <!-- Else (currentSetting is a group, not a field itself) -->
                 <div v-else>
@@ -94,9 +92,11 @@
                     <div v-if="currentSetting.settings && currentSetting.settings.length > 0">
                         <div v-for="(childSetting, index) in currentSetting.settings" :key="'direct_child_'+index"
                              class="my-3">
+
                             <nested-settings-item
                                 :setting="childSetting"
                                 :root-selector="getRootSelector()"
+                                :is-single-setting-mode="isSingleSettingMode"
                                 @navigate="navigateTo"
                                 @update="handleSettingUpdate"
                                 @batch-update="handleBatchUpdate"
@@ -107,10 +107,10 @@
                     </div>
                     <!-- Option 2: Children are found via subItems (URL matching), and no direct .settings array -->
                     <div v-else-if="subItems && subItems.length > 0">
-                        <div v-for="(subItemFromFlatList, index) in subItems" :key="'sub_item_'+index" class="my-3">
-                            <nested-settings-item
+                        <div v-for="(subItemFromFlatList, index) in subItems" :key="'sub_item_'+index" class="my-3">                            <nested-settings-item
                                 :setting="subItemFromFlatList"
                                 :root-selector="getRootSelector()"
+                                :is-single-setting-mode="isSingleSettingMode"
                                 @navigate="navigateTo"
                                 @update="handleSettingUpdate"
                                 @batch-update="handleBatchUpdate"
@@ -187,6 +187,13 @@ export default {
         FieldSettingsGroups,
         FieldBackButton
     },
+    props: {
+        setting: {
+            type: String,
+            default: null,
+            required: false
+        }
+    },
     provide() {
         return {
             templateSettings: this
@@ -220,13 +227,21 @@ export default {
             activeStylePackOpener: null,
             hasActiveStylePackOpener: false,
 
-        };
-    }, computed: {
+        };    }, computed: {
         displayedStyleSettingVars() {
+            let vars = this.styleSettingVars;
+
+            // Apply layout mode filtering if needed
             if (this.isLayoutMode && this.existingLayoutSelectorsInitialized) {
-                return this.filterSettingsForLayoutMode(this.styleSettingVars, this.existingLayoutSelectors);
+                vars = this.filterSettingsForLayoutMode(vars, this.existingLayoutSelectors);
             }
-            return this.styleSettingVars;
+
+            // If setting prop is provided, filter to show only that specific setting
+            if (this.setting) {
+                vars = this.filterSingleSetting(vars, this.setting);
+            }
+
+            return vars;
         },
 
         hasStyleSettings() {
@@ -279,13 +294,48 @@ export default {
         isTemplateMode() {
             return this.applyMode === 'template';
         },
-    },
 
-    mounted() {
+        // Check if we're in single setting mode (filtering enabled)
+        isSingleSettingMode() {
+            return this.setting && this.setting.trim() !== '';
+        },
+
+        // Get the URL of the first filtered setting to auto-navigate to
+        autoNavigationUrl() {
+            if (!this.isSingleSettingMode || !this.displayedStyleSettingVars.length) {
+                return null;
+            }
+
+            // Find the first setting with a URL
+            const findFirstUrlInSettings = (settings) => {
+                for (const setting of settings) {
+                    if (setting.url) {
+                        return setting.url;
+                    }
+                    if (setting.settings && setting.settings.length > 0) {
+                        const nestedUrl = findFirstUrlInSettings(setting.settings);
+                        if (nestedUrl) {
+                            return nestedUrl;
+                        }
+                    }
+                }
+                return null;
+            };
+
+            return findFirstUrlInSettings(this.displayedStyleSettingVars);
+        },
+    },    mounted() {
         this.fetchData().then(() => {
             this.initializeStyleValues();
             if (this.isLayoutMode) {
                 this.fetchExistingLayoutSelectors();
+            }
+
+            // Auto-navigate to the first setting when in single setting mode
+            if (this.isSingleSettingMode && this.autoNavigationUrl) {
+                this.$nextTick(() => {
+                    this.currentPath = this.autoNavigationUrl;
+                });
             }
         });
 
@@ -339,10 +389,23 @@ export default {
                 this.initializeStyleValues();
             },
             deep: true
-        },
-        currentPath() {
+        },        currentPath() {
             // When path changes, the relevant rootSelector might change, so re-evaluating values might be needed
             // if not all values are pre-cached. For now, initializeStyleValues fetches all.
+        },
+
+        // Watch for changes in displayedStyleSettingVars when in single setting mode
+        displayedStyleSettingVars: {
+            handler(newVars) {
+                if (this.isSingleSettingMode && newVars && newVars.length > 0 && this.autoNavigationUrl) {
+                    this.$nextTick(() => {
+                        if (this.currentPath === '/') {
+                            this.currentPath = this.autoNavigationUrl;
+                        }
+                    });
+                }
+            },
+            immediate: false
         }
     }, methods: {
         fetchExistingLayoutSelectors() {
@@ -730,8 +793,12 @@ export default {
                         item.fieldSettings.value = value;
                     }
                 }
-            });
-        }, navigateTo(path) {
+            });        }, navigateTo(path) {
+            // Prevent navigation when in single setting mode
+            if (this.isSingleSettingMode) {
+                return;
+            }
+
             // Try to collapse any active style pack first
             if (this.hasActiveStylePackOpener && path !== this.currentPath) {
                 if (this.collapseActiveStylePack()) {
@@ -1216,6 +1283,56 @@ export default {
                 }
             }
             return false;
+        },
+
+        filterSingleSetting(settings, settingParameter) {
+            if (!settingParameter || !Array.isArray(settings)) {
+                return settings;
+            }
+
+            // Helper function to recursively search through settings
+            const findMatchingSetting = (settingsArray, searchTerm) => {
+                const results = [];
+
+                for (const setting of settingsArray) {
+                    let isMatch = false;
+
+                    // Check if the setting matches by title (case insensitive)
+                    if (setting.title && setting.title.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        isMatch = true;
+                    }
+
+                    // Check if the setting matches by fieldType
+                    if (setting.fieldType && setting.fieldType.toLowerCase() === searchTerm.toLowerCase()) {
+                        isMatch = true;
+                    }
+
+                    // Check if the setting matches by URL
+                    if (setting.url && setting.url.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        isMatch = true;
+                    }
+
+                    if (isMatch) {
+                        results.push(setting);
+                    }
+
+                    // Recursively search in nested settings
+                    if (setting.settings && Array.isArray(setting.settings)) {
+                        const nestedResults = findMatchingSetting(setting.settings, searchTerm);
+                        if (nestedResults.length > 0) {
+                            // If we found matches in nested settings, include the parent with filtered children
+                            results.push({
+                                ...setting,
+                                settings: nestedResults
+                            });
+                        }
+                    }
+                }
+
+                return results;
+            };
+
+            return findMatchingSetting(settings, settingParameter);
         },
     }
 };

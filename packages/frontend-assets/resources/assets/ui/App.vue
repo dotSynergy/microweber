@@ -9,6 +9,7 @@
         <ListModules></ListModules>
        <ElementSettingsModal></ElementSettingsModal>
        <FontsManager></FontsManager>
+       <SetupWizard></SetupWizard>
 <!--       <ModalsContainer ></ModalsContainer >-->
 
     </div>
@@ -31,6 +32,7 @@ import ListLayouts from "./components/Layouts/ListLayouts.vue";
 import ListModules from "./components/Modules/ListModules.vue";
 import FontsManager from "./components/FontsManager/FontsManager.vue";
 import ElementSettingsModal from "./components/ElementSettings/ElementSettingsModal.vue";
+import SetupWizard from "./components/SetupWizard/SetupWizard.vue";
 
 export default {
     components: {
@@ -42,6 +44,7 @@ export default {
         ListLayouts,
         ListModules,
         FontsManager,
+        SetupWizard,
     },
 
     data() {

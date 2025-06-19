@@ -94,8 +94,8 @@ const AIChatFormCSS= `
 
 
 
-const AIChatFormTpl = (multiLine, placeholder, options) => `
-    <div class="mw-ai-chat-box">
+const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => `
+    <div class="mw-ai-chat-box" style="display:${hasChat ? '' : 'none'}">
         <div class="mw-ai-chat-box-area">
             <${multiLine ? 'textarea' : 'input' } class="mw-ai-chat-box-area-field" placeholder="${placeholder || mw.lang('Enter topic')}">${multiLine ? '</textarea>' : ''}
             <div class="mw-ai-chat-box-footer">
@@ -110,7 +110,7 @@ const AIChatFormTpl = (multiLine, placeholder, options) => `
                     </select>`: ''}
                 </div>
                 <div class="mw-ai-chat-box-actions">
-                    <button type="button" class="mw-ai-chat-box-action-voice">${mw.top().app.iconService.icon('mic')}</button>
+                    <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>
                     <button type="button" class="mw-ai-chat-box-action-send">${mw.top().app.iconService.icon('send')}</button>
                 </div>
             </div>
@@ -131,19 +131,23 @@ export class MWSpeechRecognition extends MicroweberBaseClass {
     }
 
     #status = false;
+    #recognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition;
+
+    isSupported() {
+        return !!this.#recognition;
+    }
 
     init() {
-        this.recognition = new (window.SpeechRecognition ||
-        window.webkitSpeechRecognition ||
-        window.mozSpeechRecognition)();
-        this.events();
+        if(this.#recognition) {
+            this.recognition = new (this.#recognition)();
+            this.events();
+        }
+
     }
 
     events () {
         this.recognition.onstart = () => {
             this.dispatch('start');
-
-
         };
         this.recognition.onend = () => {
             this.dispatch('end')
@@ -163,13 +167,17 @@ export class MWSpeechRecognition extends MicroweberBaseClass {
     }
 
     start() {
-        this.recognition.start();
-        this.#status = true;
+        if(this.#recognition) {
+            this.recognition.start();
+            this.#status = true;
+        }
     }
 
     stop() {
-        this.recognition.stop();
-        this.#status = false;
+        if(this.#recognition) {
+            this.recognition.stop();
+            this.#status = false;
+        }
     }
 
     toggle() {
@@ -192,7 +200,8 @@ export class AIChatForm extends MicroweberBaseClass {
 
     rend() {
         const frag = document.createElement('div');
-        frag.innerHTML = AIChatFormTpl(this.settings.multiLine, this.settings.placeholder, this.settings.chatOptions);
+        const hasChat = !!mw.top().win.MwAi;
+        frag.innerHTML = AIChatFormTpl(this.settings.multiLine, this.settings.placeholder,  this.settings.chatOptions, this.speechRecognition.isSupported(), hasChat);
         frag.className = 'mw-ai-chat-form';
 
         this.form = frag;
@@ -279,8 +288,9 @@ export class AIChatForm extends MicroweberBaseClass {
     }
 
     init() {
-        this.rend()
         this.#speech()
+        this.rend()
+
         this.handleArea()
         this.handleMic()
         this.handleSubmit()

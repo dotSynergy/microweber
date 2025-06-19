@@ -433,7 +433,9 @@ class QuickEditService extends MicroweberBaseClass {
     collectTexts(edits, toJson) {
         return this.collect(edits, toJson, (curr, node) => {
 
-            return node.nodeName !== 'IMG';
+            console.log(curr,node)
+
+            return node.nodeName !== 'IMG' && !node.classList.contains('mw-layout-background-node');
         });
     }
 
@@ -502,7 +504,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const defaults = {
             document: mw.top().app.canvas.getDocument(),
             root: mw.top().app.canvas.getDocument().body,
-            nodesSelector: 'h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node',
+            nodesSelector: 'h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
             editsSelector: '.edit[rel][field]:not(.module,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,

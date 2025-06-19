@@ -33,7 +33,7 @@
             <div class="lg:w-64 shrink-0">
                 <div class="bg-[#f4f4f4] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-5 sticky top-5">
                     <ul class="space-y-1.5">
-                        <li>
+                        <li class="my-0">
                             <button onclick="filterTemplates('')"
                                 class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter active"
                                 data-category="">
@@ -41,9 +41,9 @@
                             </button>
                         </li>
                         @foreach($categories as $category)
-                            <li>
+                            <li class="my-0">
                                 <button onclick="filterTemplates('{{ $category }}')"
-                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter"
+                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter mt-0 mb-0"
                                     data-category="{{ $category }}">
                                     {{ $category }}
                                 </button>
@@ -61,31 +61,33 @@
                             <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
                             </div>
                             <div class="template-info">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $template['name'] }}</h3>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $template['name'] }}</h3>
+{{--                                @if(isset($template['description']))--}}
+{{--                                    <div class="template-description mb-4">--}}
+{{--                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
 
-                                <!-- Categories display -->
-                                @if(!empty($template['categories']) && is_array($template['categories']))
-                                    <div class="template-categories flex flex-wrap gap-1.5 mb-3">
-                                        @php
-                                            $categoriesToRemove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
-                                            $filteredCategories = array_filter($template['categories'], function($cat) use ($categoriesToRemove) {
-                                                return !in_array(strtolower($cat), $categoriesToRemove);
-                                            });
-                                        @endphp
-
-                                        @foreach($filteredCategories as $cat)
-                                            <span class="px-2 py-0.5 text-xs bg-gray-200 text-gray-700 rounded-full">{{ $cat }}</span>
-                                        @endforeach
+                                @if(!empty($template['categories']))
+                                    <div class="template-categories mb-4">
+                                        <div class="flex flex-wrap gap-1">
+                                            @php
+                                                $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+                                                $filteredCategories = [];
+                                                foreach($template['categories'] as $category) {
+                                                    if(!in_array(strtolower($category), $remove)) {
+                                                        $filteredCategories[] = $category;
+                                                    }
+                                                }
+                                            @endphp
+                                            @foreach($filteredCategories as $category)
+                                                <label class="live-edit-label !font-thin">{{ $category }}{{ !$loop->last ? ', ' : '' }}</label>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 @endif
 
-                                @if(isset($template['description']))
-                                    <div class="template-description mb-4">
-                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>
-                                    </div>
-                                @endif
-
-                                <button class="btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
+                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
                                     <span>Use this template</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -146,7 +148,7 @@
                 body: JSON.stringify({template: template})
             })
                 .then(response => response.json())
-                .then data => {
+                .then(data => {
                     mw.spinner({element: document.body}).hide();
                     if (data.error) {
                         mw.notification.error(data.error);
@@ -244,6 +246,25 @@
 
         .top-5 {
             top: 20px !important;
+        }
+
+        .template-categories {
+            label {
+                font-weight: 400 !important;
+            }
+        }
+
+        .use-template-btn{
+            &:hover {
+                background-color: #1f2937 !important;
+                color: #ffffff !important;
+            }
+
+            svg {
+                &:hover {
+                    fill: #ffffff !important;
+                }
+            }
         }
     </style>
 </main>

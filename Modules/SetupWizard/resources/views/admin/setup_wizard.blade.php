@@ -33,7 +33,7 @@
             <div class="lg:w-64 shrink-0">
                 <div class="bg-[#f4f4f4] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-5 sticky top-5">
                     <ul class="space-y-1.5">
-                        <li>
+                        <li class="my-0">
                             <button onclick="filterTemplates('')"
                                 class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter active"
                                 data-category="">
@@ -41,9 +41,9 @@
                             </button>
                         </li>
                         @foreach($categories as $category)
-                            <li>
+                            <li class="my-0">
                                 <button onclick="filterTemplates('{{ $category }}')"
-                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter my-0"
+                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter mt-0 mb-0"
                                     data-category="{{ $category }}">
                                     {{ $category }}
                                 </button>

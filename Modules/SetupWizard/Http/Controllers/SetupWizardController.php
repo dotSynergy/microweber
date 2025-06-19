@@ -15,6 +15,8 @@ class SetupWizardController extends AdminController
         $getCategories = [];
         $siteTemplates = [];
         $getTemplates = site_templates();
+        $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+
 
         foreach ($getTemplates as $template) {
             if (!isset($template['screenshot'])) {
@@ -66,10 +68,6 @@ class SetupWizardController extends AdminController
             $template['description'] = $templateDescription;
             $siteTemplates[] = $template;
         }
-
-
-        $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
-
 
         foreach ($remove as $key => $removeCategory) {
             $remove[$key] = strtolower($removeCategory);

@@ -53,10 +53,11 @@
                         <small>Placeholder for site title, description, company name, contact email, etc.</small>
 
 
-                        temp
+
 
                         <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
                         <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
+                        <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
 
 
                     </div>

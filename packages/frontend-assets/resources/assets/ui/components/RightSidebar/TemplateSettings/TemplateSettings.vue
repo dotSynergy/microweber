@@ -1,5 +1,7 @@
 <template>
-    <Teleport defer to="#template-settings-teleport-widget-content">
+
+
+
     <div class="p-3">
         <div v-if="isLoading" class="text-center">
             <div class="spinner-border" role="status">
@@ -153,7 +155,10 @@
                 @load-more-fonts="loadMoreFonts"
             />
         </div>
-    </div></Teleport>
+    </div>
+
+
+
 </template>
 
 <style>
@@ -189,6 +194,7 @@ export default {
     },
     data() {
         return {
+            shouldTeleport: true,
             isLoading: true,
             currentError: null,
             supportedFonts: [],

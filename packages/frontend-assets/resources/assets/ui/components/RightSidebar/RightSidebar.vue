@@ -36,7 +36,8 @@
                          role="tabpanel">
 
 
-                        <TemplateSettings></TemplateSettings>
+<!--                        <TemplateSettings></TemplateSettings>-->
+                        <TemplateSettingsTeleport></TemplateSettingsTeleport>
 
 
 <!--
@@ -88,9 +89,11 @@ import ToolsButtons from "./ToolsButtons.vue";
 import StyleEditor from "../StyleEditor/StyleEditor.vue";
 
 import CSSGUIService from "../../../api-core/services/services/css-gui.service.js";
+import TemplateSettingsTeleport from "./TemplateSettings/TemplateSettingsTeleport.vue";
 
 export default {
     components: {
+        TemplateSettingsTeleport,
 
         StyleEditor,
         Editor,

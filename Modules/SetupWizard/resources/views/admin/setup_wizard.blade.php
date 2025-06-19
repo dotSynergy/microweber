@@ -43,7 +43,7 @@
                         @foreach($categories as $category)
                             <li>
                                 <button onclick="filterTemplates('{{ $category }}')"
-                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter mb-0"
+                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter my-0"
                                     data-category="{{ $category }}">
                                     {{ $category }}
                                 </button>

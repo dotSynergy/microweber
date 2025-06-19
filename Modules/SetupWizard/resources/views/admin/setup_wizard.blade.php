@@ -38,21 +38,23 @@
         <div class="templates-container">
             @foreach($templates as $template)
                 <div class="template-item" data-categories="{{ json_encode($template['categories']) }}">
-                    <div class="template-preview">
-                        <img src="{{ $template['screenshot'] }}" alt="{{ $template['name'] }}">
+                    <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
                     </div>
                     <div class="template-info">
                         <h3>{{ $template['name'] }}</h3>
+                        @if(isset($template['description']))
+                            <div class="template-description d-none">
+                                <p>{{ $template['description'] }}</p>
+                            </div>
+                        @endif
+
+
                         <button class="btn btn-primary" onclick="installTemplate('{{ $template['dir_name'] }}')">
-                            Install Template
+                            Use this template
                         </button>
                     </div>
 
-                    @if(isset($template['description']))
-                        <div class="template-description">
-                            <p>{{ $template['description'] }}</p>
-                        </div>
-                    @endif
+
 
                 </div>
             @endforeach
@@ -127,10 +129,17 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .template-preview img {
+        .template-preview {
             width: 100%;
             height: 200px;
-            object-fit: cover;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            transition: background-position 3s ease-in-out;
+        }
+
+        .template-preview:hover {
+            background-position: bottom center;
         }
 
         .template-info {

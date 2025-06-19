@@ -220,6 +220,66 @@
       "kind": "webfonts#webfont",
       "family": "Source Sans Pro",
       "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Inter",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Raleway",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Nunito Sans",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "DM Sans",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Manrope",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Syne",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Outfit",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Space Grotesk",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Fraunces",
+      "category": "serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Urbanist",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Plus Jakarta Sans",
+      "category": "sans-serif"
+    },
+    {
+      "kind": "webfonts#webfont",
+      "family": "Albert Sans",
+      "category": "sans-serif"
     }
   ]
 }

@@ -315,7 +315,7 @@ class TemplateManager
         return $this->templateAdapter->getConfig($template);
     }
 
-    public function get_composer_json($template = false) : array
+    public function get_composer_json($template = false): array
     {
         return $this->templateAdapter->getComposerJson($template);
     }
@@ -883,8 +883,12 @@ class TemplateManager
             }
 
             $config = $this->get_template_config($template_path);
+
             if ($config && (!$remove_hidden || empty($config['is_hidden_from_install_screen']))) {
-                $config['screenshot'] = $this->get_template_screenshot($template_path);
+                if (isset($config['name'])) {
+                    $config['screenshot'] = $this->get_template_screenshot($config['name']);
+
+                }
                 $templates[] = $config;
             }
         }
@@ -928,19 +932,31 @@ class TemplateManager
     /**
      * Get the screenshot file for the template.
      *
-     * @param string $template_path
+     * @param string $name
      * @return string|false
      */
-    public function get_template_screenshot($template_path)
+    public function get_template_screenshot($activeTemplate)
     {
-        $jpg_screenshot = normalize_path($template_path . '/screenshot.jpg', false);
-        $png_screenshot = normalize_path($template_path . '/screenshot.png', false);
 
-        if (is_file($jpg_screenshot)) {
-            return $this->app->url_manager->link_to_file($jpg_screenshot);
-        } elseif (is_file($png_screenshot)) {
-            return $this->app->url_manager->link_to_file($png_screenshot);
+        $checkIfActiveSiteTemplate = app()->templates->find($activeTemplate);
+        if ($checkIfActiveSiteTemplate) {
+            $checkIfActiveSiteTemplateLowerName = $checkIfActiveSiteTemplate->getLowerName();
+
+            $basePath = normalize_path(public_path());
+
+            $jpg_screenshot = normalize_path($basePath . 'templates' . DS . $checkIfActiveSiteTemplateLowerName . DS . 'screenshot.jpg', false);
+            $png_screenshot = normalize_path($basePath . 'templates' . DS . $checkIfActiveSiteTemplateLowerName . DS . 'screenshot.png', false);
+
+            if (is_file($png_screenshot)) {
+                return asset('templates/' . $checkIfActiveSiteTemplateLowerName . '/screenshot.png');
+            } elseif (is_file($jpg_screenshot)) {
+                return asset('templates/' . $checkIfActiveSiteTemplateLowerName . '/screenshot.jpg');
+            } else {
+                return false;
+            }
+
         }
+
 
         return false;
     }
@@ -1019,7 +1035,7 @@ class TemplateManager
         $this->isBooted = true;
         //load_service_providers_for_template();
 
-       // load_functions_files_for_template();
+        // load_functions_files_for_template();
 //        $load_template_functions = TEMPLATE_DIR . 'functions.php';
 //
 //        if (is_file($load_template_functions)) {

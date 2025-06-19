@@ -2,6 +2,7 @@
 
 namespace Modules\Ai\Filament\Pages;
 
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -28,14 +29,57 @@ class AiSettingsPage extends AdminSettingsPage
         'ai'
     ];
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $isDisabled = config('modules.ai.disable_settings', false);
+
+        if ($isDisabled) {
+            return false;
+        }
+
+        return static::$shouldRegisterNavigation;
+    }
+
+
+
     public function form(Form $form): Form
     {
+
+        $isDisabled = config('modules.ai.disable_settings', false);
+
+        if($isDisabled){
+            return $form
+                ->schema([
+                    Section::make('AI settings are disabled')
+                        ->view('filament-forms::sections.section')
+                        ->schema([
+                            Placeholder::make('options.ai.disabled_message')
+                                ->label('AI settings are currently disabled')
+                                ->disabled()
+                                ->helperText('AI settings features are not available at this time.'),
+                        ])
+            ]);
+
+        }
+
+
+
+
+
         return $form
             ->schema([
                 Section::make('General AI Settings')
                     ->view('filament-forms::sections.section')
                     ->schema([
+                        Toggle::make('options.ai.enabled')
+                            ->label('Enable AI Functionality')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark')
+                            ->helperText('Enable or disable all AI features globally'),
+
                         Select::make('options.ai.default_driver')
+                            ->visible(fn(callable $get) => $get('options.ai.enabled'))
                             ->label('Set default AI provider for text generation')
                             ->live()
                             ->options([
@@ -44,20 +88,22 @@ class AiSettingsPage extends AdminSettingsPage
                                 'openrouter' => 'OpenRouter',
                                 'ollama' => 'Ollama',
                             ])
-                        ->helperText('Select the provider to use for AI text generation tasks'),
+                            ->helperText('Select the provider to use for AI text generation tasks'),
 
                         Select::make('options.ai.default_driver_images')
+                            ->visible(fn(callable $get) => $get('options.ai.enabled'))
                             ->label('Set default AI provider for image generation')
                             ->live()
                             ->options([
-                             //   'gemini' => 'Google Gemini',
-                             //   'openai' => 'OpenAI (DALL-E)',
+                                //   'gemini' => 'Google Gemini',
+                                //   'openai' => 'OpenAI (DALL-E)',
                                 'replicate' => 'Replicate',
                             ])
                             ->helperText('Select the provider to use for AI image generation tasks')
                     ]),
 
                 Section::make('OpenAI Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.openai_enabled')
@@ -66,7 +112,7 @@ class AiSettingsPage extends AdminSettingsPage
                             ->onIcon('heroicon-m-check')
                             ->offIcon('heroicon-m-x-mark')
 
-                            ,
+                        ,
 
                         Select::make('options.ai.openai_model')
                             ->live()
@@ -87,6 +133,7 @@ class AiSettingsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('Google Gemini Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.gemini_enabled')
@@ -95,7 +142,7 @@ class AiSettingsPage extends AdminSettingsPage
                             ->onIcon('heroicon-m-check')
                             ->offIcon('heroicon-m-x-mark')
 
-                            ,
+                        ,
 
                         Select::make('options.ai.gemini_model')
                             ->label('Gemini Model')
@@ -116,6 +163,7 @@ class AiSettingsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('OpenRouter Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.openrouter_enabled')
@@ -124,7 +172,7 @@ class AiSettingsPage extends AdminSettingsPage
                             ->onIcon('heroicon-m-check')
                             ->offIcon('heroicon-m-x-mark')
 
-                            ,
+                        ,
 
                         Select::make('options.ai.openrouter_model')
                             ->live()
@@ -145,6 +193,7 @@ class AiSettingsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('Ollama Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.ollama_enabled')
@@ -153,7 +202,7 @@ class AiSettingsPage extends AdminSettingsPage
                             ->onIcon('heroicon-m-check')
                             ->offIcon('heroicon-m-x-mark')
 
-                            ,
+                        ,
 
                         Select::make('options.ai.ollama_model')
                             ->live()
@@ -173,6 +222,7 @@ class AiSettingsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('Anthropic/Claude Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.anthropic_enabled')
@@ -197,6 +247,7 @@ class AiSettingsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('Replicate Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
                     ->schema([
                         Toggle::make('options.ai.replicate_enabled')
@@ -222,7 +273,7 @@ class AiSettingsPage extends AdminSettingsPage
                             ->placeholder('Enter your Replicate API token')
                             ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://replicate.com/account/api-tokens" target="_blank">Get your API token</a> from Replicate.</small>')),
 
-                                         ]),
+                    ]),
             ]);
     }
 }

@@ -11,6 +11,10 @@ return [
     |
     */
 
+    'enabled' => env('AI_ENABLED', false),
+
+    'disable_settings' => env('AI_DISABLE_SETTINGS', false),
+
     'default_driver' => env('AI_DRIVER', 'openai'),
     'default_driver_images' => env('AI_DRIVER_IMAGES', 'replicate'),
 
@@ -160,11 +164,11 @@ return [
             'use_cache' => env('ANTHROPIC_USE_CACHE', false),
             'cache_duration' => env('ANTHROPIC_CACHE_DURATION', 600), // minutes
             'models' => [
-                'claude-sonnet-4-20250514'      => 'Claude Sonnet 4',
-                'claude-3-7-sonnet-latest'    => 'Claude Sonnet 3.7',
-                'claude-3-5-sonnet-latest'    => 'Claude Sonnet 3.5',
-                'claude-3-opus-latest'       => 'Claude Opus 4',
-                'claude-3-5-haiku-latest'     => 'Claude Haiku 3.5',
+                'claude-sonnet-4-20250514' => 'Claude Sonnet 4',
+                'claude-3-7-sonnet-latest' => 'Claude Sonnet 3.7',
+                'claude-3-5-sonnet-latest' => 'Claude Sonnet 3.5',
+                'claude-3-opus-latest' => 'Claude Opus 4',
+                'claude-3-5-haiku-latest' => 'Claude Haiku 3.5',
             ],
         ],
     ],

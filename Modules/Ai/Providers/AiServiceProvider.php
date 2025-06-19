@@ -77,6 +77,13 @@ class AiServiceProvider extends BaseModuleServiceProvider
     public function setAiConfig(): void
     {
         if (mw_is_installed()) {
+
+            $enabled = get_option('enabled', 'ai');
+            if ($enabled) {
+                Config::set('modules.ai.enabled', $enabled);
+            }
+
+
             // Load general settings
             $defaultDriver = get_option('default_driver', 'ai');
             if ($defaultDriver) {

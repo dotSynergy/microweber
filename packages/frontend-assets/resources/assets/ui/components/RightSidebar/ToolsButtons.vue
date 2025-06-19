@@ -20,6 +20,15 @@
         </li>
 
         <li>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()">
+                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
+            </svg>
+                <Lang>Setup wizard</Lang>
+            </a>
+        </li>
+
+        <li>
             <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openContentResetContent()">
                 <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/></svg>
                 <Lang>Reset Content</Lang>
@@ -49,6 +58,10 @@ export default {
         showCodeEditor: function () {
             this.emitter.emit('show-code-editor');
         },
+        openSetupWizard: function () {
+            mw.top().app.dispatch('showSetupWizard');
+        },
+
         hideContentRevisionsDialog: function () {
             if (this.contentRevisionsDialogInstance) {
                 this.contentRevisionsDialogInstance.remove();

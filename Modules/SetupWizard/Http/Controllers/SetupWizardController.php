@@ -51,8 +51,13 @@ class SetupWizardController extends AdminController
                 }
             }
 
+            // Normalize template categories to title case
+            foreach ($templateCategories as $key => $templateCategory) {
+                $templateCategories[$key] = ucwords(strtolower($templateCategory));
+            }
+
             foreach ($templateCategories as $templateCategory) {
-                $getCategories[$templateCategory] = $templateCategory;
+                $getCategories[strtolower($templateCategory)] = $templateCategory;
             }
 
 
@@ -66,20 +71,21 @@ class SetupWizardController extends AdminController
         $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
 
 
-        foreach ($getCategories as $category) {
-            $slug = Str::slug($category);
-            foreach ($remove as $removeCategory) {
-                $removeCategory = Str::slug($removeCategory);
-                if ($slug == $removeCategory) {
-                    unset($getCategories[$category]);
-                }
+        foreach ($remove as $key => $removeCategory) {
+            $remove[$key] = strtolower($removeCategory);
+        }
+
+        // Filter out unwanted categories
+        $uniqueCategories = [];
+        foreach ($getCategories as $lowerKey => $titleCasedCategory) {
+            if (!in_array($lowerKey, $remove)) {
+                $uniqueCategories[$lowerKey] = $titleCasedCategory;
             }
         }
 
-
         return view('modules.setup_wizard::admin.setup_wizard', [
             'templates' => $siteTemplates,
-            'categories' => $getCategories
+            'categories' => $uniqueCategories
         ]);
     }
 

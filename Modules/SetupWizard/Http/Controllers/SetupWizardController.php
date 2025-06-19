@@ -3,6 +3,7 @@
 namespace Modules\SetupWizard\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use MicroweberPackages\Install\TemplateInstaller;
 use MicroweberPackages\Admin\Http\Controllers\AdminController;
 
@@ -22,12 +23,20 @@ class SetupWizardController extends AdminController
 
             $templateCategories = [];
             $templateColors = [];
+            $templateDescription  = '';
             $templateJson = templates_path() . $template['dir_name'] . '/composer.json';
 
             if (is_file($templateJson)) {
                 $templateJson = @file_get_contents($templateJson);
                 $templateJson = @json_decode($templateJson, true);
                 if (!empty($templateJson)) {
+
+                    if( isset($templateJson['description']) and is_string($templateJson['description'])) {
+                        $templateDescription = $templateJson['description'];
+                    } else {
+                        $templateDescription = '';
+                    }
+
                     if (isset($templateJson['extra']['colors'])) {
                         $templateColors = $templateJson['extra']['colors'];
                     }
@@ -46,16 +55,27 @@ class SetupWizardController extends AdminController
                 $getCategories[$templateCategory] = $templateCategory;
             }
 
-            if ($filterCategory) {
-                if (!in_array($filterCategory, $templateCategories)) {
-                    continue;
-                }
-            }
 
             $template['categories'] = $templateCategories;
             $template['colors'] = $templateColors;
+            $template['description'] = $templateDescription;
             $siteTemplates[] = $template;
         }
+
+
+        $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+
+
+        foreach ($getCategories as $category) {
+            $slug = Str::slug($category);
+            foreach ($remove as $removeCategory) {
+                $removeCategory = Str::slug($removeCategory);
+                if ($slug == $removeCategory) {
+                    unset($getCategories[$category]);
+                }
+            }
+        }
+
 
         return view('modules.setup_wizard::admin.setup_wizard', [
             'templates' => $siteTemplates,

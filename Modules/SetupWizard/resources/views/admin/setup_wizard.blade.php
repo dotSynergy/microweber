@@ -20,7 +20,7 @@
 
 <body>
 <main class="w-100 h-100vh">
-    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>
 
     <div class="templates-wrapper">
         <div class="templates-header">
@@ -47,6 +47,13 @@
                             Install Template
                         </button>
                     </div>
+
+                    @if(isset($template['description']))
+                        <div class="template-description">
+                            <p>{{ $template['description'] }}</p>
+                        </div>
+                    @endif
+
                 </div>
             @endforeach
         </div>
@@ -70,22 +77,22 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify({ template: template })
+                body: JSON.stringify({template: template})
             })
-            .then(response => response.json())
-            .then(data => {
-                mw.spinner({element: document.body}).hide();
-                if (data.error) {
-                    mw.notification.error(data.error);
-                } else if (data.success) {
-                    mw.notification.success(data.success);
-                    window.location.href = "{{ admin_url() }}";
-                }
-            })
-            .catch(error => {
-                mw.spinner({element: document.body}).hide();
-                mw.notification.error('Error installing template');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    mw.spinner({element: document.body}).hide();
+                    if (data.error) {
+                        mw.notification.error(data.error);
+                    } else if (data.success) {
+                        mw.notification.success(data.success);
+                        window.location.href = "{{ admin_url() }}";
+                    }
+                })
+                .catch(error => {
+                    mw.spinner({element: document.body}).hide();
+                    mw.notification.error('Error installing template');
+                });
         }
     </script>
 
@@ -95,34 +102,41 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .templates-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
         }
+
         .templates-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
+
         .template-item {
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
+
         .template-item:hover {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
         .template-preview img {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
+
         .template-info {
             padding: 15px;
         }
+
         .template-info h3 {
             margin: 0 0 15px 0;
             font-size: 16px;

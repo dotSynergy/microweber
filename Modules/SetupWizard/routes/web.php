@@ -15,6 +15,7 @@ use Modules\SetupWizard\Http\Controllers\SetupWizardController;
 */
 
 Route::middleware(['admin'])
+    ->prefix(mw_admin_prefix_url())
     ->name('admin.setup-wizard.')
     ->group(function () {
         Route::get('/setup-wizard', [

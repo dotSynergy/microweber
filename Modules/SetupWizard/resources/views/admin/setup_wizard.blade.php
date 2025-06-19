@@ -18,56 +18,102 @@
 
 </head>
 
-<body>
-<main class="w-100 h-100vh">
+<body class="bg-gray-50">
+<main class="w-full min-h-screen py-10 bg-[#ececec]">
     <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>
 
-    <div class="templates-wrapper">
-        <div class="templates-header">
-            <h2>Choose a template</h2>
-            <div class="templates-filters">
-                <select class="form-select" onchange="filterTemplates(this.value)">
-                    <option value="">All categories</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category }}">{{ $category }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
-        <div class="templates-container">
-            @foreach($templates as $template)
-                <div class="template-item" data-categories="{{ json_encode($template['categories']) }}">
-                    <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
-
-                    </div>
-                    <div class="template-info">
-                        <h3>{{ $template['name'] }}</h3>
-                        @if(isset($template['description']))
-                            <div class="template-description d-none">
-                                <p>{{ $template['description'] }}</p>
-                            </div>
-                        @endif
-
-
-                        <button class="btn btn-primary" onclick="installTemplate('{{ $template['dir_name'] }}')">
-                            Use this template
-                        </button>
-                    </div>
-
-
-
+    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8 p-10">
+          <h1 class="text-3xl font-thin text-gray-800 mb-3">Select template for your Website</h1>
+          <p>Choose template and customize it to fit your
+              style and ideas</p>
+      </div>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Categories Sidebar -->
+            <div class="lg:w-64 shrink-0">
+                <div class="bg-[#f4f4f4] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-5 sticky top-5">
+                    <ul class="space-y-1.5">
+                        <li>
+                            <button onclick="filterTemplates('')"
+                                class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter active"
+                                data-category="">
+                                All categories
+                            </button>
+                        </li>
+                        @foreach($categories as $category)
+                            <li>
+                                <button onclick="filterTemplates('{{ $category }}')"
+                                    class="live-edit-label w-full text-left px-4 py-2.5 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter"
+                                    data-category="{{ $category }}">
+                                    {{ $category }}
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-            @endforeach
+            </div>
+
+            <!-- Templates Grid -->
+            <div class="flex-1">
+                <div class="templates-container grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-6">
+                    @foreach($templates as $template)
+                        <div class="template-item group bg-[#f4f4f4] rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 mb-4" data-categories="{{ json_encode($template['categories']) }}">
+                            <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
+                            </div>
+                            <div class="template-info">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $template['name'] }}</h3>
+                                @if(isset($template['description']))
+                                    <div class="template-description mb-4">
+                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>
+                                    </div>
+                                @endif
+
+                                <button class="btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
+                                    <span>Use this template</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         function filterTemplates(category) {
+            // Update active category in sidebar
+            document.querySelectorAll('.category-filter').forEach(button => {
+                if (button.dataset.category === category) {
+                    button.classList.add('bg-gray-100', 'text-gray-900');
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('bg-gray-100', 'text-gray-900');
+                    button.classList.remove('active');
+                }
+            });
+
+            // Filter templates with fade effect
             const items = document.querySelectorAll('.template-item');
             items.forEach(item => {
                 const categories = JSON.parse(item.dataset.categories);
-                item.style.display = !category || categories.includes(category) ? 'block' : 'none';
+                const shouldShow = !category || categories.includes(category);
+
+                if (shouldShow) {
+                    item.classList.remove('opacity-0', 'scale-95');
+                    item.classList.add('opacity-100', 'scale-100');
+                    setTimeout(() => {
+                        item.style.display = 'block';
+                    }, 50);
+                } else {
+                    item.classList.remove('opacity-100', 'scale-100');
+                    item.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
             });
         }
 
@@ -89,7 +135,7 @@
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
-                        window.location.href = "{{ admin_url('live-edit') }}";
+                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true";
                     }
                 })
                 .catch(error => {
@@ -97,25 +143,21 @@
                     mw.notification.error('Error installing template');
                 });
         }
+
+        // Initialize first category as active
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.category-filter').classList.add('bg-gray-100', 'text-gray-900');
+        });
     </script>
 
     <style>
+        /* You can keep this section for compatibility with existing styles */
         .templates-wrapper {
             padding: 20px;
-            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .templates-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
         .templates-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
 
@@ -124,6 +166,9 @@
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s ease;
+            display: block;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .template-item:hover {
@@ -132,12 +177,11 @@
 
         .template-preview {
             width: 100%;
-            height: 200px;
+            height: 450px;
             background-size: cover;
             background-position: top center;
             background-repeat: no-repeat;
-            transition: background-position 2s ease-in-out;
-            display: block;
+            transition: background-position 3s ease-in-out;
         }
 
         .template-preview:hover {
@@ -145,12 +189,44 @@
         }
 
         .template-info {
-            padding: 15px;
+            border-top: 1px solid #9d9d9d;
+            padding: 20px;
         }
 
         .template-info h3 {
             margin: 0 0 15px 0;
             font-size: 16px;
+        }
+
+        /* Line clamp for description */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Active category style - enhanced */
+        .category-filter.active {
+            background-color: #f3f4f6;
+            color: #111827;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Add hover effect for sidebar items */
+        .category-filter {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-filter:hover {
+            transform: translateX(3px);
+        }
+
+
+        .top-5 {
+            top: 20px !important;
         }
     </style>
 </main>

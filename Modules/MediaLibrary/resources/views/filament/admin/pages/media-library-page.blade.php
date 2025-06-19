@@ -244,7 +244,7 @@
                 <a href="http://unsplash.com" target="_new" style="color:#009cff;">Unsplash.com</a>.
                 <br/><?php _e("You can use free stock images."); ?></small>
 
-            <div class="form-control-live-edit-label-wrapper">
+            <div class="form-control-live-edit-label-wrapper stock-field mt-4">
                 <input type="text" class="form-control-live-edit-input"
                        placeholder="<?php _e("Example: cars, business or landscape..."); ?>" oninput="doSearch(this)">
             </div>

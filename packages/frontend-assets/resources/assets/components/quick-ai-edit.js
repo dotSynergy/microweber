@@ -92,7 +92,7 @@ class QuickEditGUI {
         const scope = this.instance;
 
         frag.$$ref = obj;
-        frag.className = `relative`;
+        frag.className = `relative my-4`;
         frag.innerHTML = `
 
             <img src="${obj.node.src}">
@@ -527,6 +527,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         })
 
         mw.top().app.on('editChanged', this.#editChangeSyncHandle);
+        mw.top().app.on('stateChange', this.#editChangeSyncHandle);
 
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
@@ -897,6 +898,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         }
 
          mw.top().app.off('editChanged', this.#editChangeSyncHandle);
+         mw.top().app.off('stateChange', this.#editChangeSyncHandle);
 
         this.#observer = null;
     }

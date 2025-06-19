@@ -135,7 +135,7 @@
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
-                        window.location.href = "{{ admin_url() }}";
+                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true";
                     }
                 })
                 .catch(error => {

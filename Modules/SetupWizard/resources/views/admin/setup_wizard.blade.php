@@ -87,7 +87,7 @@
                                     </div>
                                 @endif
 
-                                <button class="btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
+                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
                                     <span>Use this template</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -251,6 +251,19 @@
         .template-categories {
             label {
                 font-weight: 400 !important;
+            }
+        }
+
+        .use-template-btn{
+            &:hover {
+                background-color: #1f2937 !important;
+                color: #ffffff !important;
+            }
+
+            svg {
+                &:hover {
+                    fill: #ffffff !important;
+                }
             }
         }
     </style>

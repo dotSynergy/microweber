@@ -199,9 +199,7 @@ export default {
                 // Force the component to refresh since currentValue is computed and will get the new value
                 this.$forceUpdate();
             }
-        },
-
-        // New method to collapse style pack if it's expanded
+        },        // New method to collapse style pack if it's expanded
         collapseStylePack() {
             if (this.setting.fieldType === 'stylePack' && this.$refs.fieldComponent) {
                 const fieldComponent = this.$refs.fieldComponent;
@@ -210,8 +208,33 @@ export default {
                 }
             }
             return false;
+        },
+
+        // New method to expand style pack if it's a style pack opener
+        expandStylePack(targetSetting) {
+            if (this.setting.fieldType === 'stylePack' && 
+                this.setting.previewElementsMode === 'stylePackOpener' &&
+                this.$refs.fieldComponent) {
+                const fieldComponent = this.$refs.fieldComponent;
+                
+                // Check if this component matches the target setting
+                if (targetSetting && (
+                    this.setting === targetSetting ||
+                    this.setting.url === targetSetting.url ||
+                    this.setting.title === targetSetting.title
+                )) {
+                    if (typeof fieldComponent.toggleStylePacksExpansion === 'function') {
+                        // Only expand if not already expanded
+                        if (!fieldComponent.stylePacksExpanded) {
+                            fieldComponent.toggleStylePacksExpansion();
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
-    }, mounted() {
+    },mounted() {
         // Register this component to receive CSS property change notifications from TemplateSettings
         if (this.templateSettings && typeof this.templateSettings.registerPropertyChangeListener === 'function') {
             this.templateSettings.registerPropertyChangeListener(this.onCssPropertyChanged);

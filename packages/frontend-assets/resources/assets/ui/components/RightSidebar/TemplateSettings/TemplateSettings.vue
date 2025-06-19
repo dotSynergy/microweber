@@ -205,8 +205,7 @@ export default {
         return {
             templateSettings: this
         };
-    },
-    data() {
+    },    data() {
         return {
             shouldTeleport: true,
             isLoading: true,
@@ -233,9 +232,10 @@ export default {
             stylePacksExpandedState: {},
             activeStylePackOpener: null,
             hasActiveStylePackOpener: false,
+            nestedItems: [], // Array to store references to nested settings items
 
         };
-    }, computed: {
+    },computed: {
         displayedStyleSettingVars() {
             let vars = this.styleSettingVars;
 
@@ -331,8 +331,7 @@ export default {
             };
 
             return findFirstUrlInSettings(this.displayedStyleSettingVars);
-        },
-    }, mounted() {
+        },    }, mounted() {
         this.fetchData().then(() => {
             this.initializeStyleValues();
             if (this.isLayoutMode) {
@@ -343,6 +342,16 @@ export default {
             if (this.isSingleSettingMode && this.autoNavigationUrl) {
                 this.$nextTick(() => {
                     this.currentPath = this.autoNavigationUrl;
+                    
+                    // Also try to auto-open style pack openers after navigation
+                    this.$nextTick(() => {
+                        this.autoOpenStylePackOpeners();
+                    });
+                });
+            } else if (this.isSingleSettingMode) {
+                // If no auto navigation URL, still try to open style pack openers
+                this.$nextTick(() => {
+                    this.autoOpenStylePackOpeners();
                 });
             }
         });
@@ -400,17 +409,31 @@ export default {
         }, currentPath() {
             // When path changes, the relevant rootSelector might change, so re-evaluating values might be needed
             // if not all values are pre-cached. For now, initializeStyleValues fetches all.
-        },
-
-        // Watch for changes in displayedStyleSettingVars when in single setting mode
+        },        // Watch for changes in displayedStyleSettingVars when in single setting mode
         displayedStyleSettingVars: {
             handler(newVars) {
-                if (this.isSingleSettingMode && newVars && newVars.length > 0 && this.autoNavigationUrl) {
-                    this.$nextTick(() => {
-                        if (this.currentPath === '/') {
-                            this.currentPath = this.autoNavigationUrl;
-                        }
-                    });
+                // Clear nested items array when settings change
+                this.nestedItems = [];
+                
+                if (this.isSingleSettingMode && newVars && newVars.length > 0) {
+                    console.log('displayedStyleSettingVars changed in single setting mode:', newVars.length, 'items');
+                    
+                    if (this.autoNavigationUrl) {
+                        this.$nextTick(() => {
+                            if (this.currentPath === '/') {
+                                this.currentPath = this.autoNavigationUrl;
+                            }
+                            // Auto-open style pack openers in single setting mode
+                            this.$nextTick(() => {
+                                this.autoOpenStylePackOpeners();
+                            });
+                        });
+                    } else {
+                        // If no auto navigation URL, still try to open style pack openers
+                        this.$nextTick(() => {
+                            this.autoOpenStylePackOpeners();
+                        });
+                    }
                 }
             },
             immediate: false
@@ -807,8 +830,14 @@ export default {
                     }
                 }
             });
-        },
+        },       
+        
         navigateTo(path) {
+            // Prevent navigation when in single setting mode and style pack is open
+            if (this.isSingleSettingMode && this.hasActiveStylePackOpener) {
+                return;
+            }
+            
             // Prevent navigation when in single setting mode
             if (this.isSingleSettingMode) {
                 return;
@@ -1302,9 +1331,7 @@ export default {
                 }
             }
             return false;
-        },
-
-        filterSingleSetting(settings, settingParameter) {
+        },        filterSingleSetting(settings, settingParameter) {
             if (!settingParameter || !Array.isArray(settings)) {
                 return settings;
             }
@@ -1352,6 +1379,77 @@ export default {
             };
 
             return findMatchingSetting(settings, settingParameter);
+        },        // Auto-open style pack openers when in single setting mode
+        autoOpenStylePackOpeners() {
+            if (!this.isSingleSettingMode) {
+                return;
+            }
+
+            const findAndOpenStylePackOpeners = (settings) => {
+                if (!Array.isArray(settings)) return false;
+
+                for (const setting of settings) {
+                    // Check if current setting is a style pack opener
+                    if (setting.fieldType === 'stylePack' && 
+                        setting.previewElementsMode === 'stylePackOpener') {
+                        
+                        console.log('Found style pack opener:', setting.title);
+                        
+                        // Schedule opening after next tick to ensure DOM is ready
+                        this.$nextTick(() => {
+                            this.openStylePackOpener(setting);
+                        });
+                        return true;
+                    }
+
+                    // Check nested settings
+                    if (setting.settings && Array.isArray(setting.settings)) {
+                        if (findAndOpenStylePackOpeners(setting.settings)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            };
+
+            // First try current setting if it exists
+            if (this.currentSetting) {
+                if (findAndOpenStylePackOpeners([this.currentSetting])) {
+                    return;
+                }
+            }
+
+            // If not found in current setting, search in all displayed settings
+            if (this.displayedStyleSettingVars && this.displayedStyleSettingVars.length > 0) {
+                findAndOpenStylePackOpeners(this.displayedStyleSettingVars);
+            }
+        },        // Open a style pack opener and disable navigation
+        openStylePackOpener(setting) {
+            console.log('Opening style pack opener:', setting.title);
+            
+            // Mark that we have an active style pack opener
+            this.hasActiveStylePackOpener = true;
+            this.activeStylePackOpener = setting.url || 'auto-opened';
+
+            // Use a longer delay to ensure all nested components are fully rendered
+            setTimeout(() => {
+                // Find the nested item component and trigger expansion
+                if (this.nestedItems && this.nestedItems.length > 0) {
+                    console.log('Found nestedItems:', this.nestedItems.length);
+                    for (const item of this.nestedItems) {
+                        if (item && typeof item.expandStylePack === 'function') {
+                            console.log('Trying to expand style pack for item:', item.setting?.title);
+                            if (item.expandStylePack(setting)) {
+                                console.log('Successfully expanded style pack');
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    console.log('No nested items found');
+                }
+            }, 300); // Increased delay to 300ms
         },
     }
 };

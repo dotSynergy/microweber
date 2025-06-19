@@ -34,11 +34,14 @@ export default {
         },
         selectorToApply: {
             type: String,
-            default: ''
-        },
+            default: ''        },
         rootSelector: {
             type: String,
             default: ''
+        },
+        isSingleSettingMode: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -61,10 +64,22 @@ export default {
                    Array.isArray(this.setting.previewElementsStyleProperties) &&
                    this.setting.previewElementsStyleProperties.length > 0;
         }
-    },
-    data() {
+    },    data() {
         // Set stylePacksExpanded to true by default if this is the Predefined styles selection
         const isPredefinedStyles = this.setting.title === "Predefined styles selection";
+        
+        // Auto-expand if in single setting mode and is a style pack opener
+        const autoExpand = this.isSingleSettingMode && 
+                          this.setting.previewElementsMode === 'stylePackOpener';
+
+        console.log('FieldStylePack data initialization:', {
+            title: this.setting.title,
+            previewElementsMode: this.setting.previewElementsMode,
+            isSingleSettingMode: this.isSingleSettingMode,
+            isPredefinedStyles,
+            autoExpand,
+            willExpand: isPredefinedStyles || autoExpand
+        });
 
         return {
             iframe: null,
@@ -74,7 +89,7 @@ export default {
             previousStylePack: null, // Track the previously selected style pack
             fontsLoaded: false,
             fontsToLoad: [],
-            stylePacksExpanded: isPredefinedStyles, // Set to true for predefined styles
+            stylePacksExpanded: isPredefinedStyles || autoExpand, // Auto-expand in single setting mode
             uniqueId: 'style-pack-' + Math.random().toString(36).substr(2, 9), // Generate unique ID for this component
             selectedStylePackProperties: null, // Store selected style pack properties for opener
         }
@@ -92,14 +107,28 @@ export default {
             this.$nextTick(() => {
                 this.updateIframeContent();
             });
-        },
-
-        // Watch for changes in expanded state and emit event
+        },        // Watch for changes in expanded state and emit event
         stylePacksExpanded(newVal) {
             this.$emit('style-pack-expanded-state', {
                 id: this.uniqueId,
                 isExpanded: newVal
             });
+        },
+
+        // Watch for changes in single setting mode
+        isSingleSettingMode(newValue) {
+            if (newValue && this.setting.previewElementsMode === 'stylePackOpener' && !this.stylePacksExpanded) {
+                console.log('Auto-expanding style pack in single setting mode');
+                this.stylePacksExpanded = true;
+                this.$nextTick(() => {
+                    this.updateIframeContent();
+                    // Emit expanded state
+                    this.$emit('style-pack-expanded-state', {
+                        id: this.uniqueId,
+                        isExpanded: true
+                    });
+                });
+            }
         }
     },
     mounted() {
@@ -277,14 +306,12 @@ export default {
                 if (stylePack.label && this.setting.previewElementsStyleProperties[0]) {
                     this.setting.previewElementsStyleProperties[0].label = stylePack.label;
                 }
-            }
-
-            // Update the current style pack and refresh the iframe
+            }            // Update the current style pack and refresh the iframe
             this.currentStylePack = stylePack;
             this.updateIframeContent();
 
-            // After updating the opener, collapse the style packs
-            if (this.isStylePackOpenerMode && this.stylePacksExpanded) {
+            // After updating the opener, collapse the style packs ONLY if NOT in single setting mode
+            if (this.isStylePackOpenerMode && this.stylePacksExpanded && !this.isSingleSettingMode) {
                 this.collapseStylePacks();
             }
 

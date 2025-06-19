@@ -10,8 +10,7 @@
                 <p v-if="setting.description && isActive" class="text-muted small mt-0 mb-2">{{
                         setting.description
                     }}</p>
-            </div>
-            <component
+            </div>            <component
                 :is="getComponentType(setting.fieldType)"
                 :setting="{
                     ...setting,
@@ -22,6 +21,7 @@
                 }"
                 :selector-to-apply="selectorToApply"
                 :root-selector="rootSelector"
+                :is-single-setting-mode="isSingleSettingMode"
                 @update="handleUpdate"
                 @batch-update="handleBatchUpdate"
                 @open-style-editor="$emit('open-style-editor', $event)"
@@ -208,9 +208,7 @@ export default {
                 }
             }
             return false;
-        },
-
-        // New method to expand style pack if it's a style pack opener
+        },        // New method to expand style pack if it's a style pack opener
         expandStylePack(targetSetting) {
             if (this.setting.fieldType === 'stylePack' && 
                 this.setting.previewElementsMode === 'stylePackOpener' &&

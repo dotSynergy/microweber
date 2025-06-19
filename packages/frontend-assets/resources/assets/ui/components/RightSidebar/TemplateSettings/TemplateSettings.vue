@@ -1382,49 +1382,14 @@ export default {
         },        // Auto-open style pack openers when in single setting mode
         autoOpenStylePackOpeners() {
             if (!this.isSingleSettingMode) {
+                console.log('Not in single setting mode, skipping auto-open');
                 return;
             }
 
-            const findAndOpenStylePackOpeners = (settings) => {
-                if (!Array.isArray(settings)) return false;
-
-                for (const setting of settings) {
-                    // Check if current setting is a style pack opener
-                    if (setting.fieldType === 'stylePack' && 
-                        setting.previewElementsMode === 'stylePackOpener') {
-                        
-                        console.log('Found style pack opener:', setting.title);
-                        
-                        // Schedule opening after next tick to ensure DOM is ready
-                        this.$nextTick(() => {
-                            this.openStylePackOpener(setting);
-                        });
-                        return true;
-                    }
-
-                    // Check nested settings
-                    if (setting.settings && Array.isArray(setting.settings)) {
-                        if (findAndOpenStylePackOpeners(setting.settings)) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            };
-
-            // First try current setting if it exists
-            if (this.currentSetting) {
-                if (findAndOpenStylePackOpeners([this.currentSetting])) {
-                    return;
-                }
-            }
-
-            // If not found in current setting, search in all displayed settings
-            if (this.displayedStyleSettingVars && this.displayedStyleSettingVars.length > 0) {
-                findAndOpenStylePackOpeners(this.displayedStyleSettingVars);
-            }
-        },        // Open a style pack opener and disable navigation
+            console.log('Single setting mode active - style packs should auto-expand via their own logic');
+            // The FieldStylePack components will handle auto-expansion themselves
+            // This method is kept for potential future use or manual triggering
+        },// Open a style pack opener and disable navigation
         openStylePackOpener(setting) {
             console.log('Opening style pack opener:', setting.title);
             
@@ -1447,9 +1412,24 @@ export default {
                         }
                     }
                 } else {
-                    console.log('No nested items found');
+                    console.log('No nested items found, retrying...');
+                    // Retry after another delay if nested items aren't ready yet
+                    setTimeout(() => {
+                        if (this.nestedItems && this.nestedItems.length > 0) {
+                            console.log('Retry - Found nestedItems:', this.nestedItems.length);
+                            for (const item of this.nestedItems) {
+                                if (item && typeof item.expandStylePack === 'function') {
+                                    console.log('Retry - Trying to expand style pack for item:', item.setting?.title);
+                                    if (item.expandStylePack(setting)) {
+                                        console.log('Retry - Successfully expanded style pack');
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }, 500);
                 }
-            }, 300); // Increased delay to 300ms
+            }, 500); // Increased delay to 500ms
         },
     }
 };

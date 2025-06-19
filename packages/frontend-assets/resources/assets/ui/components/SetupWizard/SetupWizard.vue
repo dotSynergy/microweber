@@ -45,8 +45,7 @@
             </div>
 
             <!-- Wizard Content -->
-            <div class="mw-setup-wizard-content p-4">
-                <!-- Site Info Step -->
+            <div class="mw-setup-wizard-content p-4">                <!-- Site Info Step -->
                 <div v-if="currentStep === 0" class="wizard-step-content">
                     <h4 class="mb-4">Site Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
@@ -58,7 +57,6 @@
 
                         <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
                         <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
-
 
 
                     </div>

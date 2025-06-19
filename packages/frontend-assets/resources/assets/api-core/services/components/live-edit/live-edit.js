@@ -63,6 +63,11 @@ export const liveEditComponent = () => {
  //   mw.app.register('liveEdit', liveEdit);
     mw.app.register('state', mw.liveEditState);
 
+    mw.top().app.state.on('change', data => {
+        mw.top().app.dispatch('stateChange', data)
+    });
+
+
   //  mw.app.state =mw.liveEditState;
     mw.app.editImageDialog =  new LiveEditImageDialog();
     mw.app.layoutBackground =  new LiveEditLayoutBackground();

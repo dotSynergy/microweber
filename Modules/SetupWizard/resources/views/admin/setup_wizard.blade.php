@@ -81,7 +81,7 @@
                                                 }
                                             @endphp
                                             @foreach($filteredCategories as $category)
-                                                <span class="live-edit-label">{{ $category }}, </span>
+                                                <label class="live-edit-label !font-thin">{{ $category }}{{ !$loop->last ? ', ' : '' }}</label>
                                             @endforeach
                                         </div>
                                     </div>
@@ -246,6 +246,12 @@
 
         .top-5 {
             top: 20px !important;
+        }
+
+        .template-categories {
+            label {
+                font-weight: 400 !important;
+            }
         }
     </style>
 </main>

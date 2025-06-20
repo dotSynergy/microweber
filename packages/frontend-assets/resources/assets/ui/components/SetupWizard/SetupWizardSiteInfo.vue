@@ -1,6 +1,7 @@
 <script setup>
 import {ref, defineEmits, onMounted, onBeforeUnmount} from 'vue'
 import axios from 'axios'
+import { QuickEditComponent } from '../../../components/quick-ai-edit'
 
 // Component props and emits
 const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords'])
@@ -18,6 +19,9 @@ const activeTab = ref('manual') // 'manual', 'ai'
 const aiPrompt = ref('')
 const aiLoading = ref(false)
 const aiError = ref('')
+let wizardAiChat = ref(null)
+
+
 
 // Debounce timers for auto-save
 let titleSaveTimeout = null
@@ -59,13 +63,27 @@ const loadWebsiteInfo = async () => {
     }
 }
 
-// Initialize component
-onMounted(() => {
+
+
+onMounted( async () => {
     // Check AI availability
     checkAIAvailability()
 
     // Load website info
-    loadWebsiteInfo()
+    await loadWebsiteInfo()
+
+    const quickEdit = new QuickEditComponent({
+        target: mw.top().doc.body
+    });
+
+
+
+    setTimeout(() => {
+        wizardAiChat.value.appendChild(quickEdit.editor());
+    }, 300);
+
+
+
 })
 
 // AI Integration Methods
@@ -345,16 +363,21 @@ onBeforeUnmount(() => {
                 </div>
             </div>
 
+
+
             <!-- AI Tab Content -->
-            <div v-if="isAIAvailable && activeTab === 'ai'" class="ai-tab-content">
+            <div v-show="isAIAvailable && activeTab === 'ai'" class="ai-tab-content">
                 <div class="ai-generator-section">
                     <h5 class="mb-3">Generate with AI</h5>
                     <p class="text-muted mb-3">
                         Describe your website and let AI generate the title, description, keywords, and brand personality for you.
                     </p>
 
+                    <div id="wizard-ai-chat" ref="wizardAiChat"></div>
+
                     <!-- Simple AI Prompt Input -->
                     <div class="ai-prompt-container mb-3">
+
                         <textarea
                             v-model="aiPrompt"
                             class="form-control"
@@ -673,4 +696,6 @@ textarea.form-control {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+
 </style>

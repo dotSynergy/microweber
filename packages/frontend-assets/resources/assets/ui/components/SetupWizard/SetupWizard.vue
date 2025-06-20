@@ -447,6 +447,10 @@ html.mw-setup-wizard-document #live-editor-frame{
     transition: .4s;
 }
 
+#wizard-ai-chat .edit-fields-container{
+    display: none !important;
+}
+
 
 </style>
 

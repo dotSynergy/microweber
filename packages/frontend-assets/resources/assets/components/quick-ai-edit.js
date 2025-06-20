@@ -543,6 +543,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
     #editChangeSyncHandle = (edit) => {
 
+
+
         this.sync(edit)
 
 
@@ -581,6 +583,9 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     sync(edit) {
+        if(this.settings.disableSync) {
+           return
+        }
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
             if (this.isGlobal || edit === this.settings.root) {

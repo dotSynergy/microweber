@@ -66,10 +66,10 @@
                 <div v-show="currentStep === 0" class="wizard-step-content">
                     <h4 class="mb-4">Website Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
-
                         <SetupWizardSiteInfo
                             @ai-request-start="handleAIRequestStart"
                             @ai-request-end="handleAIRequestEnd"
+                            @form-submit-result="handleFormSubmitResult"
                         ></SetupWizardSiteInfo>
 
                         <!-- Trigger AI Form Submit Button -->
@@ -526,7 +526,8 @@ export default {
                 {title: 'Fonts', key: 'fonts'}
             ],
             params: null,
-            isAIProcessing: false
+            isAIProcessing: false,
+            canAdvanceStep: true
         }
     },
 
@@ -548,7 +549,9 @@ export default {
         nextStep() {
             // If we're on the first step (Website Info), trigger form submit before advancing
             if (this.currentStep === 0) {
+                this.canAdvanceStep = false; // Reset the flag
                 this.triggerSiteInfoFormSubmit();
+                return; // Wait for form submit result
             }
 
             if (this.currentStep < this.steps.length - 1) {
@@ -567,7 +570,19 @@ export default {
             if (stepIndex >= 0 && stepIndex < this.steps.length) {
                 this.currentStep = stepIndex;
             }
-        },        // AI request handlers
+        },
+
+        // Handle form submit result from SiteInfo component
+        handleFormSubmitResult(canAdvance) {
+            this.canAdvanceStep = canAdvance;
+
+            // If form submission allows advancement and we're on step 0, advance to next step
+            if (canAdvance && this.currentStep === 0) {
+                if (this.currentStep < this.steps.length - 1) {
+                    this.currentStep++;
+                }
+            }
+        },// AI request handlers
         handleAIRequestStart() {
             this.isAIProcessing = true;
         },
@@ -580,17 +595,15 @@ export default {
             }, 1000); // Small delay to show completion
         },        // Trigger form submit in SiteInfo component
         triggerSiteInfoFormSubmit() {
-
-
             // Fallback to custom window event
             const event = new CustomEvent('setupWizard.triggerFormSubmit', {
-                detail: { step: this.currentStep }
+                detail: {step: this.currentStep}
             });
             window.dispatchEvent(event);
-        },completeWizard() {
+        }, completeWizard() {
 
             const event = new CustomEvent('setupWizard.complete', {
-                detail: { step: this.currentStep , completed: true }
+                detail: {step: this.currentStep, completed: true}
 
             });
 

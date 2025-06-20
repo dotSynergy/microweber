@@ -4,7 +4,7 @@ import axios from 'axios'
 import {QuickEditComponent} from '../../../components/quick-ai-edit'
 
 // Component props and emits
-const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords', 'ai-request-start', 'ai-request-end'])
+const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords', 'ai-request-start', 'ai-request-end', 'form-submit-result'])
 
 // Reactive data
 const siteTitle = ref('')
@@ -87,23 +87,51 @@ onMounted(async () => {
         //must disable the parent wizard next  button
         emit('ai-request-start')
     });
-
     quickEdit.on('aiRequestEnd', () => {
         aiLoading.value = false
         aiError.value = ''
+
+
+
         //must enable  the parent wizard next  button
         // advance the setup wizard on the next setep
         emit('ai-request-end')
     });    // Listen for wizard events to trigger form submission
-    const handleWizardFormSubmit = () => {
-        if (quickEdit) {
-            quickEdit.dispatch('formSubmit');
+    const handleWizardFormSubmit = (event) => {
+        // If AI is available and we're on the AI tab, don't allow manual advancement
+        if (isAIAvailable.value && activeTab.value === 'ai') {
 
-            return false;
+
+            if (quickEdit) {
+
+                let val = quickEdit.aiChatForm.area.value;
+
+                if (val) {
+
+                   // quickEdit.aiChatForm.dispatch('formSubmit');
+                    quickEdit.dispatch('formSubmit');
+
+                    generateSiteInfoWithAI(val)
+
+                    emit('form-submit-result', false);
+
+                    return false;
+
+                } else {
+                    emit('form-submit-result', true);
+                    return true;
+                }
+                // Prevent advancement when using AI - let AI completion handle it
+                // return false;
+            }
         }
 
+        // For manual tab or when AI is not available, allow advancement
+        // as long as basic fields are filled
+        // const hasBasicInfo = siteTitle.value.trim() || siteDescription.value.trim();
+        // emit('form-submit-result', hasBasicInfo);
+        // return hasBasicInfo;
     };
-
 
     // Fallback to window event listener
     window.addEventListener('setupWizard.triggerFormSubmit', handleWizardFormSubmit);

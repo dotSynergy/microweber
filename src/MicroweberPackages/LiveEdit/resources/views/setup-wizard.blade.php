@@ -1,5 +1,13 @@
 <!DOCTYPE html>
-<html <?php print lang_attributes(); ?>>
+<html <        <div id="form-loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 flex items-center space-x-4 shadow-xl min-w-[350px]">
+                <svg class="animate-spin h-8 w-8 text-blue-600 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-lg font-medium text-gray-700 flex-1" id="installing_template_text">Installing template...</span>
+            </div>
+        </div>t lang_attributes(); ?>>
 <head>
     <title><?php _e('Setup Wizard'); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +36,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span class="text-lg font-medium text-gray-700">Installing template...</span>
+                <span class="text-lg font-medium text-gray-700" id="installing_template_text">Installing template...</span>
             </div>
         </div>
 
@@ -144,8 +152,27 @@
         }        function installTemplate(template) {
             // Show loading overlay
             const loadingOverlay = document.getElementById('form-loading-overlay');
+            const loadingText = document.getElementById('installing_template_text');
             loadingOverlay.classList.remove('hidden');
             
+            // Rotating text messages
+            const messages = [
+                'Installing template...',
+                'Please wait...',
+                'Will be ready shortly...',
+                'Setting up your website...',
+                'Almost done...'
+            ];
+            
+            let messageIndex = 0;
+            loadingText.textContent = messages[messageIndex];
+            
+            // Start rotating messages
+            const messageInterval = setInterval(() => {
+                messageIndex = (messageIndex + 1) % messages.length;
+                loadingText.textContent = messages[messageIndex];
+            }, 2000); // Change message every 2 seconds
+
             // Disable all buttons
             const allButtons = document.querySelectorAll('.use-template-btn');
             allButtons.forEach(btn => {
@@ -163,15 +190,16 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    clearInterval(messageInterval); // Stop rotating messages
                     loadingOverlay.classList.add('hidden');
-                    
+
                     if (data.error) {
                         // Re-enable buttons on error
                         allButtons.forEach(btn => {
                             btn.disabled = false;
                             btn.classList.remove('opacity-50', 'cursor-not-allowed');
                         });
-                        
+
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
@@ -179,14 +207,15 @@
                     }
                 })
                 .catch(error => {
+                    clearInterval(messageInterval); // Stop rotating messages
                     loadingOverlay.classList.add('hidden');
-                    
+
                     // Re-enable buttons on error
                     allButtons.forEach(btn => {
                         btn.disabled = false;
                         btn.classList.remove('opacity-50', 'cursor-not-allowed');
                     });
-                    
+
                     mw.notification.error('Error installing template');
                 });
         }
@@ -228,7 +257,7 @@
 
         .template-preview {
             width: 100%;
-            height: 250px;
+            height: 350px;
             background-size: cover;
             background-position: top center;
             background-repeat: no-repeat;

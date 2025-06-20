@@ -22,11 +22,11 @@
 <main class="w-full min-h-screen py-10 bg-[#ececec]">
     <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <!-- Loading Overlay -->
-        <div id="form-loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div id="form-loading-overlay" class="hidden fixed inset-0   bg-opacity-50 flex items-center justify-center z-50" style="background-color: rgb(149 187 221);">
             <div class="bg-white rounded-lg p-8 flex items-center space-x-4 shadow-xl">
                 <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" ></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="fill: #ffffff;stroke-width: 0px;"></path>
                 </svg>
                 <span class="text-lg font-medium text-gray-700" id="installing_template_text">Installing template...</span>
             </div>

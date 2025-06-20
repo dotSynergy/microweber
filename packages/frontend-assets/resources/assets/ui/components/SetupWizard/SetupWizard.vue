@@ -560,7 +560,12 @@ export default {
             // If we're on the first step (Website Info), trigger form submit before advancing
             if (this.currentStep === 0) {
                 this.canAdvanceStep = false; // Reset the flag
-                this.triggerSiteInfoFormSubmit();
+
+                if(!this.isAIProcessing) {
+                    this.triggerSiteInfoFormSubmit();
+                }
+
+
                 return; // Wait for form submit result
             }
 

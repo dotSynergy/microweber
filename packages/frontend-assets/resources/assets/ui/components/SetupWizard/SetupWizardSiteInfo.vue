@@ -73,8 +73,13 @@ onMounted( async () => {
     await loadWebsiteInfo()
 
     const quickEdit = new QuickEditComponent({
-        target: mw.top().doc.body
+        target: mw.top().doc.body,
+        submitOnEnter:true
     });
+
+    quickEdit.on('submit', (val) => {
+        generateSiteInfoWithAI(val)
+    })
 
 
 
@@ -172,11 +177,7 @@ Make sure the content is relevant, professional, and optimized for SEO.`
                 saveSiteKeywords(response.data.keywords)
             }
 
-            // Switch to manual tab to show the generated content
-            activeTab.value = 'manual'
 
-            // Clear the AI input
-            aiPrompt.value = ''
         } else {
             throw new Error('Invalid response from AI')
         }
@@ -379,8 +380,9 @@ onBeforeUnmount(() => {
                     <div class="ai-prompt-container mb-3">
 
                         <textarea
+
                             v-model="aiPrompt"
-                            class="form-control"
+                            class="hidden d-none form-control"
                             placeholder="Describe your website... e.g., 'A modern consulting website for small businesses with a professional blue theme'"
                             rows="4"
                             :disabled="aiLoading"

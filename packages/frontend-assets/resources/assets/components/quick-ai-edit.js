@@ -930,6 +930,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         ];
         const aiChatForm = new AIChatForm({
             chatOptions,
+            submitOnEnter:this.settings.submitOnEnter || false,
         });
 
         this.aiChatForm = aiChatForm;
@@ -944,9 +945,14 @@ export class QuickEditComponent extends MicroweberBaseClass {
         aiChatForm.on("submit", async value => {
 
             const val = value.trim();
+            this.dispatch('submit', val);
+
             aiChatForm.disable();
             await this.ai(val);
             aiChatForm.enable();
+
+
+
         });
 
 

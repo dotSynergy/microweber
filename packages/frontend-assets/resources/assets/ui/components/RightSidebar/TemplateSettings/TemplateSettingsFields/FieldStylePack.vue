@@ -1,13 +1,17 @@
 <template>
-    <label v-if="setting.title" class="live-edit-label">{{ setting.title }}</label>
-    <div v-if="setting.description" class="mt-1">
-        <small>{{ setting.description }}</small>
-    </div>
 
+    <div v-if="!this.isSingleSettingMode">
+
+
+        <label v-if="setting.title" class="live-edit-label">{{ setting.title }}</label>
+        <div v-if="setting.description" class="mt-1">
+            <small>{{ setting.description }}</small>
+        </div>
+    </div>
     <div class="mt-2">
         <!-- Back button that appears only when style pack opener is expanded -->
         <FieldBackButton
-            v-if="isStylePackOpenerMode && stylePacksExpanded"
+            v-if="isStylePackOpenerMode && stylePacksExpanded && !isSingleSettingMode"
             :current-path="'/'"
             :button-text="'Back to styles'"
             :show-button="true"
@@ -34,7 +38,8 @@ export default {
         },
         selectorToApply: {
             type: String,
-            default: ''        },
+            default: ''
+        },
         rootSelector: {
             type: String,
             default: ''
@@ -61,16 +66,16 @@ export default {
         // Check if stylePackOpener mode is enabled
         isStylePackOpenerMode() {
             return this.setting.previewElementsMode === 'stylePackOpener' &&
-                   Array.isArray(this.setting.previewElementsStyleProperties) &&
-                   this.setting.previewElementsStyleProperties.length > 0;
+                Array.isArray(this.setting.previewElementsStyleProperties) &&
+                this.setting.previewElementsStyleProperties.length > 0;
         }
-    },    data() {
+    }, data() {
         // Set stylePacksExpanded to true by default if this is the Predefined styles selection
         const isPredefinedStyles = this.setting.title === "Predefined styles selection";
-        
+
         // Auto-expand if in single setting mode and is a style pack opener
-        const autoExpand = this.isSingleSettingMode && 
-                          this.setting.previewElementsMode === 'stylePackOpener';
+        const autoExpand = this.isSingleSettingMode &&
+            this.setting.previewElementsMode === 'stylePackOpener';
 
         console.log('FieldStylePack data initialization:', {
             title: this.setting.title,
@@ -291,7 +296,7 @@ export default {
             }
 
             // Store the selected style pack properties for the opener display
-            this.selectedStylePackProperties = { ...stylePack.properties };
+            this.selectedStylePackProperties = {...stylePack.properties};
 
             // Update previewElementsStyleProperties for the opener preview
             if (
@@ -300,7 +305,7 @@ export default {
                 this.setting.previewElementsStyleProperties.length > 0
             ) {
                 // Update the opener preview with selected style properties
-                this.setting.previewElementsStyleProperties[0].properties = { ...stylePack.properties };
+                this.setting.previewElementsStyleProperties[0].properties = {...stylePack.properties};
 
                 // Also update the label if available
                 if (stylePack.label && this.setting.previewElementsStyleProperties[0]) {

@@ -60,7 +60,7 @@
                 </div>
             </div>            <!-- Wizard Content -->
             <div class="mw-setup-wizard-content p-4">                <!-- Website Info Step -->
-                <div v-if="currentStep === 0" class="wizard-step-content">
+                <div v-show="currentStep === 0" class="wizard-step-content">
                     <h4 class="mb-4">Website Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- Colors Step -->
-                <div v-if="currentStep === 1" class="wizard-step-content">
+                <div v-show="currentStep === 1" class="wizard-step-content">
                     <h4 class="mb-4">Colors</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -80,7 +80,7 @@
                 </div>
 
                 <!-- Buttons Step -->
-                <div v-if="currentStep === 2" class="wizard-step-content">
+                <div v-show="currentStep === 2" class="wizard-step-content">
                     <h4 class="mb-4">Buttons</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -90,7 +90,7 @@
                 </div>
 
                 <!-- Fonts Step -->
-                <div v-if="currentStep === 3" class="wizard-step-content">
+                <div v-show="currentStep === 3" class="wizard-step-content">
                     <h4 class="mb-4">Fonts</h4>
                     <div class="p-4 border rounded bg-light text-center">
 

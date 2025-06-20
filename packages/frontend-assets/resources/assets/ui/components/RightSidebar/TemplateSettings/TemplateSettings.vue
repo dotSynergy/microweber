@@ -74,10 +74,14 @@
 
             <!-- Settings detail when not at root path -->
             <div v-if="currentPath !== '/' && currentSetting && showStyleSettings !== 'styleEditor'">
-                <div class="my-5">
+
+
+                <div class="my-5" v-show="!isSingleSettingMode">
                     <label class="live-edit-label" v-if="currentSetting.title">{{ currentSetting.title }}</label>
                     <small v-if="currentSetting.description">{{ currentSetting.description }}</small>
                 </div>
+
+
 
                 <!-- If currentSetting itself is a field, render it using NestedSettingsItem -->
                 <!-- NestedSettingsItem will also handle currentSetting.settings if it exists (for complex fields) -->
@@ -143,9 +147,12 @@
                     />
 
                 </div>
+
+                 <div v-if="!this.isSingleSettingMode">
+
                 <b v-if="styleEditorData.title">{{ styleEditorData.title }}</b>
                 <p v-if="styleEditorData.description">{{ styleEditorData.description }}</p>
-
+</div>
                 <div class="my-3">
                     <div id="iframe-holder"></div>
                 </div>
@@ -342,7 +349,7 @@ export default {
             if (this.isSingleSettingMode && this.autoNavigationUrl) {
                 this.$nextTick(() => {
                     this.currentPath = this.autoNavigationUrl;
-                    
+
                     // Also try to auto-open style pack openers after navigation
                     this.$nextTick(() => {
                         this.autoOpenStylePackOpeners();
@@ -414,10 +421,10 @@ export default {
             handler(newVars) {
                 // Clear nested items array when settings change
                 this.nestedItems = [];
-                
+
                 if (this.isSingleSettingMode && newVars && newVars.length > 0) {
                     console.log('displayedStyleSettingVars changed in single setting mode:', newVars.length, 'items');
-                    
+
                     if (this.autoNavigationUrl) {
                         this.$nextTick(() => {
                             if (this.currentPath === '/') {
@@ -830,14 +837,14 @@ export default {
                     }
                 }
             });
-        },       
-        
+        },
+
         navigateTo(path) {
             // Prevent navigation when in single setting mode and style pack is open
             if (this.isSingleSettingMode && this.hasActiveStylePackOpener) {
                 return;
             }
-            
+
             // Prevent navigation when in single setting mode
             if (this.isSingleSettingMode) {
                 return;
@@ -1392,7 +1399,7 @@ export default {
         },// Open a style pack opener and disable navigation
         openStylePackOpener(setting) {
             console.log('Opening style pack opener:', setting.title);
-            
+
             // Mark that we have an active style pack opener
             this.hasActiveStylePackOpener = true;
             this.activeStylePackOpener = setting.url || 'auto-opened';

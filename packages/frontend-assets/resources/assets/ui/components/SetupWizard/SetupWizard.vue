@@ -51,6 +51,7 @@
                         <p class="text-muted"><Lang>Site information settings will go here</Lang></p>
                         <small>Placeholder for site title, description, company name, contact email, etc.</small>
 
+                        <SetupWizardSiteInfo></SetupWizardSiteInfo>
 
                     </div>
                 </div>
@@ -358,12 +359,14 @@ html.mw-setup-wizard-document #live-editor-frame{
 
 <script>
 import TemplateSettings from "../RightSidebar/TemplateSettings/TemplateSettings.vue";
+import SetupWizardSiteInfo from "./SetupWizardSiteInfo.vue";
 import * as api from "../../../api-core/services/services/preview.service.js";
 
 export default {
     name: 'SetupWizard',
     components: {
-        TemplateSettings
+        TemplateSettings,
+        SetupWizardSiteInfo,
     },
 
     mounted() {

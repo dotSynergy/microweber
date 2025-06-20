@@ -3,13 +3,12 @@ import {ref, defineEmits, onMounted, onBeforeUnmount} from 'vue'
 import axios from 'axios'
 
 // Component props and emits
-const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords', 'update:brandPersonality'])
+const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords'])
 
 // Reactive data
 const siteTitle = ref('')
 const siteDescription = ref('')
 const siteKeywords = ref('')
-const selectedPersonality = ref('Professional')
 const isSaving = ref(false)
 const isLoading = ref(false)
 
@@ -24,12 +23,6 @@ const aiError = ref('')
 let titleSaveTimeout = null
 let descriptionSaveTimeout = null
 let keywordsSaveTimeout = null
-
-// Available brand personalities
-const personalities = [
-    'Professional', 'Playful', 'Sophisticated', 'Friendly',
-    'Bold', 'Quirky', 'Innovative'
-]
 
 // Load website info from API
 const loadWebsiteInfo = async () => {
@@ -58,12 +51,6 @@ const loadWebsiteInfo = async () => {
                 siteKeywords.value = response.data.keywords
                 emit('update:siteKeywords', response.data.keywords)
             }
-
-            // Set brand personality from API response
-            if (response.data.brand_personality) {
-                selectedPersonality.value = response.data.brand_personality
-                emit('update:brandPersonality', response.data.brand_personality)
-            }
         }
     } catch (error) {
         console.error('Error loading website info:', error)
@@ -76,7 +63,7 @@ const loadWebsiteInfo = async () => {
 onMounted(() => {
     // Check AI availability
     checkAIAvailability()
-    
+
     // Load website info
     loadWebsiteInfo()
 })
@@ -86,6 +73,7 @@ const checkAIAvailability = () => {
     try {
         if (typeof mw.top().win.MwAi === 'function') {
             isAIAvailable.value = true
+            activeTab.value = 'ai'
             console.log('AI is available')
         } else {
             isAIAvailable.value = false
@@ -130,21 +118,19 @@ const generateSiteInfoWithAI = async (prompt) => {
 Please generate appropriate website information in JSON format with the following structure:
 {
     "title": "website title (max 100 characters)",
-    "description": "SEO description (max 160 characters)", 
-    "keywords": "relevant keywords separated by commas (max 200 characters)",
-    "brand_personality": "one of: Professional, Playful, Sophisticated, Friendly, Bold, Quirky, Innovative"
+    "description": "SEO description (max 160 characters)",
+    "keywords": "relevant keywords separated by commas (max 200 characters)"
 }
 
 Make sure the content is relevant, professional, and optimized for SEO.`
 
         const messages = [{role: 'user', content: message}]
-        
+
         const response = await window.mw.top().win.MwAi().sendToChat(messages, {
             schema: JSON.stringify({
                 title: "",
                 description: "",
-                keywords: "",
-                brand_personality: "Professional"
+                keywords: ""
             })
         })
 
@@ -155,28 +141,22 @@ Make sure the content is relevant, professional, and optimized for SEO.`
                 emit('update:siteTitle', response.data.title)
                 saveSiteTitle(response.data.title)
             }
-            
+
             if (response.data.description) {
                 siteDescription.value = response.data.description
                 emit('update:siteDescription', response.data.description)
                 saveSiteDescription(response.data.description)
             }
-            
+
             if (response.data.keywords) {
                 siteKeywords.value = response.data.keywords
                 emit('update:siteKeywords', response.data.keywords)
                 saveSiteKeywords(response.data.keywords)
             }
-            
-            if (response.data.brand_personality && personalities.includes(response.data.brand_personality)) {
-                selectedPersonality.value = response.data.brand_personality
-                emit('update:brandPersonality', response.data.brand_personality)
-                saveBrandPersonality(response.data.brand_personality)
-            }
 
             // Switch to manual tab to show the generated content
             activeTab.value = 'manual'
-            
+
             // Clear the AI input
             aiPrompt.value = ''
         } else {
@@ -228,13 +208,6 @@ const updateKeywords = (value) => {
     keywordsSaveTimeout = setTimeout(() => {
         saveSiteKeywords(value)
     }, 1000) // Save after 1 second of no typing
-}
-
-const selectPersonality = (personality) => {
-    selectedPersonality.value = personality
-    emit('update:brandPersonality', personality)
-    // Save immediately for button clicks (no debounce needed)
-    saveBrandPersonality(personality)
 }
 
 // AJAX save functions
@@ -353,7 +326,7 @@ onBeforeUnmount(() => {
             <!-- Tabs Navigation (only show if AI is available) -->
             <div v-if="isAIAvailable" class="tab-navigation mb-4">
                 <div class="nav nav-tabs" role="tablist">
-                    <button 
+                    <button
                         class="nav-link"
                         :class="{ active: activeTab === 'manual' }"
                         @click="switchTab('manual')"
@@ -361,7 +334,7 @@ onBeforeUnmount(() => {
                     >
                         Manual Setup
                     </button>
-                    <button 
+                    <button
                         class="nav-link"
                         :class="{ active: activeTab === 'ai' }"
                         @click="switchTab('ai')"
@@ -379,7 +352,7 @@ onBeforeUnmount(() => {
                     <p class="text-muted mb-3">
                         Describe your website and let AI generate the title, description, keywords, and brand personality for you.
                     </p>
-                    
+
                     <!-- Simple AI Prompt Input -->
                     <div class="ai-prompt-container mb-3">
                         <textarea
@@ -392,8 +365,8 @@ onBeforeUnmount(() => {
                             @keydown.meta.enter="submitAIPrompt"
                         ></textarea>
                         <div class="mt-2">
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="btn btn-primary"
                                 @click="submitAIPrompt"
                                 :disabled="aiLoading || !aiPrompt.trim()"
@@ -404,7 +377,7 @@ onBeforeUnmount(() => {
                             <small class="text-muted ms-2">Press Ctrl+Enter to submit</small>
                         </div>
                     </div>
-                    
+
                     <!-- Shared UI elements -->
                     <div v-if="aiLoading" class="text-center mt-2">AI is thinking...</div>
                     <div v-if="aiError" class="text-danger mt-2">{{ aiError }}</div>
@@ -414,7 +387,7 @@ onBeforeUnmount(() => {
             <!-- Manual Tab Content -->
             <div v-if="!isAIAvailable || activeTab === 'manual'"
                  class="manual-content">
-                
+
             <!-- Site Title Section -->
             <div class="mb-4">
                 <label for="siteTitle" class="form-label">Site title</label>
@@ -471,34 +444,7 @@ onBeforeUnmount(() => {
                     <span class="character-count">{{ siteKeywords.length }}/200</span>
                 </div>
             </div>
-
-            <!-- Brand Personality Section -->
-            <div class="mb-4">
-                <label class="form-label">Brand personality</label>
-                <p class="text-muted small mb-3">Each personality has a unique set of colors, fonts, and tone for
-                    creating
-                    AI-generated content. Having a clear brand personality can help build customer relationships.</p>
-
-                <div class="personality-grid">
-                    <button
-                        v-for="personality in personalities"
-                        :key="personality"
-                        type="button"
-                        class="personality-btn"
-                        :class="{ active: selectedPersonality === personality }"
-                        @click="selectPersonality(personality)"
-                        :disabled="isSaving"
-                    >
-                        {{ personality }}
-                    </button>
-                </div>
-
-                <!-- Loading indicator -->
-                <div v-if="isSaving" class="text-center mt-2">
-                    <small class="text-muted">Saving...</small>
-                </div>
-            </div>
-            </div> <!-- End manual/advanced content -->
+            </div> <!-- End manual content -->
         </div>
     </div>
 </template>

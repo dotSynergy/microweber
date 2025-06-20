@@ -274,94 +274,7 @@ class QuickEditGUI {
         return frag
     }
 
-    backgroundImage(obj) { // element node with background
 
-        const scope = this.instance;
-
-        const frag = document.createElement("div");
-
-        frag.$$ref = obj;
-        frag.className = `relative flex content-center justify-center`;
-        frag.style.minHeight = `100px`;
-
-        const src = obj.node.style.backgroundImage.slice(4, -1).replace(/"/g, "").replace(/['"]/g, "")
-            || `data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`;
-
-
-        frag.innerHTML = `
-
-            <img src="${src}">
-
-            <nav>
-
-            </nav>
-
-        `;
-
-        const changeBTN = document.createElement('button');
-        changeBTN.className = 'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
-        changeBTN.title = mw.lang('Change image');
-        changeBTN.innerHTML = mw.top().app.iconService.icon('image-change');
-        const img = frag.querySelector('img');
-
-        const nav = frag.querySelector('nav');
-        nav.appendChild(changeBTN);
-        img.addEventListener('click', e => {
-            obj.node.scrollIntoView({behavior: "smooth", block: "center", inline: "start"});
-
-            mw.top().app.liveEdit.handles.get('element').set(obj.node)
-
-            mw.top().app.liveEdit.handles.get('module').hide();
-            mw.top().app.liveEdit.handles.get('layout').hide();
-        })
-        changeBTN.addEventListener('click', e => {
-
-
-            let dialog;
-
-            const onResult = data => {
-                scope.pausedSync();
-
-                obj.node.style.backgroundImage = `url(${data[0]})`;
-
-
-                mw.top().app.registerChangedState(obj.node);
-
-
-                dialog.remove()
-
-                scope.unPauseSync();
-
-            }
-            var picker = new mw.filePicker({
-                type: 'images',
-                label: false,
-                autoSelect: false,
-                footer: true,
-                _frameMaxHeight: true,
-                onResult: onResult,
-                okLabel: mw.lang('Select image'),
-            });
-            dialog = mw.top().dialog({
-                content: picker.root,
-                title: mw.lang('Select image'),
-                footer: false,
-                width: 860,
-            });
-            picker.$cancel.on('click', function () {
-                dialog.remove()
-            })
-
-
-            $(dialog).on('Remove', () => {
-
-
-            })
-        })
-
-
-        return frag
-    }
 
 
     text(obj) {
@@ -509,7 +422,7 @@ class QuickEditService extends MicroweberBaseClass {
         const result = [];
         this.collect(edits, toJson, (curr, node) => {
 
-            if (node.nodeName === 'IMG' || node.classList.contains('mw-layout-background-node') || node.style.backgroundImage) {
+            if(node.nodeName === 'IMG' || node.classList.contains('mw-layout-background-node')) {
                 result.push(curr);
             }
         });
@@ -520,9 +433,8 @@ class QuickEditService extends MicroweberBaseClass {
     collectTexts(edits, toJson) {
         return this.collect(edits, toJson, (curr, node) => {
             return node.nodeName !== 'IMG'
-                && !node.classList.contains('mw-layout-background-node')
-                && !node.style.backgroundImage
-                && node.textContent.trim().length > 2;
+            && !node.classList.contains('mw-layout-background-node')
+            && node.textContent.trim().length > 2;
         });
     }
 
@@ -559,12 +471,12 @@ const defaultAiTextAdapter = async (message, options) => {
 
 const defaultAiImagesAdapter = async (message, numberOfImages = 1, messagesOptions) => {
 
-    let messages = [{role: 'user', content: message}];
-    const arr = Array.from({length: numberOfImages}).map(() => generateImage(messages, messagesOptions))
+        let messages = [{role: 'user', content: message}];
+        const arr = Array.from({length: numberOfImages}).map(() => generateImage(messages, messagesOptions))
 
-    let res = await Promise.all(arr);
+        let res = await Promise.all(arr);
 
-    res = res.map(itm => itm[0]).filter(itm => !!itm);
+        res = res.map(itm => itm[0]).filter(itm => !!itm);
 
     if (res) {
         return res;

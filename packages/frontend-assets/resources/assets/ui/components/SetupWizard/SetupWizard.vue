@@ -73,15 +73,15 @@
                         ></SetupWizardSiteInfo>
 
                         <!-- Trigger AI Form Submit Button -->
-<!--                        <div class="mt-3">
-                            <button
-                                type="button"
-                                @click="triggerSiteInfoFormSubmit"
-                                class="btn btn-outline-primary btn-sm"
-                            >
-                                Generate with AI
-                            </button>
-                        </div>-->
+                        <!--                        <div class="mt-3">
+                                                    <button
+                                                        type="button"
+                                                        @click="triggerSiteInfoFormSubmit"
+                                                        class="btn btn-outline-primary btn-sm"
+                                                    >
+                                                        Generate with AI
+                                                    </button>
+                                                </div>-->
 
                     </div>
                 </div>
@@ -97,7 +97,10 @@
                 </div>
 
                 <!-- Buttons Step -->
-                <div v-show="currentStep === 2" class="wizard-step-content">
+                <div v-if="currentStep === 2" class="wizard-step-content">
+
+                    <!-- This in on v-if because if colors change -->
+
                     <h4 class="mb-4">Buttons</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -515,7 +518,14 @@ export default {
                 instance.hideModal();
             }
         });
-    }, data() {
+
+
+        // Check for show_wizard parameter and auto-show modal
+        this.checkUrlParamAndShowWizard();
+
+    },
+
+    data() {
         return {
             showModal: false,
             currentStep: 0,
@@ -538,6 +548,29 @@ export default {
     },
 
     methods: {
+
+        checkUrlParamAndShowWizard() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            alert( 'Checking URL parameters for show_wizard:', urlParams.toString());
+
+            if (urlParams.has('show_wizard')) {
+                // Show the modal
+                this.openModal();
+
+                // Remove the parameter from URL without page reload
+                const newUrl = window.location.pathname +
+                    window.location.search.replace(/[?&]show_wizard=?([^&]$|[^&]*)/i, '') +
+                    window.location.hash;
+
+                window.history.replaceState(
+                    {path: newUrl},
+                    document.title,
+                    newUrl
+                );
+            }
+        },
+
 
         pagePreviewToggle: () => {
             //toggle  class to the body 'wizard-preview'
@@ -600,7 +633,9 @@ export default {
                 detail: {step: this.currentStep}
             });
             window.dispatchEvent(event);
-        }, completeWizard() {
+        },
+
+        completeWizard() {
 
             const event = new CustomEvent('setupWizard.complete', {
                 detail: {step: this.currentStep, completed: true}

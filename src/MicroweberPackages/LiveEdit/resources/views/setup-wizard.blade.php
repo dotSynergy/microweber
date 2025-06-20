@@ -146,7 +146,7 @@
             const loadingOverlay = document.getElementById('form-loading-overlay');
             const loadingText = document.getElementById('installing_template_text');
             loadingOverlay.classList.remove('hidden');
-            
+
             // Rotating text messages
             const messages = [
                 'Installing template...',
@@ -155,15 +155,15 @@
                 'Setting up your website...',
                 'Almost done...'
             ];
-            
+
             let messageIndex = 0;
             loadingText.textContent = messages[messageIndex];
-            
+
             // Start rotating messages
             const messageInterval = setInterval(() => {
                 messageIndex = (messageIndex + 1) % messages.length;
                 loadingText.textContent = messages[messageIndex];
-            }, 2000); // Change message every 2 seconds
+            }, 5000); // Change message every 5 seconds
 
             // Disable all buttons
             const allButtons = document.querySelectorAll('.use-template-btn');
@@ -195,7 +195,10 @@
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
-                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true";
+
+
+
+                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}');
                     }
                 })
                 .catch(error => {

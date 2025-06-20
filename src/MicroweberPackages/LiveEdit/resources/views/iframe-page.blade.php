@@ -140,6 +140,11 @@
 
         <?php print \MicroweberPackages\LiveEdit\Facades\LiveEditManager::headTags(); ?>
         <?php event_trigger('mw.live_edit.footer'); ?>
+
+
+
+
+
     </div>
 
 
@@ -147,5 +152,28 @@
 
     <script x-src="{{ asset('vendor/microweber-packages/frontend-assets/build/element-style-editor-app.js') }}"
             defer></script>
+
+
+
+
+
+
+
+
+
+
+    @if(request()->get('setup_wizard'))
+        <script>
+
+          window.addEventListener('load', function () {
+             setTimeout(function () {
+                 mw.app.dispatch('showSetupWizard');
+                }, 200);
+          });
+
+
+        </script>
+
+    @endif
 
 </div>

@@ -586,8 +586,10 @@ export class QuickEditComponent extends MicroweberBaseClass {
             if (this.isGlobal || edit === this.settings.root) {
                 let shoultSync = !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
                 if (shoultSync) {
-                    const editorParent = this._editorNode.parentElement;
-                    editorParent.appendChild(this.editor());
+                    if(this._editorNode.parentElement){
+                        const editorParent = this._editorNode.parentElement;
+                        editorParent.appendChild(this.editor());
+                    }
                 }
             }
         }, 100)

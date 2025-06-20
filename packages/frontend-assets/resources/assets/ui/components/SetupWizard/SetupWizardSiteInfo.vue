@@ -380,7 +380,6 @@ onBeforeUnmount(() => {
 
         <!-- Main content -->
         <div v-else>
-            <h4 class="mb-4">Site Information & Brand Settings</h4>
 
             <!-- Tabs Navigation (only show if AI is available) -->
             <div v-if="isAIAvailable && showTabs" class="tab-navigation mb-4">

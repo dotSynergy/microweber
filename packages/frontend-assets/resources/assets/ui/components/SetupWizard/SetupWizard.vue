@@ -520,8 +520,6 @@ export default {
         });
 
 
-        // Check for show_wizard parameter and auto-show modal
-        this.checkUrlParamAndShowWizard();
 
     },
 
@@ -549,27 +547,6 @@ export default {
 
     methods: {
 
-        checkUrlParamAndShowWizard() {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            alert( 'Checking URL parameters for show_wizard:', urlParams.toString());
-
-            if (urlParams.has('show_wizard')) {
-                // Show the modal
-                this.openModal();
-
-                // Remove the parameter from URL without page reload
-                const newUrl = window.location.pathname +
-                    window.location.search.replace(/[?&]show_wizard=?([^&]$|[^&]*)/i, '') +
-                    window.location.hash;
-
-                window.history.replaceState(
-                    {path: newUrl},
-                    document.title,
-                    newUrl
-                );
-            }
-        },
 
 
         pagePreviewToggle: () => {

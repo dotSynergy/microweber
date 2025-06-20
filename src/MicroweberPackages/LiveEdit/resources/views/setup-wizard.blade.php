@@ -141,7 +141,9 @@
                     }, 300);
                 }
             });
-        }        function installTemplate(template) {
+        }
+
+        function installTemplate(template) {
             // Show loading overlay
             const loadingOverlay = document.getElementById('form-loading-overlay');
             const loadingText = document.getElementById('installing_template_text');
@@ -164,6 +166,8 @@
                 messageIndex = (messageIndex + 1) % messages.length;
                 loadingText.textContent = messages[messageIndex];
             }, 5000); // Change message every 5 seconds
+
+
 
             // Disable all buttons
             const allButtons = document.querySelectorAll('.use-template-btn');
@@ -196,6 +200,12 @@
                     } else if (data.success) {
                         mw.notification.success(data.success);
 
+
+                         const wrapperMakeHiddern = document.querySelector('.templates-wrapper');
+
+                         if(wrapperMakeHiddern){
+                            wrapperMakeHiddern.classList.add('hidden');
+                         }
 
 
                         window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}');

@@ -525,8 +525,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
         })
 
-        mw.top().app.on('editChanged', this.#editChangeSyncHandle);
-        mw.top().app.on('stateChange', this.#editChangeSyncHandle);
+        mw.top().app.on('editChanged', this.editChangeSyncHandle);
+        mw.top().app.on('stateChange', this.editChangeSyncHandle);
 
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
@@ -549,6 +549,10 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
 
     }
+
+    editChangeSyncHandle = this.#editChangeSyncHandle.bind(this);
+
+
 
     #currentEditor = null;
     #observer = null;
@@ -941,8 +945,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
             this.#observer.disconnect();
         }
 
-        mw.top().app.off('editChanged', this.#editChangeSyncHandle);
-        mw.top().app.off('stateChange', this.#editChangeSyncHandle);
+        mw.top().app.off('editChanged', this.editChangeSyncHandle);
+        mw.top().app.off('stateChange', this.editChangeSyncHandle);
 
         this.#observer = null;
     }

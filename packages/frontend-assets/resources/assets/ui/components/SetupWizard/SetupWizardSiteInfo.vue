@@ -77,7 +77,12 @@ onMounted(async () => {
         disableSync: true
     });
     quickEdit.on('submit', (val) => {
-        generateSiteInfoWithAI(val)
+      //  generateSiteInfoWithAI(val)
+
+
+
+
+
     });
 
 
@@ -98,7 +103,7 @@ onMounted(async () => {
         // advance the setup wizard on the next setep
         emit('ai-request-end')
     });    // Listen for wizard events to trigger form submission
-    const handleWizardFormSubmit = (event) => {
+    const handleWizardFormSubmit = async (event) => {
         // If AI is available and we're on the AI tab, don't allow manual advancement
         if (isAIAvailable.value && activeTab.value === 'ai') {
 
@@ -109,8 +114,10 @@ onMounted(async () => {
 
                 if (val) {
 
-                   // quickEdit.aiChatForm.dispatch('formSubmit');
-                    quickEdit.dispatch('formSubmit');
+                    // quickEdit.aiChatForm.dispatch('formSubmit');
+                    // quickEdit.dispatch('formSubmit');
+
+                    await quickEdit.ai(val);
 
                     generateSiteInfoWithAI(val)
 

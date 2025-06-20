@@ -73,7 +73,8 @@ onMounted(async () => {
 
     const quickEdit = new QuickEditComponent({
         target: mw.top().doc.body,
-        submitOnEnter: true
+        submitOnEnter: true,
+        disableSync: true
     });
     quickEdit.on('submit', (val) => {
         generateSiteInfoWithAI(val)

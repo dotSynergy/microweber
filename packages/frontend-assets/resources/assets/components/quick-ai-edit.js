@@ -676,6 +676,34 @@ export class QuickEditComponent extends MicroweberBaseClass {
                 canvasNode.src = url;
             } else {
                 canvasNode.style.backgroundImage = `url(${url})`
+                const module = canvasNode.closest('.module-background');
+
+                const curr = module.dataset.mwTempOptionSave;
+                let json = [];
+                if (curr) {
+                    try {
+                        json = JSON.parse(curr);
+                    } catch (e) {
+                        json = [];
+                    }
+                }
+
+                let target = json.find(o => o.key === 'data-background-image');
+                if (!target) {
+                    target = {
+                        "group": module.id,
+                        "key": "data-background-image",
+                        "module": "background",
+                        "value": url
+                    };
+
+                    json.push(target)
+
+                } else {
+                    target.value = data[0]
+                }
+
+                module.setAttribute('data-mw-temp-option-save', JSON.stringify(json));
             }
 
             editorNodes[i].querySelector('img').src = url;

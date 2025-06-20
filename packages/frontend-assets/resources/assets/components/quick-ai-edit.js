@@ -583,18 +583,25 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     sync(edit) {
-        if(this.settings.disableSync) {
-           return
-        }
+        // if(this.settings.disableSync) {
+        //    return
+        // }
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
             if (this.isGlobal || edit === this.settings.root) {
                 let shoultSync = !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
                 if (shoultSync) {
-                    if(this._editorNode.parentElement){
-                        const editorParent = this._editorNode.parentElement;
-                        editorParent.appendChild(this.editor());
-                    }
+
+                        try {
+                            if(this._editorNode && this._editorNode.parentElement){
+                            const editorParent = this._editorNode.parentElement;
+                            editorParent.appendChild(this.editor());
+                            }
+                        } catch ( e) {
+                            console.error('Error appending editor:', e);
+                        }
+
+
                 }
             }
         }, 100)

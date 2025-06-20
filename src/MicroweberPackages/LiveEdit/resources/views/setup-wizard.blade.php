@@ -20,9 +20,18 @@
 
 <body class="bg-gray-50">
 <main class="w-full min-h-screen py-10 bg-[#ececec]">
-    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>
+    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <!-- Loading Overlay -->
+        <div id="form-loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 flex items-center space-x-4 shadow-xl">
+                <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-lg font-medium text-gray-700">Installing template...</span>
+            </div>
+        </div>
 
-    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-8 p-10">
           <h1 class="text-3xl font-thin text-gray-800 mb-3">Select template for your Website</h1>
           <p>Choose template and customize it to fit your
@@ -85,9 +94,7 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                @endif
-
-                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
+                                @endif                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
                                     <span>Use this template</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -134,10 +141,17 @@
                     }, 300);
                 }
             });
-        }
-
-        function installTemplate(template) {
-            mw.spinner({element: document.body, message: 'Installing template...'}).show();
+        }        function installTemplate(template) {
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('form-loading-overlay');
+            loadingOverlay.classList.remove('hidden');
+            
+            // Disable all buttons
+            const allButtons = document.querySelectorAll('.use-template-btn');
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
 
             fetch("{{ route('admin.setup-wizard.install-template') }}", {
                 method: 'POST',
@@ -149,8 +163,15 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    mw.spinner({element: document.body}).hide();
+                    loadingOverlay.classList.add('hidden');
+                    
                     if (data.error) {
+                        // Re-enable buttons on error
+                        allButtons.forEach(btn => {
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        });
+                        
                         mw.notification.error(data.error);
                     } else if (data.success) {
                         mw.notification.success(data.success);
@@ -158,7 +179,14 @@
                     }
                 })
                 .catch(error => {
-                    mw.spinner({element: document.body}).hide();
+                    loadingOverlay.classList.add('hidden');
+                    
+                    // Re-enable buttons on error
+                    allButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
+                    
                     mw.notification.error('Error installing template');
                 });
         }
@@ -174,6 +202,10 @@
         .templates-wrapper {
             padding: 20px;
             margin: 0 auto;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         .templates-container {
@@ -196,7 +228,7 @@
 
         .template-preview {
             width: 100%;
-            height: 450px;
+            height: 250px;
             background-size: cover;
             background-position: top center;
             background-repeat: no-repeat;
@@ -252,18 +284,34 @@
             label {
                 font-weight: 400 !important;
             }
-        }
-
-        .use-template-btn{
-            &:hover {
+        }        .use-template-btn{
+            &:hover:not(:disabled) {
                 background-color: #1f2937 !important;
                 color: #ffffff !important;
+            }
+
+            &:disabled {
+                cursor: not-allowed !important;
+                transform: none !important;
             }
 
             svg {
                 &:hover {
                     fill: #ffffff !important;
                 }
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
             }
         }
     </style>

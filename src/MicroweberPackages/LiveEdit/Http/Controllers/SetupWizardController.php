@@ -1,11 +1,10 @@
 <?php
 
-namespace Modules\SetupWizard\Http\Controllers;
+namespace MicroweberPackages\LiveEdit\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use MicroweberPackages\Install\TemplateInstaller;
 use MicroweberPackages\Admin\Http\Controllers\AdminController;
+use MicroweberPackages\Install\TemplateInstaller;
 
 class SetupWizardController extends AdminController
 {
@@ -81,7 +80,7 @@ class SetupWizardController extends AdminController
             }
         }
 
-        return view('modules.setup_wizard::admin.setup_wizard', [
+        return view('microweber-live-edit::setup-wizard', [
             'templates' => $siteTemplates,
             'categories' => $uniqueCategories
         ]);

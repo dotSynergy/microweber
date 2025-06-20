@@ -34,3 +34,21 @@ Route::group(['middleware' => 'web'], function () {
 
 
 });
+
+
+
+
+Route::middleware(['admin'])
+    ->prefix(mw_admin_prefix_url())
+    ->name('admin.setup-wizard.')
+    ->group(function () {
+        Route::get('/setup-wizard', [
+            \MicroweberPackages\LiveEdit\Http\Controllers\SetupWizardController::class,
+            'index'
+        ])->name('index');
+
+        Route::post('/install-template', [
+            \MicroweberPackages\LiveEdit\Http\Controllers\SetupWizardController::class,
+            'installTemplate'
+        ])->name('install-template');
+    });

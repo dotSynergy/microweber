@@ -1,13 +1,14 @@
 <template>    <div v-if="showModal" style="visibility: hidden; position: absolute; width: 1px; height: 1px;"></div>
-    <div v-if="showModal" v-on:click="hideModal" class="mw-le-overlay active"></div>
+    <div v-if="false && showModal" v-on:click="hideModal" class="mw-le-overlay active"></div>
 
     <Transition
         enter-active-class="animate__animated animate__zoomIn"
         leave-active-class="animate__animated animate__zoomOut"
     >
         <div v-if="showModal"
-             class="mw-le-dialog-block mw-le-layouts-dialog mw-setup-wizard-modal active"
+             class=" mw-setup-wizard-modal active"
              style="animation-duration: .3s;"
+             id="mw-setup-wizard-dialog"
         >            <!-- Close Button -->
             <button
                 type="button"
@@ -21,14 +22,14 @@
 
             <!-- Wizard Header -->
             <div class="mw-setup-wizard-header">
-                <h3 class="text-center mb-4">Setup Wizard</h3>
+                <h3 class="text-center mb-4"><Lang>Setup Wizard</Lang></h3>
 
                 <!-- Progress Steps -->
                 <div class="mw-wizard-steps d-flex justify-content-center mb-4">
                     <div
                         v-for="(step, index) in steps"
                         :key="index"
-                        class="mw-wizard-step d-flex align-items-center me-4"
+                        class="mw-wizard-step align-items-center me-4"
                         :class="{
                             'active': currentStep === index,
                             'completed': currentStep > index
@@ -47,7 +48,7 @@
                 <div v-if="currentStep === 0" class="wizard-step-content">
                     <h4 class="mb-4">Site Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Site information settings will go here</p>
+                        <p class="text-muted"><Lang>Site information settings will go here</Lang></p>
                         <small>Placeholder for site title, description, company name, contact email, etc.</small>
 
 
@@ -141,16 +142,22 @@
 <style>
 /* Setup Wizard Modal */
 .mw-setup-wizard-modal {
-    max-width: 1000px !important;
-    max-height: 700px !important;
-    width: 90% !important;
+    max-width: 30vw !important;
+    height: 100vh;
+    min-height: 100vh;
+    width: 400px;
+    min-width: 310px;
     position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    top: 0 !important;
+    right: 0 !important;
+    transform: none !important;
     margin: 0 !important;
     display: flex;
     flex-direction: column;
+    z-index: 101;
+    background-color: white;
+    color: #111;
+    box-shadow: -10px 0 20px #00000040;
 }
 
 /* Wizard Header */
@@ -170,11 +177,17 @@
 }
 
 .mw-wizard-step {
-    display: flex;
+
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+}
+.mw-wizard-step{
+    display: none;
+}
+.mw-wizard-step.active{
+    display: flex;
 }
 
 .mw-wizard-step.disabled {
@@ -241,7 +254,8 @@
     flex: 1;
     overflow-y: auto;
     min-height: 400px;
-    max-height: 500px;
+    max-height: calc(100vh - 190px); /* dvh is not supported in firefox (142) */
+    max-height: calc(100dvh - 190px);
 }
 
 .wizard-step-content {
@@ -309,10 +323,7 @@
         display: none;
     }
 
-    .mw-wizard-step {
-        flex-direction: column;
-        text-align: center;
-    }
+
 
     .step-number {
         margin-right: 0;
@@ -333,6 +344,16 @@
     min-width: 32px;
     text-align: center;
 }
+
+html.mw-setup-wizard-document #live-editor-frame{
+    transform: scale(.75);
+    width: 133.333%;
+    height: 133.333%;
+    transform-origin: center top;
+    transition: .4s;
+}
+
+
 </style>
 
 <script>
@@ -419,12 +440,19 @@ export default {
             this.showModal = true;
             this.currentStep = 0;
             this.pagePreviewToggle();
+            mw.top().doc.documentElement.classList.add('mw-setup-wizard-document');
+            mw.top().doc.documentElement.classList.add('live-edit-gui-editor-opened');
         },
 
         hideModal() {
             this.showModal = false;
             this.params = null;
             this.pagePreviewToggle();
+            mw.top().doc.documentElement.classList.remove('mw-setup-wizard-document');
+            if(!mw.top().controlBox.hasOpened('right')) {
+                mw.top().doc.documentElement.classList.remove('live-edit-gui-editor-opened');
+            }
+
         }
     }
 }

@@ -61,7 +61,6 @@ const _prepareCss = () => {
 
 
 
-
 const isEditMode = function (value) {
 
     if(value === undefined){
@@ -91,6 +90,7 @@ export const previewMode = function () {
     mw.app.dispatch('mw.previewMode');
 
     _prepareCss();
+    mw.top().app.domTree.hide();
 
     mw.app.canvas.getDocument().body.querySelectorAll('.mw-free-layout-container').forEach(node => {
         const movable = node.__mvb;

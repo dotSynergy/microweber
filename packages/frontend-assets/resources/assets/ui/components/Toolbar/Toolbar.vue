@@ -36,6 +36,10 @@ html.preview .back-to-edit{
     opacity: 1;
 }
 
+html.mw-setup-wizard-document .back-to-edit{
+    display: none;
+}
+
 .back-to-edit svg{
     transform: rotate(45deg);
     width: 24px;

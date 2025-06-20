@@ -432,9 +432,6 @@ class QuickEditService extends MicroweberBaseClass {
 
     collectTexts(edits, toJson) {
         return this.collect(edits, toJson, (curr, node) => {
-
-            console.log(curr,node)
-
             return node.nodeName !== 'IMG' && !node.classList.contains('mw-layout-background-node');
         });
     }

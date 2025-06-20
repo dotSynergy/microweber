@@ -72,6 +72,17 @@
                             @ai-request-end="handleAIRequestEnd"
                         ></SetupWizardSiteInfo>
 
+                        <!-- Trigger AI Form Submit Button -->
+                        <div class="mt-3">
+                            <button
+                                type="button"
+                                @click="triggerSiteInfoFormSubmit"
+                                class="btn btn-outline-primary btn-sm"
+                            >
+                                Generate with AI
+                            </button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -458,6 +469,20 @@ html.mw-setup-wizard-document #live-editor-frame {
     display: none !important;
 }
 
+/* AI Trigger Button Styling */
+.wizard-step-content .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+    transition: all 0.3s ease;
+}
+
+.wizard-step-content .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
 
 </style>
 
@@ -521,6 +546,11 @@ export default {
             api.pagePreviewToggle()
         },        // Wizard navigation methods
         nextStep() {
+            // If we're on the first step (Website Info), trigger form submit before advancing
+            if (this.currentStep === 0) {
+                this.triggerSiteInfoFormSubmit();
+            }
+
             if (this.currentStep < this.steps.length - 1) {
                 this.currentStep++;
             }
@@ -537,9 +567,7 @@ export default {
             if (stepIndex >= 0 && stepIndex < this.steps.length) {
                 this.currentStep = stepIndex;
             }
-        },
-
-        // AI request handlers
+        },        // AI request handlers
         handleAIRequestStart() {
             this.isAIProcessing = true;
         },
@@ -550,10 +578,20 @@ export default {
             setTimeout(() => {
                 this.nextStep();
             }, 1000); // Small delay to show completion
-        }, completeWizard() {
-            // Emit completion event
-            mw.app.trigger('setupWizardComplete', {
-                step: 'completed'
+        },        // Trigger form submit in SiteInfo component
+        triggerSiteInfoFormSubmit() {
+
+
+            // Fallback to custom window event
+            const event = new CustomEvent('setupWizard.triggerFormSubmit', {
+                detail: { step: this.currentStep }
+            });
+            window.dispatchEvent(event);
+        },completeWizard() {
+
+            const event = new CustomEvent('setupWizard.complete', {
+                detail: { step: this.currentStep , completed: true }
+
             });
 
             this.hideModal();

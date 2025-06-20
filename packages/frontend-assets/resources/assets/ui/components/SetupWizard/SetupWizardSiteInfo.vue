@@ -79,7 +79,10 @@ onMounted(async () => {
         generateSiteInfoWithAI(val)
     });
 
- 
+
+    // quickEdit.dispatch('formSubmit');
+
+
     quickEdit.on('aiRequestStart', () => {
         //must disable the parent wizard next  button
         emit('ai-request-start')
@@ -91,8 +94,22 @@ onMounted(async () => {
         //must enable  the parent wizard next  button
         // advance the setup wizard on the next setep
         emit('ai-request-end')
-    });
+    });    // Listen for wizard events to trigger form submission
+    const handleWizardFormSubmit = () => {
+        if (quickEdit) {
+            quickEdit.dispatch('formSubmit');
 
+            return false;
+        }
+
+    };
+
+
+    // Fallback to window event listener
+    window.addEventListener('setupWizard.triggerFormSubmit', handleWizardFormSubmit);
+
+    // Store reference for cleanup
+    wizardAiChat.value._wizardEventHandler = handleWizardFormSubmit;
 
     setTimeout(() => {
         wizardAiChat.value.appendChild(quickEdit.editor());
@@ -309,6 +326,12 @@ const cleanup = () => {
     if (titleSaveTimeout) clearTimeout(titleSaveTimeout)
     if (descriptionSaveTimeout) clearTimeout(descriptionSaveTimeout)
     if (keywordsSaveTimeout) clearTimeout(keywordsSaveTimeout)
+    // Remove event listener
+    if (wizardAiChat.value && wizardAiChat.value._wizardEventHandler) {
+
+        // Remove from window events
+        window.removeEventListener('setupWizard.triggerFormSubmit', wizardAiChat.value._wizardEventHandler);
+    }
 }
 
 // Vue lifecycle hook for cleanup

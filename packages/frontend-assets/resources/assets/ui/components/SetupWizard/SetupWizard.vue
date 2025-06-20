@@ -73,7 +73,7 @@
                         ></SetupWizardSiteInfo>
 
                         <!-- Trigger AI Form Submit Button -->
-                        <div class="mt-3">
+<!--                        <div class="mt-3">
                             <button
                                 type="button"
                                 @click="triggerSiteInfoFormSubmit"
@@ -81,7 +81,7 @@
                             >
                                 Generate with AI
                             </button>
-                        </div>
+                        </div>-->
 
                     </div>
                 </div>

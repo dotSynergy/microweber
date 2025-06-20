@@ -429,15 +429,7 @@ onBeforeUnmount(() => {
                             @keydown.meta.enter="submitAIPrompt"
                         ></textarea>
                         <div class="mt-2">
-                            <button
-                                type="button"
-                                class="hidden d-none btn btn-primary"
-                                @click="submitAIPrompt"
-                                :disabled="aiLoading || !aiPrompt.trim()"
-                            >
-                                <span v-if="aiLoading">Generating...</span>
-                                <span v-else>Generate with AI</span>
-                            </button>
+
                             <small class="text-muted ms-2">Press Enter to submit</small>
                         </div>
                     </div>

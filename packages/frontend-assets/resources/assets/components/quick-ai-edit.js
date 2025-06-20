@@ -936,7 +936,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const chatOptions = [
             {id: 'images', content: mw.lang('Regenerate Images')},
             {id: 'text', content: mw.lang('Regenerate texts')},
-            {id: 'all', content: mw.lang('Regenerate texts and images'), selected: false},
+            {id: 'all', content: mw.lang('Regenerate texts and images'), selected: true},
         ];
         const aiChatForm = new AIChatForm({
             chatOptions,

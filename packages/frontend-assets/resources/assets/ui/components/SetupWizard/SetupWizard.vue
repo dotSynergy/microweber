@@ -627,7 +627,7 @@ export default {
                 return;
             }
             var saved = canvasWindow.mw.drag.save()
-            
+
 
             this.hideModal();
         },

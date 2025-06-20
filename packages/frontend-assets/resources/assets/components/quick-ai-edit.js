@@ -104,9 +104,9 @@ class QuickEditGUI {
         `;
 
         const changeBTN = document.createElement('button');
-        changeBTN.className =  'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+        changeBTN.className = 'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
         changeBTN.title = mw.lang('Change image');
-        changeBTN.innerHTML =  mw.top().app.iconService.icon('image-change');
+        changeBTN.innerHTML = mw.top().app.iconService.icon('image-change');
         const img = frag.querySelector('img');
 
         const nav = frag.querySelector('nav');
@@ -174,8 +174,8 @@ class QuickEditGUI {
         frag.className = `relative flex content-center justify-center`;
         frag.style.minHeight = `100px`;
 
-        const src =  obj.node.style.backgroundImage.slice(4, -1).replace(/"/g, "").replace(/['"]/g, "")
-        || `data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`;
+        const src = obj.node.style.backgroundImage.slice(4, -1).replace(/"/g, "").replace(/['"]/g, "")
+            || `data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`;
 
 
         frag.innerHTML = `
@@ -189,9 +189,9 @@ class QuickEditGUI {
         `;
 
         const changeBTN = document.createElement('button');
-        changeBTN.className =  'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+        changeBTN.className = 'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
         changeBTN.title = mw.lang('Change image');
-        changeBTN.innerHTML =  mw.top().app.iconService.icon('image-change');
+        changeBTN.innerHTML = mw.top().app.iconService.icon('image-change');
         const img = frag.querySelector('img');
 
         const nav = frag.querySelector('nav');
@@ -215,16 +215,16 @@ class QuickEditGUI {
                 obj.node.style.backgroundImage = `url(${data[0]})`;
                 const curr = module.dataset.mwTempOptionSave;
                 let json = [];
-                if(curr) {
+                if (curr) {
                     try {
                         json = JSON.parse(curr);
-                    } catch(e) {
+                    } catch (e) {
                         json = [];
                     }
                 }
 
                 let target = json.find(o => o.key === 'data-background-image');
-                if(!target) {
+                if (!target) {
                     target = {
                         "group": module.id,
                         "key": "data-background-image",
@@ -271,7 +271,6 @@ class QuickEditGUI {
         })
 
 
-
         return frag
     }
 
@@ -285,8 +284,8 @@ class QuickEditGUI {
         frag.className = `relative flex content-center justify-center`;
         frag.style.minHeight = `100px`;
 
-        const src =  obj.node.style.backgroundImage.slice(4, -1).replace(/"/g, "").replace(/['"]/g, "")
-        || `data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`;
+        const src = obj.node.style.backgroundImage.slice(4, -1).replace(/"/g, "").replace(/['"]/g, "")
+            || `data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`;
 
 
         frag.innerHTML = `
@@ -300,9 +299,9 @@ class QuickEditGUI {
         `;
 
         const changeBTN = document.createElement('button');
-        changeBTN.className =  'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+        changeBTN.className = 'btn btn-dark btn-icon absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
         changeBTN.title = mw.lang('Change image');
-        changeBTN.innerHTML =  mw.top().app.iconService.icon('image-change');
+        changeBTN.innerHTML = mw.top().app.iconService.icon('image-change');
         const img = frag.querySelector('img');
 
         const nav = frag.querySelector('nav');
@@ -361,7 +360,6 @@ class QuickEditGUI {
         })
 
 
-
         return frag
     }
 
@@ -376,7 +374,7 @@ class QuickEditGUI {
         obj.node.$$ref = inp;
 
         inp.addEventListener('input', () => {
-             this.instance.pauseSync();
+            this.instance.pauseSync();
             this.instance.pause();
             obj.text = inp.value;
             this.instance.dispatch('change', obj);
@@ -386,7 +384,7 @@ class QuickEditGUI {
 
         inp.addEventListener('blur', e => {
 
-                this.instance.unPauseSync();
+            this.instance.unPauseSync();
 
         })
         inp.addEventListener('focus', e => {
@@ -422,14 +420,14 @@ class QuickEditService extends MicroweberBaseClass {
 
     #collectSingle(editNode, toJson, onNode) {
         const nestedEdits = Array.from(editNode.querySelectorAll(this.component.settings.editsSelector));
-        const skipTags = [ 'IFRAME'];
+        const skipTags = ['IFRAME'];
         return Array
             .from(editNode.querySelectorAll(this.component.settings.nodesSelector))
             .filter(node => {
                 return nestedEdits.length === 0 || !nestedEdits.find(edit => this.#editNodeContains(edit, node))
             })
             .map(node => {
-                if (skipTags.indexOf(node.nodeName ) !== -1 ){
+                if (skipTags.indexOf(node.nodeName) !== -1) {
                     return;
                 }
 
@@ -454,7 +452,7 @@ class QuickEditService extends MicroweberBaseClass {
                 }
                 if (onNode) {
                     const onres = onNode.call(this.component, curr, node);
-                    if(onres !== false) {
+                    if (onres !== false) {
                         return curr;
                     }
                 } else {
@@ -494,7 +492,7 @@ class QuickEditService extends MicroweberBaseClass {
 
             if (onNode) {
                 const onres = onNode.call(this.component, curr, edit);
-                if(onres !== false) {
+                if (onres !== false) {
                     result.push(curr);
                 }
             } else {
@@ -504,7 +502,6 @@ class QuickEditService extends MicroweberBaseClass {
         }
 
 
-
         return result;
     }
 
@@ -512,7 +509,7 @@ class QuickEditService extends MicroweberBaseClass {
         const result = [];
         this.collect(edits, toJson, (curr, node) => {
 
-            if(node.nodeName === 'IMG' || node.classList.contains('mw-layout-background-node') || node.style.backgroundImage) {
+            if (node.nodeName === 'IMG' || node.classList.contains('mw-layout-background-node') || node.style.backgroundImage) {
                 result.push(curr);
             }
         });
@@ -523,9 +520,9 @@ class QuickEditService extends MicroweberBaseClass {
     collectTexts(edits, toJson) {
         return this.collect(edits, toJson, (curr, node) => {
             return node.nodeName !== 'IMG'
-            && !node.classList.contains('mw-layout-background-node')
-            && !node.style.backgroundImage
-            && node.textContent.trim().length > 2;
+                && !node.classList.contains('mw-layout-background-node')
+                && !node.style.backgroundImage
+                && node.textContent.trim().length > 2;
         });
     }
 
@@ -537,10 +534,8 @@ class QuickEditService extends MicroweberBaseClass {
 }
 
 
-
-
 const sendToChat = (messages, messagesOptions) => (MwAi().sendToChat(messages, messagesOptions).then(data => [data, null]).catch(err => [null, err]));
-const generateImage =  (messages, messagesOptions) =>(MwAi().generateImage(messages, messagesOptions).then(data => [data, null]).catch(err => [null, err]));
+const generateImage = (messages, messagesOptions) => (MwAi().generateImage(messages, messagesOptions).then(data => [data, null]).catch(err => [null, err]));
 
 
 const defaultAiTextAdapter = async (message, options) => {
@@ -564,22 +559,22 @@ const defaultAiTextAdapter = async (message, options) => {
 
 const defaultAiImagesAdapter = async (message, numberOfImages = 1, messagesOptions) => {
 
-        let messages = [{role: 'user', content: message}];
-        const arr = Array.from({length: numberOfImages}).map(() => generateImage(messages, messagesOptions))
+    let messages = [{role: 'user', content: message}];
+    const arr = Array.from({length: numberOfImages}).map(() => generateImage(messages, messagesOptions))
 
-        let res = await Promise.all(arr);
+    let res = await Promise.all(arr);
 
-        res = res.map(itm => itm[0]).filter(itm => !!itm);
+    res = res.map(itm => itm[0]).filter(itm => !!itm);
 
-        if (res) {
-            return res;
+    if (res) {
+        return res;
 
-        } else {
-            return {
-                succcess: false,
-                message: 'Error'
-            }
+    } else {
+        return {
+            succcess: false,
+            message: 'Error'
         }
+    }
 
 
 }
@@ -601,7 +596,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         }
         this.settings = Object.assign({}, defaults, options);
         this.settings.nodesSelector = this.settings.nodesSelector.split(',').join(':not(' + skipSelector + '),');
-        this.settings.nodesSelector += ':not('+skipSelector+')';
+        this.settings.nodesSelector += ':not(' + skipSelector + ')';
         this.api = new QuickEditService(this);
         this.gui = new QuickEditGUI(this);
 
@@ -624,23 +619,19 @@ export class QuickEditComponent extends MicroweberBaseClass {
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
 
-
         this.on('formSubmit', () => {
-            if(this.aiChatForm) {
-                this.aiChatForm(this.aiChatForm.area.value.trim())
+            if (this.aiChatForm) {
+                this.ai(this.aiChatForm.area.value.trim())
             }
-
-
         })
 
 
     }
 
 
-
     #editChangeSyncHandle = (edit) => {
 
-            this.sync(edit)
+        this.sync(edit)
 
 
     }
@@ -657,32 +648,32 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
     #pausedSync = false;
 
-    pausedSync(state){
-        if(typeof state === 'boolean'){
+    pausedSync(state) {
+        if (typeof state === 'boolean') {
             this.#pausedSync = state;
         }
         return this.#pausedSync;
     }
 
-    pauseSync(){
-         clearTimeout(this.#pauseSyncTimer);
-         this.pausedSync(true);
+    pauseSync() {
+        clearTimeout(this.#pauseSyncTimer);
+        this.pausedSync(true);
     }
 
-    unPauseSync(){
-         clearTimeout(this.#pauseSyncTimer);
-         this.#pauseSyncTimer = setTimeout(() => {
+    unPauseSync() {
+        clearTimeout(this.#pauseSyncTimer);
+        this.#pauseSyncTimer = setTimeout(() => {
             this.pausedSync(false);
-         }, 300);
+        }, 300);
 
     }
 
     sync(edit) {
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
-            if(this.isGlobal || edit === this.settings.root) {
-                let shoultSync =  !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
-                if(shoultSync) {
+            if (this.isGlobal || edit === this.settings.root) {
+                let shoultSync = !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
+                if (shoultSync) {
                     const editorParent = this._editorNode.parentElement;
                     editorParent.appendChild(this.editor());
                 }
@@ -756,13 +747,13 @@ export class QuickEditComponent extends MicroweberBaseClass {
             let url;
             if (img.url) {
                 url = img.url
-            } else if(img.data && img.data.url) {
+            } else if (img.data && img.data.url) {
                 url = img.data.url
             } else {
                 url = img;
             }
             const canvasNode = canvasNodes[i];
-            if(canvasNode.nodeName === 'IMG') {
+            if (canvasNode.nodeName === 'IMG') {
                 canvasNode.src = url;
             } else {
                 canvasNode.style.backgroundImage = `url(${url})`
@@ -807,7 +798,6 @@ export class QuickEditComponent extends MicroweberBaseClass {
             if (node.id && node.text !== undefined) {
                 const input = document.getElementById(`data-node-id-${node.id}`);
                 const target = this.settings.document.getElementById(`${node.id}`);
-
 
 
                 if (input) {
@@ -871,7 +861,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     editor() {
-        if(this._editorNode) {
+        if (this._editorNode) {
             this._editorNode.remove()
         }
         const editor = document.createElement("div");
@@ -894,7 +884,6 @@ export class QuickEditComponent extends MicroweberBaseClass {
                 nodes.push(obj.node);
 
 
-
                 // Get the parent section for grouping
                 let parentEdit = obj.node.closest('.edit');
                 let parentEditClosesIdElement = parentEdit.closest('id');
@@ -904,7 +893,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
                 }
 
                 let sectionTitle;
-                if ( type === 'layoutBackground') {
+                if (type === 'layoutBackground') {
                     const parent = obj.node.closest('.module-background');
                     parentEdit = parent.parentElement.querySelector('.edit');
                 }
@@ -949,7 +938,6 @@ export class QuickEditComponent extends MicroweberBaseClass {
             const headerText = document.createElement('span');
             headerText.className = 'header-text fw-bold text-secondary';
             headerText.textContent = fieldGroups[sectionId].title;
-
 
 
             // Assemble the header
@@ -999,8 +987,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
             this.#observer.disconnect();
         }
 
-         mw.top().app.off('editChanged', this.#editChangeSyncHandle);
-         mw.top().app.off('stateChange', this.#editChangeSyncHandle);
+        mw.top().app.off('editChanged', this.#editChangeSyncHandle);
+        mw.top().app.off('stateChange', this.#editChangeSyncHandle);
 
         this.#observer = null;
     }
@@ -1033,7 +1021,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         ];
         const aiChatForm = new AIChatForm({
             chatOptions,
-            submitOnEnter:this.settings.submitOnEnter || false,
+            submitOnEnter: this.settings.submitOnEnter || false,
         });
 
         this.aiChatForm = aiChatForm;
@@ -1053,7 +1041,6 @@ export class QuickEditComponent extends MicroweberBaseClass {
             aiChatForm.disable();
             await this.ai(val);
             aiChatForm.enable();
-
 
 
         });
@@ -1122,10 +1109,10 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         messageOptions.schema = editSchema;
 
 
-        if(this.chatOption === 'all' || this.chatOption === 'text') {
+        if (this.chatOption === 'all' || this.chatOption === 'text') {
             let textRes = await this.aiTextAdapter(message, messageOptions);
 
-            if (textRes.success  && textRes.data?.content) {
+            if (textRes.success && textRes.data?.content) {
                 this.applyJSON(textRes.data.content);
 
             } else if (textRes.success && textRes.data) {
@@ -1137,13 +1124,11 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         }
 
 
-
-        if(this.chatOption === 'all' || this.chatOption === 'images') {
+        if (this.chatOption === 'all' || this.chatOption === 'images') {
             let imageRes = await this.aiImagesAdapter(about, this.collectImages(undefined, true).length);
             this.applyImages(imageRes)
 
         }
-
 
 
         mw.top().spinner(({element: mw.top().doc.body, size: 60, decorate: true})).remove();

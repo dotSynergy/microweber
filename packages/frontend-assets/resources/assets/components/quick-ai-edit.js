@@ -711,7 +711,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
                     json.push(target)
 
                 } else {
-                    target.value = data[0]
+                    target.value = url
                 }
 
                 module.setAttribute('data-mw-temp-option-save', JSON.stringify(json));

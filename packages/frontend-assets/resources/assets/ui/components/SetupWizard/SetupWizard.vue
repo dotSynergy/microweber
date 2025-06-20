@@ -1,6 +1,5 @@
-<template>
-    <div v-if="showModal" style="visibility: hidden; position: absolute; width: 1px; height: 1px;"></div>
-    <div v-if="showModal" v-on:click="showModal = false" class="mw-le-overlay active"></div>
+<template>    <div v-if="showModal" style="visibility: hidden; position: absolute; width: 1px; height: 1px;"></div>
+    <div v-if="showModal" v-on:click="hideModal" class="mw-le-overlay active"></div>
 
     <Transition
         enter-active-class="animate__animated animate__zoomIn"
@@ -9,12 +8,11 @@
         <div v-if="showModal"
              class="mw-le-dialog-block mw-le-layouts-dialog mw-setup-wizard-modal active"
              style="animation-duration: .3s;"
-        >
-            <!-- Close Button -->
+        >            <!-- Close Button -->
             <button
                 type="button"
                 class="mw-le-dialog-close-btn"
-                @click="showModal = false"
+                @click="hideModal"
                 aria-label="Close"
                 style="position:absolute;top:16px;right:16px;z-index:10;background:none;border:none;font-size:2rem;line-height:1;cursor:pointer;"
             >
@@ -53,13 +51,6 @@
                         <small>Placeholder for site title, description, company name, contact email, etc.</small>
 
 
-
-
-                        <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
-                        <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
-                        <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
-
-
                     </div>
                 </div>
 
@@ -89,7 +80,11 @@
                         <small>Placeholder for primary, secondary, accent colors, color palette selection, etc.</small>
 
 
-                        <TemplateSettings setting="colors"></TemplateSettings>
+                        <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
+
+
+                        <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
+
 
 
                     </div>
@@ -103,11 +98,12 @@
                         <small>Placeholder for font families, weights, sizes, typography settings, etc.</small>
 
 
-                        <TemplateSettings setting="typography"></TemplateSettings>
+                        <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
 
 
                     </div>
                 </div>
+
             </div>
 
             <!-- Wizard Navigation -->
@@ -139,7 +135,7 @@
         </div>
     </Transition>
 
-    <div v-if="showModal" v-on:click="showModal = false" class="mw-le-dialog-close active"></div>
+    <div v-if="showModal" v-on:click="hideModal" class="mw-le-dialog-close active"></div>
 </template>
 
 <style>
@@ -341,6 +337,7 @@
 
 <script>
 import TemplateSettings from "../RightSidebar/TemplateSettings/TemplateSettings.vue";
+import * as api from "../../../api-core/services/services/preview.service.js";
 
 export default {
     name: 'SetupWizard',
@@ -349,24 +346,20 @@ export default {
     },
 
     mounted() {
-        const instance = this;
-
-        // Initialize setup wizard listener
+        const instance = this;        // Initialize setup wizard listener
         mw.app.on('showSetupWizard', (params) => {
-            this.showModal = true;
             this.params = params;
-            this.currentStep = 0;
+            this.openModal();
         });
 
         mw.app.on('hideSetupWizard', () => {
-            this.showModal = false;
-            this.params = null;
+            this.hideModal();
         });
 
         // Close on Escape
         document.addEventListener('keyup', function (evt) {
             if (evt.keyCode === 27) {
-                instance.showModal = false;
+                instance.hideModal();
             }
         });
     },
@@ -387,6 +380,14 @@ export default {
     },
 
     methods: {
+
+        pagePreviewToggle: () => {
+            //toggle  class to the body 'wizard-preview'
+
+            document.body.classList.toggle('wizard-preview');
+
+            api.pagePreviewToggle()
+        },
         // Wizard navigation methods
         nextStep() {
             if (this.currentStep < this.steps.length - 1) {
@@ -405,15 +406,25 @@ export default {
             if (stepIndex >= 0 && stepIndex < this.steps.length) {
                 this.currentStep = stepIndex;
             }
-        },
-
-        completeWizard() {
+        },        completeWizard() {
             // Emit completion event
             mw.app.trigger('setupWizardComplete', {
                 step: 'completed'
             });
 
+            this.hideModal();
+        },
+
+        openModal() {
+            this.showModal = true;
+            this.currentStep = 0;
+            this.pagePreviewToggle();
+        },
+
+        hideModal() {
             this.showModal = false;
+            this.params = null;
+            this.pagePreviewToggle();
         }
     }
 }

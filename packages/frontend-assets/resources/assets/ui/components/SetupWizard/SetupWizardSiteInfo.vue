@@ -1,10 +1,10 @@
 <script setup>
 import {ref, defineEmits, onMounted, onBeforeUnmount} from 'vue'
 import axios from 'axios'
-import { QuickEditComponent } from '../../../components/quick-ai-edit'
+import {QuickEditComponent} from '../../../components/quick-ai-edit'
 
 // Component props and emits
-const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords'])
+const emit = defineEmits(['update:siteTitle', 'update:siteDescription', 'update:siteKeywords', 'ai-request-start', 'ai-request-end'])
 
 // Reactive data
 const siteTitle = ref('')
@@ -22,11 +22,11 @@ const aiError = ref('')
 let wizardAiChat = ref(null)
 
 
-
 // Debounce timers for auto-save
 let titleSaveTimeout = null
 let descriptionSaveTimeout = null
 let keywordsSaveTimeout = null
+let showTabs = null
 
 // Load website info from API
 const loadWebsiteInfo = async () => {
@@ -64,8 +64,7 @@ const loadWebsiteInfo = async () => {
 }
 
 
-
-onMounted( async () => {
+onMounted(async () => {
     // Check AI availability
     checkAIAvailability()
 
@@ -74,19 +73,30 @@ onMounted( async () => {
 
     const quickEdit = new QuickEditComponent({
         target: mw.top().doc.body,
-        submitOnEnter:true
+        submitOnEnter: true
     });
-
     quickEdit.on('submit', (val) => {
         generateSiteInfoWithAI(val)
-    })
+    });
 
+ 
+    quickEdit.on('aiRequestStart', () => {
+        //must disable the parent wizard next  button
+        emit('ai-request-start')
+    });
+
+    quickEdit.on('aiRequestEnd', () => {
+        aiLoading.value = false
+        aiError.value = ''
+        //must enable  the parent wizard next  button
+        // advance the setup wizard on the next setep
+        emit('ai-request-end')
+    });
 
 
     setTimeout(() => {
         wizardAiChat.value.appendChild(quickEdit.editor());
     }, 300);
-
 
 
 })
@@ -131,10 +141,12 @@ const generateSiteInfoWithAI = async (prompt) => {
         aiError.value = 'AI functionality is not available'
         return
     }
-
     try {
         aiLoading.value = true
         aiError.value = ''
+
+        // Emit AI request start event
+
 
         const message = `Based on this website description: "${prompt}"
 
@@ -290,29 +302,6 @@ const saveSiteKeywords = async (keywords) => {
     }
 }
 
-const saveBrandPersonality = async (personality) => {
-    try {
-        isSaving.value = true // Only disable for personality buttons briefly
-
-        const response = await axios.post(mw.settings.api_url + 'save_option', {
-            option_key: 'brand_personality',
-            option_group: 'website',
-            option_value: personality
-        }, {
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || mw.cookie.get("XSRF-TOKEN")
-            }
-        })
-
-        if (response.data.is_saved) {
-            console.log('Brand personality saved successfully')
-        }
-    } catch (error) {
-        console.error('Error saving brand personality:', error)
-    } finally {
-        isSaving.value = false
-    }
-}
 
 // Cleanup
 const cleanup = () => {
@@ -343,7 +332,7 @@ onBeforeUnmount(() => {
             <h4 class="mb-4">Site Information & Brand Settings</h4>
 
             <!-- Tabs Navigation (only show if AI is available) -->
-            <div v-if="isAIAvailable" class="tab-navigation mb-4">
+            <div v-if="isAIAvailable && showTabs" class="tab-navigation mb-4">
                 <div class="nav nav-tabs" role="tablist">
                     <button
                         class="nav-link"
@@ -365,13 +354,12 @@ onBeforeUnmount(() => {
             </div>
 
 
-
             <!-- AI Tab Content -->
             <div v-show="isAIAvailable && activeTab === 'ai'" class="ai-tab-content">
                 <div class="ai-generator-section">
                     <h5 class="mb-3">Generate with AI</h5>
                     <p class="text-muted mb-3">
-                        Describe your website and let AI generate the title, description, keywords, and brand personality for you.
+                        Describe your website and let AI generate the title, description, keywords, and text for you.
                     </p>
 
                     <div id="wizard-ai-chat" ref="wizardAiChat"></div>
@@ -383,7 +371,7 @@ onBeforeUnmount(() => {
 
                             v-model="aiPrompt"
                             class="hidden d-none form-control"
-                            placeholder="Describe your website... e.g., 'A modern consulting website for small businesses with a professional blue theme'"
+                            placeholder="Describe your website... e.g., 'A pizza restaurant with in New York City, offering delivery and takeout.'"
                             rows="4"
                             :disabled="aiLoading"
                             @keydown.ctrl.enter="submitAIPrompt"
@@ -392,14 +380,14 @@ onBeforeUnmount(() => {
                         <div class="mt-2">
                             <button
                                 type="button"
-                                class="btn btn-primary"
+                                class="hidden d-none btn btn-primary"
                                 @click="submitAIPrompt"
                                 :disabled="aiLoading || !aiPrompt.trim()"
                             >
                                 <span v-if="aiLoading">Generating...</span>
                                 <span v-else>Generate with AI</span>
                             </button>
-                            <small class="text-muted ms-2">Press Ctrl+Enter to submit</small>
+                            <small class="text-muted ms-2">Press Enter to submit</small>
                         </div>
                     </div>
 
@@ -413,31 +401,31 @@ onBeforeUnmount(() => {
             <div v-if="!isAIAvailable || activeTab === 'manual'"
                  class="manual-content">
 
-            <!-- Site Title Section -->
-            <div class="mb-4">
-                <label for="siteTitle" class="form-label">Site title</label>
-                <p class="text-muted small mb-2">This is the name of your site. You can change it later.</p>
-                <div class="position-relative">
-                    <input
-                        id="siteTitle"
-                        v-model="siteTitle"
-                        @input="updateTitle($event.target.value)"
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter your site title"
-                        maxlength="100"
-                    />
-                    <span class="character-count">{{ siteTitle.length }}/100</span>
+                <!-- Site Title Section -->
+                <div class="mb-4">
+                    <label for="siteTitle" class="form-label">Site title</label>
+                    <p class="text-muted small mb-2">This is the name of your site. You can change it later.</p>
+                    <div class="position-relative">
+                        <input
+                            id="siteTitle"
+                            v-model="siteTitle"
+                            @input="updateTitle($event.target.value)"
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter your site title"
+                            maxlength="100"
+                        />
+                        <span class="character-count">{{ siteTitle.length }}/100</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Site Description Section -->
-            <div class="mb-4">
-                <label for="siteDescription" class="form-label">Site description</label>
-                <p class="text-muted small mb-2">A brief description of your site that appears in search engines and
-                    social
-                    media.</p>
-                <div class="position-relative">
+                <!-- Site Description Section -->
+                <div class="mb-4">
+                    <label for="siteDescription" class="form-label">Site description</label>
+                    <p class="text-muted small mb-2">A brief description of your site that appears in search engines and
+                        social
+                        media.</p>
+                    <div class="position-relative">
             <textarea
                 id="siteDescription"
                 v-model="siteDescription"
@@ -447,28 +435,29 @@ onBeforeUnmount(() => {
                 rows="3"
                 maxlength="160"
             ></textarea>
-                    <span class="character-count">{{ siteDescription.length }}/160</span>
+                        <span class="character-count">{{ siteDescription.length }}/160</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Site Keywords Section -->
-            <div class="mb-4">
-                <label for="siteKeywords" class="form-label">Keywords</label>
-                <p class="text-muted small mb-2">Important keywords that describe your site content. Separate multiple
-                    keywords with commas.</p>
-                <div class="position-relative">
-                    <input
-                        id="siteKeywords"
-                        v-model="siteKeywords"
-                        @input="updateKeywords($event.target.value)"
-                        type="text"
-                        class="form-control"
-                        placeholder="e.g. business, consulting, web design"
-                        maxlength="200"
-                    />
-                    <span class="character-count">{{ siteKeywords.length }}/200</span>
+                <!-- Site Keywords Section -->
+                <div class="mb-4">
+                    <label for="siteKeywords" class="form-label">Keywords</label>
+                    <p class="text-muted small mb-2">Important keywords that describe your site content. Separate
+                        multiple
+                        keywords with commas.</p>
+                    <div class="position-relative">
+                        <input
+                            id="siteKeywords"
+                            v-model="siteKeywords"
+                            @input="updateKeywords($event.target.value)"
+                            type="text"
+                            class="form-control"
+                            placeholder="e.g. business, consulting, web design"
+                            maxlength="200"
+                        />
+                        <span class="character-count">{{ siteKeywords.length }}/200</span>
+                    </div>
                 </div>
-            </div>
             </div> <!-- End manual content -->
         </div>
     </div>

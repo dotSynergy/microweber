@@ -1,4 +1,5 @@
-<template>    <div v-if="showModal" style="visibility: hidden; position: absolute; width: 1px; height: 1px;"></div>
+<template>
+    <div v-if="showModal" style="visibility: hidden; position: absolute; width: 1px; height: 1px;"></div>
     <div v-if="false && showModal" v-on:click="hideModal" class="mw-le-overlay active"></div>
 
     <Transition
@@ -22,7 +23,9 @@
 
             <!-- Wizard Header -->
             <div class="mw-setup-wizard-header">
-                <h3 class="text-center mb-4"><Lang>Setup Wizard</Lang></h3>                <!-- Progress Bar -->
+                <h3 class="text-center mb-4">
+                    <Lang>Setup Wizard</Lang>
+                </h3>                <!-- Progress Bar -->
                 <div class="mw-progress-container mb-4">
                     <!-- Progress Bar Track -->
                     <div class="mw-progress-track">
@@ -64,7 +67,10 @@
                     <h4 class="mb-4">Website Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
-                        <SetupWizardSiteInfo></SetupWizardSiteInfo>
+                        <SetupWizardSiteInfo
+                            @ai-request-start="handleAIRequestStart"
+                            @ai-request-end="handleAIRequestEnd"
+                        ></SetupWizardSiteInfo>
 
                     </div>
                 </div>
@@ -111,13 +117,14 @@
                     Previous
                 </button>
                 <div v-else></div>
-
                 <button
                     v-if="currentStep < steps.length - 1"
                     @click="nextStep"
                     class="btn btn-primary"
+                    :disabled="isAIProcessing"
                 >
-                    Next
+                    <span v-if="isAIProcessing">AI Processing...</span>
+                    <span v-else>Next</span>
                 </button>
                 <button
                     v-else
@@ -193,7 +200,7 @@
     right: 0;
     width: 10px;
     height: 100%;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
 }
 
 /* Step Indicators */
@@ -439,7 +446,7 @@
     text-align: center;
 }
 
-html.mw-setup-wizard-document #live-editor-frame{
+html.mw-setup-wizard-document #live-editor-frame {
     transform: scale(.75);
     width: 133.333%;
     height: 133.333%;
@@ -447,7 +454,7 @@ html.mw-setup-wizard-document #live-editor-frame{
     transition: .4s;
 }
 
-#wizard-ai-chat .edit-fields-container{
+#wizard-ai-chat .edit-fields-container {
     display: none !important;
 }
 
@@ -483,7 +490,7 @@ export default {
                 instance.hideModal();
             }
         });
-    },    data() {
+    }, data() {
         return {
             showModal: false,
             currentStep: 0,
@@ -493,7 +500,8 @@ export default {
                 {title: 'Buttons', key: 'buttons'},
                 {title: 'Fonts', key: 'fonts'}
             ],
-            params: null
+            params: null,
+            isAIProcessing: false
         }
     },
 
@@ -511,8 +519,7 @@ export default {
             document.body.classList.toggle('wizard-preview');
 
             api.pagePreviewToggle()
-        },
-        // Wizard navigation methods
+        },        // Wizard navigation methods
         nextStep() {
             if (this.currentStep < this.steps.length - 1) {
                 this.currentStep++;
@@ -530,7 +537,20 @@ export default {
             if (stepIndex >= 0 && stepIndex < this.steps.length) {
                 this.currentStep = stepIndex;
             }
-        },        completeWizard() {
+        },
+
+        // AI request handlers
+        handleAIRequestStart() {
+            this.isAIProcessing = true;
+        },
+
+        handleAIRequestEnd() {
+            this.isAIProcessing = false;
+            // Auto-advance to next step after AI completes
+            setTimeout(() => {
+                this.nextStep();
+            }, 1000); // Small delay to show completion
+        }, completeWizard() {
             // Emit completion event
             mw.app.trigger('setupWizardComplete', {
                 step: 'completed'
@@ -552,7 +572,7 @@ export default {
             this.params = null;
             this.pagePreviewToggle();
             mw.top().doc.documentElement.classList.remove('mw-setup-wizard-document');
-            if(!mw.top().controlBox.hasOpened('right')) {
+            if (!mw.top().controlBox.hasOpened('right')) {
                 mw.top().doc.documentElement.classList.remove('live-edit-gui-editor-opened');
             }
 

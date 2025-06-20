@@ -41,67 +41,51 @@
                         <div v-if="index < steps.length - 1" class="step-connector ms-4"></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Wizard Content -->
-            <div class="mw-setup-wizard-content p-4">                <!-- Site Info Step -->
+            </div>            <!-- Wizard Content -->
+            <div class="mw-setup-wizard-content p-4">                <!-- Website Info Step -->
                 <div v-if="currentStep === 0" class="wizard-step-content">
-                    <h4 class="mb-4">Site Information</h4>
+                    <h4 class="mb-4">Website Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted"><Lang>Site information settings will go here</Lang></p>
-                        <small>Placeholder for site title, description, company name, contact email, etc.</small>
+                        <p class="text-muted"><Lang>Configure your website basic information</Lang></p>
+                        <small>Set up site title, description, company name, contact email, etc.</small>
 
                         <SetupWizardSiteInfo></SetupWizardSiteInfo>
 
                     </div>
                 </div>
 
-                <!-- Homepage Step -->
-                <div v-if="currentStep === 1" class="wizard-step-content">
-                    <h4 class="mb-4">Homepage</h4>
-                    <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Homepage configuration will go here</p>
-                        <small>Placeholder for homepage layout, template selection, hero content, etc.</small>
-                    </div>
-                </div>
-
-                <!-- Pages Step -->
-                <div v-if="currentStep === 2" class="wizard-step-content">
-                    <h4 class="mb-4">Pages</h4>
-                    <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Page management will go here</p>
-                        <small>Placeholder for creating basic pages, navigation setup, page templates, etc.</small>
-                    </div>
-                </div>
-
                 <!-- Colors Step -->
-                <div v-if="currentStep === 3" class="wizard-step-content">
+                <div v-if="currentStep === 1" class="wizard-step-content">
                     <h4 class="mb-4">Colors</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Color customization will go here</p>
-                        <small>Placeholder for primary, secondary, accent colors, color palette selection, etc.</small>
-
+                        <p class="text-muted">Customize your website colors</p>
+                        <small>Choose primary, secondary, accent colors and color palette for your site</small>
 
                         <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
 
+                    </div>
+                </div>
+
+                <!-- Buttons Step -->
+                <div v-if="currentStep === 2" class="wizard-step-content">
+                    <h4 class="mb-4">Buttons</h4>
+                    <div class="p-4 border rounded bg-light text-center">
+                        <p class="text-muted">Configure button styles</p>
+                        <small>Set up button appearance, colors, sizes and styles</small>
 
                         <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
-
-
 
                     </div>
                 </div>
 
                 <!-- Fonts Step -->
-                <div v-if="currentStep === 4" class="wizard-step-content">
+                <div v-if="currentStep === 3" class="wizard-step-content">
                     <h4 class="mb-4">Fonts</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Font selection will go here</p>
-                        <small>Placeholder for font families, weights, sizes, typography settings, etc.</small>
-
+                        <p class="text-muted">Select typography settings</p>
+                        <small>Choose font families, weights, sizes and text styles</small>
 
                         <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
-
 
                     </div>
                 </div>
@@ -185,7 +169,8 @@
     position: relative;
 }
 .mw-wizard-step{
-    display: none;
+   
+
 }
 .mw-wizard-step.active{
     display: flex;
@@ -386,17 +371,14 @@ export default {
                 instance.hideModal();
             }
         });
-    },
-
-    data() {
+    },    data() {
         return {
             showModal: false,
             currentStep: 0,
             steps: [
-                {title: 'Site Info', key: 'siteInfo'},
-                {title: 'Homepage', key: 'homepage'},
-                {title: 'Pages', key: 'pages'},
+                {title: 'Website Info', key: 'websiteInfo'},
                 {title: 'Colors', key: 'colors'},
+                {title: 'Buttons', key: 'buttons'},
                 {title: 'Fonts', key: 'fonts'}
             ],
             params: null

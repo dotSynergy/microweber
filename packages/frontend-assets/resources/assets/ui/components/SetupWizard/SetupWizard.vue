@@ -22,23 +22,40 @@
 
             <!-- Wizard Header -->
             <div class="mw-setup-wizard-header">
-                <h3 class="text-center mb-4"><Lang>Setup Wizard</Lang></h3>
+                <h3 class="text-center mb-4"><Lang>Setup Wizard</Lang></h3>                <!-- Progress Bar -->
+                <div class="mw-progress-container mb-4">
+                    <!-- Progress Bar Track -->
+                    <div class="mw-progress-track">
+                        <div
+                            class="mw-progress-fill"
+                            :style="{ width: progressPercentage + '%' }"
+                        ></div>
+                    </div>
 
-                <!-- Progress Steps -->
-                <div class="mw-wizard-steps d-flex justify-content-center mb-4">
-                    <div
-                        v-for="(step, index) in steps"
-                        :key="index"
-                        class="mw-wizard-step align-items-center me-4"
-                        :class="{
-                            'active': currentStep === index,
-                            'completed': currentStep > index
-                        }"
-                        @click="navigateToStep(index)"
-                    >
-                        <div class="step-number me-2">{{ index + 1 }}</div>
-                        <div class="step-title">{{ step.title }}</div>
-                        <div v-if="index < steps.length - 1" class="step-connector ms-4"></div>
+                    <!-- Step Indicators -->
+                    <div class="mw-step-indicators">
+                        <div
+                            v-for="(step, index) in steps"
+                            :key="index"
+                            class="mw-step-indicator"
+                            :class="{
+                                'active': currentStep === index,
+                                'completed': currentStep > index
+                            }"
+                            @click="navigateToStep(index)"
+                        >
+                            <div class="step-circle">
+                                <span v-if="currentStep > index" class="step-check">✓</span>
+                                <span v-else>{{ index + 1 }}</span>
+                            </div>
+                            <div class="step-label">{{ step.title }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Current Step Info (Mobile Only) -->
+                    <div class="mw-current-step-info">
+                        <span class="step-counter">{{ currentStep + 1 }} of {{ steps.length }}</span>
+                        <span class="step-name">{{ steps[currentStep].title }}</span>
                     </div>
                 </div>
             </div>            <!-- Wizard Content -->
@@ -46,8 +63,6 @@
                 <div v-if="currentStep === 0" class="wizard-step-content">
                     <h4 class="mb-4">Website Information</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted"><Lang>Configure your website basic information</Lang></p>
-                        <small>Set up site title, description, company name, contact email, etc.</small>
 
                         <SetupWizardSiteInfo></SetupWizardSiteInfo>
 
@@ -58,8 +73,6 @@
                 <div v-if="currentStep === 1" class="wizard-step-content">
                     <h4 class="mb-4">Colors</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Customize your website colors</p>
-                        <small>Choose primary, secondary, accent colors and color palette for your site</small>
 
                         <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
 
@@ -70,8 +83,6 @@
                 <div v-if="currentStep === 2" class="wizard-step-content">
                     <h4 class="mb-4">Buttons</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Configure button styles</p>
-                        <small>Set up button appearance, colors, sizes and styles</small>
 
                         <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
 
@@ -82,8 +93,6 @@
                 <div v-if="currentStep === 3" class="wizard-step-content">
                     <h4 class="mb-4">Fonts</h4>
                     <div class="p-4 border rounded bg-light text-center">
-                        <p class="text-muted">Select typography settings</p>
-                        <small>Choose font families, weights, sizes and text styles</small>
 
                         <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>
 
@@ -152,87 +161,135 @@
     background: #f8f9fa;
 }
 
-/* Wizard Steps */
-.mw-wizard-steps {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+/* Progress Bar Styles */
+.mw-progress-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.mw-wizard-step {
+.mw-progress-track {
+    width: 100%;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+}
 
+.mw-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    position: relative;
+}
+
+.mw-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 100%);
+}
+
+/* Step Indicators */
+.mw-step-indicators {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.mw-step-indicator {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-}
-.mw-wizard-step{
-   
-
-}
-.mw-wizard-step.active{
-    display: flex;
+    z-index: 2;
 }
 
-.mw-wizard-step.disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.step-number {
-    width: 35px;
-    height: 35px;
+.step-circle {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: #e9ecef;
     color: #6c757d;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 13px;
     transition: all 0.3s ease;
-    margin-right: 10px;
+    margin-bottom: 8px;
+    border: 2px solid transparent;
 }
 
-.step-title {
+.step-label {
+    font-size: 12px;
     font-weight: 500;
     color: #6c757d;
+    text-align: center;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.mw-wizard-step.active .step-number {
+/* Active and Completed States */
+.mw-step-indicator.active .step-circle {
     background: #007bff;
     color: white;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-.mw-wizard-step.active .step-title {
+.mw-step-indicator.active .step-label {
     color: #007bff;
     font-weight: 600;
 }
 
-.mw-wizard-step.completed .step-number {
+.mw-step-indicator.completed .step-circle {
     background: #28a745;
     color: white;
+    border-color: #28a745;
 }
 
-.mw-wizard-step.completed .step-title {
+.mw-step-indicator.completed .step-label {
     color: #28a745;
 }
 
-.step-connector {
-    width: 30px;
-    height: 2px;
-    background: #e9ecef;
-    position: absolute;
-    right: -35px;
-    top: 50%;
-    transform: translateY(-50%);
+.mw-step-indicator:hover:not(.active) .step-circle {
+    background: #dee2e6;
+    transform: scale(1.05);
 }
 
-.mw-wizard-step.completed .step-connector {
-    background: #28a745;
+/* Current Step Info (Hidden on Desktop) */
+.mw-current-step-info {
+    display: none;
+    text-align: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.step-counter {
+    font-size: 14px;
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+.step-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #495057;
 }
 
 /* Wizard Content */
@@ -301,19 +358,70 @@
         max-height: 85vh !important;
     }
 
-    .mw-wizard-steps {
-        gap: 1rem;
+    /* Mobile Progress Bar Adjustments */
+    .mw-progress-container {
+        max-width: 100%;
+        padding: 0 10px;
     }
 
-    .step-connector {
+    .mw-step-indicators {
+        margin-bottom: 10px;
+    }
+
+    .mw-step-indicator {
+        flex: 1;
+        max-width: none;
+    }
+
+    .step-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+
+    .step-label {
+        font-size: 10px;
+        max-width: 60px;
+        line-height: 1.2;
+    }
+
+    /* Show current step info on mobile */
+    .mw-current-step-info {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens - minimize step labels */
+    .step-label {
         display: none;
     }
 
+    .mw-current-step-info {
+        margin-top: 20px;
+        padding: 15px;
+    }
 
-
-    .step-number {
-        margin-right: 0;
+    .step-counter {
+        display: block;
         margin-bottom: 5px;
+        margin-right: 0;
+    }
+
+    .step-name {
+        font-size: 18px;
+    }
+
+    .mw-progress-track {
+        height: 8px;
+        margin-bottom: 25px;
+    }
+
+    .step-circle {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
     }
 }
 
@@ -382,6 +490,12 @@ export default {
                 {title: 'Fonts', key: 'fonts'}
             ],
             params: null
+        }
+    },
+
+    computed: {
+        progressPercentage() {
+            return ((this.currentStep + 1) / this.steps.length) * 100;
         }
     },
 

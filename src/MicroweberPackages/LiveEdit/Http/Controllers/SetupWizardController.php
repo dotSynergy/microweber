@@ -15,6 +15,25 @@ class SetupWizardController extends AdminController
         $siteTemplates = [];
         $getTemplates = site_templates();
         $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+        $templateNamesOnTop=[
+            'Big2',
+            'Yummy2',
+            'Freelancer2',
+            'Coffeeshop2',
+            'Resume2',
+            'Simple2',
+            'HumanResources',
+            'Tattoo2',
+            'Office2',
+            'Nomad2',
+            'OnlineLearning2',
+            'Pricing',
+            'NotaryServices2',
+
+
+            'Conference2',
+            'Events2' ,
+            'MobileApp2'];
 
 
         foreach ($getTemplates as $template) {
@@ -70,15 +89,36 @@ class SetupWizardController extends AdminController
 
         foreach ($remove as $key => $removeCategory) {
             $remove[$key] = strtolower($removeCategory);
-        }
-
-        // Filter out unwanted categories
+        }        // Filter out unwanted categories
         $uniqueCategories = [];
         foreach ($getCategories as $lowerKey => $titleCasedCategory) {
             if (!in_array($lowerKey, $remove)) {
                 $uniqueCategories[$lowerKey] = $titleCasedCategory;
             }
         }
+
+        // Sort templates by putting top ones first
+        usort($siteTemplates, function($a, $b) use ($templateNamesOnTop) {
+            $aIsTop = in_array($a['name'], $templateNamesOnTop);
+            $bIsTop = in_array($b['name'], $templateNamesOnTop);
+
+            if ($aIsTop && !$bIsTop) {
+                return -1; // a comes before b
+            }
+            if (!$aIsTop && $bIsTop) {
+                return 1; // b comes before a
+            }
+
+            // If both are top templates, maintain the order defined in $templateNamesOnTop
+            if ($aIsTop && $bIsTop) {
+                $aPos = array_search($a['name'], $templateNamesOnTop);
+                $bPos = array_search($b['name'], $templateNamesOnTop);
+                return $aPos - $bPos;
+            }
+
+            // If neither is a top template, sort alphabetically
+            return strcmp($a['name'], $b['name']);
+        });
 
         return view('microweber-live-edit::setup-wizard', [
             'templates' => $siteTemplates,

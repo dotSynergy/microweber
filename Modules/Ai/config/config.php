@@ -96,15 +96,15 @@ return [
         'replicate' => [
             'enabled' => env('REPLICATE_ENABLED', false),
             'api_key' => env('REPLICATE_API_KEY'),
-            'model' => env('REPLICATE_MODEL', 'google/imagen-3'),
+            'model' => env('REPLICATE_MODEL', 'google/imagen-3-fast'),
             'max_tokens' => env('REPLICATE_MAX_TOKENS', null),
             'temperature' => env('REPLICATE_TEMPERATURE', 0.7),
             'use_cache' => env('REPLICATE_USE_CACHE', false),
             'cache_duration' => env('REPLICATE_CACHE_DURATION', 600), // minutes
             'api_endpoint' => env('REPLICATE_API_ENDPOINT', 'https://api.replicate.com'),
             'models' => [
-                'google/imagen-3' => 'Imagen 3',
                 'google/imagen-3-fast' => 'Imagen 3 Fast',
+                'google/imagen-3' => 'Imagen 3',
                 'minimax/image-01' => 'Minimax Image 0.1',
                 'stability-ai/stable-diffusion-3.5-medium' => 'Stable Diffusion 3.5 Medium',
 

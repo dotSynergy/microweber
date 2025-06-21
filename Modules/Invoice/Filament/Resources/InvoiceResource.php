@@ -15,7 +15,7 @@ use Filament\Tables\Actions\Action;
 
 class InvoiceResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationGroup = 'Shop Settings';
     protected static ?string $model = Invoice::class;
 
     protected static ?string $navigationLabel = 'Invoices';

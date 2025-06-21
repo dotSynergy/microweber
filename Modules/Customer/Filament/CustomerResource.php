@@ -17,7 +17,7 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationGroup = 'Shop Settings';
 
     protected static ?int $navigationSort = 3;
 
@@ -32,16 +32,12 @@ class CustomerResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('first_name')
-
                     ->maxLength(255),
                 Forms\Components\TextInput::make('last_name')
-
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
-
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
-
                     ->email()
                     ->maxLength(255),
                 Forms\Components\Toggle::make('active')
@@ -57,7 +53,6 @@ class CustomerResource extends Resource
                     ->options(collect(\Modules\Currency\Models\Currency::all())->pluck('name', 'id'))
                     ->searchable()
                     ->default('USD')
-
                     ->required(),
                 Forms\Components\Select::make('company_id')
                     ->label('Company')
@@ -117,7 +112,6 @@ class CustomerResource extends Resource
                 return view('modules.content::filament.admin.empty-state', ['modelName' => $modelName]);
 
             })
-
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),

@@ -40,6 +40,7 @@ class PicturesModuleSettings extends LiveEditModuleSettings
                             ->schema([
 
                                 ToggleButtons::make('options.data-use-from-post')
+                                    ->visible($relType == 'module' and $relId > 0)
                                     ->label('Use images from post')
                                     ->helperText('Use images from the post')
                                     ->live()
@@ -52,6 +53,7 @@ class PicturesModuleSettings extends LiveEditModuleSettings
 
 
                                 MwMediaBrowser::make('mediaIds')
+                                    ->label('Media')
                                     ->setRelType($relType)
                                     ->setRelId($relId)
                                     ->default(function () use ($relType, $relId) {

@@ -29,6 +29,7 @@ class PicturesModule extends BaseModule
     {
         $viewData = $this->prepareViewData();
         $relationData = $this->determineRelationData();
+
         $pictures = $this->fetchPictures($relationData);
 
         if (empty($pictures)) {
@@ -59,16 +60,25 @@ class PicturesModule extends BaseModule
     private function determineRelationData(): array
     {
         $params = $this->getParams();
-        $relType = $params['rel'] ?? $params['data-rel'] ?? 'module';
+        $relType = $params['rel'] ?? $params['data-rel'] ?? $params['rel-type'] ?? $params['rel_type'] ?? 'module';
+        $relId = $params['rel-id'] ?? $params['data-rel-id'] ?? $params['rel_id'] ?? false;
+        $moduleId = $params['module_id'] ?? $params['data-module-id'] ?? $params['module_id'] ?? $this->getModuleId();
 
 
-        $relId = $this->getModuleId();
-        $contentId = content_id();
 
-        if ($this->shouldUseContentRelation($params, $contentId)) {
+        if($relType == 'content') {
             $relType = morph_name(Content::class);
-            $relId = $params['content_id'] ?? $contentId;
+            if(!$relId){
+                $relId = content_id();
+            }
+
+        } else {
+            if(!$relId) {
+                $relId = $moduleId;
+            }
         }
+
+
 
         return [
             'type' => $relType,

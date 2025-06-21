@@ -52,7 +52,7 @@ class KitchenSink extends Page
 
     protected static string $view = 'filament.admin.pages.kitchen-sink';
 
-    protected static ?string $navigationGroup = 'Other';
+    protected static ?string $navigationGroup = 'System Settings';
     protected static ?int $navigationSort = 99;
 
     public int $star = 0;

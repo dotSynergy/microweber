@@ -24,7 +24,7 @@ class MarketplaceResource extends Resource
     protected static ?string $navigationIcon = 'mw-marketplace';
     protected static ?string $navigationLabel = 'Marketplace';
 
-    protected static ?string $navigationGroup = 'Other';
+    protected static ?string $navigationGroup = 'System Settings';
 
     protected static ?string $breadcrumb = 'Marketplace';
 

@@ -178,11 +178,11 @@ class FilamentAdminPanelProvider extends PanelProvider
                     ->collapsible(true),
             ])
             ->navigationItems([
-                NavigationItem::make('E-mail Marketing')
+           /*     NavigationItem::make('E-mail Marketing')
                     ->url(admin_url('newsletter'))
                     ->group('Other')
                     ->sort(2)
-                    ->icon('heroicon-o-megaphone'),
+                    ->icon('heroicon-o-megaphone'),*/
 
 
             ])

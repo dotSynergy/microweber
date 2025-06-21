@@ -2,6 +2,7 @@
 
 namespace Modules\Newsletter\Providers;
 
+use Filament\Facades\Filament;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
@@ -25,6 +26,19 @@ use MicroweberPackages\Admin\Filament\FilamentAdminPanelProvider;
 class NewsletterFilamentAdminPanelProvider extends FilamentAdminPanelProvider
 {
     public string $filamentId = 'admin-newsletter';
+
+    public function boot(): void
+    {
+        Filament::serving(function () {
+            Filament::registerNavigationItems([
+                NavigationItem::make('E-mail Marketing')
+                    ->url(admin_url('newsletter'))
+                    ->group('Shop Settings')
+                    ->sort(2)
+                    ->icon('heroicon-o-megaphone'),
+            ]);
+        });
+    }
 
     public function panel(Panel $panel): Panel
     {

@@ -41,7 +41,7 @@ class BillingServiceProvider extends BaseModuleServiceProvider
                 NavigationItem::make('Billing')
                     ->url(admin_url('billing'), shouldOpenInNewTab: true)
                     ->icon('heroicon-o-currency-dollar')
-                  ->group('Other')
+                  ->group('Shop Settings')
                     ->sort(300),
             ]);
 

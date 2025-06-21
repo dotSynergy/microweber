@@ -14,7 +14,7 @@ class AdminExperimentalPage extends AdminSettingsPage
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
     protected static ?string $title = 'Experimental';
     protected static string $description = 'Configure experimental features and settings';
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'System Settings';
 
     public function form(Form $form): Form
     {

@@ -67,7 +67,11 @@
                 <div class="templates-container grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-6">
                     @foreach($templates as $template)
                         <div class="template-item group bg-[#f4f4f4] rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 mb-4" data-categories="{{ json_encode($template['categories']) }}">
-                            <div class="template-preview" style="background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
+                            <div class="template-preview"
+
+
+                                 onclick="installTemplate('{{ $template['dir_name'] }}')"
+                                 style="cursor:pointer; background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
                             </div>
                             <div class="template-info">
                                 <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $template['name'] }}</h3>
@@ -94,7 +98,9 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                @endif                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
+                                @endif
+
+                                <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
                                     <span>Use this template</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />

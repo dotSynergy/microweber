@@ -157,7 +157,7 @@ class MicroweberTemplate
         }
 
         if (!$this->templateFolderName) {
-            $fallbackFromConfig = config('microweber.install_default_template') ?? $this->fallbackTempleteFolderName;
+            $fallbackFromConfig = config('microweber.install_default_template') ?? $this->getFallbackTemplateFolderName();
 
             $this->templateFolderName = $fallbackFromConfig;
         }
@@ -249,7 +249,7 @@ class MicroweberTemplate
      */
     public function getFallbackTemplateDir(): string
     {
-        return templates_dir() . $this->fallbackTempleteFolderName . DS;
+        return templates_dir() . $this->getFallbackTemplateFolderName() . DS;
     }
 
     public function getFallbackTemplateFolderName(): string
@@ -537,7 +537,7 @@ class MicroweberTemplate
         $look_for_post = false;
         $template_view_set_inner = false;
         $fallback_render_internal_file = false;
-        $site_template_settings = app()->option_manager->get('current_template', 'template') ?? $this->fallbackTempleteFolderName;
+        $site_template_settings = app()->option_manager->get('current_template', 'template') ?? $this->getFallbackTemplateFolderName();
 
         //  dd($site_template_settings,$this->getFallbackTemplateFolderName(),$page,$site_template_settings);
         if (!isset($page['active_site_template']) and !$site_template_settings) {
@@ -1580,7 +1580,7 @@ class MicroweberTemplate
             define('DEFAULT_TEMPLATE_DIR', $this->getFallbackTemplateDir());
         }
         if (!defined('DEFAULT_TEMPLATE_URL')) {
-            define('DEFAULT_TEMPLATE_URL', templates_url() . $this->fallbackTempleteFolderName . '/');
+            define('DEFAULT_TEMPLATE_URL', templates_url() . $this->getFallbackTemplateFolderName() . '/');
         }
         if (!defined('ACTIVE_TEMPLATE_DIR')) {
             define('ACTIVE_TEMPLATE_DIR', $this->getActiveTemplateDir());

@@ -724,6 +724,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
     applyJSON(json = [], extend = true) {
 
+
         // Handle case where json is wrapped in a response object
         if (json.success === true && json.data) {
             json = json.data;
@@ -746,6 +747,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         if (!Array.isArray(json)) {
             json = [json];
         }
+
+
 
         // Enhanced recursive function to process nodes at any depth
         const processAllNodesAtAnyDepth = (node) => {
@@ -1011,6 +1014,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
     async ai(about) {
 
+
+
         if (this.#aiPending) {
             return;
         }
@@ -1068,9 +1073,12 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 
         if (this.chatOption === 'all' || this.chatOption === 'text') {
-            let textRes = await this.aiTextAdapter(message, messageOptions);
+           let textRes = await this.aiTextAdapter(message, messageOptions);
 
-            if (textRes.success && textRes.data?.content) {
+            if(textRes.data.content?.length === 0 && textRes.data.children?.length > 0){
+                this.applyJSON(textRes.data.children);
+
+            } else if (textRes.success && textRes.data?.content) {
                 this.applyJSON(textRes.data.content);
 
             } else if (textRes.success && textRes.data) {

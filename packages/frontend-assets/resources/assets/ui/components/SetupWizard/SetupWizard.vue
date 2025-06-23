@@ -70,6 +70,7 @@
                             @ai-request-start="handleAIRequestStart"
                             @ai-request-end="handleAIRequestEnd"
                             @form-submit-result="handleFormSubmitResult"
+                            @exposeQuickEdit="getQuickEdit"
                         ></SetupWizardSiteInfo>
 
                         <!-- Trigger AI Form Submit Button -->
@@ -504,8 +505,11 @@ export default {
     mounted() {
         const instance = this;        // Initialize setup wizard listener
         mw.app.on('showSetupWizard', (params) => {
+            const prompt = (params?.prompt || '').trim();
+            this.prompt = prompt;
             this.params = params;
             this.openModal();
+
         });
 
         mw.app.on('hideSetupWizard', () => {
@@ -534,6 +538,7 @@ export default {
                 {title: 'Fonts', key: 'fonts'}
             ],
             params: null,
+            prompt: '',
             isAIProcessing: false,
             canAdvanceStep: true
         }
@@ -548,7 +553,14 @@ export default {
     methods: {
 
 
+        getQuickEdit(quickEditInstance) {
+            console.log(quickEditInstance)
 
+            if(this.prompt) {
+                quickEditInstance.aiChatForm.area.value = this.prompt;
+                quickEditInstance.ai(this.prompt);
+            }
+        },
         pagePreviewToggle: () => {
             //toggle  class to the body 'wizard-preview'
 
@@ -557,6 +569,9 @@ export default {
             api.pagePreviewToggle()
         },        // Wizard navigation methods
         nextStep() {
+
+            console.log('this.currentStep', this.currentStep)
+
             // If we're on the first step (Website Info), trigger form submit before advancing
             if (this.currentStep === 0) {
                 this.canAdvanceStep = false; // Reset the flag

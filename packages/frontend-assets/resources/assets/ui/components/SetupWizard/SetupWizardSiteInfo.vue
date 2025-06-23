@@ -76,6 +76,10 @@ onMounted(async () => {
         submitOnEnter: true,
         disableSync: true
     });
+
+
+
+
     quickEdit.on('submit', (val) => {
       //  generateSiteInfoWithAI(val)
 
@@ -123,6 +127,7 @@ onMounted(async () => {
 
                     emit('form-submit-result', false);
 
+
                     return false;
 
                 } else {
@@ -149,6 +154,7 @@ onMounted(async () => {
 
     setTimeout(() => {
         wizardAiChat.value.appendChild(quickEdit.editor());
+        emit('exposeQuickEdit', quickEdit);
     }, 300);
 
 

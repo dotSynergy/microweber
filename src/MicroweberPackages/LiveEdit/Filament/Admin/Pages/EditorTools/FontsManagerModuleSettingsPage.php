@@ -7,6 +7,8 @@ use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
 
+
+/* @deprecated  This class is deprecated and will be removed in future versions. Use the new LiveEditModuleSettings class instead. */
 class FontsManagerModuleSettingsPage extends LiveEditModuleSettings
 {
     public string $module = 'editor/fonts/font-manager-modal';

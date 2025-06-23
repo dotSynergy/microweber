@@ -78,7 +78,7 @@ class LiveEditServiceProvider extends ServiceProvider
         //editor tools
         FilamentRegistry::registerPage(ResetContentModuleSettingsPage::class);
         FilamentRegistry::registerPage(CodeEditorModuleSettingsPage::class);
-        FilamentRegistry::registerPage(FontsManagerModuleSettingsPage::class);
+        //FilamentRegistry::registerPage(FontsManagerModuleSettingsPage::class);
         FilamentRegistry::registerPage(AddContentModalPage::class);
         FilamentRegistry::registerPage(ModulePresetsModuleSettingsPage::class);
         FilamentRegistry::registerPage(UnlockPackageModuleSettingsPage::class);
@@ -126,7 +126,7 @@ class LiveEditServiceProvider extends ServiceProvider
                 // ModuleAdmin::registerSettingsComponent('editor/module_presets',ModulePresetsModuleSettingsPage::class);
                 ModuleAdmin::registerLiveEditSettingsUrl('editor/reset_content', ResetContentModuleSettingsPage::getUrl());
                 ModuleAdmin::registerLiveEditSettingsUrl('editor/code_editor', CodeEditorModuleSettingsPage::getUrl());
-                ModuleAdmin::registerLiveEditSettingsUrl('editor/fonts/font-manager-modal', FontsManagerModuleSettingsPage::getUrl());
+                //ModuleAdmin::registerLiveEditSettingsUrl('editor/fonts/font-manager-modal', FontsManagerModuleSettingsPage::getUrl());
 
                 ModuleAdmin::registerLiveEditSettingsUrl('editor/sidebar_template_settings', AdminLiveEditSidebarTemplateSettingsPage::getUrl());
                 ModuleAdmin::registerLiveEditSettingsUrl('microweber/toolbar/editor_tools/rte_css_editor2/rte_editor_vue', AdminLiveEditSidebarElementStyleEditorPage::getUrl());

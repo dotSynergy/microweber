@@ -254,6 +254,15 @@ class MicroweberTemplate
 
     public function getFallbackTemplateFolderName(): string
     {
+        $install_default_template = config('microweber.install_default_template');
+
+        if($install_default_template) {
+            $this->fallbackTempleteFolderName = $install_default_template;
+        } else {
+            $this->fallbackTempleteFolderName = 'Bootstrap';
+        }
+
+
         return $this->fallbackTempleteFolderName;
     }
 

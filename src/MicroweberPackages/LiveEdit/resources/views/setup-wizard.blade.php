@@ -213,8 +213,17 @@
                             wrapperMakeHiddern.classList.add('hidden');
                          }
 
+@php
+$promptParams='';
+if(request()->has('prompt')) {
+    $promptParams = '&prompt=' . urlencode(request()->get('prompt'));
+}
 
-                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}');
+@endphp
+
+
+
+                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}') + "&template=" + encodeURIComponent(template) + "{!! $promptParams !!}";
                     }
                 })
                 .catch(error => {

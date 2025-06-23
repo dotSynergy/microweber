@@ -163,11 +163,30 @@
 
 
     @if(request()->get('setup_wizard'))
+
+        @php
+         $propmtParams = [];
+        $propmtParamsJson = json_encode([]);
+        if(request()->get('prompt')){
+            $propmtParams['prompt'] = request()->get('prompt');
+        }
+
+        if (isset($propmtParams) && is_array($propmtParams) and !empty($propmtParams)) {
+            $propmtParamsJson = json_encode($propmtParams);
+        }
+
+
+        @endphp
+
         <script>
+
 
           window.addEventListener('load', function () {
              setTimeout(function () {
-                 mw.app.dispatch('showSetupWizard');
+
+                 mw.app.dispatch('showSetupWizard',{!! $propmtParamsJson !!});
+
+
                 }, 200);
           });
 

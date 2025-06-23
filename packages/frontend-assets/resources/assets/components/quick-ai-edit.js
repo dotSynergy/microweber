@@ -1030,6 +1030,9 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
         You are a website content writer, and you must write the text in a way that is relevant to the object,
 
+
+        You must rewrite the text of the website to the new subject,
+
         The website subject is: ${about}
 
         You must write the text for the website and will the existing object IDs with the text,

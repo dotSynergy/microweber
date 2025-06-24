@@ -3,6 +3,8 @@
 namespace MicroweberPackages\Console\Commands;
 
 use Illuminate\Console\Command;
+use MicroweberPackages\LaravelModules\LaravelModule;
+use MicroweberPackages\LaravelTemplates\LaravelTemplate;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -15,7 +17,9 @@ class VendorAssetsSymlinkCommand extends Command
     public function __construct()
     {
         parent::__construct();
-    }    public function handle()
+    }
+
+    public function handle()
     {
         $this->info('Creating symlinks for vendor assets...');
 
@@ -23,23 +27,25 @@ class VendorAssetsSymlinkCommand extends Command
         $basePath = base_path();
 
         $allSystemLinks = [
+            //livewire system assets
+            'vendor/livewire' => 'vendor/livewire/livewire/dist',
+
+
             // filament system assets
             'js/filament/filament/echo.js' => 'vendor/filament/filament/dist/echo.js',
             'js/filament/filament/app.js' => 'vendor/filament/filament/dist/index.js',
             'js/filament/filament/forms/components' => 'vendor/filament/forms/dist/components',
             'js/filament/forms' => 'vendor/filament/forms/dist',
-            'js/filament/notifications/notifications.js' =>  'vendor/filament/notifications/dist/index.js',
-            'js/filament/support/support.js' =>  'vendor/filament/support/dist/index.js',
-            'js/filament/support/async-alpine.js' =>  'vendor/filament/support/dist/async-alpine.js',
+            'js/filament/notifications/notifications.js' => 'vendor/filament/notifications/dist/index.js',
+            'js/filament/support/support.js' => 'vendor/filament/support/dist/index.js',
+            'js/filament/support/async-alpine.js' => 'vendor/filament/support/dist/async-alpine.js',
             'js/filament/tables/components' => 'vendor/filament/tables/dist/components',
             'js/filament/widgets' => 'vendor/filament/widgets/dist',
 
-           // filamnent libs
-//            'js/coolsam/flatpickr/components' => 'vendor/coolsam/flatpickr/resources/js/dist/components/flatpickr-component.js',
-//            'js/coolsam/flatpickr/flatpickr-week-select-plugin.js' => 'vendor/bobimicroweber/',
-//            'js/coolsam/flatpickr/flatpickr-range-plugin.js' => 'vendor/bobimicroweber/filament-flatpickr/',
-//            'js/coolsam/flatpickr/flatpickr-confirm-date.js' => 'vendor/bobimicroweber/',
-//            'js/coolsam/flatpickr/flatpickr-month-select-plugin.js' => 'vendor/bobimicroweber/',
+
+            //filament-language-switch
+            'css/bezhansalleh/filament-language-switch/filament-language-switch.css' => 'vendor/bezhansalleh/filament-language-switch/resources/dist/filament-language-switch.css',
+
 
             // Flatpickr assets
             'js/coolsam/flatpickr/flatpickr-range-plugin.js' => 'vendor/bobimicroweber/filament-flatpickr/resources/assets/flatpickr/dist/plugins/rangePlugin.js',
@@ -61,11 +67,10 @@ class VendorAssetsSymlinkCommand extends Command
             'js/coolsam/flatpickr/flatpickr-component.js' => 'vendor/bobimicroweber/filament-flatpickr/resources/js/dist/components/flatpickr-component.js',
 
 
+            // microweber-packages
 
             'vendor/microweber-packages/microweber-filament-theme/build' => 'vendor/microweber-packages/microweber-filament-theme/resources/dist/build',
-
             'vendor/microweber-packages/frontend-assets-libs' => 'vendor/microweber-packages/frontend-assets-libs/resources/dist',
-
             'vendor/microweber-packages/frontend-assets/build' => 'vendor/microweber-packages/frontend-assets/resources/dist/build',
 
         ];
@@ -73,28 +78,29 @@ class VendorAssetsSymlinkCommand extends Command
         // Create symlinks for system assets
         foreach ($allSystemLinks as $link => $target) {
 
-            $tagetPath = normalize_path($basePath . DIRECTORY_SEPARATOR . $target,false);
-            $linkPath = normalize_path($publicPath . DIRECTORY_SEPARATOR .$link,false);
+            $tagetPath = normalize_path($basePath . DIRECTORY_SEPARATOR . $target, false);
+            $linkPath = normalize_path($publicPath . DIRECTORY_SEPARATOR . $link, false);
 
-            $this->createSymlink($linkPath,$tagetPath);
+            $this->createSymlink($linkPath, $tagetPath);
         }
 
-//        // Get all modules and create symlinks for their assets
-//        $allModules = app()->modules->all();
-//        foreach ($allModules as $module) {
-//            $this->symlinkModuleAssets($module);
-//        }
-//
-//        // Get all templates and create symlinks for their assets
-//        $allTemplates = app()->templates->all();
-//        foreach ($allTemplates as $template) {
-//            $this->symlinkTemplateAssets($template);
-//        }
+        // Get all modules and create symlinks for their assets
+        $allModules = app()->modules->all();
+        foreach ($allModules as $module) {
+            $this->symlinkModuleAssets($module);
+        }
+
+        // Get all templates and create symlinks for their assets
+        $allTemplates = app()->templates->all();
+        foreach ($allTemplates as $template) {
+            $this->symlinkTemplateAssets($template);
+        }
 
         $this->info('Vendor assets symlinks created successfully!');
     }
 
-    protected function _symlink($target, $link) {
+    protected function _symlink($target, $link)
+    {
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $target = str_replace('/', '\\', $target);
             $link = str_replace('/', '\\', $link);
@@ -108,7 +114,8 @@ class VendorAssetsSymlinkCommand extends Command
         }
     }
 
-    protected function _unlink($link) {
+    protected function _unlink($link)
+    {
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $link = str_replace('/', '\\', $link);
             if (is_dir($link)) {
@@ -125,7 +132,8 @@ class VendorAssetsSymlinkCommand extends Command
         }
     }
 
-    protected function recursiveRemoveDirectory($directory) {
+    protected function recursiveRemoveDirectory($directory)
+    {
         if (!is_dir($directory)) {
             return;
         }
@@ -158,7 +166,7 @@ class VendorAssetsSymlinkCommand extends Command
             return false;
         }
 
-        if(is_link($link)){
+        if (is_link($link)) {
             $this->info("Link already exists: {$link}");
             return true;
         }
@@ -184,51 +192,52 @@ class VendorAssetsSymlinkCommand extends Command
     /**
      * Create symlinks for module assets
      */
-    protected function symlinkModuleAssets($module)
+    protected function symlinkModuleAssets(LaravelModule $module)
     {
-        if (!isset($module['path'])) {
+
+
+        $moduleName = $module->getLowerName();
+        $modulePath = $module->getPath() . '/resources/assets';
+        $modulePath = normalize_path($modulePath, true);
+        $targetDir = public_path('modules/' . $moduleName);
+
+
+        if (!is_dir($modulePath)) {
             return;
         }
-
-        $modulePath = $module['path'];
-        $moduleName = basename($modulePath);
-
-        // Common asset directories in modules
-        $assetDirs = ['js', 'css', 'img', 'images', 'fonts', 'assets'];
-
-        foreach ($assetDirs as $assetDir) {
-            $sourceDir = $modulePath . DIRECTORY_SEPARATOR . $assetDir;
-            $targetDir = public_path('modules' . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . $assetDir);
-
-            if (is_dir($sourceDir)) {
-                $this->createSymlink($targetDir, $sourceDir);
-            }
+        if (is_link($modulePath)) {
+            $this->info("Module assets symlink already exists: {$modulePath}");
+            return;
         }
+        $this->info("Creating symlink for module: {$moduleName}");
+        // Create the symlink for the module assets
+        $this->createSymlink($targetDir, $modulePath);
+
     }
 
     /**
      * Create symlinks for template assets
      */
-    protected function symlinkTemplateAssets($template)
+    protected function symlinkTemplateAssets(LaravelTemplate $template)
     {
-        if (!isset($template['path'])) {
+        $templatePath = $template->getPath() . '/resources/assets';
+
+        $templatePath = normalize_path($templatePath, true);
+        $templateName = $template->getLowerName();
+        $targetDir = public_path('templates/' . $templateName);
+
+        if (!is_dir($templatePath)) {
             return;
         }
 
-        $templatePath = $template['path'];
-        $templateName = basename($templatePath);
-
-        // Common asset directories in templates
-        $assetDirs = ['js', 'css', 'img', 'images', 'fonts', 'assets'];
-
-        foreach ($assetDirs as $assetDir) {
-            $sourceDir = $templatePath . DIRECTORY_SEPARATOR . $assetDir;
-            $targetDir = public_path('templates' . DIRECTORY_SEPARATOR . $templateName . DIRECTORY_SEPARATOR . $assetDir);
-
-            if (is_dir($sourceDir)) {
-                $this->createSymlink($targetDir, $sourceDir);
-            }
+        if (is_link($templatePath)) {
+            $this->info("Template assets symlink already exists: {$templatePath}");
+            return;
         }
+
+        $this->info("Creating symlink for template: {$templateName}");
+        // Create the symlink for the template assets
+        $this->createSymlink($targetDir, $templatePath);
     }
 
 }

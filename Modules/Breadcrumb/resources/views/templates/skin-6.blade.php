@@ -22,6 +22,7 @@
            width: 100%;
            min-width: 480px;
            padding: 0 40px;
+           margin-top: 30px;
        }
 
        .breadcrumb {

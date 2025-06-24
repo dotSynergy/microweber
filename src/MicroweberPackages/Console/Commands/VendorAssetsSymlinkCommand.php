@@ -64,6 +64,10 @@ class VendorAssetsSymlinkCommand extends Command
 
             'vendor/microweber-packages/microweber-filament-theme/build' => 'vendor/microweber-packages/microweber-filament-theme/resources/dist/build',
 
+            'vendor/microweber-packages/frontend-assets-libs' => 'vendor/microweber-packages/frontend-assets-libs/resources/dist',
+
+            'vendor/microweber-packages/frontend-assets/build' => 'vendor/microweber-packages/frontend-assets/resources/dist/build',
+
         ];
 
         // Create symlinks for system assets

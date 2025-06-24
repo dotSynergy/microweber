@@ -11,7 +11,10 @@
 </script>
     <div
             x-data="{ state: $wire.entangle('{{ $getStatePath() }}'), initialized: false }"
-            x-load-js="[@js(\Illuminate\Support\Facades\Vite::asset('src/MicroweberPackages/Filament/resources/js/tiny-editor.js'))]"
+
+            ax-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/tiny-editor.js') }}"
+
+
             x-init="(() => {
             $nextTick(async () => {
                 // tinymce.createEditor('tiny-editor-{{ $getId() }}', {

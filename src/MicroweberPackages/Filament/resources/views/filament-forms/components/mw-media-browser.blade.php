@@ -85,13 +85,13 @@
 
                             ax-load="visible"
 
-                            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('mw-media-browser', 'mw-filament/forms') }}"
+                            ax-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js')}}"
 
                             x-data="mwMediaManagerComponent({
                                 mediaIds: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},
                             })"
 
-                            x-ignore
+
 
                             x-on:end="
 

@@ -17,11 +17,18 @@ class VendorAssetsSymlinkCommand extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->addOption('restore', 'r', InputOption::VALUE_NONE, 'Remove all vendor asset symlinks');
     }
 
     public function handle()
     {
-        $this->info('Creating symlinks for vendor assets...');
+        $isRestore = $this->option('restore');
+
+        if ($isRestore) {
+            $this->info('Removing vendor assets symlinks...');
+        } else {
+            $this->info('Creating symlinks for vendor assets...');
+        }
 
         $publicPath = public_path();
         $basePath = base_path();
@@ -75,28 +82,76 @@ class VendorAssetsSymlinkCommand extends Command
 
         ];
 
-        // Create symlinks for system assets
+        // Handle system assets
         foreach ($allSystemLinks as $link => $target) {
-
             $tagetPath = normalize_path($basePath . DIRECTORY_SEPARATOR . $target, false);
             $linkPath = normalize_path($publicPath . DIRECTORY_SEPARATOR . $link, false);
 
-            $this->createSymlink($linkPath, $tagetPath);
+            if ($isRestore) {
+                $this->removeSymlink($linkPath);
+            } else {
+                $this->createSymlink($linkPath, $tagetPath);
+            }
         }
 
-        // Get all modules and create symlinks for their assets
+        // Handle module assets
         $allModules = app()->modules->all();
         foreach ($allModules as $module) {
-            $this->symlinkModuleAssets($module);
+            if ($isRestore) {
+                $this->removeModuleSymlink($module);
+            } else {
+                $this->symlinkModuleAssets($module);
+            }
         }
 
-        // Get all templates and create symlinks for their assets
+        // Handle template assets
         $allTemplates = app()->templates->all();
         foreach ($allTemplates as $template) {
-            $this->symlinkTemplateAssets($template);
+            if ($isRestore) {
+                $this->removeTemplateSymlink($template);
+            } else {
+                $this->symlinkTemplateAssets($template);
+            }
         }
 
-        $this->info('Vendor assets symlinks created successfully!');
+        if ($isRestore) {
+            $this->info('Vendor assets symlinks removed successfully!');
+            $this->info('You must run `composer publish-assets` to republish the assets after removing the symlinks.');
+        } else {
+            $this->info('Vendor assets symlinks created successfully!');
+        }
+    }
+
+    protected function removeSymlink($link)
+    {
+        if (is_link($link) || file_exists($link)) {
+            $this->_unlink($link);
+            $this->line("Removed symlink: {$link}");
+            return true;
+        }
+        return false;
+    }
+
+    protected function removeModuleSymlink(LaravelModule $module)
+    {
+        $moduleName = $module->getLowerName();
+        $targetDir = public_path('modules/' . $moduleName);
+
+        if (is_link($targetDir) || file_exists($targetDir)) {
+            $this->info("Removing symlink for module: {$moduleName}");
+            $this->removeSymlink($targetDir);
+        }
+    }
+
+    protected function removeTemplateSymlink(LaravelTemplate $template)
+    {
+        $templateName = $template->getLowerName();
+        $targetDir = public_path('templates/' . $templateName);
+
+        if (is_link($targetDir) || file_exists($targetDir)) {
+            $this->info("Removing symlink for template: {$templateName}");
+            $this->removeSymlink($targetDir);
+        }
     }
 
     protected function _symlink($target, $link)

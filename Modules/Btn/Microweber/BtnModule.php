@@ -26,7 +26,7 @@ class BtnModule extends BaseModule
 
         $viewData['style'] = $this->params['button_style'] ?? '';
         $viewData['size'] = $this->params['button_size'] ?? $params['size'] ?? '';
-        $viewData['class'] = $this->params['class'] ?? '';
+        $viewData['class'] = $this->params['link_class'] ?? '';
         $viewData['popupContent'] = '';
         $viewData['url'] = '';
         $viewData['blank'] = '';

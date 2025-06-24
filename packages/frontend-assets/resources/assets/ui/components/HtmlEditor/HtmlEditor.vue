@@ -48,6 +48,8 @@ export default {
                 leFrameParent.style.transition = '';
             };
 
+            dlg.show()
+
 
 
             var htmlEditorDialoginstance = this;

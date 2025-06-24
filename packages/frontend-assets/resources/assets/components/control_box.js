@@ -35,6 +35,12 @@ const css = `
     .mw-control-box-default.mw-control-box-left.active {
         transform: translateX(0);
     }
+        .mw-control-box-default.mw-control-box-bottom {
+        transform: translateY(100%);
+    }
+    .mw-control-box-default.mw-control-box-bottom.active {
+        transform: translateY(0);
+    }
     .mw-control-box-top {
         top: 0;
         left: 0;

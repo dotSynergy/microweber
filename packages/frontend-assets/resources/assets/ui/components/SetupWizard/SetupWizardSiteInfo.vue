@@ -74,27 +74,20 @@ onMounted(async () => {
     const quickEdit = new QuickEditComponent({
         target: mw.top().doc.body,
         submitOnEnter: true,
-        disableSync: true
+        disableSync: true,
+        generateSiteInfo: true,
     });
 
 
 
 
-    quickEdit.on('submit', (val) => {
-      //  generateSiteInfoWithAI(val)
 
 
 
-
-
-    });
-
-
-    // quickEdit.dispatch('formSubmit');
 
 
     quickEdit.on('aiRequestStart', () => {
-        //must disable the parent wizard next  button
+
         emit('ai-request-start')
     });
     quickEdit.on('aiRequestEnd', () => {
@@ -123,7 +116,7 @@ onMounted(async () => {
 
                     await quickEdit.ai(val);
 
-                    generateSiteInfoWithAI(val)
+                    // await generateSiteInfoWithAI(val)
 
                     emit('form-submit-result', false);
 
@@ -139,11 +132,7 @@ onMounted(async () => {
             }
         }
 
-        // For manual tab or when AI is not available, allow advancement
-        // as long as basic fields are filled
-        // const hasBasicInfo = siteTitle.value.trim() || siteDescription.value.trim();
-        // emit('form-submit-result', hasBasicInfo);
-        // return hasBasicInfo;
+
     };
 
     // Fallback to window event listener
@@ -182,16 +171,11 @@ const switchTab = (tab) => {
     aiError.value = ''
 }
 
-const submitAIPrompt = () => {
-    if (!aiPrompt.value.trim()) {
-        aiError.value = 'Please enter a description for your website'
-        return
-    }
-    generateSiteInfoWithAI(aiPrompt.value)
-}
+
 
 const generateSiteInfoWithAI = async (prompt) => {
-    if (!prompt.trim()) {
+    prompt = (prompt || '').trim();
+    if (!prompt) {
         aiError.value = 'Please enter a description for your website'
         return
     }
@@ -431,16 +415,7 @@ onBeforeUnmount(() => {
                     <!-- Simple AI Prompt Input -->
                     <div class="ai-prompt-container mb-3">
 
-                        <textarea
 
-                            v-model="aiPrompt"
-                            class="hidden d-none form-control"
-                            placeholder="Describe your website... e.g., 'A pizza restaurant with in New York City, offering delivery and takeout.'"
-                            rows="4"
-                            :disabled="aiLoading"
-                            @keydown.ctrl.enter="submitAIPrompt"
-                            @keydown.meta.enter="submitAIPrompt"
-                        ></textarea>
                         <div class="mt-2">
 
                             <small class="text-muted ms-2">Press Enter to submit</small>

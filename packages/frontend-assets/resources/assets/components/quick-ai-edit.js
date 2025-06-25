@@ -1,5 +1,6 @@
 import MicroweberBaseClass from "../api-core/services/containers/base-class.js";
 import {AIChatForm} from "./ai-chat.js";
+import { generateSiteInfoWithAI } from "./ai-site-description.service.js";
 
 
 const elementSchema = {
@@ -505,6 +506,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
             editsSelector: '.edit[rel][field]:not(.module,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,
+            siteInfoAdapter: generateSiteInfoWithAI,
         }
         this.settings = Object.assign({}, defaults, options);
         this.settings.nodesSelector = this.settings.nodesSelector.split(',').join(':not(' + skipSelector + '),');
@@ -514,6 +516,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
         this.aiTextAdapter = this.settings.aiTextAdapter;
         this.aiImagesAdapter = this.settings.aiImagesAdapter;
+        this.siteInfoAdapter = this.settings.siteInfoAdapter;
         this.editMode = 'whole-page'; // Add default edit mode
 
         this.on('change', obj => {
@@ -1106,7 +1109,12 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 
         if (this.chatOption === 'all' || this.chatOption === 'text') {
+           await getTexts()
 
+        }
+
+        if(this.settings.generateSiteInfo) {
+            await this.siteInfoAdapter(message);
 
         }
 

@@ -73,16 +73,7 @@
                             @exposeQuickEdit="getQuickEdit"
                         ></SetupWizardSiteInfo>
 
-                        <!-- Trigger AI Form Submit Button -->
-                        <!--                        <div class="mt-3">
-                                                    <button
-                                                        type="button"
-                                                        @click="triggerSiteInfoFormSubmit"
-                                                        class="btn btn-outline-primary btn-sm"
-                                                    >
-                                                        Generate with AI
-                                                    </button>
-                                                </div>-->
+
 
                     </div>
                 </div>
@@ -540,7 +531,7 @@ export default {
             params: null,
             prompt: '',
             isAIProcessing: false,
-            canAdvanceStep: true
+
         }
     },
 
@@ -570,22 +561,23 @@ export default {
         },        // Wizard navigation methods
         nextStep() {
 
-            console.log('this.currentStep', this.currentStep)
 
-            // If we're on the first step (Website Info), trigger form submit before advancing
+            /*
             if (this.currentStep === 0) {
-                this.canAdvanceStep = false; // Reset the flag
+
 
                 if(!this.isAIProcessing) {
-                    this.triggerSiteInfoFormSubmit();
+                     this.triggerSiteInfoFormSubmit();
                 }
 
 
-                return; // Wait for form submit result
-            }
+                return;
+            }*/
+
 
             if (this.currentStep < this.steps.length - 1) {
                 this.currentStep++;
+
             }
         },
 
@@ -604,11 +596,13 @@ export default {
 
         // Handle form submit result from SiteInfo component
         handleFormSubmitResult(canAdvance) {
-            this.canAdvanceStep = canAdvance;
+
 
             // If form submission allows advancement and we're on step 0, advance to next step
-            if (canAdvance && this.currentStep === 0) {
+            if (!canAdvance && this.currentStep === 0) {
+
                 if (this.currentStep < this.steps.length - 1) {
+
                     this.currentStep++;
                 }
             }

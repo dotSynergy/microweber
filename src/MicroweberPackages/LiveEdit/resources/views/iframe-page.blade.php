@@ -165,7 +165,7 @@
     @if(request()->get('setup_wizard'))
 
         @php
-         $propmtParams = [];
+        $propmtParams = [];
         $propmtParamsJson = json_encode([]);
         if(request()->get('prompt')){
             $propmtParams['prompt'] = request()->get('prompt');
@@ -182,12 +182,21 @@
 
 
           window.addEventListener('load', function () {
+
+
+
              setTimeout(function () {
 
                  mw.app.dispatch('showSetupWizard',{!! $propmtParamsJson !!});
 
+                 const topSearch = new URLSearchParams(mw.top().win.location.search);
 
-                }, 200);
+                 topSearch.delete('prompt');
+                 topSearch.delete('setup_wizard');
+                 window.top.history.pushState(null, null, `?${topSearch.toString()}`);
+
+
+                }, 2000);
           });
 
 

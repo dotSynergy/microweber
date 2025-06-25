@@ -40,7 +40,7 @@
     "akaunting/laravel-money": "*",
     "alexwestergaard/php-ga4": "dev-master",
     "barryvdh/laravel-debugbar": "v3.14.10",
-    "bezhansalleh/filament-language-switch": "dev-main",
+    "bezhansalleh/filament-language-switch": "3.1.1",
     "bobimicroweber/accordion": "*",
     "bobimicroweber/filament-dropdown-column": "dev-main",
     "bobimicroweber/filament-flatpickr": "3.2",

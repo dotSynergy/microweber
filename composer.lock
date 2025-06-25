@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa77a0d76270847140cd8a5864a7b064",
+    "content-hash": "fe71bd722e21a739818ac1b183b3cb14",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -630,16 +630,16 @@
         },
         {
             "name": "bezhansalleh/filament-language-switch",
-            "version": "dev-main",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bezhanSalleh/filament-language-switch.git",
-                "reference": "9e5346ccd5a01d1ab9b02a522e720aa6fa5bea59"
+                "reference": "e16645113d92cccb842f55675cdf3f7ded09150f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bezhanSalleh/filament-language-switch/zipball/9e5346ccd5a01d1ab9b02a522e720aa6fa5bea59",
-                "reference": "9e5346ccd5a01d1ab9b02a522e720aa6fa5bea59",
+                "url": "https://api.github.com/repos/bezhanSalleh/filament-language-switch/zipball/e16645113d92cccb842f55675cdf3f7ded09150f",
+                "reference": "e16645113d92cccb842f55675cdf3f7ded09150f",
                 "shasum": ""
             },
             "require": {
@@ -655,7 +655,6 @@
                 "pestphp/pest-plugin-laravel": "^2.3",
                 "spatie/laravel-ray": "^1.26"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -694,7 +693,7 @@
             ],
             "support": {
                 "issues": "https://github.com/bezhanSalleh/filament-language-switch/issues",
-                "source": "https://github.com/bezhanSalleh/filament-language-switch/tree/main"
+                "source": "https://github.com/bezhanSalleh/filament-language-switch/tree/3.1.1"
             },
             "funding": [
                 {
@@ -702,7 +701,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-03T06:59:34+00:00"
+            "time": "2025-06-11T17:21:20+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -22698,7 +22697,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "alexwestergaard/php-ga4": 20,
-        "bezhansalleh/filament-language-switch": 20,
         "bobimicroweber/filament-dropdown-column": 20,
         "composer/installers": 20,
         "finlet/flexmail": 20,

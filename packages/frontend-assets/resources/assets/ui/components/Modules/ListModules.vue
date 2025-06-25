@@ -51,7 +51,7 @@
                     </div>
 
                     <div v-if="modulesCategoriesList.length > 0" v-for="category in modulesCategoriesList" class="modules-list-block-category-section">
-                        <div class="w-100 pt-3 text-capitalize px-3">
+                        <div class="w-100 pt-3 text-capitalize px-3" v-show="typeof category === 'string'">
                             <h4 class="mb-2">{{category}}</h4>
                         </div>
                         <div v-for="item in modulesListFiltered[category]"
@@ -224,6 +224,8 @@ export default {
                 }
                 instance.modulesListFiltered[moduleElement.categories].push(moduleElement);
             });
+
+
         }
     },
     watch: {
@@ -299,6 +301,7 @@ export default {
                 instance.showModal = false;
             }
         });
+
 
     },
     data() {

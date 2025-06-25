@@ -725,28 +725,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
     applyJSON(json = [], extend = true) {
 
 
-        // Handle case where json is wrapped in a response object
-        if (json.success === true && json.data) {
-            json = json.data;
-        }
 
-        // Handle direct data property
-        if (json.data) {
-            json = json.data;
-        }
-
-        // Check for content array at the top level
-        if (json.content && Array.isArray(json.content)) {
-            json = json.content;
-        }
-        if (json.items && Array.isArray(json.items)) {
-            json = json.items;
-        }
-
-        // Handle case where json is a single object rather than an array
-        if (!Array.isArray(json)) {
-            json = [json];
-        }
 
 
 
@@ -1074,22 +1053,61 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         //   messageOptions.schema = editSchema;
         messageOptions.schema = editSchema;
 
+        let retryCount = 0;
+        const maxRetry = 2;
+        const scope = this;
+
+        const getTexts = async () => {
+           retryCount++;
+           let textRes = await this.aiTextAdapter(message, messageOptions);
+           let resData;
+            if(textRes.data.content?.length === 0 && textRes.data.children?.length > 0){
+                resData = textRes.data.children ;
+            } else if (textRes.success && textRes.data?.content) {
+                resData = textRes.data.content ;
+            } else if (textRes.success && textRes.data) {
+                resData = textRes.data
+            }
+            if (resData) {
+
+                    // Handle case where json is wrapped in a response object
+                if (resData.success === true && resData.data) {
+                    resData = resData.data;
+                }
+
+                // Handle direct data property
+                if (resData.data) {
+                    resData = resData.data;
+                }
+
+                // Check for content array at the top level
+                if (resData.content && Array.isArray(resData.content)) {
+                    resData = resData.content;
+                }
+                if (resData.items && Array.isArray(resData.items)) {
+                    resData = resData.items;
+                }
+
+                // Handle case where resData is a single object rather than an array
+                if (!Array.isArray(resData)) {
+                    resData = [resData];
+                }
+
+                if(resData && resData.length > 0) {
+                    scope.applyJSON(resData);
+                } else if(retryCount < maxRetry) {
+                    await getTexts();
+                }
+
+            } else if(retryCount < maxRetry) {
+                await getTexts();
+            }
+        }
+
 
         if (this.chatOption === 'all' || this.chatOption === 'text') {
-           let textRes = await this.aiTextAdapter(message, messageOptions);
 
-            if(textRes.data.content?.length === 0 && textRes.data.children?.length > 0){
-                this.applyJSON(textRes.data.children);
 
-            } else if (textRes.success && textRes.data?.content) {
-                this.applyJSON(textRes.data.content);
-
-            } else if (textRes.success && textRes.data) {
-                this.applyJSON(textRes.data);
-
-            } else {
-                console.error(textRes.message);
-            }
         }
 
 

@@ -658,6 +658,8 @@ export default {
             this.pagePreviewToggle();
             mw.top().doc.documentElement.classList.add('mw-setup-wizard-document');
             mw.top().doc.documentElement.classList.add('live-edit-gui-editor-opened');
+            mw.top().controlBox.hideAll()
+
         },
 
         hideModal() {

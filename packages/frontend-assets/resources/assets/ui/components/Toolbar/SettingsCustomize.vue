@@ -2,12 +2,19 @@
 
 
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links svg {
-    width: 27px;
-    height: auto;
+
+
     fill: currentColor !important;
     margin: 0 !important;
     margin-inline: 0 !important;
+
+    width: 25px !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
 }
+
+
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links,
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .btn-icon.live-edit-toolbar-buttons {
     height: 39px;
@@ -15,8 +22,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 
@@ -82,7 +89,7 @@
 
         <div v-on:click="toggle('style-editor')" :class="{'live-edit-right-sidebar-active': !buttonIsActive && buttonIsActiveStyleEditor }"
              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle" title="Design">
-            <svg class="me-1" fill="currentColor"
+            <svg   fill="currentColor"
                  xmlns="http://www.w3.org/2000/svg" height="22"
                  viewBox="0 -960 960 960" width="22">
                 <path

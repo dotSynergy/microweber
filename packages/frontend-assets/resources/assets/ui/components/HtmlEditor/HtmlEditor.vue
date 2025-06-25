@@ -78,6 +78,10 @@ export default {
 
             mw.top().win.document.documentElement.style.setProperty('--iframe-height-minus',  300 + 'px');
 
+            dlg.on('hide', () => {
+                mw.top().win.document.documentElement.style.setProperty('--iframe-height-minus',  0 + 'px');
+            })
+
             mw.spinner({element: dlg.boxContent, decorate: true})
 
 

@@ -335,6 +335,73 @@ export default {
             return selector.replace(/^[.#]/g, '');
         },
 
+        // New method to show loading indicator inside preview content
+        showPreviewContentLoading(previewContent) {
+            const iframeDoc = this.iframe.contentDocument;
+
+            // Check if loading indicator already exists
+            if (iframeDoc.querySelector('.preview-content-loading')) return;
+
+            // Create loading indicator
+            const loadingEl = iframeDoc.createElement('div');
+            loadingEl.className = 'preview-content-loading';
+            loadingEl.innerHTML = `
+                <div class="spinner-container">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                    <div class="loading-text">Loading styles...</div>
+                </div>
+            `;
+
+            // Add loading styles if they don't exist yet
+            if (!iframeDoc.getElementById('preview-loading-styles')) {
+                const styleEl = iframeDoc.createElement('style');
+                styleEl.id = 'preview-loading-styles';
+                styleEl.textContent += `
+                    .preview-content-loading {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: rgba(255,255,255,0.7);
+                        border-radius: 7px;
+                        z-index: 100;
+                        backdrop-filter: blur(5px);
+                        -webkit-backdrop-filter: blur(5px);
+                        transition: all 0.3s ease;
+                    }
+                `;
+                iframeDoc.head.appendChild(styleEl);
+            }
+
+            previewContent.style.position = 'relative';
+            previewContent.style.minHeight = '150px';
+            previewContent.appendChild(loadingEl);
+        },
+
+        // New method to hide loading indicator
+        hidePreviewContentLoading(previewContent) {
+            const iframeDoc = this.iframe.contentDocument;
+            const loadingEl = iframeDoc.querySelector('.preview-content-loading');
+
+            if (loadingEl) {
+                loadingEl.style.opacity = '0';
+
+                setTimeout(() => {
+                    if (loadingEl && loadingEl.parentNode) {
+                        loadingEl.parentNode.removeChild(loadingEl);
+                    }
+                }, 300); // Match the transition duration
+            }
+        },
+
         initIframeWrapper() {
             // Add fancy loading animation
             const loadingEl = document.createElement('div');
@@ -354,16 +421,25 @@ export default {
             const styleEl = document.createElement('style');
             styleEl.textContent = `
                 .style-pack-loading {
+                    position: absolute;
                     width: 100%;
-                    height: 200px;
+                    height: 100%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: rgba(255,255,255,0.8);
+                    background-color: rgba(255,255,255,0.7);
                     border-radius: 7px;
+                    z-index: 100;
+                    backdrop-filter: blur(5px);
+                    -webkit-backdrop-filter: blur(5px);
+                    transition: all 0.3s ease;
                 }
                 .spinner-container {
                     text-align: center;
+                    background-color: rgba(255,255,255,0.9);
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
                 }
                 .loading-text {
                     margin-top: 15px;
@@ -399,8 +475,16 @@ export default {
                         transform: scale(1.0);
                     }
                 }
+
+                .iframe-wrapper {
+                    position: relative;
+                    min-height: 200px;
+                }
             `;
             document.head.appendChild(styleEl);
+
+            // Make sure container has position relative
+            this.$refs.iframeContainer.style.position = 'relative';
             this.$refs.iframeContainer.appendChild(loadingEl);
 
             // Create iframe element
@@ -419,10 +503,15 @@ export default {
 
             // Initialize iframe content after it's loaded
             this.iframe.onload = () => {
-                // Remove loading element when iframe is loaded
-                if (loadingEl && loadingEl.parentNode) {
-                    loadingEl.parentNode.removeChild(loadingEl);
-                }
+                // Add fade-out animation to loading element
+                loadingEl.style.opacity = '0';
+
+                setTimeout(() => {
+                    // Remove loading element when iframe is loaded and animation completes
+                    if (loadingEl && loadingEl.parentNode) {
+                        loadingEl.parentNode.removeChild(loadingEl);
+                    }
+                }, 300); // Match the transition duration
 
                 this.injectCanvasStyles();
                 this.updateIframeContent();
@@ -484,6 +573,7 @@ export default {
                             display: flex;
                             flex-direction: column;
                             gap: 15px;
+                            margin-top: 20px;
                         }
                         .style-pack-item {
                             cursor: pointer;
@@ -833,6 +923,9 @@ export default {
 
             if (!previewContent) return;
 
+            // Show loading indicator inside the preview content
+            this.showPreviewContentLoading(previewContent);
+
             // Clear existing content
             previewContent.innerHTML = '';
 
@@ -878,6 +971,9 @@ export default {
                     });
                 }
             }
+
+            // Hide loading after content is loaded
+            this.hidePreviewContentLoading(previewContent);
         },
 
         createStylePackElement(stylePack, index, iframeDoc) {

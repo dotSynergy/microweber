@@ -80,7 +80,7 @@ html.mw-setup-wizard-document .back-to-edit{
             <div class="toolbar-col-container">
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <ResolutionSwitch></ResolutionSwitch>
-                    <SettingsCustomize></SettingsCustomize>
+
 
                     <HtmlEditor></HtmlEditor>
 

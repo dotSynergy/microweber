@@ -3,10 +3,9 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()">
-                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                    <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
-                </svg>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()" title="Setup wizard">
+
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xml:space="preserve"><path d="m454.3 219.7-38.7-52 20.8-61.3A16.7 16.7 0 0 0 415 85.2L353.8 106l-52-38.8a16.7 16.7 0 0 0-26.7 13.6l.8 64.9-53 37.4a16.7 16.7 0 0 0 4.8 29.6l43.8 13.7-257 257A16.7 16.7 0 0 0 38 507.1l257-257 13.7 43.8a16.7 16.7 0 0 0 29.7 4.7l37.4-53 64.8.9a16.7 16.7 0 0 0 13.6-26.8M173.4 67.3 160 42.8l-13.3 24.5-24.5 13.3L146.7 94l13.3 24.4L173.4 94l24.4-13.4zm189.5 317.2-10.8-19.8-10.8 19.8-19.7 10.8 19.7 10.8 10.8 19.8 10.8-19.8 19.8-10.8zm15.2-364.7L367.3 0l-10.8 19.8-19.7 10.8 19.7 10.8 10.8 19.7 10.8-19.7 19.8-10.8zm112.5 122.7-6.4-11.8-6.5 11.8-11.8 6.5 11.8 6.4 6.5 11.9 6.4-11.9 11.9-6.4zm2 151.6-26.7 7.9-26.8-7.9 7.9 26.8-7.9 26.7 26.8-7.8 26.7 7.8-7.8-26.7z"/></svg>
                 <Lang>Setup wizard</Lang>
             </a>
         </li>
@@ -15,7 +14,7 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="showCodeEditor()">
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="showCodeEditor()" title="Code Editor">
                 <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                     <path
                         d="M0-360v-240h60v80h80v-80h60v240h-60v-100H60v100H0Zm310 0v-180h-70v-60h200v60h-70v180h-60Zm170 0v-200q0-17 11.5-28.5T520-600h180q17 0 28.5 11.5T740-560v200h-60v-180h-40v140h-60v-140h-40v180h-60Zm320 0v-240h60v180h100v60H800Z"/>
@@ -25,7 +24,7 @@
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()">
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()" title="Layers">
                 <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                 <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
             </svg>
@@ -35,14 +34,14 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openContentResetContent()">
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openContentResetContent()" title="Reset Content">
                 <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/></svg>
                 <Lang>Reset Content</Lang>
             </a>
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="clearCache()">
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="clearCache()" title="Clear Cache">
                 <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                     <path
                         d="M280-720v520-520Zm170 600H280q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v172q-17-5-39.5-8.5T680-560v-160H280v520h132q6 21 16 41.5t22 38.5Zm-90-160h40q0-63 20-103.5l20-40.5v-216h-80v360Zm160-230q17-11 38.5-22t41.5-16v-92h-80v130ZM680-80q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80Zm66-106 28-28-74-74v-112h-40v128l86 86Z"/>

@@ -119,7 +119,7 @@ body {
 }
 
 .mw-live-edit-resolutions-wrapper,
-.mw-live-edit-right-sidebar-wrapper {
+.mw-live-edit-right-sidebar-wrapper:not(.mw-live-edit-right-sidebar-template-sidebar) {
     @apply !bg-gray-100 !rounded-[5px] !p-[5px] !max-h-[35px] !flex !items-center !justify-center !gap-[2px];
 }
 

@@ -3,6 +3,7 @@
 
     <div>
         <Toolbar></Toolbar>
+        <SettingsCustomize template="sidebar"></SettingsCustomize>
         <!-- <LeftSidebar></LeftSidebar>-->
         <RightSidebar></RightSidebar>
         <ListLayouts></ListLayouts>
@@ -33,6 +34,8 @@ import ListModules from "./components/Modules/ListModules.vue";
 import FontsManager from "./components/FontsManager/FontsManager.vue";
 import ElementSettingsModal from "./components/ElementSettings/ElementSettingsModal.vue";
 import SetupWizard from "./components/SetupWizard/SetupWizard.vue";
+import SettingsCustomize from './components/Toolbar/SettingsCustomize.vue';
+
 
 export default {
     components: {
@@ -45,6 +48,7 @@ export default {
         ListModules,
         FontsManager,
         SetupWizard,
+        SettingsCustomize
     },
 
     data() {

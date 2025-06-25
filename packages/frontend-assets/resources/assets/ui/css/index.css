@@ -41,7 +41,7 @@ a {
     position: fixed;
     top: var(--toolbar-height);
     left: 0;
-    right: 0;
+    right: 50px;
     height: calc(100% - var(--toolbar-height) - var(--iframe-height-minus));
     bottom: calc(0px - var(--iframe-height-minus));
     transition: var(--toolbar-height-animation-speed);

@@ -336,6 +336,73 @@ export default {
         },
 
         initIframeWrapper() {
+            // Add fancy loading animation
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'style-pack-loading';
+            loadingEl.innerHTML = `
+                <div class="spinner-container">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                    <div class="loading-text">Loading styles...</div>
+                </div>
+            `;
+
+            // Add loading spinner styles
+            const styleEl = document.createElement('style');
+            styleEl.textContent = `
+                .style-pack-loading {
+                    width: 100%;
+                    height: 200px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: rgba(255,255,255,0.8);
+                    border-radius: 7px;
+                }
+                .spinner-container {
+                    text-align: center;
+                }
+                .loading-text {
+                    margin-top: 15px;
+                    color: #007bff;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                .spinner {
+                    margin: 0 auto;
+                    width: 70px;
+                    text-align: center;
+                }
+                .spinner > div {
+                    width: 12px;
+                    height: 12px;
+                    background-color: #007bff;
+                    border-radius: 100%;
+                    display: inline-block;
+                    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+                    margin: 0 3px;
+                }
+                .spinner .bounce1 {
+                    animation-delay: -0.32s;
+                }
+                .spinner .bounce2 {
+                    animation-delay: -0.16s;
+                }
+                @keyframes sk-bouncedelay {
+                    0%, 80%, 100% {
+                        transform: scale(0);
+                    }
+                    40% {
+                        transform: scale(1.0);
+                    }
+                }
+            `;
+            document.head.appendChild(styleEl);
+            this.$refs.iframeContainer.appendChild(loadingEl);
+
             // Create iframe element
             this.iframe = document.createElement('iframe');
 
@@ -352,6 +419,11 @@ export default {
 
             // Initialize iframe content after it's loaded
             this.iframe.onload = () => {
+                // Remove loading element when iframe is loaded
+                if (loadingEl && loadingEl.parentNode) {
+                    loadingEl.parentNode.removeChild(loadingEl);
+                }
+
                 this.injectCanvasStyles();
                 this.updateIframeContent();
                 this.injectFontsIntoIframe();

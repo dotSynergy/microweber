@@ -75,7 +75,7 @@ const AIChatFormCSS= `
         display: block;
         outline: none !important;
         padding-bottom: 60px;
-        border-radius: 20px !important;
+        border-radius: 7px !important;
       }
 
       .mw-ai-chat-box-options select selectedcontent{

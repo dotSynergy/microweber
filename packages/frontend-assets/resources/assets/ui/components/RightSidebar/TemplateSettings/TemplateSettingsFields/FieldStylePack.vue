@@ -484,7 +484,7 @@ export default {
                             display: flex;
                             flex-direction: column;
                             gap: 15px;
-                            margin-top: 20px;
+
                         }
                         .style-pack-item {
                             cursor: pointer;

@@ -126,6 +126,12 @@ html.mw-live-edit-sidebar-start.live-edit-gui-editor-opened #live_edit_side_hold
     }
 }
 
+html.preview  #live-edit-frame-holder{
+    right: 0;
+}
+html.preview   .mw-live-edit-right-sidebar-template-sidebar{
+    display: none !important;
+}
 html.preview #toolbar {
 
     overflow: hidden;

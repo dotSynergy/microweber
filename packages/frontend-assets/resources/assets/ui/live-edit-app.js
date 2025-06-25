@@ -57,7 +57,10 @@ mw.app.canvas.on('liveEditCanvasLoaded', (data) => {
 
     mw.top().app.broadcast.message('canvasURL', {url: data.frameWindow.location.href})
 
-    window.top.history.pushState(null, null, `?url=${encodeURIComponent(data.frameWindow.location.href)}`);
+    const topSearch = new URLSearchParams(mw.top().win.location.search);
+    topSearch.set('url', encodeURIComponent(data.frameWindow.location.href));
+
+    window.top.history.pushState(null, null, `?${topSearch.toString()}`);
 
 
     mw.app.remove('cssEditor');

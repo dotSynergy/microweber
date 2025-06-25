@@ -590,9 +590,9 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     sync(edit) {
-        // if(this.settings.disableSync) {
-        //    return
-        // }
+         if(this.settings.disableSync) {
+            return
+        }
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
             if (this.isGlobal || edit === this.settings.root) {
@@ -960,7 +960,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const chatOptions = [
             {id: 'images', content: mw.lang('Regenerate Images')},
             {id: 'text', content: mw.lang('Regenerate texts')},
-            {id: 'all', content: mw.lang('Regenerate texts and images'), selected: true},
+            {id: 'all', content: mw.lang('Regenerate texts and images')},
         ];
         const aiChatForm = new AIChatForm({
             chatOptions,

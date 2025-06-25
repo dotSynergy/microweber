@@ -1114,7 +1114,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         }
 
         if(this.settings.generateSiteInfo) {
-            await this.siteInfoAdapter(message);
+            await this.siteInfoAdapter(about);
 
         }
 

@@ -1049,7 +1049,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
         `;
 
-        mw.top().spinner(({element: mw.top().doc.body, size: 60, decorate: true})).show();
+        mw.top().spinnerProgress({}).show()
 
         let messageOptions = {};
         //messageOptions.schema = this.schema();
@@ -1108,28 +1108,51 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         }
 
 
+        let totalSteps = 0;
         if (this.chatOption === 'all' || this.chatOption === 'text') {
+            totalSteps++;
+        }
+        if(this.settings.generateSiteInfo) { totalSteps++;}
+        if(this.chatOption === 'all' || this.chatOption === 'images') { totalSteps++;}
+
+        const step = Math.round(100/totalSteps);
+
+        let currentStep = -1;
+
+
+
+
+        if (this.chatOption === 'all' || this.chatOption === 'text') {
+            currentStep++;
+            mw.top().spinnerProgress({}).set(currentStep * step, mw.lang('Generating texts') + '...')
            await getTexts()
 
         }
 
         if(this.settings.generateSiteInfo) {
+            currentStep++;
+            mw.top().spinnerProgress({}).set(currentStep * step, mw.lang('Generating site info') + '...')
             await this.siteInfoAdapter(about);
 
         }
 
 
         if (this.chatOption === 'all' || this.chatOption === 'images') {
+            currentStep++;
+            mw.top().spinnerProgress({}).set(currentStep * step,mw.lang('Generating images') + '...')
             let imageRes = await this.aiImagesAdapter(about, this.collectImages(undefined, true).length);
             this.applyImages(imageRes)
 
         }
 
 
-        mw.top().spinner(({element: mw.top().doc.body, size: 60, decorate: true})).remove();
+         mw.top().spinnerProgress({}).set(100, mw.lang('Done') + '...')
 
         this.#aiPending = false;
         this.dispatch('aiRequestEnd');
+        setTimeout(() => {
+            mw.top().spinnerProgress({}).hide();
+        }, 1500)
     }
 
 

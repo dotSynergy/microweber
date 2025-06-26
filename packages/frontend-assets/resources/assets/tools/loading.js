@@ -45,9 +45,12 @@ export const Progress = function (obj) {
             if (v < 0) {
                 v = 0;
             }
+            obj.progress = v;
+
             action = action || this.progress.progressInfo.action;
             mw.$('.mw-ui-progress-bar', this.progress).css('width', v + '%');
             mw.$('.mw-ui-progress-percent', this.progress).html(v + '%');
+            mw.$('.mw-ui-progress-info', this.progress).html(action);
             progress.progressInfo.element.progressOptions.show();
         }
     };

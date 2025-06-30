@@ -78,8 +78,16 @@
                     </div>
                 </div>
 
-                <!-- Colors Step -->
+                <!-- Full Styles Step -->
                 <div v-show="currentStep === 1" class="wizard-step-content">
+                    <h4 class="mb-4">Styles</h4>
+                    <div class="p-4 border rounded bg-light text-center">
+                        <TemplateSettings setting="predefined-styles/full-styles"></TemplateSettings>
+                    </div>
+                </div>
+
+                <!-- Colors Step -->
+                <div v-show="currentStep === 2" class="wizard-step-content">
                     <h4 class="mb-4">Colors</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -89,7 +97,7 @@
                 </div>
 
                 <!-- Buttons Step -->
-                <div v-if="currentStep === 2" class="wizard-step-content">
+                <div v-if="currentStep === 3" class="wizard-step-content">
 
                     <!-- This in on v-if because if colors change -->
 
@@ -102,7 +110,7 @@
                 </div>
 
                 <!-- Fonts Step -->
-                <div v-show="currentStep === 3" class="wizard-step-content">
+                <div v-show="currentStep === 4" class="wizard-step-content">
                     <h4 class="mb-4">Fonts</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
@@ -551,6 +559,7 @@ export default {
             currentStep: 0,
             steps: [
                 {title: 'Website Info', key: 'websiteInfo'},
+                {title: 'Styles', key: 'styles'},
                 {title: 'Colors', key: 'colors'},
                 {title: 'Buttons', key: 'buttons'},
                 {title: 'Fonts', key: 'fonts'}

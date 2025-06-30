@@ -81,7 +81,10 @@
 
 
         <div v-on:click="handleInsertLayout()"
-            class="btn-icon live-edit-toolbar-buttons" :title="$lang('Insert layout')" v-html="iconInsertlayout">
+            class="btn-icon live-edit-toolbar-buttons"
+            :title="$lang('Insert layout')"
+            v-if="insertLayoutVisible"
+            v-html="iconInsertlayout">
 
         </div>
 
@@ -184,7 +187,7 @@ export default {
                 const doc = mw.top().app.canvas.getDocument();
                 const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
 
-                const arr = Array.from(doc.querySelectorAll('.edit .module-layouts'))
+                const arr = Array.from(doc.querySelectorAll('.edit[data-layout-container] .module-layouts'))
                 const activeIndex = arr
                 .map(node => {
                     return node.getBoundingClientRect().top + doc.defaultView.scrollY + node.offsetHeight;
@@ -197,13 +200,11 @@ export default {
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
 
                 }
-
-
             }
 
             if(active) {
                 active.scrollIntoView();
-                mw.top().app.editor.dispatch('insertLayoutRequestOnTop', active)
+                mw.top().app.editor.dispatch('insertLayoutRequestOnBottom', active)
             }
 
         },
@@ -328,9 +329,12 @@ export default {
 
 
             if(mw.top().app.liveEditWidgets) {
-            mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
-            mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
-        }
+                mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
+                mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
+            }
+
+
+            this.insertLayoutVisible = !!mw.app.canvas.getDocument().querySelector('.edit[data-layout-container]')
 
 
         });
@@ -387,6 +391,7 @@ export default {
             buttonIsActiveStyleEditor: false,
             buttonIsActiveQuickEdit: false,
             advanced: false,
+            insertLayoutVisible: false,
             layers: false,
             iconInsertlayout: mw.top().app?.iconService?.icon('plus'),
 

@@ -893,7 +893,7 @@ export default {
             const previewDiv = iframeDoc.createElement('div');
             // Apply display format class based on previewElementsFormat prop or setting
             const displayFormat = this.previewElementsFormat;
-            previewDiv.className = `preview-display-${displayFormat} cursor-pointer style-pack-preview main`;
+            previewDiv.className = `preview-display-${displayFormat} cursor-pointer style-pack-preview`;
 
             if (this.setting.previewElements && this.setting.previewElements.length > 0) {
                 // Use actual preview elements
@@ -916,10 +916,12 @@ export default {
                             // For CSS variables starting with --, use setProperty
                             if (property.startsWith('--')) {
                                 component.style.setProperty(property, stylePack.properties[property]);
+                                stylePackDiv.style.setProperty(property, stylePack.properties[property]);
                             } else {
                                 // For direct properties, apply to style object
                                 const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
                                 component.style[cssProperty] = stylePack.properties[property];
+                                stylePackDiv.style[cssProperty] = stylePack.properties[property];
                             }
                         });
 

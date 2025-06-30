@@ -183,9 +183,13 @@ export class LayoutHandleContent {
                     layoutSettingsDispatch(target);
                 }
 
-            },
+            }
+
+
+           /* ,
+
             {
-                title: this.rootScope.lang('Edit'),
+                title: this.rootScope.lang('Quick Edit'),
                 text: '',
                 icon: mw.top().app.iconService.icon('edit'),
                 className: 'mw-handle-edit-layout-button',
@@ -194,7 +198,7 @@ export class LayoutHandleContent {
                     mw.top().app.liveEditWidgets.setQuickEditorForNode(target);
                 }
 
-            }
+            }*/
         ];
 
         const primaryNavigation = [

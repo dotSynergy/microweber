@@ -813,7 +813,7 @@ export default {
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = this.setting.previewElementsStyleProperties[0].label;
-                label.className = 'live-edit-label';
+                label.className = 'live-edit-label text-black';
 
                 labelDiv.appendChild(label);
                 innerDiv.appendChild(labelDiv);

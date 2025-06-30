@@ -527,12 +527,7 @@ export default {
             this.hideModal();
         });
 
-        // Close on Escape
-        document.addEventListener('keyup', function (evt) {
-            if (evt.keyCode === 27) {
-                instance.hideModal();
-            }
-        });
+
 
          const isDark = mw.top().app.theme.isDark();
         document.querySelectorAll('iframe.preview-iframe[srcdoc]')

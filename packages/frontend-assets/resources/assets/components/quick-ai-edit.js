@@ -357,7 +357,7 @@ class QuickEditService extends MicroweberBaseClass {
                 const curr = {
                     tag: node.nodeName,
                     text: node.textContent,
-                    html: node.innerHTML,
+                    //html: node.innerHTML,
                     id: node.id,
                 };
 

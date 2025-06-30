@@ -151,6 +151,7 @@ export default {
             this.initIframeWrapper();
             this.setupFontChangeListener();
             this.setupCssReloadListener();
+            this.setupStylePackGlobalReloadListener(); // Add global reload listener
         }, 100);
     },
     beforeUnmount() {
@@ -158,6 +159,7 @@ export default {
         if (mw.top() && mw.top().app) {
             mw.top().app.off('fontsManagerSelectedFont');
             mw.top().app.canvas.off('reloadCustomCssDone');
+            mw.top().app.off('stylePackGlobalReload'); // Clean up global reload listener
         }
     },
     methods: {
@@ -255,7 +257,7 @@ export default {
             });
         },
 
-        applyStylePack(stylePack) {
+        applyStylePack(stylePack, previewDiv) {
             // Unset properties from the previous style pack before applying the new one
             if (this.previousStylePack && this.previousStylePack.properties) {
                 const selector = this.selectorToApply || this.rootSelector;
@@ -290,6 +292,21 @@ export default {
                     });
                 });
 
+                if(
+                    typeof(previewDiv) != "undefined"
+                    && previewDiv
+                ) {
+                     //pply css variables to the preview div
+                    Object.keys(stylePack.properties).forEach(property => {
+                        if (property.startsWith('--')) {
+                            previewDiv.style.setProperty(property, stylePack.properties[property]);
+                        } else {
+                            const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                            previewDiv.style[cssProperty] = stylePack.properties[property];
+                        }
+                    });
+                }
+
                 if (updates.length > 0) {
                     this.$emit('batch-update', updates);
                 }
@@ -311,13 +328,30 @@ export default {
                 if (stylePack.label && this.setting.previewElementsStyleProperties[0]) {
                     this.setting.previewElementsStyleProperties[0].label = stylePack.label;
                 }
+
             }            // Update the current style pack and refresh the iframe
             this.currentStylePack = stylePack;
             this.updateIframeContent();
 
             // After updating the opener, collapse the style packs ONLY if NOT in single setting mode
             if (this.isStylePackOpenerMode && this.stylePacksExpanded && !this.isSingleSettingMode) {
+
                 this.collapseStylePacks();
+            }
+
+            // Emit global event to reload all other style pack preview components
+            if (mw.top() && mw.top().app) {
+
+
+                if(!this.isSingleSettingMode) {
+                    console.log('Emitting global style pack reload event');
+
+                    mw.top().app.dispatch('stylePackGlobalReload', {
+                        sourceComponentId: this.uniqueId,
+                        appliedStylePack: stylePack,
+                        selector: this.selectorToApply || this.rootSelector
+                    });
+                }
             }
 
             this.$emit('style-pack-applied', {
@@ -855,6 +889,16 @@ export default {
                 // Create a container for all style packs
                 const stylePackContainer = iframeDoc.createElement('div');
                 stylePackContainer.className = 'style-pack-container';
+
+                // Apply current style pack properties to container if available
+                if (this.currentStylePack && this.currentStylePack.properties) {
+                    Object.keys(this.currentStylePack.properties).forEach(property => {
+                        if (property.startsWith('--')) {
+                            stylePackContainer.style.setProperty(property, this.currentStylePack.properties[property]);
+                        }
+                    });
+                }
+
                 if (this.stylePacksExpanded) {
                     stylePackContainer.classList.add('expanded');
                 }
@@ -863,7 +907,19 @@ export default {
                 // Add the opener element if not expanded
                 if (!this.stylePacksExpanded) {
                     const openerElement = this.createOpenerElement(iframeDoc);
+
+                    // Apply current style pack properties to opener if available
+                    if (this.currentStylePack && this.currentStylePack.properties) {
+                        Object.keys(this.currentStylePack.properties).forEach(property => {
+                            if (property.startsWith('--')) {
+                                openerElement.style.setProperty(property, this.currentStylePack.properties[property]);
+                            }
+                        });
+                    }
+
                     stylePackContainer.appendChild(openerElement);
+
+
                 }
 
                 // Render all style packs (they will be hidden by CSS if not expanded)
@@ -887,6 +943,9 @@ export default {
         createStylePackElement(stylePack, index, iframeDoc) {
             const stylePackDiv = iframeDoc.createElement('div');
             stylePackDiv.className = 'style-pack-item';
+
+
+
             stylePackDiv.onclick = () => this.applyStylePack(stylePack);
 
             const innerDiv = iframeDoc.createElement('div');
@@ -1035,7 +1094,23 @@ export default {
                     console.log('CSS reloaded, refreshing style pack preview');
                 });
             }
-        }
+        },
+
+        // New method to setup global reload listener for style packs
+        setupStylePackGlobalReloadListener() {
+            if (mw.top() && mw.top().app) {
+                mw.top().app.on('stylePackGlobalReload', () => {
+                    console.log('Global style pack reload triggered');
+                    // Re-scan and load fonts
+                    this.scanAndLoadFonts();
+
+                    // Re-inject fonts and update iframe content
+                    this.injectFontsIntoIframe();
+                    this.injectCanvasStyles();
+                    this.updateIframeContent();
+                });
+            }
+        },
     }
 }
 </script>

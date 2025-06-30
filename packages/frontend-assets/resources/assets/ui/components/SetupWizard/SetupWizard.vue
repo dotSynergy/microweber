@@ -83,7 +83,7 @@
                     <h4 class="mb-4">Colors</h4>
                     <div class="p-4 border rounded bg-light text-center">
 
-                        <TemplateSettings setting="predefined-colors/main"></TemplateSettings>
+                        <TemplateSettings setting="predefined-styles/website-colors"></TemplateSettings>
 
                     </div>
                 </div>

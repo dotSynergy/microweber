@@ -340,12 +340,11 @@ export default {
             }
 
             // Emit global event to reload all other style pack preview components
+            console.log('Emitting global style pack reload event');
             if (mw.top() && mw.top().app) {
 
 
                 if(!this.isSingleSettingMode) {
-                    console.log('Emitting global style pack reload event');
-
                     mw.top().app.dispatch('stylePackGlobalReload', {
                         sourceComponentId: this.uniqueId,
                         appliedStylePack: stylePack,

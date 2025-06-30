@@ -88,7 +88,7 @@ export default {
 
         return {
             iframe: null,
-            isDarkMode: false,
+            isDarkMode: mw.top().app.theme.isDark(),
             fontCallbacks: [],
             currentStylePack: null,
             previousStylePack: null, // Track the previously selected style pack
@@ -427,7 +427,10 @@ export default {
                 this.injectCanvasStyles();
                 this.updateIframeContent();
                 this.injectFontsIntoIframe();
-                mw.top().tools.iframeAutoHeight(this.iframe)
+                mw.top().tools.iframeAutoHeight(this.iframe);
+                const isDark = mw.top().app.theme.isDark();
+                 document.querySelectorAll('iframe.preview-iframe[srcdoc]')
+                    .forEach(frame => frame.contentDocument.documentElement.classList[isDark ? 'add' : 'remove']('dark'))
             };
 
             // Define color variables based on theme

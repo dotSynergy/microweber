@@ -147,8 +147,11 @@
 </template>
 
 <style>
+
+
 /* Setup Wizard Modal */
 .mw-setup-wizard-modal {
+    --dark-bg:  rgb(var(--gray-900));
     max-width: 30vw !important;
     height: 100vh;
     min-height: 100vh;
@@ -163,8 +166,11 @@
     flex-direction: column;
     z-index: 101;
     background-color: white;
-    color: #111;
     box-shadow: -10px 0 20px #00000040;
+}
+
+html.dark .mw-setup-wizard-modal {
+    background: var(--dark-bg)
 }
 
 /* Wizard Header */
@@ -172,6 +178,10 @@
     padding: 20px 20px 10px;
     border-bottom: 1px solid #e9ecef;
     background: #f8f9fa;
+}
+html.dark .mw-setup-wizard-header {
+    border-bottom: 1px solid #e9ecef44;
+    background: var(--dark-bg)
 }
 
 /* Progress Bar Styles */
@@ -181,6 +191,7 @@
     margin: 0 auto;
 }
 
+
 .mw-progress-track {
     width: 100%;
     height: 6px;
@@ -189,6 +200,10 @@
     overflow: hidden;
     margin-bottom: 20px;
     position: relative;
+}
+
+html.dark .mw-progress-track {
+    background: var(--dark-bg)
 }
 
 .mw-progress-fill {
@@ -242,6 +257,7 @@
     margin-bottom: 8px;
     border: 2px solid transparent;
 }
+
 
 .step-label {
     font-size: 12px;
@@ -335,7 +351,11 @@
 .wizard-navigation {
     margin-top: auto;
     background: #f8f9fa;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid #e9ecef5b;
+}
+
+html.dark .wizard-navigation{
+    background-color: var(--dark-bg);
 }
 
 /* Font Section (adapted from original) */
@@ -356,7 +376,7 @@
 .form-label {
     font-weight: 500;
     margin-bottom: 0.5rem;
-    color: #495057;
+
 }
 
 .form-control:focus {
@@ -513,6 +533,18 @@ export default {
                 instance.hideModal();
             }
         });
+
+         const isDark = mw.top().app.theme.isDark();
+        document.querySelectorAll('iframe.preview-iframe[srcdoc]')
+            .forEach(frame => frame.contentDocument.documentElement.classList[isDark ? 'add' : 'remove']('dark'))
+
+        mw.top().app.theme.on('change', () => {
+            const isDark = mw.top().app.theme.isDark();
+
+            document.querySelectorAll('iframe.preview-iframe[srcdoc]')
+            .forEach(frame => frame.contentDocument.documentElement.classList[isDark ? 'add' : 'remove']('dark'))
+
+        })
 
 
 

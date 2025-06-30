@@ -108,7 +108,24 @@
 
 
 
-        <div  v-if="template === 'sidebar'" style="width: 100%;">
+            <div class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()" :title="$lang('Layers')">
+                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
+            </svg>
+                <Lang>Layers</Lang>
+            </div>
+
+
+<div v-if="!advanced" v-on:click="handleAdvanced()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
+            class="btn-icon live-edit-toolbar-buttons" :title="$lang('Advanced')">
+           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320Zm-40-120h80v-200h-80v200ZM370-80l-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm40-320Z"/></svg>
+
+        </div>
+
+
+
+
+        <div  v-if="template === 'sidebar' && advanced" style="width: 100%;">
             <ToolsButtons></ToolsButtons>
         </div>
         <div class="dropdown btn-icon live-edit-toolbar-buttons" v-if="template === 'default'">
@@ -154,6 +171,13 @@ export default {
     methods: {
         handleQuickEdit: function () {
             mw.app.liveEditWidgets.toggleQuickEditComponent()
+        },
+        handleAdvanced () {
+            this.advanced = true;
+        },
+        handleLayers() {
+             this.layers = !this.layers;
+            mw.app.liveEditWidgets.toggleLayers();
         },
         show: function (name) {
 
@@ -307,6 +331,8 @@ export default {
             buttonIsActive: false,
             buttonIsActiveStyleEditor: false,
             buttonIsActiveQuickEdit: false,
+            advanced: false,
+            layers: false,
 
         }
     }

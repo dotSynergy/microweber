@@ -24,6 +24,9 @@
     justify-content: center;
     margin: 0 !important;
     padding: 0 !important;
+    svg{
+        width: 25px;
+    }
 }
 
 
@@ -77,14 +80,17 @@
 
 
 
-        <div v-on:click="handleQuickEdit()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
-            class="btn-icon live-edit-toolbar-buttons" title="Quick AI edit">
-            <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M323-160q-11 0-20.5-5.5T288-181l-78-139h58l40 80h92v-40h-68l-40-80H188l-57-100q-2-5-3.5-10t-1.5-10q0-4 5-20l57-100h104l40-80h68v-40h-92l-40 80h-58l78-139q5-10 14.5-15.5T323-800h97q17 0 28.5 11.5T460-760v160h-60l-40 40h100v120h-88l-40-80h-92l-40 40h108l40 80h112v200q0 17-11.5 28.5T420-160h-97Zm237 0q-33 0-56.5-23.5T480-240q0-23 11-40.5t29-28.5v-342q-18-11-29-28.5T480-720q0-33 23.5-56.5T560-800q33 0 56.5 23.5T640-720q0 23-11 40.5T600-651v101l80-48q0-34 23.5-58t56.5-24q33 0 56.5 23.5T840-600q0 33-23.5 56.5T760-520q-11 0-20.5-2.5T721-530l-91 55 101 80q7-3 14-4t15-1q33 0 56.5 23.5T840-320q0 33-23.5 56.5T760-240q-37 0-60.5-28T681-332l-81-65v89q18 11 28.5 28.5T639-240q0 33-23 56.5T560-160Z"/></svg>
+        <div v-on:click="handleInsertLayout()"
+            class="btn-icon live-edit-toolbar-buttons" :title="$lang('Insert layout')" v-html="iconInsertlayout">
+
         </div>
 
 
 
-
+        <div v-on:click="handleQuickEdit()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
+            class="btn-icon live-edit-toolbar-buttons" title="Quick AI edit">
+            <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M323-160q-11 0-20.5-5.5T288-181l-78-139h58l40 80h92v-40h-68l-40-80H188l-57-100q-2-5-3.5-10t-1.5-10q0-4 5-20l57-100h104l40-80h68v-40h-92l-40 80h-58l78-139q5-10 14.5-15.5T323-800h97q17 0 28.5 11.5T460-760v160h-60l-40 40h100v120h-88l-40-80h-92l-40 40h108l40 80h112v200q0 17-11.5 28.5T420-160h-97Zm237 0q-33 0-56.5-23.5T480-240q0-23 11-40.5t29-28.5v-342q-18-11-29-28.5T480-720q0-33 23.5-56.5T560-800q33 0 56.5 23.5T640-720q0 23-11 40.5T600-651v101l80-48q0-34 23.5-58t56.5-24q33 0 56.5 23.5T840-600q0 33-23.5 56.5T760-520q-11 0-20.5-2.5T721-530l-91 55 101 80q7-3 14-4t15-1q33 0 56.5 23.5T840-320q0 33-23.5 56.5T760-240q-37 0-60.5-28T681-332l-81-65v89q18 11 28.5 28.5T639-240q0 33-23 56.5T560-160Z"/></svg>
+        </div>
 
 
         <div v-on:click="toggle('style-editor')" :class="{'live-edit-right-sidebar-active': !buttonIsActive && buttonIsActiveStyleEditor }"
@@ -172,6 +178,35 @@ export default {
         },
     },
     methods: {
+        handleInsertLayout: function () {
+            let active = mw.top().app.liveEdit.layoutHandle.getTarget();
+             if(!active) {
+                const doc = mw.top().app.canvas.getDocument();
+                const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
+
+                const arr = Array.from(doc.querySelectorAll('.edit .module-layouts'))
+                const activeIndex = arr
+                .map(node => {
+                    return node.getBoundingClientRect().top + doc.defaultView.scrollY + node.offsetHeight;
+                })
+                .reduce(function(prev, curr, index) {
+                    return (Math.abs(curr - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
+                }, -1);
+                if(activeIndex >= 0) {
+                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
+                    active = mw.top().app.liveEdit.layoutHandle.getTarget();
+
+                }
+
+
+            }
+
+            if(active) {
+                active.scrollIntoView();
+                mw.top().app.editor.dispatch('insertLayoutRequestOnTop', active)
+            }
+
+        },
         handleQuickEdit: function () {
             mw.app.liveEditWidgets.toggleQuickEditComponent()
         },
@@ -247,15 +282,9 @@ export default {
     },
     mounted() {
 
+
+
         handleLayersChange = handleLayersChange.bind(this);
-
-        if(mw.top().app.liveEditWidgets) {
-            mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
-            mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
-        }
-
-
-
 
         mw.top().app.on('mw.open-template-settings', () => {
             // close the hamburger
@@ -359,6 +388,7 @@ export default {
             buttonIsActiveQuickEdit: false,
             advanced: false,
             layers: false,
+            iconInsertlayout: mw.top().app?.iconService?.icon('plus'),
 
         }
     }

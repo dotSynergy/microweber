@@ -419,6 +419,7 @@ export class LayoutHandleContent {
 
         this.plusTop.hide().on('click', () => {
             handlePlus('top');
+
         });
 
         this.plusBottom.hide().on('click', () => {

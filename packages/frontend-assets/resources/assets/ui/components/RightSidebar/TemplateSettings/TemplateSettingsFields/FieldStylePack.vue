@@ -88,7 +88,7 @@ export default {
 
         return {
             iframe: null,
-            isDarkMode: false,
+            isDarkMode: mw.top().app.theme.isDark(),
             fontCallbacks: [],
             currentStylePack: null,
             previousStylePack: null, // Track the previously selected style pack
@@ -427,7 +427,10 @@ export default {
                 this.injectCanvasStyles();
                 this.updateIframeContent();
                 this.injectFontsIntoIframe();
-                mw.top().tools.iframeAutoHeight(this.iframe)
+                mw.top().tools.iframeAutoHeight(this.iframe);
+                const isDark = mw.top().app.theme.isDark();
+                 document.querySelectorAll('iframe.preview-iframe[srcdoc]')
+                    .forEach(frame => frame.contentDocument.documentElement.classList[isDark ? 'add' : 'remove']('dark'))
             };
 
             // Define color variables based on theme
@@ -810,7 +813,7 @@ export default {
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = this.setting.previewElementsStyleProperties[0].label;
-                label.className = 'live-edit-label';
+                label.className = 'live-edit-label text-black';
 
                 labelDiv.appendChild(label);
                 innerDiv.appendChild(labelDiv);
@@ -981,7 +984,7 @@ export default {
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = stylePack.label;
-                label.className = 'live-edit-label';
+                label.className = 'live-edit-label text-black';
 
                 labelDiv.appendChild(label);
                 innerDiv.appendChild(labelDiv);

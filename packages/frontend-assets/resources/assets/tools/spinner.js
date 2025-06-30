@@ -81,3 +81,41 @@ mw.Spinner = function(options){
 mw.spinner = function(options){
     return new mw.Spinner(options);
 };
+
+let _mwSpinnerProgress = false;
+
+mw.spinnerProgress = function({spinnerOptions, progressOptions}){
+    const spinnerConfig = Object.assign({element: document.body, decorate: true}, spinnerOptions)
+    const progressConfig = Object.assign({element: document.body, progress: 0}, progressOptions)
+
+    if(progressConfig.element && progressConfig.element.$$spinnerProgress) {
+        return progressConfig.element.$$spinnerProgress
+    }
+
+    const spinner = mw.spinner(spinnerConfig);
+    const progress = mw.progress(progressConfig);
+    progress.progress.setAttribute('style', `
+        position: absolute;
+        z-index: 10;
+        top: calc(50% + 20px);
+        width: 200px;
+        left: calc(50% - 100px);
+    `);
+
+    progressConfig.element.$$spinnerProgress = {
+        show(){
+            spinner.show()
+            progress.show()
+        },
+        hide(){
+            spinner.hide();
+            progress.hide()
+        },
+        set(val = 0, action) {
+            progress.set(val, action);
+        }
+    }
+
+    return progressConfig.element.$$spinnerProgress
+
+}

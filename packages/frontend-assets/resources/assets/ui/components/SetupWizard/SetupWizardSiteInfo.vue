@@ -64,6 +64,8 @@ const loadWebsiteInfo = async () => {
 }
 
 
+
+
 onMounted(async () => {
     // Check AI availability
     checkAIAvailability()
@@ -139,10 +141,11 @@ onMounted(async () => {
     window.addEventListener('setupWizard.triggerFormSubmit', handleWizardFormSubmit);
 
     // Store reference for cleanup
-    wizardAiChat.value._wizardEventHandler = handleWizardFormSubmit;
+
 
     setTimeout(() => {
         wizardAiChat.value.appendChild(quickEdit.editor());
+        wizardAiChat.value._wizardEventHandler = handleWizardFormSubmit;
         emit('exposeQuickEdit', quickEdit);
     }, 300);
 

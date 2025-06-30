@@ -53,6 +53,10 @@
     @apply fill-black;
 }
 
+.mw-live-edit-right-sidebar-template-sidebar .live-edit-right-sidebar-active{
+    @apply !bg-white dark:!bg-gray-950 dark:text-white border-none;
+}
+
 
 .admin-thumb-item-uploader,
 input.mw-uploader-input,

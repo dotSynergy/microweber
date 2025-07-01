@@ -28,7 +28,18 @@ class RatingModuleSettings extends LiveEditModuleSettingsTable
                                 ])
                             ]),
                         Tabs\Tab::make('Design')
-                            ->schema($this->getTemplatesFormSchema()),
+                            ->schema([
+                                \Filament\Forms\Components\ColorPicker::make('options.starColor')
+                                    ->label('Star Color')
+                                    ->default('#FFD700'),
+                                \Filament\Forms\Components\ColorPicker::make('options.starBgColor')
+                                    ->label('Star Background Color')
+                                    ->default('#ffffff00'),
+                                \Filament\Forms\Components\TextInput::make('options.starSize')
+                                    ->label('Star Size (px)')
+                                    ->numeric()
+                                    ->default(24),
+                            ]),
                     ]),
             ]);
     }

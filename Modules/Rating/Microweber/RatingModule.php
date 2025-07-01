@@ -86,6 +86,9 @@ class RatingModule extends BaseModule
         $viewData['rel_type'] = $rel_type;
         $viewData['rel_id'] = $rel_id;
         $viewData['require_comment'] = $require_comment;
+        $viewData['starColor'] = $this->getOption('starColor') ?? '#FFD700';
+        $viewData['starBgColor'] = $this->getOption('starBgColor') ?? 'transparent';
+        $viewData['starSize'] = $this->getOption('starSize') ?? 24;
 
         return view(static::$templatesNamespace . '.' . $template, $viewData);
     }

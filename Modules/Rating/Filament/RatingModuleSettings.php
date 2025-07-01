@@ -31,12 +31,15 @@ class RatingModuleSettings extends LiveEditModuleSettingsTable
                             ->schema([
                                 \Filament\Forms\Components\ColorPicker::make('options.starColor')
                                     ->label('Star Color')
+                                    ->live()
                                     ->default('#FFD700'),
                                 \Filament\Forms\Components\ColorPicker::make('options.starBgColor')
                                     ->label('Star Background Color')
+                                    ->live()
                                     ->default('#ffffff00'),
                                 \Filament\Forms\Components\TextInput::make('options.starSize')
                                     ->label('Star Size (px)')
+                                    ->live()
                                     ->numeric()
                                     ->default(24),
                             ]),

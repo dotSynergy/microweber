@@ -64,7 +64,7 @@
             </div>            <!-- Wizard Content -->
             <div class="mw-setup-wizard-content p-4">                <!-- Website Info Step -->
                 <div v-show="currentStep === 0" class="wizard-step-content">
-                    <h4 class="mb-4">Website Information</h4>
+                    <h4>Website Information</h4>
                     <div class="bg-light text-center">
                         <SetupWizardSiteInfo
                             @ai-request-start="handleAIRequestStart"
@@ -80,7 +80,7 @@
 
                 <!-- Full Styles Step -->
                 <div v-show="currentStep === 1" class="wizard-step-content">
-                    <h4 class="mb-4">Styles</h4>
+                    <h4>Styles</h4>
                     <div class="bg-light text-center">
                         <TemplateSettings setting="predefined-styles/full-styles"></TemplateSettings>
                     </div>
@@ -88,7 +88,7 @@
 
                 <!-- Colors Step -->
                 <div v-show="currentStep === 2" class="wizard-step-content">
-                    <h4 class="mb-4">Colors</h4>
+                    <h4>Colors</h4>
                     <div class="bg-light text-center">
 
                         <TemplateSettings setting="predefined-styles/website-colors"></TemplateSettings>
@@ -101,7 +101,7 @@
 
                     <!-- This in on v-if because if colors change -->
 
-                    <h4 class="mb-4">Buttons</h4>
+                    <h4>Buttons</h4>
                     <div class="bg-light text-center">
 
                         <TemplateSettings setting="predefined-styles/button-styles"></TemplateSettings>
@@ -111,7 +111,7 @@
 
                 <!-- Fonts Step -->
                 <div v-show="currentStep === 4" class="wizard-step-content">
-                    <h4 class="mb-4">Fonts</h4>
+                    <h4>Fonts</h4>
                     <div class="bg-light text-center">
 
                         <TemplateSettings setting="predefined-styles/text-styles"></TemplateSettings>

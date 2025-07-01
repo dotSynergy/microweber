@@ -207,4 +207,128 @@ class MailTemplateService
         $name = str_replace('_', ' ', $name);
         return ucwords($name);
     }
+
+    /**
+     * Get the full mail template form schema for use in other modules
+     */
+    public function getTemplateFormSchema(): array
+    {
+        return [
+            \Filament\Forms\Components\Section::make('Template Details')
+                ->schema([
+                    \Filament\Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->placeholder('Template Name')
+                        ->helperText('Enter a descriptive name for this email template')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\Select::make('type')
+                        ->options($this->getTemplateTypes())
+                        ->required()
+                        ->live()
+                        ->helperText('Select the type of email template')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\TextInput::make('from_name')
+                        ->required()
+                        ->maxLength(255)
+                        ->placeholder('From Name')
+                        ->default($this->getDefaultFromName())
+                        ->helperText('The sender name that will appear in the email')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\TextInput::make('from_email')
+                        ->email()
+                        ->required()
+                        ->maxLength(255)
+                        ->placeholder('From Email')
+                        ->default($this->getDefaultFromEmail())
+                        ->helperText('The sender email address')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\TextInput::make('copy_to')
+                        ->email()
+                        ->maxLength(255)
+                        ->placeholder('Copy To Email (Optional)')
+                        ->helperText('Optional: Send a copy of each email to this address')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\TextInput::make('subject')
+                        ->required()
+                        ->maxLength(255)
+                        ->placeholder('Email Subject')
+                        ->helperText('You can use variables like {order_id}, {first_name}, etc.')
+                        ->columnSpanFull(),
+                ]),
+
+            \Filament\Forms\Components\Section::make('Template Content')
+                ->schema([
+                    \Filament\Forms\Components\RichEditor::make('message')
+                        ->required()
+                        ->toolbarButtons([
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strike',
+                            'link',
+                            'orderedList',
+                            'unorderedList',
+                            'undo',
+                            'redo',
+                        ])
+                        ->placeholder('Email Content')
+                        ->helperText('Use HTML formatting and variables like {order_id}, {first_name}, {cart_items}, etc.')
+                        ->columnSpanFull(),
+
+                    \Filament\Forms\Components\Toggle::make('is_active')
+                        ->label('Active')
+                        ->default(true)
+                        ->helperText('Enable or disable this template')
+                        ->columnSpanFull(),
+               ]),
+
+            \Filament\Forms\Components\Section::make('Available Variables')
+                ->schema([
+                    \Filament\Forms\Components\Placeholder::make('variables')
+                        ->content(function ($get) {
+                            $type = $get('type');
+                            if (!$type) {
+                                return new \Illuminate\Support\HtmlString('<p class="text-gray-500">Select a template type to see available variables.</p>');
+                            }
+
+                            $variables = $this->getAvailableVariables($type);
+                            
+                            // Default order variables if none configured
+                            if (empty($variables) && in_array($type, ['new_order', 'order_paid', 'order_shipped', 'order_delivered'])) {
+                                $variables = [
+                                    '{order_id}' => 'Order ID',
+                                    '{first_name}' => 'Customer first name',
+                                    '{last_name}' => 'Customer last name',
+                                    '{email}' => 'Customer email',
+                                    '{phone}' => 'Customer phone',
+                                    '{address}' => 'Customer address',
+                                    '{city}' => 'Customer city',
+                                    '{state}' => 'Customer state',
+                                    '{country}' => 'Customer country',
+                                    '{zip}' => 'Customer zip code',
+                                    '{order_amount}' => 'Total order amount',
+                                    '{cart_items}' => 'Order items table',
+                                ];
+                            }
+
+                            $content = '<div class="rounded-lg border border-blue-200 bg-blue-50 p-4"><h4 class="font-medium mb-2">Available Variables</h4><div class="space-y-1 text-sm">';
+                            foreach ($variables as $var => $desc) {
+                                $content .= "<div><code class='bg-blue-100 px-2 py-1 rounded text-blue-800'>{$var}</code> - {$desc}</div>";
+                            }
+                            $content .= '</div></div>';
+
+                            return new \Illuminate\Support\HtmlString($content);
+                        })
+                        ->columnSpanFull(),
+                ])
+                ->collapsible()
+                ->collapsed(),
+        ];
+    }
 }

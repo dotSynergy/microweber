@@ -81,7 +81,6 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerPage(AdminTemplatePage::class);
         FilamentRegistry::registerPage(AdminTrustProxiesPage::class);
         FilamentRegistry::registerPage(AdminUiColorsPage::class);
-        FilamentRegistry::registerPage(AdminUpdatesPage::class);
         FilamentRegistry::registerPage(AdminWebManifestPage::class);
 
         // Register shop settings pages

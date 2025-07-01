@@ -21,6 +21,9 @@ class AdminEmailPage extends AdminSettingsPage
 
     protected static ?string $title = 'Email';
 
+    protected static ?string $navigationGroup = 'Email';
+
+
     public array $optionGroups = [
         'email'
     ];

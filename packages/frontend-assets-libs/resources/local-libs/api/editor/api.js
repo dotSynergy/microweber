@@ -4,18 +4,7 @@
  mw.lib.require('xss');
 
 ;(function (){
-    var _filterXSS = function (html){
-        var options = {
-            onTagAttr: function (tag, name, value, isWhiteAttr) {
-                var allow = ['class', 'id', 'target', 'title', 'alt', 'for', 'contenteditable'];
-                if(!isWhiteAttr && (allow.includes(name) || name.indexOf('data-'))){
-                    return name + '=' + value;
-                }
-            }
-        };
 
-        return (filterXSS(html, options)) ;
-    };
 
 
     MWEditor.api = function (scope) {
@@ -1394,7 +1383,7 @@
                 });
 
 
-                return /*_filterXSS*/ (this._cleaner.innerHTML) || '';
+                return   (this._cleaner.innerHTML) || '';
             },
             insertHTML: function(html) {
 

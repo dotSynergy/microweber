@@ -174,6 +174,11 @@
                 mw.require(mw.settings.libs_url + 'webfontloader/webfontloader.js');
             }
         ],
+        "purify": [
+            function () {
+                mw.require(mw.settings.libs_url + 'purify/purify.js');
+            }
+        ],
 
 
     };

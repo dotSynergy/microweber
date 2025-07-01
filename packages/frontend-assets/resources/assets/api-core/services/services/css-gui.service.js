@@ -1,29 +1,18 @@
 
-let _cssGUIVisible = false;
 
-
-let _show = state => {
-    const action = state ? 'add' : 'remove';
-    mw.top().app.guiEditorBox[state ? 'show' : 'hide']();
-
-
-}
 
 const CSSGUIService = {
     show: () => {
-        _cssGUIVisible = true;
-        _show(_cssGUIVisible)
+        mw.top().app.guiEditorBox.show();
     },
     hide: () => {
-        _cssGUIVisible = false;
-        _show(_cssGUIVisible)
+        mw.top().app.guiEditorBox.hide();
     },
     toggle: () => {
-        _cssGUIVisible = !_cssGUIVisible;
-        _show(_cssGUIVisible)
+        mw.top().app.guiEditorBox.toggle();
     },
     isVisible: () => {
-        return _cssGUIVisible;
+        return mw.top().app.guiEditorBox.visible()
     }
 }
 

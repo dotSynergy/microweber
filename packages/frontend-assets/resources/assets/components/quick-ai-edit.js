@@ -521,6 +521,13 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
         this.on('change', obj => {
 
+
+
+            if(!obj.node.ownerDocument && obj.node.id) {
+                obj.node = mw.top().app.canvas.getDocument().getElementById(obj.node.id);
+            }
+
+
             obj.node.textContent = obj.text;
 
             mw.top().app.registerChangedState(obj.node);
@@ -1062,8 +1069,8 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
         const getTexts = async () => {
            retryCount++;
-           let textRes = await this.aiTextAdapter(message, messageOptions);
-           let resData;
+            let textRes = await this.aiTextAdapter(message, messageOptions);
+
             if(textRes.data.content?.length === 0 && textRes.data.children?.length > 0){
                 resData = textRes.data.children ;
             } else if (textRes.success && textRes.data?.content) {
@@ -1071,6 +1078,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
             } else if (textRes.success && textRes.data) {
                 resData = textRes.data
             }
+
             if (resData) {
 
                     // Handle case where json is wrapped in a response object
@@ -1096,13 +1104,15 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
                     resData = [resData];
                 }
 
-                if(resData && resData.length > 0) {
+
+
+                if(resData && resData.length > 0 && !resData[0].$schema) {
                     scope.applyJSON(resData);
                 } else if(retryCount < maxRetry) {
                     await getTexts();
                 }
 
-            } else if(retryCount < maxRetry) {
+            } else if(retryCount < maxzRetry) {
                 await getTexts();
             }
         }

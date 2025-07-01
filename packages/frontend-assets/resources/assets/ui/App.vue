@@ -8,7 +8,7 @@
         <RightSidebar></RightSidebar>
         <ListLayouts></ListLayouts>
         <ListModules></ListModules>
-       <ElementSettingsModal></ElementSettingsModal>
+
        <FontsManager></FontsManager>
        <SetupWizard></SetupWizard>
 <!--       <ModalsContainer ></ModalsContainer >-->
@@ -32,15 +32,13 @@ import RightSidebar from "./components/RightSidebar/RightSidebar.vue";
 import ListLayouts from "./components/Layouts/ListLayouts.vue";
 import ListModules from "./components/Modules/ListModules.vue";
 import FontsManager from "./components/FontsManager/FontsManager.vue";
-import ElementSettingsModal from "./components/ElementSettings/ElementSettingsModal.vue";
-import SetupWizard from "./components/SetupWizard/SetupWizard.vue";
+ import SetupWizard from "./components/SetupWizard/SetupWizard.vue";
 import SettingsCustomize from './components/Toolbar/SettingsCustomize.vue';
 
 
 export default {
     components: {
-        ElementSettingsModal,
-        ModalsContainer,
+         ModalsContainer,
         Toolbar,
         LeftSidebar,
         RightSidebar,

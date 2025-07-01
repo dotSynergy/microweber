@@ -10,7 +10,7 @@ description: Default Rating Layout
     'starSize' => $starSize ?? 24,
     'starColor' => $starColor ?? '#FFD700',
     'starBgColor' => $starBgColor ?? 'transparent',
-    'params' => ['id' => 'rating-stars']
+    'params' => ['id' => $params['id']]
 ])
 
 <div id="rating-stars" class="module-rating module-rating-template-default">

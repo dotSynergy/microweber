@@ -28,6 +28,7 @@ const nodeModulesScripts = [
     {target: `easymde`, path: `node_modules/easymde/dist/easymde.min.js`, process: false},
     {target: `async-alpine`, path: `node_modules/async-alpine/dist/async-alpine.script.js` },
        {target: `bootstrap_datepicker`, path: `node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js`, process: false},
+       {target: `purify`, path: `node_modules/dompurify/dist/purify.js`, process: false},
 
     {
         target: `rangy`,

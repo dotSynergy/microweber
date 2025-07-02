@@ -86,7 +86,13 @@ class MenusList extends Component implements HasForms, HasActions
                 $record->fill($data);
                 $record->save();
 
+                if ($this->option_group != '' and $this->option_key != '') {
+                    $this->dispatch('mw-option-saved',
+                        optionGroup: $this->option_group,
+                        optionKey: $this->option_key,
 
+                    );
+                }
             });
     }
 
@@ -316,6 +322,15 @@ class MenusList extends Component implements HasForms, HasActions
                 }
                 $record->fill($data);
                 $record->save();
+
+
+                if ($this->option_group != '' and $this->option_key != '') {
+                    $this->dispatch('mw-option-saved',
+                        optionGroup: $this->option_group,
+                        optionKey: $this->option_key,
+
+                    );
+                }
             });
     }
 

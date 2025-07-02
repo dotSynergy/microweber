@@ -1,119 +1,92 @@
 export default function sortableMenu() {
     return {
         async init() {
-
-
             const collectTreeElements = target => {
                 if (!target) {
                     console.log('target is not defined')
-                    return [];
-                }
-                var closestMenuId = 0;
-                var closestMenuIdElement = target.closest('[data-menu-id]');
-                if (closestMenuIdElement) {
-                    closestMenuId = closestMenuIdElement.getAttribute('data-menu-id');
+                    return { ids: [], ids_parents: {} };
                 }
 
+                let container = $(target).closest('[data-menu-id]');
+                if (!container.length) {
+                    container = $('[data-menu-id]').first();
+                }
 
-                return Array.from(closestMenuIdElement.querySelectorAll('li')).map(node => {
-                    const parent = node.parentNode.closest('li');
-                    return {
-                        id: node.dataset.itemId,
-                        parentId: parent ? parent.dataset.itemId : closestMenuId
+                const closestMenuId = container.attr('data-menu-id') || 0;
+
+                const result = {
+                    menu_id: closestMenuId,
+                    ids: [],
+                    ids_parents: {}
+                };
+
+                // Find all menu items in order
+                container.find('.menu_element').each(function() {
+                    const id = $(this).attr('data-item-id');
+                    if (id) {
+                        result.ids.push(id);
+                        const parentEl = $(this).parents('.menu_element:first');
+                        const parentId = parentEl.attr('data-item-id');
+                        if (parentId) {
+                            result.ids_parents[id] = parentId;
+                        } else {
+                            const fallbackParent = $('#ed_menu_holder').find('[name="parent_id"]').first().val();
+                            result.ids_parents[id] = fallbackParent || closestMenuId;
+                        }
                     }
                 });
-            }
 
-            var _orderChangeHandleTimeout = null;
+                return result;
+            };
 
-            var _orderChangeHandle = function (e, ui) {
+            let _orderChangeHandleTimeout = null;
+
+            const saveMenuOrder = async (target) => {
+                try {
+                    const result = collectTreeElements(target);
+                    await $.post(route('api.menu.item.reorder'), result);
+                    if (mw.notification) {
+                        mw.notification.success('Menu changes are saved');
+                    }
+                } catch (error) {
+                    console.error('Error saving menu order:', error);
+                    if (mw.notification) {
+                        mw.notification.error('Could not save menu changes');
+                    }
+                }
+            };
+
+            const _orderChangeHandle = function(e, ui) {
                 clearTimeout(_orderChangeHandleTimeout);
-                _orderChangeHandleTimeout = setTimeout(function () {
-                    var result = collectTreeElements(e.target);
-                    result = {'items': result};
-
-
-                    $.post(route('api.menu.item.reorder'), result, function () {
-                        if (mw.notification) {
-                            mw.notification.success('Menu changes are saved');
-                        }
-                    });
-
-
+                _orderChangeHandleTimeout = setTimeout(function() {
+                    saveMenuOrder(e.target);
                 }, 100);
             };
 
-
-            var sortableLists = $(document.querySelector('.admin-menu-items-holder ul'));
-
-
-            sortableLists.nestedSortable({
+            // Initialize sortable
+            $('.admin-menu-items-holder ul').nestedSortable({
                 items: "li",
                 listType: 'ul',
                 handle: ".cursor-move",
-                update: async function () {
-                    var obj = {ids: [], ids_parents: {}};
-                    $(this).find('.menu_element').each(function () {
-
-                        var id = this.attributes['data-item-id'].nodeValue;
-                        obj.ids.push(id);
-                        var $has_p = $(this).parents('.menu_element:first').attr('data-item-id');
-                        if ($has_p != undefined) {
-                            obj.ids_parents[id] = $has_p;
-                        } else {
-                            var $has_p1 = $('#ed_menu_holder').find('[name="parent_id"]').first().val();
-                            if ($has_p1 != undefined) {
-                                obj.ids_parents[id] = $has_p1;
-                            }
-                        }
-                    });
-
-                    const save = async () => {
-                        //   console.log('api.menu.item.reorder', obj);
-
-                        return await $.post(route('api.menu.item.reorder'), obj);
-                    }
-
-                    const afterSave = () => {
-                        if (mw.notification) {
-                            mw.notification.success('Menu changes are saved');
-                        }
-                    }
-
-
-                    await save();
-                    afterSave();
-                },
-
-
+                update: _orderChangeHandle
             });
 
-
-            // //onclick on .menu_element
-            var menuElements = document.querySelectorAll('.admin-menu-items-holder .menu_element_link');
-            for (var i = 0; i < menuElements.length; i++) {
-                if (menuElements[i].classList.contains('binded-click')) {
-                    continue;
+            // Click handlers for menu elements
+            $('.admin-menu-items-holder .menu_element_link').each(function() {
+                if ($(this).hasClass('binded-click')) {
+                    return;
                 }
-                menuElements[i].classList.add('binded-click');
+                $(this).addClass('binded-click');
 
-
-                menuElements[i].addEventListener('click', (e) => {
+                $(this).on('click', (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-
-                    var id = e.target.getAttribute('data-item-id');
-
-                    this.$wire.mountAction('editAction', {id: id})
-
-
+                    const id = $(e.target).attr('data-item-id');
+                    if (id) {
+                        this.$wire.mountAction('editAction', {id: id});
+                    }
                 });
-
-            }
-
-        },
-        updateOrder(event) {
-
+            });
         }
-    }
+    };
 }

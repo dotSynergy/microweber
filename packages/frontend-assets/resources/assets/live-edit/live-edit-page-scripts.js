@@ -567,15 +567,15 @@ if (self === top) {
             stickyButton.href = window.mwLiveEditIframeBackUrl;
             stickyButton.classList.add('sticky');
 
-            // Add SVG icon and text
+            // Add SVG icon and text (icon on right, arrow points right)
             stickyButton.innerHTML = `
+                <span class="back-to-live-text">Go Live Edit</span>
                 <span class="back-to-live-icon" aria-hidden="true">
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
                         <circle cx="11" cy="11" r="10" stroke="#fff" stroke-width="2" fill="#2980b9"/>
-                        <path d="M7 11h6M11 7l-4 4 4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M11 7l4 4-4 4M7 11h8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <span class="back-to-live-text">Go Live Edit</span>
             `;
 
             // Append the button to the document body
@@ -595,7 +595,7 @@ if (self === top) {
                     top: -60px;
                     background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
                     color: #fff !important;
-                    padding: 12px 28px 12px 20px;
+                    padding: 12px 20px 12px 28px;
                     border-radius: 0 0 16px 16px;
                     font-family: Arial, sans-serif;
                     border: none;
@@ -608,11 +608,18 @@ if (self === top) {
                     font-weight: 600;
                     letter-spacing: 0.02em;
                     opacity: 0.98;
+                    text-decoration: none !important;
                     transition:
                         top 0.5s cubic-bezier(.68,-0.55,.27,1.55),
                         box-shadow 0.25s,
                         background 0.25s;
                     animation: back-to-live-slide-down 0.7s cubic-bezier(.68,-0.55,.27,1.55) 0.2s forwards;
+                }
+                #back-to-live-sticky-button *,
+                #back-to-live-sticky-button:visited,
+                #back-to-live-sticky-button:active {
+                    text-decoration: none !important;
+                    color: inherit;
                 }
                 @keyframes back-to-live-slide-down {
                     from { top: -60px; }
@@ -622,7 +629,12 @@ if (self === top) {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+                    transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55), filter 0.3s;
+                    margin-left: 8px;
+                }
+                #back-to-live-sticky-button .back-to-live-text {
+                    transition: color 0.2s;
+                    margin-right: 0;
                 }
                 #back-to-live-sticky-button:hover {
                     background: linear-gradient(90deg, #2980b9 0%, #3498db 100%);
@@ -630,11 +642,8 @@ if (self === top) {
                     text-decoration: none !important;
                 }
                 #back-to-live-sticky-button:hover .back-to-live-icon {
-                    transform: scale(1.18) rotate(-12deg);
+                    transform: scale(1.18) translateX(4px) rotate(12deg);
                     filter: drop-shadow(0 0 6px #fff8);
-                }
-                #back-to-live-sticky-button .back-to-live-text {
-                    transition: color 0.2s;
                 }
                 #back-to-live-sticky-button:hover .back-to-live-text {
                     color: #eaf6fb;

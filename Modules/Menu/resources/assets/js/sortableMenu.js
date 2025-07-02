@@ -48,6 +48,9 @@ export default function sortableMenu() {
                     if (mw.notification) {
                         mw.notification.success('Menu changes are saved');
                     }
+
+                    Livewire.dispatch('menuOrderUpdated', { menuId: result.menu_id, ids: result.ids, ids_parents: result.ids_parents });
+
                 } catch (error) {
                     console.error('Error saving menu order:', error);
                     if (mw.notification) {

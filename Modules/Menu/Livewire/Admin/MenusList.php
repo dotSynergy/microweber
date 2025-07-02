@@ -97,9 +97,19 @@ class MenusList extends Component implements HasForms, HasActions
     }
 
     protected $listeners = [
-        'newMenuAdded' => '$refresh'
-    ];
+        'newMenuAdded' => '$refresh',
+        'menuOrderUpdated' => 'onMenuOrderUpdated',
+     ];
+    public function onMenuOrderUpdated($menuId)
+    {
+        if ($this->option_group != '' and $this->option_key != '') {
+            $this->dispatch('mw-option-saved',
+                optionGroup: $this->option_group,
+                optionKey: $this->option_key,
 
+            );
+        }
+    }
     public function createAction(): Action
     {
         return CreateAction::make('create')

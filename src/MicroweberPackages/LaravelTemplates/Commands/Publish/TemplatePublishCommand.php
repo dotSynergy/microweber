@@ -1,9 +1,7 @@
 <?php
 
 namespace MicroweberPackages\LaravelTemplates\Commands\Publish;
-use MicroweberPackages\LaravelTemplates\Support\TemplateAssetPublisher;
 use Nwidart\Modules\Commands\BaseCommand;
-use Nwidart\Modules\Publishing\AssetPublisher;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use function Laravel\Prompts\multiselect;

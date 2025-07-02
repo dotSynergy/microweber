@@ -5,6 +5,7 @@ namespace MicroweberPackages\LaravelModules\Providers;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use MicroweberPackages\LaravelModules\Commands\Migrate\ModuleMigrateCommand;
+use MicroweberPackages\LaravelModules\Commands\Publish\ModulePublishCommand;
 use Nwidart\Modules\Commands;
 
 class ModulesConsoleServiceProvider extends ServiceProvider
@@ -94,7 +95,8 @@ class ModulesConsoleServiceProvider extends ServiceProvider
             Commands\Make\ViewMakeCommand::class,
 
             //Publish Commands
-            Commands\Publish\PublishCommand::class,
+            //Commands\Publish\PublishCommand::class,
+            ModulePublishCommand::class,
             Commands\Publish\PublishConfigurationCommand::class,
             Commands\Publish\PublishMigrationCommand::class,
             Commands\Publish\PublishTranslationCommand::class,

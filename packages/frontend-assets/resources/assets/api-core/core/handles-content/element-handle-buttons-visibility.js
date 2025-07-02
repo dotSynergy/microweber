@@ -36,19 +36,16 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             if (hasCloneable) {
                 return true;
             }
-            var hasCloneableClassOnParents = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable', 'mw-col']);
-            if (hasCloneableClassOnParents) {
-                return true;
-            }
-            // if(this.shouldShowCloneButton(target)) {
-            //     return true;
-            // }
+
+
 
         }
         return isVisible;
 
     }
     shouldShowCloneButton(target) {
+
+
         const isVisible = this.isPlaceholder(target) && (target.classList.contains('cloneable') || target.classList.contains('mw-col'));
         if (!isVisible) {
             const hasCloneable = DomService.hasAnyOfClasses(target, ['cloneable']);
@@ -61,7 +58,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
     }
 
     shouldShowMoveBackwardInMoreButton(target) {
-        const hasCloneable = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable', 'mw-col']);
+        const hasCloneable = DomService.hasAnyOfClasses(target, ['cloneable', 'mw-col']);
         if (hasCloneable) {
             return true;
         }
@@ -78,7 +75,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         return isVisible;
     }
     shouldShowMoveForwardInMoreButton(target) {
-        const hasCloneable = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable', 'mw-col']);
+        const hasCloneable = DomService.hasAnyOfClasses(target, ['cloneable', 'mw-col']);
         if (hasCloneable) {
             return true;
         }

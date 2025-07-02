@@ -477,15 +477,31 @@
                         </div>
                     `);
 
+
+
                     var currentSize = 20;
 
                     if(scope.settings.target) {
                         currentSize = parseFloat(getComputedStyle(scope.settings.target).fontSize)
                     }
 
-                    var sizeel = mw.element('<div class="mwiconlist-settings-section-block-item input-group input-group-flat" style="width: 230px;"><span class="input-group-text"><kbd>px</kbd></span></div>');
-                    var sizeinput = mw.element(`<input class="form-control" value="${currentSize}" type="number" min="8" max="200">`);
-                    var sizeinput2 = mw.element(`<input class="mw-icon-selector-form-control-range" value="${currentSize}" type="range" min="8" max="200">`);
+
+                    holder.innerHTML = `
+                        <div class="mw-icon-selector-flex my-2">
+                            <label class="mw-icon-selector-control-label live-edit-label px-0">${mw.lang('Size')}</label>
+                        </div>
+                        <div class="mwiconlist-settings-section-block-item input-group input-group-flat" style="width: 230px;">
+                            <input class="mw-icon-selector-form-control-range" value="${currentSize}" type="range" min="8" max="200">
+                            <input class="form-control" value="${currentSize}" type="number" min="8" max="200">
+                            <span class="input-group-text">
+                                <kbd>px</kbd>
+                            </span>
+                        </div>
+                    `;
+
+
+                    var sizeinput = mw.element(`.form-control`, holder);
+                    var sizeinput2 = mw.element(`.mw-icon-selector-form-control-range`, holder);
 
                     actionNodes.size = sizeinput;
                     sizeinput.on('input', function () {
@@ -497,11 +513,7 @@
                         scope.dispatch('sizeChange', sizeinput.get(0).value);
                     });
 
-                    holder.append(label);
 
-                    sizeel.prepend(sizeinput2);
-                    sizeel.prepend(sizeinput);
-                    holder.append(sizeel);
                 }
                 if(scope.settings.iconOptions.color) {
                     var cel = mw.element('<div class="mwiconlist-settings-section-block-item"><label class="mw-icon-selector-control-label live-edit-label px-0 mb-2 ps-2">Choose color</label></div>');

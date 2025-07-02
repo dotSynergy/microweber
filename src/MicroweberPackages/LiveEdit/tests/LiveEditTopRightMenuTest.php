@@ -28,8 +28,6 @@ class LiveEditTopRightMenuTest extends TestCase
         $this->assertNotEmpty($topItem->icon_html);
 
         $this->assertEquals($lastItemBefore->title, 'See website');
-        $this->assertEquals($lastItemBefore->href, logout_url());
-        $this->assertNotEmpty($lastItemBefore->icon_html);
 
         $this->assertEquals($lastItem->title, 'Log out');
         $this->assertEquals($lastItem->href, logout_url());

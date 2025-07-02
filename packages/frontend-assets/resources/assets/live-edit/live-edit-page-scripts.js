@@ -1,5 +1,3 @@
-
-
 import Moveable from "moveable";
 
 
@@ -566,9 +564,19 @@ if (self === top) {
             // Create the <a> element (button)
             var stickyButton = document.createElement('a');
             stickyButton.id = 'back-to-live-sticky-button';
-            stickyButton.textContent = 'Go Live Edit';
             stickyButton.href = window.mwLiveEditIframeBackUrl;
             stickyButton.classList.add('sticky');
+
+            // Add SVG icon and text (icon on right, arrow points right)
+            stickyButton.innerHTML = `
+                <span class="back-to-live-text">Go Live Edit</span>
+                <span class="back-to-live-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <circle cx="11" cy="11" r="10" stroke="#fff" stroke-width="2" fill="#2980b9"/>
+                        <path d="M11 7l4 4-4 4M7 11h8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            `;
 
             // Append the button to the document body
             document.body.appendChild(stickyButton);
@@ -576,43 +584,74 @@ if (self === top) {
             // Apply sticky behavior
             stickyButton.classList.add('sticky');
 
-
-
             // Create and apply the CSS style dynamically
             var style = document.createElement('style');
             style.textContent = `
-                    #back-to-live-sticky-button {
-                        position: fixed;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        z-index: 1001;
-                        transition: top 0.3s;
-                        background: #3498db;
-                        color: #fff !important;
-                        padding: 10px 20px;
-                        border-radius: 5px;
-                        border-top-left-radius: 0;
-                        border-top-right-radius: 0;
-                        font-family: Arial, sans-serif;
-                        border: none;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                        cursor: pointer;
-                    }
-
-                    #back-to-live-sticky-button:hover {
-                        background: #2980b9;
-                    }
-
-
-                    #back-to-live-sticky-button.sticky {
-                        top: 0;
-                    }
-
-
-
-
+                #back-to-live-sticky-button {
+                    position: fixed;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 1001;
+                    top: -60px;
+                    background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+                    color: #fff !important;
+                    padding: 12px 20px 12px 28px;
+                    border-radius: 0 0 16px 16px;
+                    font-family: Arial, sans-serif;
+                    border: none;
+                    box-shadow: 0 8px 24px rgba(41, 128, 185, 0.18);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 1.08rem;
+                    font-weight: 600;
+                    letter-spacing: 0.02em;
+                    opacity: 0.98;
+                    text-decoration: none !important;
+                    transition:
+                        top 0.5s cubic-bezier(.68,-0.55,.27,1.55),
+                        box-shadow 0.25s,
+                        background 0.25s;
+                    animation: back-to-live-slide-down 0.7s cubic-bezier(.68,-0.55,.27,1.55) 0.2s forwards;
+                }
+                #back-to-live-sticky-button *,
+                #back-to-live-sticky-button:visited,
+                #back-to-live-sticky-button:active {
+                    text-decoration: none !important;
+                    color: inherit;
+                }
+                @keyframes back-to-live-slide-down {
+                    from { top: -60px; }
+                    to { top: 0; }
+                }
+                #back-to-live-sticky-button .back-to-live-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: transform 0.3s cubic-bezier(.68,-0.55,.27,1.55), filter 0.3s;
+                    margin-left: 8px;
+                }
+                #back-to-live-sticky-button .back-to-live-text {
+                    transition: color 0.2s;
+                    margin-right: 0;
+                }
+                #back-to-live-sticky-button:hover {
+                    background: linear-gradient(90deg, #2980b9 0%, #3498db 100%);
+                    box-shadow: 0 12px 32px 0 rgba(41,128,185,0.28), 0 2px 8px rgba(0,0,0,0.08);
+                    text-decoration: none !important;
+                }
+                #back-to-live-sticky-button:hover .back-to-live-icon {
+                    transform: scale(1.18) translateX(4px) rotate(12deg);
+                    filter: drop-shadow(0 0 6px #fff8);
+                }
+                #back-to-live-sticky-button:hover .back-to-live-text {
+                    color: #eaf6fb;
+                }
+                #back-to-live-sticky-button.sticky {
+                    /* top is animated via keyframes */
+                }
             `;
-
             document.head.appendChild(style);
         }
 
@@ -624,6 +663,3 @@ if (self === top) {
         });
     });
 }
-
-
-

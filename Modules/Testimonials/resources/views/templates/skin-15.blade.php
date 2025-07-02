@@ -41,6 +41,10 @@ if (!window.SliderV2) {
     .slider_v2-default.swiper .swiper-pagination-bullet {
         background-color: #000;
     }
+
+    .slider_v2-default.swiper .swiper-pagination-horizontal {
+        bottom: -5px;
+    }
 </style>
 
 <div id="js-testimonials-slider-{{ $params['id'] }}" class="slider_v2-default swiper">

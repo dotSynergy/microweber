@@ -2,9 +2,7 @@
 
 namespace Modules\Menu\Repositories;
 
-use Content;
 use Illuminate\Support\Facades\DB;
-use MicroweberPackages\Menu\Events\MenuWasUpdated;
 
 /**
  * Content class is used to get and save content in the database.
@@ -953,61 +951,54 @@ class MenuManager
 
     public function menu_items_reorder($data)
     {
-        $itemsReadyParents = [];
-        $itemsReadyIds = [];
+        // Initialize arrays for tracking changes
+        $itemsReadyForUpdate = [];
 
-        // First collect all items and their parent changes
-        if (isset($data['items']) and !empty($data['items'])) {
-            foreach ($data['items'] as $item) {
-                if (isset($item['id'])) {
-                    $itemsReadyIds[] = $item['id'];
+        if (isset($data['ids_parents']) && !empty($data['ids_parents'])) {
+            // First pass - collect all parent relationships
+            foreach ($data['ids_parents'] as $itemId => $parentId) {
+                $itemId = intval($itemId);
+                $parentId = intval($parentId);
 
-                    // Handle parent assignment including removal (parentId = 0 or null)
-                    if (isset($item['parentId'])) {
-                        $parentId = intval($item['parentId']);
-                        if ($item['id'] != $parentId) { // Prevent self-referencing
-                            $itemsReadyParents[$item['id']] = $parentId;
-                        }
-                    } else {
-                        // If parentId is not set, set parent to 0 (root level)
-                        $itemsReadyParents[$item['id']] = 0;
-                    }
+                if ($itemId != $parentId) { // Prevent self-referencing
+                    $itemsReadyForUpdate[] = [
+                        'id' => $itemId,
+                        'parent_id' => $parentId
+                    ];
                 }
             }
         }
 
-        $return_res = false;
-
-        // First handle all parent reassignments
-        if (!empty($itemsReadyParents)) {
-            foreach ($itemsReadyParents as $menuId => $parentId) {
-                $menuId = intval($menuId);
-                $parentId = intval($parentId);
-
-                // Update the menu item's parent
+        // Update parent relationships
+        if (!empty($itemsReadyForUpdate)) {
+            foreach ($itemsReadyForUpdate as $item) {
                 DB::table('menus')
-                    ->whereId($menuId)
+                    ->whereId($item['id'])
                     ->whereItemType('menu_item')
-                    ->update(['parent_id' => $parentId]);
+                    ->update([
+                        'parent_id' => $item['parent_id']
+                    ]);
             }
         }
 
-        // Then handle the position reordering
-        if (!empty($itemsReadyIds)) {
-            $indx = array();
-            foreach ($itemsReadyIds as $i => $id) {
-                $indx[$i] = intval($id);
-                $this->app->cache_manager->delete('menus/' . $id);
-                $this->app->database_manager->update_position_field('menus', $indx);
-                $return_res = $indx;
+        // Handle position ordering based on the ids array order
+        if (isset($data['ids']) && !empty($data['ids'])) {
+            $positions = array_flip($data['ids']); // Convert to zero-based indices
+            foreach ($positions as $id => $position) {
+                DB::table('menus')
+                    ->whereId($id)
+                    ->whereItemType('menu_item')
+                    ->update(['position' => $position]);
             }
         }
 
+        // Clear all relevant caches
         $this->app->cache_manager->delete('content');
         $this->app->cache_manager->delete('categories');
         $this->app->cache_manager->delete('menus');
 
-        return $return_res;
+
+        return true;
     }
 
     public function is_in_menu($menu_id = false, $content_id = false)

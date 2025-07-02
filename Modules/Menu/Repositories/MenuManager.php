@@ -221,7 +221,7 @@ class MenuManager
 //            if (!isset($no_cache) and ($cache_content) != false) {
 //                //  return $cache_content;
 //            }
-//        }\
+//       }\
 
 
         $data_to_return = [];
@@ -956,59 +956,48 @@ class MenuManager
         $itemsReadyParents = [];
         $itemsReadyIds = [];
 
+        // First collect all items and their parent changes
         if (isset($data['items']) and !empty($data['items'])) {
-
             foreach ($data['items'] as $item) {
-                if (isset($item['id']) and isset($item['parentId'])) {
-                    if ($item['id'] != $item['parentId']) {
-                        $itemsReadyParents[$item['id']] = $item['parentId'];
-                        $itemsReadyIds[] = $item['id'];
+                if (isset($item['id'])) {
+                    $itemsReadyIds[] = $item['id'];
+
+                    // Handle parent assignment including removal (parentId = 0 or null)
+                    if (isset($item['parentId'])) {
+                        $parentId = intval($item['parentId']);
+                        if ($item['id'] != $parentId) { // Prevent self-referencing
+                            $itemsReadyParents[$item['id']] = $parentId;
+                        }
+                    } else {
+                        // If parentId is not set, set parent to 0 (root level)
+                        $itemsReadyParents[$item['id']] = 0;
                     }
                 }
-
             }
         }
 
         $return_res = false;
 
-        if ($itemsReadyParents) {
-            $data['ids_parents'] = $itemsReadyParents;
-        }
+        // First handle all parent reassignments
+        if (!empty($itemsReadyParents)) {
+            foreach ($itemsReadyParents as $menuId => $parentId) {
+                $menuId = intval($menuId);
+                $parentId = intval($parentId);
 
-
-        if (isset($data['ids_parents'])) {
-            $value = $data['ids_parents'];
-            if (is_array($value)) {
-                foreach ($value as $menuId => $parentId) {
-                    $parentId = intval($parentId);
-                    $menuId = intval($menuId);
-
-                    DB::table('menus')
-                        ->whereId($menuId)
-                        ->where('id', '!=', $parentId)
-                        ->whereItemType('menu_item')
-                        ->update(['parent_id' => $parentId]);
-
-
-                }
+                // Update the menu item's parent
+                DB::table('menus')
+                    ->whereId($menuId)
+                    ->whereItemType('menu_item')
+                    ->update(['parent_id' => $parentId]);
             }
         }
 
-        if ($itemsReadyIds) {
-            $data['ids'] = $itemsReadyIds;
-        }
-
-        if (isset($data['ids'])) {
-            $value = $data['ids'];
-            if (is_array($value)) {
-                $indx = array();
-                $i = 0;
-                foreach ($value as $value2) {
-                    $indx[$i] = $value2;
-                    $this->app->cache_manager->delete('menus/' . $value2);
-
-                    ++$i;
-                }
+        // Then handle the position reordering
+        if (!empty($itemsReadyIds)) {
+            $indx = array();
+            foreach ($itemsReadyIds as $i => $id) {
+                $indx[$i] = intval($id);
+                $this->app->cache_manager->delete('menus/' . $id);
                 $this->app->database_manager->update_position_field('menus', $indx);
                 $return_res = $indx;
             }

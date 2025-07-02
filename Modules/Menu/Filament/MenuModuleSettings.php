@@ -38,6 +38,7 @@ class MenuModuleSettings extends LiveEditModuleSettings
         }
         $livewireParams['option_group'] = $optionGroup;
         $livewireParams['option_key'] = 'menu_name';
+
         return $form
             ->schema([
                 Tabs::make('Layout settings')

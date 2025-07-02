@@ -76,7 +76,7 @@ export default function sortableMenu() {
 
                     const afterSave = () => {
                         if (mw.notification) {
-                            mw.notification.success('Menu changes are saved"');
+                            mw.notification.success('Menu changes are saved');
                         }
                     }
 

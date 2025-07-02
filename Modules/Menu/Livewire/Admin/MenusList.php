@@ -33,15 +33,21 @@ class MenusList extends Component implements HasForms, HasActions
 
     public function form(Form $form): Form
     {
+
+
+
+
         return $form->schema([
             Select::make('menu_id')
                 ->live()
-                ->native(false)
+                ->native(true)
                 ->selectablePlaceholder(false)
-                ->default(function (Component $component, Get $get) {
+                ->default(function (Component $component, Get $get)  {
 
+                    // return $menu_id;
                     return $get('menu_id');
                 })
+
                 ->options(Menu::where('item_type', 'menu')->get()->pluck('title', 'id'))
                 ->preload()
                 ->label(' '),
@@ -65,6 +71,7 @@ class MenusList extends Component implements HasForms, HasActions
     {
         return CreateAction::make('addMenuItemAction')
 //            ->modalWidth('md')
+            ->createAnother(false)
             ->mountUsing(function (Form $form, array $arguments) {
                 $form->fill($arguments);
             })
@@ -116,30 +123,6 @@ class MenusList extends Component implements HasForms, HasActions
     {
         return [
 
-            TextInput::make('display_title')
-                ->disabled()
-                ->hidden(function (Get $get) {
-                    return $get('use_custom_title') === true;
-                }),
-
-            TextInput::make('title')
-                ->hidden(function (Get $get) {
-                    return $get('use_custom_title') === false;
-                })
-                ->helperText('Title will be auto-filled from the selected content')
-                ->maxLength(255),
-
-            Checkbox::make('use_custom_title')
-                ->label('Use custom title')
-                ->live()
-                ->afterStateUpdated(function (Menu|null $record, Set $set, $state) {
-                    if ($state) {
-                        if ($record) {
-                            $set('title', $record->displayTitle);
-                        }
-                    }
-                })
-                ->default(false),
 
             Hidden::make('content_id'),
             Hidden::make('categories_id'),
@@ -147,6 +130,7 @@ class MenusList extends Component implements HasForms, HasActions
             Hidden::make('url_target'),
 
             MwLinkPicker::make('mw_link_picker')
+                ->label('Link')
                 ->live()
                 ->selectedData(function (Menu|null $record, Get $get) {
                     $dataId = '';
@@ -214,6 +198,33 @@ class MenusList extends Component implements HasForms, HasActions
                     $set('categories_id', $categoriesId);
                     $set('content_id', $contentId);
                 }),
+
+
+            TextInput::make('display_title')
+                ->disabled()
+                ->hidden(function (Get $get) {
+                    return $get('use_custom_title') === true;
+                }),
+
+            TextInput::make('title')
+                ->hidden(function (Get $get) {
+                    return $get('use_custom_title') === false;
+                })
+                ->helperText('Title will be auto-filled from the selected content')
+                ->maxLength(255),
+
+            Checkbox::make('use_custom_title')
+                ->label('Use custom title')
+                ->live()
+                ->afterStateUpdated(function (Menu|null $record, Set $set, $state) {
+                    if ($state) {
+                        if ($record) {
+                            $set('title', $record->displayTitle);
+                        }
+                    }
+                })
+                ->default(false),
+
 
             Checkbox::make('advanced')
                 ->label('Advanced')
@@ -320,26 +331,35 @@ class MenusList extends Component implements HasForms, HasActions
         }
 
     }
+
     public function updatedMenuId($value)
     {
 
-        if($this->option_group != '' and $this->option_key != ''){
+        if ($this->option_group != '' and $this->option_key != '') {
             $menu = get_menus('one=1&limit=1&id=' . $value);
             $title = '';
-            if($menu){
+            if ($menu) {
                 $title = $menu['title'];
             }
+           // $this->menu_id = $menu['id'] ?? 0;
+            //save_option($this->option_key, $title, $this->option_group);
+            $module = 'menu';
+            $optionKey = $this->option_key;
+            $group = $this->option_group;
 
-            save_option($this->option_key, $title, $this->option_group);
+
+            save_module_option($optionKey, $title, $group, $module);
+
 
             $this->dispatch('mw-option-saved',
-                optionGroup:  $this->option_group,
-                optionKey:  $this->option_key,
-                optionValue:  $title
+                optionGroup: $this->option_group,
+                optionKey: $this->option_key,
+                optionValue: $title
             );
         }
 
     }
+
     public function render(): View
     {
         $firstMenu = Menu::where('item_type', 'menu')

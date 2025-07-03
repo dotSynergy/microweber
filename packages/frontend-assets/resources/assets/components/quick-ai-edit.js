@@ -1156,7 +1156,12 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         if (this.chatOption === 'all' || this.chatOption === 'images') {
             currentStep++;
             mw.top().spinnerProgress({}).set(currentStep * step,mw.lang('Generating images') + '...')
-            let imageRes = await this.aiImagesAdapter(about, this.collectImages(undefined, true).length);
+
+            let images_prompt = `Generate images related to the subject: ${about}.
+            Those images should be relevant to the content of the website and should be suitable for use in a website context.`;
+
+
+            let imageRes = await this.aiImagesAdapter(images_prompt, this.collectImages(undefined, true).length);
             this.applyImages(imageRes)
 
         }

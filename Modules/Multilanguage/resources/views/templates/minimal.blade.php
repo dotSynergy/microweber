@@ -15,7 +15,7 @@ description: Minimal language switcher template
                         @if($language['display_icon'])
                             <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" style="max-width: 20px; max-height: 20px;">
                         @else
-                            <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }}"></span>
+                            <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($language['locale']) }}"></span>
                         @endif
                     </a>
                 @endif

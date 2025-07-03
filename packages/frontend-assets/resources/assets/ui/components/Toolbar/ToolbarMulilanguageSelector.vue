@@ -11,7 +11,7 @@
                 ref="multilanguageSwticherSettingsDropdown">
                 <li v-for="(language,locale) in languages" :key="locale">
                     <a @click="changeLang(locale)" :class="{ active: currentLanguage == locale }">
-                        <span :class="'flag-icon flag-icon-' + languagesIcons[locale]"></span>
+                        <span :class="'mw-flag-icon mw-flag-icon-' + languagesIcons[locale]"></span>
                         {{ language }}
                     </a>
                 </li>

@@ -48,7 +48,7 @@ mw.on('mlChangedLanguage', function (e, mlCurrentLanguage) {
 
         <button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split gap-2" aria-expanded="false">
             <i :class="function () {
-                    return 'flag-icon flag-icon-'+currentLanguageData.icon+' mr-4';
+                    return 'mw-flag-icon mw-flag-icon-'+currentLanguageData.icon+' mr-4';
             }"></i>
         </button>
 
@@ -58,7 +58,7 @@ mw.on('mlChangedLanguage', function (e, mlCurrentLanguage) {
                         currentLanguageData = @js($language);
                         mw.trigger('mlChangedLanguage', currentLanguageData);
                 }">
-                    <i class="flag-icon flag-icon-{{$language['icon']}} mr-4"></i>
+                    <i class="mw-flag-icon mw-flag-icon-{{$language['icon']}} mr-4"></i>
                     <span> {{strtoupper($language['locale'])}}</span>
                 </a>
             @endforeach

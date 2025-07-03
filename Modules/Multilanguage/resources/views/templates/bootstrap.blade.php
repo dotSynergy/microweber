@@ -12,12 +12,12 @@ description: Bootstrap language switcher template
             @if($current_language['display_icon'])
                 <img src="{{ $current_language['display_icon'] }}" alt="{{ $current_language['display_name'] }}" style="max-width: 20px; max-height: 20px;">
             @else
-                <span class="flag-icon flag-icon-{{ get_flag_icon($current_language['locale']) }}"></span>
+                <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($current_language['locale']) }}"></span>
             @endif
-            
+
             <span class="ms-2">{{ $current_language['display_name'] ?: $current_language['language'] }}</span>
         </button>
-        
+
         @if(!empty($supported_languages))
             <ul class="dropdown-menu" aria-labelledby="languageSwitcher">
                 @foreach($supported_languages as $language)
@@ -27,9 +27,9 @@ description: Bootstrap language switcher template
                                 @if($language['display_icon'])
                                     <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="me-2" style="max-width: 20px; max-height: 20px;">
                                 @else
-                                    <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }} me-2"></span>
+                                    <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($language['locale']) }} me-2"></span>
                                 @endif
-                                
+
                                 <span>{{ $language['display_name'] ?: $language['language'] }}</span>
                             </a>
                         </li>

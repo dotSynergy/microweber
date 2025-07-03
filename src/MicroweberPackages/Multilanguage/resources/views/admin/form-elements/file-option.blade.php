@@ -8,7 +8,7 @@
                   $showTab = 'active';
             }
             $langData = \MicroweberPackages\Translation\LanguageHelper::getLangData($language['locale']);
-            $flagIcon = "<i class='flag-icon flag-icon-".$language['icon']."'></i> " . strtoupper($langData['language']);
+            $flagIcon = "<i class='mw-flag-icon mw-flag-icon-".$language['icon']."'></i> " . strtoupper($langData['language']);
             echo '<a class="btn btn-outline-secondary btn-sm justify-content-center '.$showTab.'" data-bs-toggle="tab" href="#' . $randId . $language['locale'] . '">'.$flagIcon.'</a>';
         }
         @endphp

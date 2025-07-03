@@ -54,7 +54,7 @@ class TextOption extends \MicroweberPackages\FormBuilder\Elements\TextOption
             }
 
             $langData = \MicroweberPackages\Translation\LanguageHelper::getLangData($language['locale']);
-            $flagIcon = "<i class='flag-icon flag-icon-".$language['icon']."'></i> " . strtoupper($langData['language']);
+            $flagIcon = "<i class='mw-flag-icon mw-flag-icon-".$language['icon']."'></i> " . strtoupper($langData['language']);
             $html .= '<option '.$selected.' data-content="'.$flagIcon.'" value="'.$language['locale'].'"></option>';
         }
 

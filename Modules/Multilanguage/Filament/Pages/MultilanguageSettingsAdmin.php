@@ -42,7 +42,6 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
     ];
 
 
-
     protected function getHeaderActions(): array
     {
         return [
@@ -65,11 +64,20 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
 
         return $form
             ->schema([
+
+
                 Tabs::make('Multilanguage Settings')
                     ->tabs([
                         Tabs\Tab::make('Languages')
                             ->schema([
+
+                                Toggle::make('options.multilanguage_settings.is_active')
+                                    ->label('Multilanguage is active')
+                                    ->helperText('Enable or disable multilanguage functionality for your website')
+                                    ->live(),
+
                                 Section::make('Manage Languages')
+                                    ->visible(fn(Get $get) => $get('options.multilanguage_settings.is_active') === true)
                                     ->description('Add, edit, and manage the languages available on your website.')
                                     ->schema([
                                         Livewire::make(LanguagesTable::class)
@@ -77,15 +85,13 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
                             ]),
 
                         Tabs\Tab::make('General Settings')
+                            ->visible(fn(Get $get) => $get('options.multilanguage_settings.is_active') === true)
                             ->schema([
                                 Grid::make(2)
                                     ->schema([
                                         Section::make('Basic Settings')
                                             ->schema([
-                                                Toggle::make('options.multilanguage_settings.is_active')
-                                                    ->label('Multilanguage is active')
-                                                    ->helperText('Enable or disable multilanguage functionality for your website')
-                                                    ->live(),
+
 
                                                 Select::make('options.website.homepage_language')
                                                     ->label('Homepage language')
@@ -111,7 +117,7 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
                                                 Select::make('options.multilanguage_settings.geolocation_provider')
                                                     ->label('Geolocation Provider')
                                                     ->helperText('Choose your preferred geolocation IP detector')
-                                                    ->default(function(Get $get) {
+                                                    ->default(function (Get $get) {
                                                         return $get('options.multilanguage_settings.geolocation_provider') ?: 'browser_detection';
                                                     })
                                                     ->options([
@@ -138,6 +144,7 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
                             ]),
 
                         Tabs\Tab::make('Advanced')
+                            ->visible(fn(Get $get) => $get('options.multilanguage_settings.is_active') === true)
                             ->schema([
                                 Section::make('Advanced Configuration')
                                     ->description('Advanced multilanguage configuration options')

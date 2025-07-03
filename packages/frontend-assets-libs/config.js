@@ -113,7 +113,7 @@ const modifyIcons = async (data) => {
                     resolve()
                     return console.log(err);
                 }
-                var result = data.replace(/.fi/g, '.mw-flag-icon');
+                var result = data.replace(/.fi-/g, '.mw-flag-icon-');
                 setTimeout((result, targetFile) => {
                     fs.writeFile(targetFile, result, 'utf8', function (err) {
                         resolve()

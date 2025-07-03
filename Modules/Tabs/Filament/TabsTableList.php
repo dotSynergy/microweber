@@ -25,6 +25,8 @@ use Filament\Tables\Contracts\HasTable;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use Modules\Tabs\Models\Tab;
+use NeuronAI\Chat\Messages\UserMessage;
+
 
 class TabsTableList extends Component implements HasForms, HasTable
 {
@@ -66,6 +68,57 @@ class TabsTableList extends Component implements HasForms, HasTable
                 // ...
             ])
             ->headerActions([
+                CreateAction::make('createTabsWithAi')
+                    ->visible(app()->has('ai'))
+                    ->createAnother(false)
+                    ->label('Create with AI')
+                    ->form([
+                        Textarea::make('createTabsWithAiSubject')
+                            ->label('Subject')
+                            ->required()
+                            ->helperText('Describe the topic for which you need tabs generated'),
+
+                        TextInput::make('createTabsWithAiContentNumber')
+                            ->numeric()
+                            ->default(5)
+                            ->label('Number of tabs')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $prompt = "Generate content items with title and detailed content about: " . $data['createTabsWithAiSubject'];
+
+                        $numberOfItems = $data['createTabsWithAiContentNumber'] ?? 5;
+
+                        $class = new class {
+                            public string $title;
+                            public string $content;
+                        };
+
+                        /*
+                         * @var \Modules\Ai\Agents\BaseAgent $agent
+                         */
+                        $agent = app('ai.agents')->agent('base');
+
+                        for ($i = 0; $i < $numberOfItems; $i++) {
+                            $resp = $agent->structured(
+                                new UserMessage($prompt),
+                                $class::class
+                            );
+                            $resp = json_decode(json_encode($resp), true);
+
+                            if ($resp) {
+                                $tab = new Tab();
+                                $tab->title = $resp['title'] ?? 'Tab Title';
+                                $tab->content = $resp['content'] ?? 'Tab Content';
+                                $tab->rel_id = $this->rel_id;
+                                $tab->rel_type = $this->rel_type;
+                                $tab->save();
+                            }
+                        }
+
+                        $this->resetTable();
+                    }),
+
                 CreateAction::make('create')
                     ->slideOver()
                     ->form($this->editFormArray())

@@ -25,7 +25,7 @@ use Filament\Tables\Contracts\HasTable;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use Modules\Accordion\Models\Accordion;
-
+use NeuronAI\Chat\Messages\UserMessage;
 
 class AccordionTableList extends Component implements HasForms, HasTable
 {
@@ -58,7 +58,6 @@ class AccordionTableList extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-
         return $table
             ->query(Accordion::query()->where('rel_id', $this->rel_id)->where('rel_type', $this->rel_type))
             ->defaultSort('position', 'asc')
@@ -66,10 +65,58 @@ class AccordionTableList extends Component implements HasForms, HasTable
                 TextColumn::make('title')
                     ->label('Title'),
             ])
-            ->filters([
-                // ...
-            ])
             ->headerActions([
+                CreateAction::make('createAccordionWithAi')
+                    ->visible(app()->has('ai'))
+                    ->createAnother(false)
+                    ->label('Create with AI')
+                    ->form([
+                        Textarea::make('createAccordionWithAiSubject')
+                            ->label('Subject')
+                            ->required()
+                            ->helperText('Describe the topic for which you need accordion items generated'),
+
+                        TextInput::make('createAccordionWithAiContentNumber')
+                            ->numeric()
+                            ->default(5)
+                            ->label('Number of items')
+                            ->required(),
+                    ])
+                    ->action(function (array $data) {
+                        $prompt = "Generate content items with title and detailed content about: " . $data['createAccordionWithAiSubject'];
+
+                        $numberOfItems = $data['createAccordionWithAiContentNumber'] ?? 5;
+
+                        $class = new class {
+                            public string $title;
+                            public string $content;
+                        };
+
+                        /*
+                         * @var \Modules\Ai\Agents\BaseAgent $agent
+                         */
+                        $agent = app('ai.agents')->agent('base');
+
+                        for ($i = 0; $i < $numberOfItems; $i++) {
+                            $resp = $agent->structured(
+                                new UserMessage($prompt),
+                                $class::class
+                            );
+                            $resp = json_decode(json_encode($resp), true);
+
+                            if ($resp) {
+                                $accordion = new Accordion();
+                                $accordion->title = $resp['title'] ?? 'Title';
+                                $accordion->content = $resp['content'] ?? 'Content';
+                                $accordion->rel_id = $this->rel_id;
+                                $accordion->rel_type = $this->rel_type;
+                                $accordion->save();
+                            }
+                        }
+
+                        $this->resetTable();
+                    }),
+
                 CreateAction::make('create')
                     ->slideOver()
                     ->form($this->editFormArray())

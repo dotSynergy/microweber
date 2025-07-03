@@ -113,7 +113,15 @@ const modifyIcons = async (data) => {
                     resolve()
                     return console.log(err);
                 }
-                var result = data.replace(/.fi-/g, '.mw-flag-icon-');
+                var result = data
+                    .replace(/.fi-/g, '.mw-flag-icon-')
+                    .replace(/.fib, .fi/g, '.mw-flag-iconb, mw-flag-icon')
+                    .replace(/.fi {/g, '.mw-flag-icon {')
+                    .replace(/.fi:before/g, '.mw-flag-icon:before')
+                    .replace(/.fi.fis/g, '.mw-flag-icon.mw-flag-icons')
+                    .replace(/.mw-flag-icon.mw-flag-icon/g, '.mw-flag-icon.fi')
+
+
                 setTimeout((result, targetFile) => {
                     fs.writeFile(targetFile, result, 'utf8', function (err) {
                         resolve()

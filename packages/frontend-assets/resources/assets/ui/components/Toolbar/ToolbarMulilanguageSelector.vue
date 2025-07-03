@@ -1,52 +1,95 @@
 <template>
     <div class="mw-live-edit-right-sidebar-wrapper mx-2" v-if="isReady">
-        <div class="dropdown btn-icon live-edit-toolbar-buttons ">
-            <a role="button" id="dropdownLiveEditMenuLinkmultilanguageSwticherSettings"
+        <div class="custom-dropdown">
+            <a role="button" class="dropdown-trigger"
                :aria-expanded="dropdownOpen.toString()" @click.prevent="toggleDropdown">
                 <span :class="flagClass"></span>
                 {{ currentLanguage }}
-
-
-
-                <!--                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-                                    <path
-                                        d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/>
-                                </svg>-->
             </a>
 
-            <ul class="dropdown-menu change-lang-dropdown-live-edit"
-                aria-labelledby="dropdownLiveEditMenuLinkmultilanguageSwticherSettings"
+            <ul class="dropdown-content" :class="{ 'show': dropdownOpen }"
                 ref="multilanguageSwticherSettingsDropdown">
-
-
-                <li class="dropdown-item" v-for="(language,locale) in languages" :key="locale">
-                    <a @click="changeLang(locale)" :class="{active: currentLanguage == locale}">
-
+                <li v-for="(language,locale) in languages" :key="locale">
+                    <a @click="changeLang(locale)" :class="{ active: currentLanguage == locale }">
                         <span :class="'flag-icon flag-icon-' + languagesIcons[locale]"></span>
                         {{ language }}
                     </a>
                 </li>
 
-
-                <li class="dropdown-item">
-                    <a href="javascript:;" @click="showLangSettings">
+                <li class="settings-item">
+                    <a @click="showLangSettings">
                         <span class="mdi mdi-cog"></span>
                         Settings
                     </a>
                 </li>
-
-
             </ul>
         </div>
     </div>
 </template>
+
 <style>
-.change-lang-dropdown-live-edit .flag-icon {
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-content li {
+    list-style: none;
+}
+
+.dropdown-content li a {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.dropdown-content li a:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-content li a.active {
+    background-color: #e9ecef;
+}
+
+.flag-icon {
     margin-right: 7px;
 }
 
-
+.settings-item {
+    border-top: 1px solid #eee;
+    margin-top: 5px;
+    padding-top: 5px;
+}
 </style>
+
 <script>
 
 

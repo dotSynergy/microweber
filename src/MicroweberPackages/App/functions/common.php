@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Config;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 
 if (! function_exists('mw')) {
     function mw($class = null)
@@ -323,7 +324,7 @@ function get_favicon_tag()
 function multilanguage_route_prefix($prefix) {
 
     if (is_module('multilanguage')) {
-        if (get_option('is_active', 'multilanguage_settings') == 'y') {
+        if (MultilanguageHelpers::multilanguageIsEnabled()) {
             $language = mw()->lang_helper->current_lang_display();
             $prefix = $language . '/' . $prefix;
         }

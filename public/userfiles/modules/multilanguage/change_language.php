@@ -1,1 +1,0 @@
-<module type="multilanguage" template="admin" show_settings_link="true" />

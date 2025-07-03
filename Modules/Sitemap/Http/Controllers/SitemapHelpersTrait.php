@@ -3,6 +3,7 @@
 namespace Modules\Sitemap\Http\Controllers;
 
 
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Category\Models\Category;
 use Modules\Page\Models\Page;
 use Modules\Post\Models\Post;
@@ -12,16 +13,9 @@ trait SitemapHelpersTrait
 {
     public function isMutilangOn()
     {
-        if (is_module('multilanguage')
-            && get_option('is_active', 'multilanguage_settings') === 'y'
-            && function_exists('multilanguage_get_all_category_links'))
-        {
-            $res = true;
-        } else {
-            $res = false;
-        }
 
-        return $res;
+        return  MultilanguageHelpers::multilanguageIsEnabled();
+
     }
 
     public function fetchTagsLinks()

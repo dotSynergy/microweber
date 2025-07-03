@@ -5,6 +5,7 @@
  * Date: 12/13/2019
  * Time: 2:29 PM
  */
+
 namespace MicroweberPackages\Multilanguage;
 
 use MicroweberPackages\App\Managers\PermalinkManager;
@@ -25,9 +26,9 @@ class MultilanguageApi
                 if ($findDefaultLangInSupportedLocales == null) {
                     add_supported_language($defaultLang, $defaultLang);
                 }
-                save_option('is_active','y','multilanguage_settings');
+                save_option('is_active', '1', 'multilanguage_settings');
             } else {
-                save_option('is_active','n','multilanguage_settings');
+                save_option('is_active', '0', 'multilanguage_settings');
             }
 
             \Cookie::queue(\Cookie::forget('back_to_admin'));
@@ -59,7 +60,8 @@ class MultilanguageApi
         }
     }
 
-    public function sortLanguage($params) {
+    public function sortLanguage($params)
+    {
         if (isset($params['ids'])) {
             if (is_array($params['ids']) && !empty($params['ids'])) {
                 foreach ($params['ids'] as $id) {
@@ -75,7 +77,8 @@ class MultilanguageApi
         }
     }
 
-    public function addLanguage($params) {
+    public function addLanguage($params)
+    {
         if (isset($params['new_locale']) && !isset($params['locale'])) {
             $params['locale'] = $params['new_locale'];
         }
@@ -95,16 +98,32 @@ class MultilanguageApi
         return false;
     }
 
-    public function changeLanguage($params) {
+    public function changeLanguage($params)
+    {
 
         if (!isset($params['locale'])) {
             return;
         }
 
 
-
         $json = array();
         $locale = $params['locale'];
+        if (MultilanguageHelpers::multilanguageIsEnabled()) {
+            if (!is_lang_correct($locale)) {
+                // try  to get by lang name
+                $findLocale = MultilanguageSupportedLocales::where('locale', $locale)->first();
+                if (!$findLocale) {
+                    $findLocale = MultilanguageSupportedLocales::where('language', $locale)->first();
+                }
+                if (!$findLocale) {
+                    $findLocale = MultilanguageSupportedLocales::where('display_language', $locale)->first();
+                }
+                if ($findLocale) {
+                    $locale = $findLocale->locale;
+                }
+            }
+        }
+
         if (!is_lang_correct($locale)) {
             return array('error' => _e('Locale is not supported', true));
         }
@@ -117,7 +136,6 @@ class MultilanguageApi
             change_language_by_locale($locale, true);
             run_translate_manager();
         }
-
 
 
         if (isset($params['is_admin']) && $params['is_admin'] == 1) {
@@ -133,13 +151,11 @@ class MultilanguageApi
             }
 
 
-
             $location = false;
 
             $categoryId = get_category_id_from_url($url);
             $contentId = app()->content_manager->get_content_id_from_url($url);
             $contentCheck = get_content_by_id($contentId);
-
 
 
             if ($contentCheck && isset($contentCheck['content_type'])) {
@@ -161,7 +177,7 @@ class MultilanguageApi
                 $location = $mlPermalink->link($categoryId, 'category');
             }
 
-            if  ($location){
+            if ($location) {
                 $json['location'] = $location;
             }
         }

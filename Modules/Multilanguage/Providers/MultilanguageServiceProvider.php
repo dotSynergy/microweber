@@ -2,15 +2,20 @@
 
 namespace Modules\Multilanguage\Providers;
 
+use Filament\Events\ServingFilament;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Livewire\Livewire;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\UnlockPackage\UnlockPackageModuleSettingsPage;
 use MicroweberPackages\Microweber\Facades\Microweber;
+use MicroweberPackages\Module\Facades\ModuleAdmin;
 use Modules\Multilanguage\Filament\MultilanguageSettings;
 use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
 use Modules\Multilanguage\Livewire\LanguagesTable;
 use Modules\Multilanguage\Microweber\MultilanguageModule;
+use Modules\Newsletter\Livewire\Admin\Filament\NewsletterImportSubscribersActionButton;
 use Modules\Settings\Filament\Pages\Settings;
 
 class MultilanguageServiceProvider extends BaseModuleServiceProvider
@@ -37,6 +42,10 @@ class MultilanguageServiceProvider extends BaseModuleServiceProvider
         Microweber::module(MultilanguageModule::class);
         Livewire::component('modules.multilanguage::languages-table', LanguagesTable::class);
 
+
+
+
+
     }
 
     /**
@@ -44,6 +53,7 @@ class MultilanguageServiceProvider extends BaseModuleServiceProvider
      */
     public function boot(): void
     {
+
 
         // Register Livewire components
 

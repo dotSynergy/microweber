@@ -21,6 +21,17 @@ class MultilanguageModule extends BaseModule
 
         // Get supported languages
         $supportedLanguages = get_supported_languages(true);
+
+        if (!is_array($supportedLanguages) || empty($supportedLanguages)) {
+            $supportedLanguages = [];
+        }
+
+        if (count($supportedLanguages) < 2) {
+            // If there are less than 2 languages, we don't need to show the language switcher
+            return '';
+        }
+
+
         $viewData['supported_languages'] = $supportedLanguages;
 
         // Current language

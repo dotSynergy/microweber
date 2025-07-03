@@ -127,7 +127,18 @@ export default {
                 this.$refs.multilanguageSwticherSettingsDropdown.classList.remove('show');
                 this.dropdownOpen = false;
             }
-            mw.tools.open_global_module_settings_modal('multilanguage/admin');
+             // go to admin settings page
+
+            var url = mw.settings.adminUrl + 'multilanguage-settings-admin';
+
+            //open in new tab
+
+           window.open(url, '_blank');
+
+            // or you can use mw.url.open(url);
+            // mw.url.open(url);
+
+
         },
 
 

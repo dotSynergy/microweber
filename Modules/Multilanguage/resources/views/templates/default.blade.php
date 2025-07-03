@@ -6,38 +6,96 @@ description: Default language switcher template
 */
 @endphp
 
-<div class="module-multilanguage">
-    <div class="language-selector">
-        <div class="current-language d-flex align-items-center">
-            @if($current_language['display_icon'])
-                <img src="{{ $current_language['display_icon'] }}" alt="{{ $current_language['display_name'] }}" class="me-2" style="max-width: 20px; max-height: 20px;">
-            @else
-                <span class="flag-icon flag-icon-{{ get_flag_icon($current_language['locale']) }} me-2"></span>
-            @endif
-            
-            <span>{{ $current_language['display_name'] ?: $current_language['language'] }}</span>
-        </div>
-        
+<div class="dropdown module-multilanguage lang-dropdown">
+    <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center justify-content-center lang-flag-btn"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="background: #fff; border-radius: 50px; padding: 6px 10px; min-width: 44px;">
+        @if($current_language['display_icon'])
+            <img src="{{ $current_language['display_icon'] }}" alt="{{ $current_language['display_name'] }}" class="lang-flag">
+        @else
+            <span class="flag-icon flag-icon-{{ get_flag_icon($current_language['locale']) }} lang-flag"></span>
+        @endif
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownMenuButton" style="min-width: 56px;">
         @if(!empty($supported_languages))
-            <div class="languages-list">
-                <ul class="list-unstyled mt-2">
-                    @foreach($supported_languages as $language)
-                        @if($language['locale'] != $current_language['locale'] && $language['is_active'] == 'y')
-                            <li class="py-1">
-                                <a href="?lang={{ $language['locale'] }}" class="d-flex align-items-center">
-                                    @if($language['display_icon'])
-                                        <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="me-2" style="max-width: 20px; max-height: 20px;">
-                                    @else
-                                        <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }} me-2"></span>
-                                    @endif
-                                    
-                                    <span>{{ $language['display_name'] ?: $language['language'] }}</span>
-                                </a>
-                            </li>
+            @foreach($supported_languages as $language)
+                @if($language['is_active'] == 'y')
+                    <a class="dropdown-item d-flex align-items-center justify-content-center lang-flag-link p-1 @if($language['locale'] == $current_language['locale']) active @endif"
+                       href="?lang={{ $language['locale'] }}"
+                       title="{{ $language['display_name'] ?: $language['language'] }}">
+                        @if($language['display_icon'])
+                            <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="lang-flag">
+                        @else
+                            <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }} lang-flag"></span>
                         @endif
-                    @endforeach
-                </ul>
-            </div>
+                    </a>
+                @endif
+            @endforeach 
         @endif
     </div>
 </div>
+
+<style>
+.lang-dropdown .lang-flag-btn {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lang-flag {
+    width: 32px;
+    height: 24px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    background: #eee;
+    display: block;
+    transition: box-shadow 0.18s, transform 0.18s;
+}
+.lang-flag-link {
+    padding: 0;
+    border-radius: 50%;
+    transition: background 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+.lang-flag-link.active {
+    background: #e3f2fd;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10);
+}
+.lang-flag-link:hover,
+.lang-flag-link:focus {
+    background: #f0f4fa;
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.08);
+}
+.dropdown-menu .lang-flag {
+    width: 28px;
+    height: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+@media (max-width: 400px) {
+    .lang-dropdown .lang-flag-btn {
+        max-width: 44px;
+        padding: 4px 2px;
+    }
+    .lang-flag {
+        width: 26px;
+        height: 18px;
+    }
+    .dropdown-menu .lang-flag {
+        width: 22px;
+        height: 16px;
+    }
+}
+</style>

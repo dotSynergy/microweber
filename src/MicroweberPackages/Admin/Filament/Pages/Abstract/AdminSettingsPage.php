@@ -99,6 +99,19 @@ abstract class AdminSettingsPage extends Page
     {
         $changedField = array_undot_str($propertyName);
         if (isset($changedField['options'])) {
+
+            if (!is_array($changedField['options'])) {
+                if (is_array($value)) {
+                    //for select fields filanent sometimes send array with one value
+                    $valueKeyFirst = array_key_first($value);
+                    $valueSel = array_pop($value);
+                    $changedField = [];
+                    $changedField['options'][$valueKeyFirst] = $valueSel;
+                    $value = $valueSel;
+                }
+            }
+
+
             foreach ($changedField['options'] as $optionGroup => $optionKey) {
                 $optionToSave = [
                     'option_key' => $optionKey,

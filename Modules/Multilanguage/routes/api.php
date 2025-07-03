@@ -15,6 +15,4 @@ use Modules\Multilanguage\Http\Controllers\MultilanguageApiController;
  *
 */
 
-Route::post('/multilanguage/geolocaiton_test', [MultilanguageApiController::class, 'geolocaitonTest']);
-
-
+Route::post('/multilanguage/geolocation_test', [MultilanguageApiController::class, 'geolocationTest']);

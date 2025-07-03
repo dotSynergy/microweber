@@ -115,7 +115,7 @@ function module_admin_url($module_name = false)
 //                dump($value->getName());
 //            }
 //
-//            dd($routeCollection);
+
             foreach ($routeNames as $routeName) {
 
                 if (\Illuminate\Support\Facades\Route::has($routeName)) {
@@ -125,8 +125,7 @@ function module_admin_url($module_name = false)
             }
 
 
-            return $module->get('admin_url');
-        }
+         }
 
         //filament.admin.resources.orders
 

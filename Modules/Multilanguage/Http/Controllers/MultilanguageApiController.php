@@ -7,22 +7,25 @@ use Illuminate\Routing\Controller;
 
 class MultilanguageApiController extends Controller
 {
-    public function geolocaitonTest(Request $request)
+    public function geolocationTest(Request $request)
     {
         $result = [];
+        $result['success'] = true;
         $result['ip'] = $request->ip();
         $result['user_agent'] = $request->header('User-Agent');
         $result['request_time'] = date('Y-m-d H:i:s');
 
         // Get geolocation provider
         $provider = get_option('geolocation_provider', 'multilanguage_settings');
-        $result['provider'] = $provider;
+        $result['provider'] = $provider ?: 'browser_detection';
         $result['settings'] = [
             'is_active' => get_option('is_active', 'multilanguage_settings'),
             'use_geolocation' => get_option('use_geolocation', 'multilanguage_settings'),
             'add_prefix_for_all_languages' => get_option('add_prefix_for_all_languages', 'multilanguage_settings'),
-            'homepage_language' => get_option('homepage_language', 'website')
+            'homepage_language' => get_option('homepage_language', 'website'),
+            'ipstack_api_key_set' => !empty(get_option('ipstack_api_access_key', 'multilanguage_settings'))
         ];
+
 
         switch ($provider) {
             case 'browser_detection':
@@ -33,7 +36,7 @@ class MultilanguageApiController extends Controller
                 foreach ($languages as $language) {
                     $parts = explode(';', $language);
                     $lang = trim($parts[0]);
-                    $q = isset($parts[1]) ? (float) str_replace('q=', '', $parts[1]) : 1.0;
+                    $q = isset($parts[1]) ? (float)str_replace('q=', '', $parts[1]) : 1.0;
                     $result['detected_languages'][] = ['language' => $lang, 'quality' => $q];
                 }
                 break;
@@ -51,7 +54,7 @@ class MultilanguageApiController extends Controller
                 foreach ($languages as $language) {
                     $parts = explode(';', $language);
                     $lang = trim($parts[0]);
-                    $q = isset($parts[1]) ? (float) str_replace('q=', '', $parts[1]) : 1.0;
+                    $q = isset($parts[1]) ? (float)str_replace('q=', '', $parts[1]) : 1.0;
                     $result['detected_languages'][] = ['language' => $lang, 'quality' => $q];
                 }
 
@@ -93,7 +96,7 @@ class MultilanguageApiController extends Controller
 
         // Add supported languages for reference
         $supportedLocales = \MicroweberPackages\Multilanguage\Models\MultilanguageSupportedLocales::where('is_active', 1)->get();
-        $result['supported_languages'] = $supportedLocales->map(function($locale) {
+        $result['supported_languages'] = $supportedLocales->map(function ($locale) {
             return [
                 'locale' => $locale->locale,
                 'language' => $locale->language
@@ -101,5 +104,7 @@ class MultilanguageApiController extends Controller
         });
 
         return response()->json($result);
+
     }
+
 }

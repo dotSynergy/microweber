@@ -33,7 +33,6 @@ class LanguagesTable extends Component implements HasForms, HasTable
     public $selectedLocale = null;
 
 
-
     public function table(Table $table): Table
     {
 
@@ -41,9 +40,8 @@ class LanguagesTable extends Component implements HasForms, HasTable
 
         return $table
             ->query(MultilanguageSupportedLocales::query())
-             ->reorderable('position')
+            ->reorderable('position')
             ->defaultSort('position', 'asc')
-
             ->columns([
                 TextColumn::make('locale')
                     ->label('Locale')
@@ -57,7 +55,6 @@ class LanguagesTable extends Component implements HasForms, HasTable
                 TextColumn::make('display_name')
                     ->label('Language Name')
                     ->searchable()
-
                     ->sortable(),
                 ToggleColumn::make('is_active')
                     ->label('Active')
@@ -68,6 +65,7 @@ class LanguagesTable extends Component implements HasForms, HasTable
             ])
             ->actions([
                 EditAction::make()
+                    ->slideOver()
                     ->form([
                         Select::make('language')
                             ->required()
@@ -76,11 +74,12 @@ class LanguagesTable extends Component implements HasForms, HasTable
                             ->native(false)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
-                                // When language changes, update the locale options
+                                // When language changes, update the locale options and display name
                                 $languages = \MicroweberPackages\Translation\LanguageHelper::getLanguagesWithDefaultLocale();
                                 foreach ($languages as $language) {
                                     if ($language['language'] === $state) {
                                         $set('locale', $language['locale']);
+                                        $set('display_name', $language['name']);
                                         break;
                                     }
                                 }
@@ -93,6 +92,7 @@ class LanguagesTable extends Component implements HasForms, HasTable
                                 }
                                 return $options;
                             }),
+
                         Select::make('locale')
                             ->required()
                             ->reactive()
@@ -127,6 +127,10 @@ class LanguagesTable extends Component implements HasForms, HasTable
 
                                 return $options;
                             }),
+
+                        TextInput::make('display_name')
+                            ->label('Language Name')
+                            ->required(),
                         Toggle::make('is_active')
                             ->label('Active'),
                     ])
@@ -151,6 +155,7 @@ class LanguagesTable extends Component implements HasForms, HasTable
             ->headerActions([
                 Action::make('create')
                     ->label('Add Language')
+                    ->slideOver()
                     ->form([
                         Select::make('language')
                             ->required()
@@ -159,11 +164,12 @@ class LanguagesTable extends Component implements HasForms, HasTable
                             ->native(false)
                             ->searchable()
                             ->afterStateUpdated(function ($state, callable $set) {
-                                // When language changes, update the locale options
+                                // When language changes, update the locale options and display name
                                 $languages = \MicroweberPackages\Translation\LanguageHelper::getLanguagesWithDefaultLocale();
                                 foreach ($languages as $language) {
                                     if ($language['language'] === $state) {
                                         $set('locale', $language['locale']);
+                                        $set('display_name', $language['name']);
                                         break;
                                     }
                                 }
@@ -176,6 +182,7 @@ class LanguagesTable extends Component implements HasForms, HasTable
                                 }
                                 return $options;
                             }),
+
                         Select::make('locale')
                             ->required()
                             ->reactive()
@@ -211,6 +218,12 @@ class LanguagesTable extends Component implements HasForms, HasTable
 
                                 return $options;
                             }),
+
+                        TextInput::make('display_name')
+                            ->label('Language Name')
+                            ->required(),
+
+
                         Toggle::make('is_active')
                             ->label('Active')
                             ->default(true),

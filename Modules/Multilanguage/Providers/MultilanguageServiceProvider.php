@@ -8,8 +8,10 @@ use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\Microweber\Facades\Microweber;
 use Modules\Multilanguage\Filament\MultilanguageSettings;
+use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
 use Modules\Multilanguage\Livewire\LanguagesTable;
 use Modules\Multilanguage\Microweber\MultilanguageModule;
+use Modules\Settings\Filament\Pages\Settings;
 
 class MultilanguageServiceProvider extends BaseModuleServiceProvider
 {
@@ -24,10 +26,12 @@ class MultilanguageServiceProvider extends BaseModuleServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
-
-        // Register filament page for Microweber module settings
+        $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));        // Register filament page for Microweber module settings
         FilamentRegistry::registerPage(MultilanguageSettings::class);
+
+        // Register admin settings page
+        FilamentRegistry::registerPage(MultilanguageSettingsAdmin::class);
+        FilamentRegistry::registerPage(MultilanguageSettingsAdmin::class, Settings::class);
 
         // Register Microweber module
         Microweber::module(MultilanguageModule::class);

@@ -86,7 +86,7 @@ class MultilanguageServiceProvider extends ServiceProvider
 
         if (is_module('multilanguage')
             && is_module_installed('multilanguage')
-            && get_option('is_active', 'multilanguage_settings') ) {
+            && get_option('is_active', 'multilanguage_settings')  == '1') {
             $isMultilanguageActive = true;
         }
         if (defined('MW_DISABLE_MULTILANGUAGE')) {

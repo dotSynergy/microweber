@@ -574,6 +574,9 @@ class ContentManagerHelpers extends ContentManagerCrud
 
         if ($multilanguageIsActive) {
             $lang_from_url = detect_lang_from_url($ref_page_url);
+
+
+
             if (isset($post_data['lang'])
                 and ($post_data['lang'])
             ) {

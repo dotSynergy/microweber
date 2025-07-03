@@ -8,8 +8,9 @@ if (!function_exists('run_translate_manager')) {
     {
         $currentLocale = mw()->lang_helper->current_lang();
         if (is_lang_correct($currentLocale)) {
-            $translate = new \MicroweberPackages\Multilanguage\TranslateManager();
-            $translate->run();
+           // $translate = new \MicroweberPackages\Multilanguage\TranslateManager();
+
+            app()->translate_manager->run();
         }
     }
 }
@@ -140,6 +141,9 @@ if (!function_exists('change_language_by_locale')) {
                 }
             }
         }
+
+
+        app()->translate_manager->setCurrentLocale($locale);
 
         return app()->lang_helper->set_current_lang($locale);
     }

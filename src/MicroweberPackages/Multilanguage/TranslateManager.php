@@ -25,6 +25,11 @@ class TranslateManager
 
     public static $translateProviders = [];
 
+    public static function setCurrentLocale($locale)
+    {
+        self::$_getCurrentLocale = $locale;
+    }
+
     public function addTranslateProvider($providerClass)
     {
         self::$translateProviders[] = $providerClass;
@@ -176,11 +181,14 @@ class TranslateManager
                 });
 
                 // BIND SAVE TABLES
-                event_bind('mw.database.' . $providerTable . '.save.params', function ($saveData) use ($providerTable, $currentLocale, $defaultLocale, $providerInstance, $translatableModuleOptions) {
+                event_bind('mw.database.' . $providerTable . '.save.params', function ($saveData) use ($providerTable,  $providerInstance, $translatableModuleOptions) {
+
 
                     if (!MultilanguageHelpers::multilanguageIsEnabled()) {
                         return;
                     }
+                    $currentLocale = $this->getCurrentLocale();
+                    $defaultLocale = $this->getDefaultLocale();
 
                     if ($providerTable == 'options') {
                         $saveModuleOption = false;
@@ -286,16 +294,18 @@ class TranslateManager
                     return $saveData;
                 });
 
-                event_bind('mw.database.' . $providerTable . '.save.after', function ($saveData) use ($providerInstance, $currentLocale, $defaultLocale) {
+                event_bind('mw.database.' . $providerTable . '.save.after', function ($saveData) use ($providerInstance) {
+                    $currentLocale = $this->getCurrentLocale();
+                    $defaultLocale = $this->getDefaultLocale();
 
                     if (!MultilanguageHelpers::multilanguageIsEnabled()) {
                         return;
                     }
-
                     if ($currentLocale != $defaultLocale) {
                         if (!empty($providerInstance->getColumns())) {
 
                             if ($providerInstance->getRelType() == 'content_fields' && isset($saveData['__value'])) {
+
                                 $saveData['value'] = $saveData['__value'];
                                 unset($saveData['__value']);
                                 $providerInstance->saveOrUpdate($saveData);

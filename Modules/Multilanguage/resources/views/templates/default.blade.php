@@ -34,7 +34,7 @@ description: Default language switcher template
                         @endif
                     </a>
                 @endif
-            @endforeach 
+            @endforeach
         @endif
     </div>
 </div>
@@ -61,7 +61,6 @@ description: Default language switcher template
 }
 .lang-flag-link {
     padding: 0;
-    border-radius: 50%;
     transition: background 0.15s, box-shadow 0.15s;
     display: flex;
     align-items: center;

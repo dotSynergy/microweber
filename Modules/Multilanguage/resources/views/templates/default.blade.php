@@ -16,7 +16,7 @@ description: Default language switcher template
         @if($current_language['display_icon'])
             <img src="{{ $current_language['display_icon'] }}" alt="{{ $current_language['display_name'] }}" class="lang-flag">
         @else
-            <span class="flag-icon flag-icon-{{ get_flag_icon($current_language['locale']) }} lang-flag"></span>
+            <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($current_language['locale']) }} lang-flag"></span>
         @endif
     </button>
 
@@ -30,7 +30,7 @@ description: Default language switcher template
                         @if($language['display_icon'])
                             <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="lang-flag">
                         @else
-                            <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }} lang-flag"></span>
+                            <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($language['locale']) }} lang-flag"></span>
                         @endif
                     </a>
                 @endif
@@ -55,7 +55,7 @@ description: Default language switcher template
     border-radius: 6px;
     object-fit: cover;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    background: #eee;
+    background-color: #eee;
     display: block;
     transition: box-shadow 0.18s, transform 0.18s;
 }
@@ -69,12 +69,12 @@ description: Default language switcher template
     height: 36px;
 }
 .lang-flag-link.active {
-    background: #e3f2fd;
+    background-color: #e3f2fd;
     box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10);
 }
 .lang-flag-link:hover,
 .lang-flag-link:focus {
-    background: #f0f4fa;
+    background-color: #f0f4fa;
     box-shadow: 0 4px 16px rgba(25, 118, 210, 0.08);
 }
 .dropdown-menu .lang-flag {
@@ -98,3 +98,7 @@ description: Default language switcher template
     }
 }
 </style>
+
+<script>
+    mw.lib.require('flag_icons')
+</script>

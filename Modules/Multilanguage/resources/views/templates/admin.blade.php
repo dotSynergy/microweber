@@ -11,12 +11,12 @@ description: Admin language switcher template
         @if($current_language['display_icon'])
             <img src="{{ $current_language['display_icon'] }}" alt="{{ $current_language['display_name'] }}" style="max-width: 20px; max-height: 20px;">
         @else
-            <span class="flag-icon flag-icon-{{ get_flag_icon($current_language['locale']) }}"></span>
+            <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($current_language['locale']) }}"></span>
         @endif
-        
+
         <span class="d-none d-md-inline-block ms-1">{{ $current_language['display_name'] ?: $current_language['language'] }}</span>
     </button>
-    
+
     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
         @if(!empty($supported_languages))
             @foreach($supported_languages as $language)
@@ -25,15 +25,15 @@ description: Admin language switcher template
                         @if($language['display_icon'])
                             <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="me-2" style="max-width: 20px; max-height: 20px;">
                         @else
-                            <span class="flag-icon flag-icon-{{ get_flag_icon($language['locale']) }} me-2"></span>
+                            <span class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($language['locale']) }} me-2"></span>
                         @endif
-                        
+
                         <span>{{ $language['display_name'] ?: $language['language'] }}</span>
                     </a>
                 @endif
             @endforeach
         @endif
-        
+
         @if(isset($show_settings_link) && $show_settings_link)
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:mw_liveEdit_language_settings_open_modal()">
@@ -56,3 +56,7 @@ description: Admin language switcher template
         }
     </script>
 @endif
+
+<script>
+    mw.lib.require('flag_icons')
+</script>

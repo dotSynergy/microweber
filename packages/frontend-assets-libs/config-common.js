@@ -7,6 +7,7 @@ const localScripts = [
      {target: `jquery-nested-sortable`, path: `./resources/local-libs/nested-sortable/jquery.mjs.nestedSortable.js`},
      {target: `slick`, path: `./resources/local-libs/mw-slick.js`},
      {target: `justified-gallery`, path: `./resources/local-libs/justified-gallery/justified-gallery.js`},
+     {target: `bootstrap_datetimepicker`, path: `./resources/local-libs/bootstrap_datetimepicker/bootstrap-datetimepicker.js`},
 
 ];
 
@@ -70,6 +71,7 @@ const css = [
     {target: `justified-gallery`, path: `./resources/local-libs/justified-gallery/justified-gallery.css`},
    {target: `bootstrap_datepicker`, path: `node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css`},
     {target: `webfontloader`, path: `node_modules/webfontloader/webfontloader.js`, process: false},
+     {target: `bootstrap_datetimepicker`, path: `./resources/local-libs/bootstrap_datetimepicker/bootstrap-datetimepicker.min.css`},
 
 ];
 

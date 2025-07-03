@@ -1070,6 +1070,12 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         const getTexts = async () => {
            retryCount++;
             let textRes = await this.aiTextAdapter(message, messageOptions);
+            if(textRes.succcess === false) {
+                if(retryCount < maxRetry) {
+                    return await getTexts();
+                }
+                return;
+            }
             let resData;
             if(textRes.data.content?.length === 0 && textRes.data.children?.length > 0){
                 resData = textRes.data.children ;

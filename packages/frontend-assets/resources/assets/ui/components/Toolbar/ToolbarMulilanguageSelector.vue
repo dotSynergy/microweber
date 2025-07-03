@@ -140,7 +140,7 @@ export default {
     },
     computed: {
         flagClass() {
-            return 'flag-icon flag-icon-' + this.languagesIcons[this.currentLanguage];
+            return 'mw-flag-icon mw-flag-icon-' + this.languagesIcons[this.currentLanguage];
         }
     },
     components: {},

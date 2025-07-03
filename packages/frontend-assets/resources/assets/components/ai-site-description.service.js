@@ -88,6 +88,7 @@ Make sure the content is relevant, professional, and optimized for SEO.`
 
         const messages = [{role: 'user', content: message}]
 
+
         const response = await window.mw.top().win.MwAi().sendToChat(messages, {
             schema: JSON.stringify({
                 title: "",

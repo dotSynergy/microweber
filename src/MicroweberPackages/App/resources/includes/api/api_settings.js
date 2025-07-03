@@ -135,8 +135,8 @@
 
         bootstrap_datetimepicker: [
             function () {
-                mw.require(mw.settings.libs_url + 'bootstrap-datetimepicker' + '/css/bootstrap-datetimepicker.min.css', true);
-                mw.require(mw.settings.libs_url + 'bootstrap-datetimepicker' + '/js/bootstrap-datetimepicker.min.js', true);
+                mw.require(mw.settings.libs_url + 'bootstrap_datetimepicker/bootstrap-datetimepicker.min.css', true);
+                mw.require(mw.settings.libs_url + 'bootstrap_datetimepicker/bootstrap-datetimepicker.js', true);
             }
         ],
         bootstrap3ns: [

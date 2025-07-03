@@ -72,7 +72,11 @@ function MwAi() {
                         }
                     })
                     .fail(function(jqXHR, textStatus, errorThrown) {
+
+                        mw.notification.error('Error')
                         reject(errorThrown);
+
+
                     });
             })
         }

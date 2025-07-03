@@ -1,10 +1,10 @@
 <template>
-    <div class="mw-live-edit-right-sidebar-wrapper mx-2" v-if="isReady">
+    <div class="mx-2" v-if="isReady">
         <div class="custom-dropdown">
             <a role="button" class="dropdown-trigger"
                :aria-expanded="dropdownOpen.toString()" @click.prevent="toggleDropdown">
                 <span :class="flagClass"></span>
-                {{ currentLanguage }}
+                {{ languages[currentLanguage] }}
             </a>
 
             <ul class="dropdown-content" :class="{ 'show': dropdownOpen }"
@@ -35,23 +35,43 @@
 
 .dropdown-trigger {
     cursor: pointer;
-    padding: 8px;
+    padding: 8px 14px 8px 10px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    transition: border 0.2s, box-shadow 0.2s;
+    min-width: 120px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    outline: none;
+    position: relative;
+}
+
+.dropdown-trigger:focus,
+.dropdown-trigger:hover {
+    border: 1.5px solid #b3b3b3;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    background: #fafbfc;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 110%;
     right: 0;
     background-color: #fff;
-    min-width: 160px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border-radius: 4px;
-    padding: 5px 0;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+    border-radius: 8px;
+    padding: 8px 0;
     z-index: 1000;
+    border: 1px solid #e0e0e0;
+    transition: opacity 0.18s;
 }
 
 .dropdown-content.show {
@@ -65,28 +85,42 @@
 .dropdown-content li a {
     display: flex;
     align-items: center;
-    padding: 8px 16px;
+    padding: 10px 20px;
     text-decoration: none;
-    color: #333;
+    color: #222;
     cursor: pointer;
+    font-size: 15px;
+    border-radius: 5px;
+    transition: background 0.15s, color 0.15s;
+    gap: 10px;
 }
 
-.dropdown-content li a:hover {
-    background-color: #f5f5f5;
+.dropdown-content li a:hover,
+.dropdown-content li a:focus {
+    background-color: #f0f4fa;
+    color: #1976d2;
 }
 
 .dropdown-content li a.active {
-    background-color: #e9ecef;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    font-weight: 600;
 }
 
 .flag-icon {
-    margin-right: 7px;
+    margin-right: 0;
+    width: 22px;
+    height: 16px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+    object-fit: cover;
+    background: #eee;
 }
 
 .settings-item {
-    border-top: 1px solid #eee;
-    margin-top: 5px;
-    padding-top: 5px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 6px;
+    padding-top: 6px;
 }
 </style>
 

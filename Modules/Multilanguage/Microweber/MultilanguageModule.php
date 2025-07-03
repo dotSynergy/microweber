@@ -18,7 +18,7 @@ class MultilanguageModule extends BaseModule
     public function render()
     {
         $viewData = $this->getViewData();
-        
+
         // Get supported languages
         $supportedLanguages = get_supported_languages(true);
         $viewData['supported_languages'] = $supportedLanguages;

@@ -5,6 +5,7 @@ namespace MicroweberPackages\Multilanguage\Filament\Pages\ListRecords\Concerns;
 use Filament\Resources\Concerns\HasActiveLocaleSwitcher;
 use Filament\SpatieLaravelTranslatablePlugin;
 use MicroweberPackages\Multilanguage\Filament\Resources\Concerns\TranslatableHasActiveLocaleSwitcher;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 
 trait TranslatableRecordsList
 {
@@ -19,7 +20,14 @@ trait TranslatableRecordsList
     public function getTranslatableLocales(): array
     {
 
-        return static::getResource()::getTranslatableLocales();
+
+        $isMultilanguageActive = MultilanguageHelpers::multilanguageIsEnabled();
+        if ($isMultilanguageActive) {
+            return static::getResource()::getTranslatableLocales();
+        } else {
+            return [0 => 'en_US'];
+        }
+
     }
 
     public function getActiveTableLocale(): ?string

@@ -46,7 +46,7 @@ class Settings extends Page
         $settingsPages[] = new AdminLanguagePage();
         $settingsPages[] = new AdminPrivacyPolicyPage();
         $settingsPages[] = new AdminWebManifestPage();
-        $settingsPages[] = new AdminExperimentalPage();
+        //$settingsPages[] = new AdminExperimentalPage();
         $settingsPages[] = new AdminMaintenanceModePage();
         $settingsPages[] = new AdminUiColorsPage();
         $settingsPages[] = new AdminPoweredByPage();

@@ -26,7 +26,7 @@
     padding: 0 !important;
     user-select: none;
     svg{
-        width: 25px;
+        width: 22px;
     }
 }
 
@@ -187,26 +187,40 @@ export default {
     methods: {
         handleInsertLayout: function () {
             let active = mw.top().app.liveEdit.layoutHandle.getTarget();
-             if(!active) {
+            const selector = '.edit[data-layout-container] .module-layouts';
+
+             if(!active || !active.matches(selector)) {
                 const doc = mw.top().app.canvas.getDocument();
                 const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
+                const docHeight = Math.max(doc.documentElement.clientHeight, doc.defaultView.innerHeight);
 
-                const arr = Array.from(doc.querySelectorAll('.edit[data-layout-container] .module-layouts'))
+                const arr = Array.from(doc.querySelectorAll(selector))
                 const activeIndex = arr
                 .map(node => {
-                    return node.getBoundingClientRect().top + doc.defaultView.scrollY + node.offsetHeight;
+                    const rect = node.getBoundingClientRect();
+                    const rectTop = rect.top + doc.defaultView.scrollY;
+
+                    return {
+                        top: rectTop,
+                        visible: !(rect.bottom < 0 || rectTop - docHeight >= 0),
+                        node,
+                    };
                 })
                 .reduce(function(prev, curr, index) {
-                    return (Math.abs(curr - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
+
+                    return (curr.visible && Math.abs(curr.top - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
                 }, -1);
+
                 if(activeIndex >= 0) {
-                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
+                    mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
 
                 }
             }
 
-            if(active) {
+
+
+            if(active && active.matches(selector)) {
                 active.scrollIntoView();
                 mw.top().app.editor.dispatch('insertLayoutRequestOnBottom', active)
             }
@@ -386,7 +400,7 @@ export default {
             advanced: false,
             insertLayoutVisible: false,
             layers: false,
-            iconInsertlayout: mw.top().app?.iconService?.icon('plus'),
+            iconInsertlayout: mw.top().app?.iconService?.icon('add-layout'),
 
         }
     }

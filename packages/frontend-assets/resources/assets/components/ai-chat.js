@@ -210,6 +210,9 @@ export class AIChatForm extends MicroweberBaseClass {
         const frag = document.createElement('div');
         const hasChat = !!mw.top().win.MwAi;
         frag.innerHTML = AIChatFormTpl(this.settings.multiLine, this.settings.placeholder,  this.settings.chatOptions, this.speechRecognition.isSupported(), hasChat);
+
+
+
         frag.className = 'mw-ai-chat-form';
 
         this.form = frag;

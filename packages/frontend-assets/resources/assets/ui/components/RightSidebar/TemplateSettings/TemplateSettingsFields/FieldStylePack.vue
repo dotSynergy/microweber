@@ -336,7 +336,14 @@ export default {
             // After updating the opener, collapse the style packs ONLY if NOT in single setting mode
             if (this.isStylePackOpenerMode && this.stylePacksExpanded && !this.isSingleSettingMode) {
 
-                this.collapseStylePacks();
+              //  this.collapseStylePacks();
+
+               // reload other styles
+               mw.top().app.dispatch('stylePackGlobalReload', {
+                        sourceComponentId: this.uniqueId,
+                        appliedStylePack: stylePack,
+                        selector: this.selectorToApply || this.rootSelector
+                    });
             }
 
             // Emit global event to reload all other style pack preview components

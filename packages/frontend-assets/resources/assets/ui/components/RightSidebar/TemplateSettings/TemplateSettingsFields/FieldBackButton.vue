@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showButton">
+    <div v-if="showButton" class="live-edit-settings-back-button-wrapper">
         <button @click="handleGoBack"
                 class="d-flex gap-2 btn btn-link mw-live-edit-toolbar-link mw-live-edit-toolbar-link--arrowed text-start">
             <svg class="mw-live-edit-toolbar-arrow-icon" xmlns="http://www.w3.org/2000/svg" width="32"

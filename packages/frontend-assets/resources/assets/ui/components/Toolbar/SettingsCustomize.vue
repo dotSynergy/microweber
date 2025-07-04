@@ -187,26 +187,31 @@ export default {
     methods: {
         handleInsertLayout: function () {
             let active = mw.top().app.liveEdit.layoutHandle.getTarget();
-             if(!active) {
+            const selector = '.edit[data-layout-container] .module-layouts';
+
+             if(!active || !active.matches(selector)) {
                 const doc = mw.top().app.canvas.getDocument();
                 const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
 
-                const arr = Array.from(doc.querySelectorAll('.edit[data-layout-container] .module-layouts'))
+                const arr = Array.from(doc.querySelectorAll(selector))
                 const activeIndex = arr
                 .map(node => {
-                    return node.getBoundingClientRect().top + doc.defaultView.scrollY + node.offsetHeight;
+                    return node.getBoundingClientRect().top + doc.defaultView.scrollY;
                 })
                 .reduce(function(prev, curr, index) {
                     return (Math.abs(curr - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
                 }, -1);
+                console.log('arr[activeIndex]', arr[activeIndex], activeIndex, arr)
                 if(activeIndex >= 0) {
-                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
+                    mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
 
                 }
             }
 
-            if(active) {
+            console.log(active);
+
+            if(active && active.matches(selector)) {
                 active.scrollIntoView();
                 mw.top().app.editor.dispatch('insertLayoutRequestOnBottom', active)
             }

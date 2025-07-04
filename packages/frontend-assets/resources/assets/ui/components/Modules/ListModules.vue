@@ -345,10 +345,6 @@ export default {
 }
 
 .modules-list {
-    padding-top: 40px;
-}
-
-.modules-list {
     position: relative;
 }
 </style>

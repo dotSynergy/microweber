@@ -670,7 +670,8 @@ export default {
                         .color-palette-item {
                             border-radius: 7px;
                             height: 60px;
-                            width: 20px;
+                            width: 100%;
+                            max-width: 47px;
                             border: 1px solid #ececec;
                         }
 

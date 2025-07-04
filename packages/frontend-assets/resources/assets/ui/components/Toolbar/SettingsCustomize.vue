@@ -386,7 +386,7 @@ export default {
             advanced: false,
             insertLayoutVisible: false,
             layers: false,
-            iconInsertlayout: mw.top().app?.iconService?.icon('plus'),
+            iconInsertlayout: mw.top().app?.iconService?.icon('add-layout'),
 
         }
     }

@@ -139,6 +139,10 @@ class SetupWizardController extends AdminController
 
         $installer->run();
 
+        save_option('current_template', $template,'template');
+
+
+
         return ['success' => 'Template is installed successfully.'];
     }
 }

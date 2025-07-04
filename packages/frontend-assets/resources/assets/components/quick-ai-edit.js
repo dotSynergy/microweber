@@ -1157,8 +1157,10 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
             currentStep++;
             mw.top().spinnerProgress({}).set(currentStep * step,mw.lang('Generating images') + '...')
 
-            let images_prompt = `Generate images related to the subject: ${about}.
-            Those images should be relevant to the content of the website and should be suitable for use in a website context.`;
+            let images_prompt = `Generate images related to the subject: ${about}
+            The images should made for the websites context, and should be suitable for use in a website context.
+            The images should be suitable for use in a website context.
+             `;
 
 
             let imageRes = await this.aiImagesAdapter(images_prompt, this.collectImages(undefined, true).length);

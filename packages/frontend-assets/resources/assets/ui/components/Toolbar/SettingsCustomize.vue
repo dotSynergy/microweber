@@ -26,7 +26,7 @@
     padding: 0 !important;
     user-select: none;
     svg{
-        width: 25px;
+        width: 22px;
     }
 }
 
@@ -192,16 +192,25 @@ export default {
              if(!active || !active.matches(selector)) {
                 const doc = mw.top().app.canvas.getDocument();
                 const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
+                const docHeight = Math.max(doc.documentElement.clientHeight, doc.defaultView.innerHeight);
 
                 const arr = Array.from(doc.querySelectorAll(selector))
                 const activeIndex = arr
                 .map(node => {
-                    return node.getBoundingClientRect().top + doc.defaultView.scrollY;
+                    const rect = node.getBoundingClientRect();
+                    const rectTop = rect.top + doc.defaultView.scrollY;
+
+                    return {
+                        top: rectTop,
+                        visible: !(rect.bottom < 0 || rectTop - docHeight >= 0),
+                        node,
+                    };
                 })
                 .reduce(function(prev, curr, index) {
-                    return (Math.abs(curr - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
+
+                    return (curr.visible && Math.abs(curr.top - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
                 }, -1);
-                console.log('arr[activeIndex]', arr[activeIndex], activeIndex, arr)
+
                 if(activeIndex >= 0) {
                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
@@ -209,7 +218,7 @@ export default {
                 }
             }
 
-            console.log(active);
+
 
             if(active && active.matches(selector)) {
                 active.scrollIntoView();

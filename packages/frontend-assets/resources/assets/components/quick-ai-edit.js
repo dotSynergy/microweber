@@ -507,7 +507,9 @@ export class QuickEditComponent extends MicroweberBaseClass {
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,
             siteInfoAdapter: generateSiteInfoWithAI,
+            chatOptions: true,
         }
+
         this.settings = Object.assign({}, defaults, options);
         this.settings.nodesSelector = this.settings.nodesSelector.split(',').join(':not(' + skipSelector + '),');
         this.settings.nodesSelector += ':not(' + skipSelector + ')';
@@ -964,15 +966,25 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     aiGUI() {
-        const chatOptions = [
-            {id: 'images', content: mw.lang('Regenerate Images')},
-            {id: 'text', content: mw.lang('Regenerate texts')},
-            {id: 'all', content: mw.lang('Regenerate texts and images')},
-        ];
+        let chatOptions = null;
+        if(this.settings.chatOptions === true) {
+            chatOptions = [
+                {id: 'images', content: mw.lang('Regenerate Images')},
+                {id: 'text', content: mw.lang('Regenerate texts')},
+                {id: 'all', content: mw.lang('Regenerate texts and images')},
+            ];
+        } else if(Array.isArray(this.settings.chatOptions)) {
+            chatOptions = this.settings.chatOptions
+        }
+
         const aiChatForm = new AIChatForm({
             chatOptions,
             submitOnEnter: this.settings.submitOnEnter || false,
         });
+
+        if(typeof this.settings.chatOptions === 'function') {
+            console.log(aiChatForm);
+        }
 
         this.aiChatForm = aiChatForm;
 

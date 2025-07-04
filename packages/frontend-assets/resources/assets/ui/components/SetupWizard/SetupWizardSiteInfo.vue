@@ -78,6 +78,9 @@ onMounted(async () => {
         submitOnEnter: true,
         disableSync: true,
         generateSiteInfo: true,
+        chatOptions: () => {
+
+        }
     });
 
 

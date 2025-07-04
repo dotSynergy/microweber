@@ -754,6 +754,14 @@ export default {
         // Method to collapse style packs without toggling
         collapseStylePacks() {
             if (this.stylePacksExpanded) {
+
+                    mw.top().app.dispatch('stylePackGlobalReload', {
+                        sourceComponentId: this.uniqueId,
+                        appliedStylePack: this.currentStylePack,
+                        selector: this.selectorToApply || this.rootSelector
+                    });
+
+                
                 this.stylePacksExpanded = false;
                 this.updateIframeContent();
                 this.$emit('style-pack-expanded-state', {

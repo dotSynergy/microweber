@@ -859,7 +859,6 @@ html.dark .mw-le-layouts-dialog {
 
 .modules-list-search-block svg.icon {
     stroke-width: 3px;
-    stroke: var(--tblr-body-color);
 }
 
 .mw-le-dialog-close.active {

@@ -42,7 +42,7 @@ class AdminController extends Controller
     {
         $this->app = mw();
 
-        event_trigger('mw.init');
+        //event_trigger('mw.init');
         $is_installed = mw_is_installed();
 
         if ($is_installed) {

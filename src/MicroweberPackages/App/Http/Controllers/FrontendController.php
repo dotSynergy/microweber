@@ -50,7 +50,7 @@ class FrontendController extends Controller
             }
         }
 
-        event_trigger('mw.init');
+        //event_trigger('mw.init');
 
         $this->websiteOptions = app()->option_repository->getWebsiteOptions();
 

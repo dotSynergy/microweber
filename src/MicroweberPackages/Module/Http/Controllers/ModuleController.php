@@ -30,7 +30,7 @@ class ModuleController extends Controller
                 $this->app = mw();
             }
         }
-        event_trigger('mw.init');
+        //event_trigger('mw.init');
 
     }
 

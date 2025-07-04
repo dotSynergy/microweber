@@ -212,5 +212,8 @@ class MicroweberServiceProvider extends ServiceProvider
         // FrontendServiceProvider must be loaded after all other providers on boot as it has catch all routes
         $this->app->register(FrontendServiceProvider::class);
 
+
+        event_trigger('mw.init');
+
     }
 }

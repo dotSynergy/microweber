@@ -23,7 +23,7 @@ class UserForgotPasswordController extends Controller
      */
     public function __construct()
     {
-        event_trigger('mw.init');
+        //event_trigger('mw.init');
     }
 
     public function showForgotForm()

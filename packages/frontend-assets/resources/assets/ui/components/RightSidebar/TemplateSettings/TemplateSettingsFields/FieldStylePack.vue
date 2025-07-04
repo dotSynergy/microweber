@@ -352,11 +352,11 @@ export default {
 
 
                 if(!this.isSingleSettingMode) {
-                    mw.top().app.dispatch('stylePackGlobalReload', {
-                        sourceComponentId: this.uniqueId,
-                        appliedStylePack: stylePack,
-                        selector: this.selectorToApply || this.rootSelector
-                    });
+                    // mw.top().app.dispatch('stylePackGlobalReload', {
+                    //     sourceComponentId: this.uniqueId,
+                    //     appliedStylePack: stylePack,
+                    //     selector: this.selectorToApply || this.rootSelector
+                    // });
                 }
             }
 

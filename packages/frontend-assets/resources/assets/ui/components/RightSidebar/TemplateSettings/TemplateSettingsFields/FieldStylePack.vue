@@ -554,15 +554,25 @@ export default {
                         }
 
                         .style-pack-opener:after {
-                           content: '>';
+                            content: '>';
                             position: absolute;
-                            right: 18px;
-                            bottom: -22px;
+                            right: 6px;
+                            bottom: -8px;
                             transform: translateY(-50%);
-                            font-size: 30px;
+                            font-size: 16px;
                             color: #000;
                             opacity: 0.7;
                             transition: all 0.3s ease;
+                            padding: 5px;
+                            width: 25px;
+                            height: 25px;
+                            background: white;
+                            border-radius: 999px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid var(--border-color);
+
                         }
 
                         .style-pack-opener:hover:after {
@@ -685,7 +695,7 @@ export default {
                             height: 60px;
                             width: 100%;
                             max-width: 47px;
-                            border: 1px solid #ececec;
+                            border: 1px solid var(--border-color);
                         }
 
                         .click-to-expand {

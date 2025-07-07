@@ -68,7 +68,7 @@
 
                 <div v-for="(settingGroup, index) in mainStyleGroups" :key="index" class="my-3">
                     <a @click="navigateTo(settingGroup.url)"
-                       :class="['mw-admin-action-links', 'mw-adm-liveedit-tabs', 'settings-main-group', 'cursor-pointer', 'mb-4', settingGroup.class]">
+                       :class="['', '', 'settings-main-group', 'cursor-pointer', '', settingGroup.class]">
                         {{ settingGroup.title }}
                     </a>
                 </div>

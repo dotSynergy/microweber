@@ -147,9 +147,14 @@ onMounted(async () => {
 
 
     setTimeout(() => {
+    if(wizardAiChat.value) {
         wizardAiChat.value.appendChild(quickEdit.editor());
         wizardAiChat.value._wizardEventHandler = handleWizardFormSubmit;
         emit('exposeQuickEdit', quickEdit);
+    }
+
+
+
     }, 300);
 
 

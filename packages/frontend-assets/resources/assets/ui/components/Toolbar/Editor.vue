@@ -134,8 +134,7 @@ export default {
             })
 
             mw.app.editor.on('editNodeStyleRequest', async (element) => {
-                this.emitter.emit('live-edit-ui-show', 'style-editor');
-                CSSGUIService.toggle()
+                CSSGUIService.show()
             });
 
 

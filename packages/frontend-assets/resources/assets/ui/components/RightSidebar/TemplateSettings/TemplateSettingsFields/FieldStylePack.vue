@@ -670,13 +670,12 @@ export default {
 
 
                         .predefined-styles-names {
-                            position: absolute;
-                            bottom: -11px;
+                           position: absolute;
+                            bottom: -9px;
                             background: white;
-                            padding: 0px 8px;
+                            padding: 2px 10px;
                             border: 1px solid #e5e5e5;
                             border-radius: 11px;
-
 
                         }
 

@@ -801,7 +801,7 @@ export default {
                     previewElement.className = 'style-preview-element';
 
                     const component = iframeDoc.createElement(preview.tag || 'div');
-                    component.className = `preview-component ${preview.class || ''}`;
+                    component.className = `preview-component main ${preview.class || ''}`;
                     component.textContent = preview.label || '';
 
                     const attrs = preview.attributes || {};
@@ -987,7 +987,7 @@ export default {
                     previewElement.className = 'style-preview-element';
 
                     const component = iframeDoc.createElement(preview.tag || 'div');
-                    component.className = `preview-component ${preview.class || ''}`;
+                    component.className = `preview-component main ${preview.class || ''}`;
                     component.textContent = preview.label || '';
 
                     const attrs = preview.attributes || {};

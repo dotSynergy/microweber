@@ -171,7 +171,8 @@ html:not(.mw-le--page-preview) .mw-prevent-interaction{
 
 
 
- .no-select{
+ .no-select,
+ .module[data-type="background"]{
     pointer-events: none;
  }
 

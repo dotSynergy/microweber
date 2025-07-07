@@ -673,6 +673,7 @@ export default {
                             box-sizing: border-box;
                             display:block;
                             font-weight: 300;
+                            color: #0a0a0a;
 
                         }
 

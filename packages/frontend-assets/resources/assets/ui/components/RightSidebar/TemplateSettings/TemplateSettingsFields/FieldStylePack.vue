@@ -843,7 +843,7 @@ export default {
                 this.setting.previewElementsStyleProperties[0].label) {
 
                 const labelDiv = iframeDoc.createElement('div');
-                labelDiv.className = 'form-control-live-edit-label-wrapper';
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = this.setting.previewElementsStyleProperties[0].label;
@@ -1039,7 +1039,7 @@ export default {
             // Add label if available
             if (stylePack.label) {
                 const labelDiv = iframeDoc.createElement('div');
-                labelDiv.className = 'form-control-live-edit-label-wrapper';
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = stylePack.label;

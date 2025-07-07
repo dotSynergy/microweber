@@ -548,9 +548,7 @@ export default {
                             position: relative;
                             zoom: 90%;
 
-                            &:hover {
-                                background-color: var(--background-color-hover);
-                            }
+
                         }
 
                         .style-pack-opener:after {

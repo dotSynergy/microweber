@@ -913,13 +913,13 @@ export default {
                 stylePackContainer.className = 'style-pack-container';
 
                 // Apply current style pack properties to container if available
-                if (this.currentStylePack && this.currentStylePack.properties) {
-                    Object.keys(this.currentStylePack.properties).forEach(property => {
-                        if (property.startsWith('--')) {
-                            stylePackContainer.style.setProperty(property, this.currentStylePack.properties[property]);
-                        }
-                    });
-                }
+                // if (this.currentStylePack && this.currentStylePack.properties) {
+                //     Object.keys(this.currentStylePack.properties).forEach(property => {
+                //         if (property.startsWith('--')) {
+                //             stylePackContainer.style.setProperty(property, this.currentStylePack.properties[property]);
+                //         }
+                //     });
+                // }
 
                 if (this.stylePacksExpanded) {
                     stylePackContainer.classList.add('expanded');
@@ -930,14 +930,14 @@ export default {
                 if (!this.stylePacksExpanded) {
                     const openerElement = this.createOpenerElement(iframeDoc);
 
-                    // Apply current style pack properties to opener if available
-                    if (this.currentStylePack && this.currentStylePack.properties) {
-                        Object.keys(this.currentStylePack.properties).forEach(property => {
-                            if (property.startsWith('--')) {
-                                openerElement.style.setProperty(property, this.currentStylePack.properties[property]);
-                            }
-                        });
-                    }
+                    // // Apply current style pack properties to opener if available
+                    // if (this.currentStylePack && this.currentStylePack.properties) {
+                    //     Object.keys(this.currentStylePack.properties).forEach(property => {
+                    //         if (property.startsWith('--')) {
+                    //             openerElement.style.setProperty(property, this.currentStylePack.properties[property]);
+                    //         }
+                    //     });
+                    // }
 
                     stylePackContainer.appendChild(openerElement);
 

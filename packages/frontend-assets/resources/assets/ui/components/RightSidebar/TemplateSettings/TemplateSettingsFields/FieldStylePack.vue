@@ -584,6 +584,7 @@ export default {
 
                         .style-pack-container.expanded .style-pack-item {
                             display: block;
+                            position: relative;
                         }
 
                         .style-pack-container:not(.expanded) .style-pack-item {
@@ -664,8 +665,21 @@ export default {
                             box-sizing: border-box;
                             display:block;
                             font-weight: 300;
-                            margin-top: 5px;
+
                         }
+
+
+                        .predefined-styles-names {
+                            position: absolute;
+                            bottom: -11px;
+                            background: white;
+                            padding: 0px 8px;
+                            border: 1px solid #e5e5e5;
+                            border-radius: 11px;
+
+
+                        }
+
 
                         .color-palette-item {
                             border-radius: 7px;

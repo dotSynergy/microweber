@@ -262,37 +262,15 @@ class TemplateStylesSettingsReader
             is_array($setting['readSettingsFromFiles']) &&
             !empty($setting['readSettingsFromFiles'])) {
 
-            $jsonFilesOnTemplate = $setting['readSettingsFromFiles'];
-
-            foreach ($jsonFilesOnTemplate as $jsonFile) {
+            $jsonFilesOnTemplate = $setting['readSettingsFromFiles'];            foreach ($jsonFilesOnTemplate as $jsonFile) {
                 $templateColorsFilePath = $this->templateDir . DS . $jsonFile;
                 $templateColorsFilePath = $this->normalizePath($templateColorsFilePath, false);
 
-                $settingsFromFile = @file_get_contents($templateColorsFilePath);
-                $settingsFromFile = @json_decode($settingsFromFile, true);
+                // Use getStyleSettingsFromFile to recursively process all directives
+                $settingsFromFile = $this->getStyleSettingsFromFile($templateColorsFilePath);
 
-                if (is_array($settingsFromFile)) {
-                    if (isset($settingsFromFile['settings'])) {
-                        // Before merging settings, process mergeFieldSettingsFromFiles for each setting
-                        foreach ($settingsFromFile['settings'] as $key => $fileSetting) {
-                            if (isset($fileSetting['mergeFieldSettingsFromFiles']) &&
-                                is_array($fileSetting['mergeFieldSettingsFromFiles']) &&
-                                !empty($fileSetting['mergeFieldSettingsFromFiles'])) {
-                                $this->processMergeFieldSettingsFromFiles($fileSetting);
-                                $settingsFromFile['settings'][$key] = $fileSetting;
-                            }
-
-                            // Process mergeFieldSettingsFromFolders for each setting
-                            if (isset($fileSetting['mergeFieldSettingsFromFolders']) &&
-                                is_array($fileSetting['mergeFieldSettingsFromFolders']) &&
-                                !empty($fileSetting['mergeFieldSettingsFromFolders'])) {
-                                $this->processMergeFieldSettingsFromFolders($fileSetting);
-                                $settingsFromFile['settings'][$key] = $fileSetting;
-                            }
-                        }
-
-                        $newSettings = array_merge($newSettings, $settingsFromFile['settings']);
-                    }
+                if (is_array($settingsFromFile) && isset($settingsFromFile['settings'])) {
+                    $newSettings = array_merge($newSettings, $settingsFromFile['settings']);
                 }
             }
         }
@@ -306,29 +284,9 @@ class TemplateStylesSettingsReader
 
             foreach ($folders as $folder) {
                 $templateColorsFolderExists = $this->templateDir . DS . $folder;
-                $templateColorsFolderExists = $this->normalizePath($templateColorsFolderExists);
-
-                $settingsFromFolder = $this->getStyleSettingsFromFolder($templateColorsFolderExists);
+                $templateColorsFolderExists = $this->normalizePath($templateColorsFolderExists);                $settingsFromFolder = $this->getStyleSettingsFromFolder($templateColorsFolderExists);
 
                 if (is_array($settingsFromFolder) && isset($settingsFromFolder['settings'])) {
-                    // Process mergeFieldSettingsFromFiles for each setting from folder
-                    foreach ($settingsFromFolder['settings'] as $key => $folderSetting) {
-                        if (isset($folderSetting['mergeFieldSettingsFromFiles']) &&
-                            is_array($folderSetting['mergeFieldSettingsFromFiles']) &&
-                            !empty($folderSetting['mergeFieldSettingsFromFiles'])) {
-                            $this->processMergeFieldSettingsFromFiles($folderSetting);
-                            $settingsFromFolder['settings'][$key] = $folderSetting;
-                        }
-
-                        // Process mergeFieldSettingsFromFolders for each setting from folder
-                        if (isset($folderSetting['mergeFieldSettingsFromFolders']) &&
-                            is_array($folderSetting['mergeFieldSettingsFromFolders']) &&
-                            !empty($folderSetting['mergeFieldSettingsFromFolders'])) {
-                            $this->processMergeFieldSettingsFromFolders($folderSetting);
-                            $settingsFromFolder['settings'][$key] = $folderSetting;
-                        }
-                    }
-
                     $newSettings = array_merge($newSettings, $settingsFromFolder['settings']);
                 }
             }
@@ -568,13 +526,11 @@ class TemplateStylesSettingsReader
         $settings = [];
 
         if (is_dir($folderPath)) {
-            $templateColorsFolderExistsContent = glob($folderPath . DS . '*.json');
-
-            if (is_array($templateColorsFolderExistsContent)) {
+            $templateColorsFolderExistsContent = glob($folderPath . DS . '*.json');            if (is_array($templateColorsFolderExistsContent)) {
                 foreach ($templateColorsFolderExistsContent as $templateColorsFolderExistsContentItem) {
                     if (is_file($templateColorsFolderExistsContentItem)) {
-                        $settingsFromFile = @file_get_contents($templateColorsFolderExistsContentItem);
-                        $settingsFromFile = @json_decode($settingsFromFile, true);
+                        // Use getStyleSettingsFromFile to recursively process all directives
+                        $settingsFromFile = $this->getStyleSettingsFromFile($templateColorsFolderExistsContentItem);
                         if (is_array($settingsFromFile)) {
                             if(isset($settingsFromFile['settings'])){
                                 $settings = array_merge($settings, $settingsFromFile['settings']);

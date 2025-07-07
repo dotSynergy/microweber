@@ -68,7 +68,7 @@
 
                 <div v-for="(settingGroup, index) in mainStyleGroups" :key="index" class="my-3">
                     <a @click="navigateTo(settingGroup.url)"
-                       class="mw-admin-action-links mw-adm-liveedit-tabs settings-main-group cursor-pointer mb-4">
+                       :class="['mw-admin-action-links', 'mw-adm-liveedit-tabs', 'settings-main-group', 'cursor-pointer', 'mb-4', settingGroup.class]">
                         {{ settingGroup.title }}
                     </a>
                 </div>
@@ -1100,7 +1100,7 @@ export default {
         openSelectedLayoutSettings() {
             if (!this.activeLayoutId || this.activeLayoutId === 'None') return;
 
-            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getDocument()?.getElementById(this.activeLayoutId);
+            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getElementById(this.activeLayoutId);
             if (firstLayoutElement) {
                 window.mw.top().app.editor.dispatch('onLayoutSettingsRequest', firstLayoutElement);
             }

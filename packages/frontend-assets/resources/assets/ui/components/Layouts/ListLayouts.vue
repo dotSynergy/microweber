@@ -68,33 +68,33 @@
                         </div>
                     </div>
 
-                    <div class="me-5 pe-3 my-3 py-0 col-xl-2 col-md-3 col-12 ms-auto text-end justify-content-end">
-                        <div class="btn-group d-flex justify-content-end pe-4 layout-list-buttons gap-2">
-                      <button
-                                type="button"
-                                v-on:click="switchLayoutsListTypePreview('masonry')"
-                                :class="['btn', layoutsListTypePreview == 'masonry'? 'btn-dark': 'btn-outline-dark']"
-                            >
-                                <MasonryIcon style="max-width:23px;max-height:23px;" />
-                            </button>
+<!--                    <div class="me-5 pe-3 my-3 py-0 col-xl-2 col-md-3 col-12 ms-auto text-end justify-content-end">-->
+<!--                        <div class="btn-group d-flex justify-content-end pe-4 layout-list-buttons gap-2">-->
+<!--                      <button-->
+<!--                                type="button"-->
+<!--                                v-on:click="switchLayoutsListTypePreview('masonry')"-->
+<!--                                :class="['btn', layoutsListTypePreview == 'masonry'? 'btn-dark': 'btn-outline-dark']"-->
+<!--                            >-->
+<!--                                <MasonryIcon style="max-width:23px;max-height:23px;" />-->
+<!--                            </button>-->
 
+<!--&lt;!&ndash;                            <button&ndash;&gt;-->
+<!--&lt;!&ndash;                                type="button"&ndash;&gt;-->
+<!--&lt;!&ndash;                                v-on:click="switchLayoutsListTypePreview('list')"&ndash;&gt;-->
+<!--&lt;!&ndash;                                :class="['btn', layoutsListTypePreview == 'list'? 'btn-dark': 'btn-outline-dark']"&ndash;&gt;-->
+<!--&lt;!&ndash;                            >&ndash;&gt;-->
+<!--&lt;!&ndash;                                <GridIcon style="max-width:23px;max-height:23px;" />&ndash;&gt;-->
+<!--&lt;!&ndash;                            </button>&ndash;&gt;-->
 <!--                            <button-->
 <!--                                type="button"-->
-<!--                                v-on:click="switchLayoutsListTypePreview('list')"-->
-<!--                                :class="['btn', layoutsListTypePreview == 'list'? 'btn-dark': 'btn-outline-dark']"-->
+<!--                                v-on:click="switchLayoutsListTypePreview('full')"-->
+<!--                                :class="['btn', layoutsListTypePreview == 'full'? 'btn-dark': 'btn-outline-dark']"-->
 <!--                            >-->
-<!--                                <GridIcon style="max-width:23px;max-height:23px;" />-->
+<!--                                <ListIcon style="max-width:23px;max-height:23px;" />-->
 <!--                            </button>-->
-                            <button
-                                type="button"
-                                v-on:click="switchLayoutsListTypePreview('full')"
-                                :class="['btn', layoutsListTypePreview == 'full'? 'btn-dark': 'btn-outline-dark']"
-                            >
-                                <ListIcon style="max-width:23px;max-height:23px;" />
-                            </button>
 
-                        </div>
-                    </div>
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <div v-if="layoutsListLoaded && layoutsListTypePreview == 'masonry'" class="modules-list-block-masonry">
                         <MasonryWall

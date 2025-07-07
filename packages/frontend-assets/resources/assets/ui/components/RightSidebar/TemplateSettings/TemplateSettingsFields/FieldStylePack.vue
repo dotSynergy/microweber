@@ -584,6 +584,7 @@ export default {
 
                         .style-pack-container.expanded .style-pack-item {
                             display: block;
+                            position: relative;
                         }
 
                         .style-pack-container:not(.expanded) .style-pack-item {
@@ -664,8 +665,20 @@ export default {
                             box-sizing: border-box;
                             display:block;
                             font-weight: 300;
-                            margin-top: 5px;
+
                         }
+
+
+                        .predefined-styles-names {
+                           position: absolute;
+                            bottom: -9px;
+                            background: white;
+                            padding: 2px 10px;
+                            border: 1px solid #e5e5e5;
+                            border-radius: 11px;
+
+                        }
+
 
                         .color-palette-item {
                             border-radius: 7px;
@@ -843,7 +856,7 @@ export default {
                 this.setting.previewElementsStyleProperties[0].label) {
 
                 const labelDiv = iframeDoc.createElement('div');
-                labelDiv.className = 'form-control-live-edit-label-wrapper';
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = this.setting.previewElementsStyleProperties[0].label;
@@ -1039,7 +1052,7 @@ export default {
             // Add label if available
             if (stylePack.label) {
                 const labelDiv = iframeDoc.createElement('div');
-                labelDiv.className = 'form-control-live-edit-label-wrapper';
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
 
                 const label = iframeDoc.createElement('label');
                 label.textContent = stylePack.label;

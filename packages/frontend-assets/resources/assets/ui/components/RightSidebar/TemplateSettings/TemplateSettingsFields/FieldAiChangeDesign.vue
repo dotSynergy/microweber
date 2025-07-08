@@ -400,13 +400,13 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 };
 </script>
 
-<style scoped>
+<style>
 .position-relative {
     position: relative;
 }
 
 /* Modern AI Chat Text Field Styling */
-:deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
+.mw-ai-chat-box .mw-ai-chat-box-area-field {
     background: #ffffff;
     border: 1px solid #e1e5e9;
     border-radius: 12px;
@@ -424,33 +424,33 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     position: relative;
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:focus) {
+.mw-ai-chat-box .mw-ai-chat-box-area-field:focus {
     border-color: #3b82f6;
     background: #ffffff;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder) {
+.mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {
     color: #a0aec0;
     font-style: italic;
     opacity: 1;
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:hover) {
+.mw-ai-chat-box .mw-ai-chat-box-area-field:hover {
     border-color: #cbd5e0;
     background: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* AI Chat Box Container */
-:deep(.mw-ai-chat-box) {
+.mw-ai-chat-box {
     position: relative;
     margin-bottom: 16px;
     margin-top: 12px;
 }
 
-:deep(.mw-ai-chat-box::before) {
+.mw-ai-chat-box::before {
     content: '✨ AI Assistant';
     position: absolute;
     top: -8px;
@@ -468,7 +468,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 }
 
 /* Submit Button Styling */
-:deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn) {
+.mw-ai-chat-box .mw-ai-chat-box-submit-btn {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     border: none;
     border-radius: 10px;
@@ -483,17 +483,17 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     overflow: hidden;
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover) {
+.mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn:active) {
+.mw-ai-chat-box .mw-ai-chat-box-submit-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn::before) {
+.mw-ai-chat-box .mw-ai-chat-box-submit-btn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -504,7 +504,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     transition: left 0.5s;
 }
 
-:deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover::before) {
+.mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover::before {
     left: 100%;
 }
 
@@ -530,33 +530,72 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
+    .mw-ai-chat-box .mw-ai-chat-box-area-field {
         padding: 22px 16px 14px 16px;
         font-size: 16px; /* Prevents zoom on iOS */
         min-height: 80px;
     }
 
-    :deep(.mw-ai-chat-box .mw-ai-chat-box-submit-btn) {
+    .mw-ai-chat-box .mw-ai-chat-box-submit-btn {
         width: 100%;
         padding: 14px 24px;
     }
 }
 
 /* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
-        background: #ffffff;
-        border-color: #e1e5e9;
-        color: #2d3748;
-    }
+.dark .mw-ai-chat-box .mw-ai-chat-box-area-field,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field {
+    background: #374151;
+    border-color: #4b5563;
+    color: #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
-    :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder) {
-        color: #a0aec0;
-    }
+.dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {
+    color: #94a3b8;
+}
 
-    :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:focus) {
-        background: #ffffff;
-        border-color: #3b82f6;
-    }
+.dark .mw-ai-chat-box .mw-ai-chat-box-area-field:focus,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field:focus {
+    background: #374151;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark .mw-ai-chat-box .mw-ai-chat-box-area-field:hover,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field:hover {
+    border-color: #6b7280;
+    background: #374151;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.dark .mw-ai-chat-box::before,
+html.dark .mw-ai-chat-box::before {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.4);
+}
+
+.dark .mw-ai-chat-box .mw-ai-chat-box-submit-btn,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-submit-btn {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.5);
+}
+
+.dark .mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover,
+html.dark .mw-ai-chat-box .mw-ai-chat-box-submit-btn:hover {
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+}
+
+.dark .text-center,
+html.dark .text-center {
+    color: #818cf8;
+}
+
+.dark .text-danger,
+html.dark .text-danger {
+    color: #f87171;
+    background: #374151;
+    border: 1px solid #4b5563;
 }
 </style>

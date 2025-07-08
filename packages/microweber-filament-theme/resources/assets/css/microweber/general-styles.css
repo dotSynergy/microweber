@@ -1374,7 +1374,7 @@ select#activeLocale:not(:has(option:nth-of-type(2))) {
 
 
 .edit-mode-toggle-container {
-    @apply flex gap-3 flex-wrap;
+    @apply flex gap-3;
 
     @media (max-width: 768px) {
         @apply flex-col;

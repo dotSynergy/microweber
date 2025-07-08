@@ -186,7 +186,7 @@
             <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
                 <span
                     class="fs-2 font-weight-bold settings-main-group d-flex align-items-center justify-content-between">
-                    <span class="live-edit-label">Web</span>
+                    <span class="live-edit-label">Website design settings</span>
                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Reset stylesheet settings" class="reset-template-settings-and-stylesheet-button"
                             @click="resetAllDesignSelectorsValuesSettings">

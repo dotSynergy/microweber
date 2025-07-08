@@ -878,7 +878,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
 
             if(hasBg  && this.canBeEditable(hasBg)) {
-                bgImageHandles.setTarget(hasBg)
+                // bgImageHandles.setTarget(hasBg)
             }
 
 

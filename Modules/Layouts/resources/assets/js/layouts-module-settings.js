@@ -5,7 +5,14 @@ export default function layoutSettings(activeTab, optionGroup) {
         supports: [],
         optionGroup: '',
         modulesList: [],
-        modalId: null,
+        modalId: null,        // Add reactive properties for background states
+        hasBackgroundImage: false,
+        hasBackgroundVideo: false,
+        hasBackgroundColor: false,
+        hasBackgroundCursor: false,
+        backgroundImagePreview: null,
+        backgroundColorPreview: null,
+        backgroundCursorPreview: null,
 
         destroy() {
 
@@ -113,6 +120,37 @@ export default function layoutSettings(activeTab, optionGroup) {
             const {bg, bgOverlay, bgNode, target} = this.getTargets();
             mw.top().app.layoutBackground.setBackgroundImageSize(bgNode, size);
 
+        },        // Add method to update background states
+        updateBackgroundStates() {
+            let {bg, bgOverlay, bgNode, target} = this.getTargets();
+            
+            // Check for background image
+            let bgImage = mw.top().app.layoutBackground.getBackgroundImage(bgNode);
+            this.hasBackgroundImage = !!bgImage;
+            this.backgroundImagePreview = bgImage;
+            
+            // Check for background video
+            let bgVideo = mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
+            this.hasBackgroundVideo = !!bgVideo;
+            
+            // Check for background color
+            let bgColor = mw.top().app.layoutBackground.getBackgroundColor(bgOverlay);
+            this.hasBackgroundColor = !!bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent';
+            this.backgroundColorPreview = bgColor;
+            
+            // Check for cursor - only show if there's actually a cursor image set
+            let bgCursor = mw.top().app.layoutBackground.getBackgroundCursor(bgNode);
+            this.hasBackgroundCursor = !!bgCursor && bgCursor.trim() !== '' && bgCursor.trim() !== 'auto';
+            this.backgroundCursorPreview = bgCursor;
+        },
+
+        // Add method to remove background color
+        removeBackgroundColor() {
+            let {bg, bgOverlay, bgNode, target} = this.getTargets();
+            mw.top().app.layoutBackground.setBackgroundColor(bgOverlay, '');
+            this.showHideRemoveBackgroundsButtons();
+            mw.top().app.registerChange(mw.top().app.liveEdit.handles.get('layout').getTarget());
+            this.updateBackgroundStates();
         },
 
         handleReadyLayoutSettingLoaded() {
@@ -146,18 +184,21 @@ export default function layoutSettings(activeTab, optionGroup) {
             cursorPicker.on('change', () => {
                 const {bg, bgOverlay, bgNode, target} = this.getTargets();
                 mw.top().app.layoutBackground.setBackgroundCursor(target, cursorPicker.file);
+                this.updateBackgroundStates();
             });
             picker.on('change', () => {
                 const {bg, bgOverlay, bgNode, target} = this.getTargets();
                 videoPicker.setFile(null);
                 mw.top().app.layoutBackground.setBackgroundImage(bgNode, picker.file);
                 mw.top().app.registerChange(mw.top().app.liveEdit.handles.get('layout').getTarget());
+                this.updateBackgroundStates();
             });
             videoPicker.on('change', () => {
                 const {bg, bgOverlay, bgNode, target} = this.getTargets();
                 mw.top().app.layoutBackground.setBackgroundVideo(bgNode, videoPicker.file);
                 picker.setFile(null);
                 mw.top().app.registerChange(mw.top().app.liveEdit.handles.get('layout').getTarget());
+                this.updateBackgroundStates();
             });
 
             var cpo = document.querySelector('#overlay-color-picker');
@@ -171,6 +212,7 @@ export default function layoutSettings(activeTab, optionGroup) {
                         mw.top().app.layoutBackground.setBackgroundColor(bgOverlay, color);
                         this.showHideRemoveBackgroundsButtons();
                         mw.top().app.registerChange(mw.top().app.liveEdit.handles.get('layout').getTarget());
+                        this.updateBackgroundStates();
                     }
                 }
             });
@@ -199,6 +241,8 @@ export default function layoutSettings(activeTab, optionGroup) {
                 }
             }));
 
+            // Update background states after initialization
+            this.updateBackgroundStates();
         },
         handleLayoutTargetChange() {
             this.handleReadyLayoutSettingLoaded();
@@ -212,6 +256,7 @@ export default function layoutSettings(activeTab, optionGroup) {
                 $('#overlay-color-picker-remove-color').hide();
             }
             mw.top().app.registerChange(mw.top().app.liveEdit.handles.get('layout').getTarget());
+            this.updateBackgroundStates();
         }
     }
 }

@@ -7,8 +7,7 @@
     >
         <div id="mw-layout-setting-module" wire:ignore>
 
-            <div x-show="supports.length > 0">
-                <style>
+            <div x-show="supports.length > 0">                <style>
                     .change-layout-background-wrapper span {
                         font-size: 12px;
                     }
@@ -16,21 +15,73 @@
                     .change-layout-background-wrapper {
                         max-width: 90%;
                     }
+                    
+                    .tab-indicator {
+                        position: relative;
+                        overflow: visible;
+                    }
+                    
+                    .tab-indicator::after {
+                        content: '';
+                        position: absolute;
+                        top: -8px;
+                        right: -8px;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 50%;
+                        border: 2px solid #fff;
+                        background-size: cover;
+                        background-position: center;
+                        display: none;
+                        z-index: 10;
+                    }
+                    
+                    .tab-indicator.has-image::after {
+                        display: block;
+                        background-image: var(--bg-image);
+                    }
+                    
+                    .tab-indicator.has-color::after {
+                        display: block;
+                        background-color: var(--bg-color);
+                    }
+                    
+                    .tab-indicator.has-video::after {
+                        display: block;
+                        background-color: #007bff;
+                        content: '▶';
+                        color: white;
+                        font-size: 8px;
+                        line-height: 12px;
+                        text-align: center;
+                    }
+                    
+                    .tab-indicator.has-cursor::after {
+                        display: block;
+                        background-color: #6c757d;
+                        content: '↖';
+                        color: white;
+                        font-size: 10px;
+                        line-height: 12px;
+                        text-align: center;
+                    }
                 </style>
 
                 <div>
                     <div class="form-control-live-edit-label-wrapper d-flex mw-live-edit-resolutions-wrapper">
                         <span x-show="supports.includes('image')" x-on:click="activeTab = 'image'"
-                              x-bind:class="{ 'active': activeTab === 'image' }"
+                              x-bind:class="{ 'active': activeTab === 'image', 'tab-indicator': true, 'has-image': hasBackgroundImage }"
+                              x-bind:style="hasBackgroundImage && backgroundImagePreview ? `--bg-image: url('${backgroundImagePreview}')` : ''"
                               class="btn btn-icon tblr-body-color live-edit-toolbar-buttons w-100">Image</span>
                         <span x-show="supports.includes('video')" x-on:click="activeTab = 'video'"
-                              x-bind:class="{ 'active': activeTab === 'video' }"
+                              x-bind:class="{ 'active': activeTab === 'video', 'tab-indicator': true, 'has-video': hasBackgroundVideo }"
                               class="btn btn-icon tblr-body-color live-edit-toolbar-buttons w-100">Video</span>
                         <span x-show="supports.includes('color')" x-on:click="activeTab = 'color'"
-                              x-bind:class="{ 'active': activeTab === 'color' }"
+                              x-bind:class="{ 'active': activeTab === 'color', 'tab-indicator': true, 'has-color': hasBackgroundColor }"
+                              x-bind:style="hasBackgroundColor && backgroundColorPreview ? `--bg-color: ${backgroundColorPreview}` : ''"
                               class="btn btn-icon tblr-body-color live-edit-toolbar-buttons w-100">Color</span>
                         <span x-show="supports.includes('other')" x-on:click="activeTab = 'other'"
-                              x-bind:class="{ 'active': activeTab === 'other' }"
+                              x-bind:class="{ 'active': activeTab === 'other', 'tab-indicator': true, 'has-cursor': hasBackgroundCursor }"
                               class="btn btn-icon tblr-body-color live-edit-toolbar-buttons w-100"
                               style="display: none;">Other</span>
                     </div>
@@ -81,13 +132,12 @@
 
                     <div x-show="supports.includes('video') && activeTab === 'video'" class="bg-tab">
                         <div id="bg--video-picker"></div>
-                    </div>
-
-                    <div x-show="supports.includes('color') && activeTab === 'color'" class="bg-tab">
+                    </div>                    <div x-show="supports.includes('color') && activeTab === 'color'" class="bg-tab">
                         <div id="overlay-color-picker" class="card card-body"></div>
                         <div id="overlay-color-picker-remove-wrapper">
                             <button id="overlay-color-picker-remove-color" type="button"
-                                    class="btn btn-ghost-danger w-100">
+                                    class="btn btn-ghost-danger w-100"
+                                    x-on:click="removeBackgroundColor()">
                                 Remove color
                             </button>
                         </div>

@@ -25,19 +25,19 @@
     margin: 0 auto !important;
     padding: 0 !important;
     user-select: none;
-    svg{
+
+    svg {
         width: 22px;
     }
 }
 
 
-
-
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links:after,
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links svg + span{
+.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links svg + span {
     display: none !important;
 }
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar ul{
+
+.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar ul {
     display: flex;
     flex-direction: column;
     align-items: center !important;
@@ -45,13 +45,14 @@
     width: 100%;
     gap: 22px !important;
 }
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar{
+
+.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar {
     position: absolute;
     right: 0;
     bottom: 0;
     width: 50px;
     height: calc(100vh - var(--toolbar-height));
-    transition: transform .4s,  right .4s;
+    transition: transform .4s, right .4s;
     display: flex;
     flex-direction: column;
     align-items: center !important;
@@ -66,19 +67,19 @@
 
 }
 
-.live-edit-gui-editor-opened .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar{
+.live-edit-gui-editor-opened .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar {
     right: var(--sidebar-end-size);
 }
 
 .advanced-enter-active,
 .advanced-leave-active {
-  transition: 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .advanced-enter-from,
 .advanced-leave-to {
-  opacity: 0;
-  transform: translateY(100%);
+    opacity: 0;
+    transform: translateY(100%);
 }
 
 </style>
@@ -87,23 +88,22 @@
 <template>
 
 
-
-
-
     <div class="mw-live-edit-right-sidebar-wrapper me-2 " :class="'mw-live-edit-right-sidebar-template-' + template">
 
 
-
         <div v-on:click="handleInsertLayout()"
-            class="btn-icon live-edit-toolbar-buttons"
-            v-if="insertLayoutVisible">
-            <v-tooltip activator="parent" location="start"><Lang>Insert layout</Lang></v-tooltip>
+             class="btn-icon live-edit-toolbar-buttons"
+             v-if="insertLayoutVisible">
+            <v-tooltip activator="parent" location="start">
+                <Lang>Insert layout</Lang>
+            </v-tooltip>
             <span v-html="iconInsertlayout"></span>
         </div>
 
 
-        <span v-on:click="toggle('template-settings')" :class="{'live-edit-right-sidebar-active': buttonIsActive && !buttonIsActiveStyleEditor }"
-              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle" >
+        <span v-on:click="toggle('template-settings')"
+              :class="{'live-edit-right-sidebar-active': buttonIsActive && !buttonIsActiveStyleEditor }"
+              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle">
             <v-tooltip activator="parent" location="start"><Lang>Template settings</Lang></v-tooltip>
 
             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 96 960 960" width="22"><path
@@ -111,11 +111,13 @@
         </span>
 
 
-
-        <div v-on:click="toggle('style-editor')" :class="{'live-edit-right-sidebar-active': !buttonIsActive && buttonIsActiveStyleEditor }"
+        <div v-on:click="toggle('style-editor')"
+             :class="{'live-edit-right-sidebar-active': !buttonIsActive && buttonIsActiveStyleEditor }"
              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle">
-             <v-tooltip activator="parent" location="start"><Lang>Design</Lang></v-tooltip>
-            <svg   fill="currentColor"
+            <v-tooltip activator="parent" location="start">
+                <Lang>Design</Lang>
+            </v-tooltip>
+            <svg fill="currentColor"
                  xmlns="http://www.w3.org/2000/svg" height="22"
                  viewBox="0 -960 960 960" width="22">
                 <path
@@ -125,21 +127,37 @@
 
         <div v-on:click="handleQuickEdit()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
              class="btn-icon live-edit-toolbar-buttons">
-            <v-tooltip activator="parent" location="start"><Lang>Quick AI edit</Lang></v-tooltip>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22px" height="22px" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 472.403"><path fill-rule="nonzero" d="M144.317 85.269h223.368c15.381 0 29.391 6.325 39.567 16.494l.025-.024c10.163 10.164 16.477 24.193 16.477 39.599v189.728c0 15.401-6.326 29.425-16.485 39.584-10.159 10.159-24.183 16.484-39.584 16.484H144.317c-15.4 0-29.437-6.313-39.601-16.476-10.152-10.152-16.47-24.167-16.47-39.592V141.338c0-15.374 6.306-29.379 16.463-39.558l.078-.078c10.178-10.139 24.168-16.433 39.53-16.433zm59.98 204.329h-39.825l30.577-117.964h58.32l30.577 117.964h-39.825l-3.051-18.686h-33.725l-3.048 18.686zm15.645-81.726l-5.801 33.032h19.945l-5.61-33.032h-8.534zm74.007 81.726V171.634h37.749v117.964h-37.749zm161.348-35.797v30.763c0 3.165 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.586 5.752-5.751v-30.763c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zm0-70.639v30.762c0 3.163 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.589 5.752-5.752v-30.762c0-3.168-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.584-5.752 5.752zm0 141.278v30.763c0 3.165 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.587 5.752-5.752V324.44c0-3.165-2.587-5.751-5.752-5.751h-45.199c-3.165 0-5.752 2.586-5.752 5.751zm0-211.92v30.763c0 3.164 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.587 5.752-5.751V112.52c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zM56.703 253.801v30.763c0 3.165-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.586-5.752-5.751v-30.763c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zm0-70.639v30.762c0 3.163-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.589-5.752-5.752v-30.762c0-3.168 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.584 5.752 5.752zm0 141.278v30.763c0 3.165-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.587-5.752-5.752V324.44c0-3.165 2.587-5.751 5.752-5.751h45.199c3.165 0 5.752 2.586 5.752 5.751zm0-211.92v30.763c0 3.164-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.587-5.752-5.751V112.52c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zM346.579 415.7h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752v-45.199c0-3.165 2.586-5.752 5.751-5.752zM346.579 0h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752V5.752c0-3.165 2.586-5.752 5.751-5.752zm233.027 111.097H144.317a30.11 30.11 0 00-21.35 8.844l-.049.049a30.117 30.117 0 00-8.844 21.348v189.728c0 8.292 3.414 15.847 8.9 21.333 5.494 5.493 13.058 8.907 21.343 8.907h223.368c8.273 0 15.833-3.421 21.326-8.914s8.915-13.053 8.915-21.326V141.338c0-8.283-3.414-15.848-8.908-21.341v-.049c-5.454-5.456-13.006-8.851-21.333-8.851z"/></svg>
+            <v-tooltip activator="parent" location="start">
+                <Lang>Quick AI edit</Lang>
+            </v-tooltip>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22px" height="22px"
+                 shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+                 image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 472.403">
+                <path fill-rule="nonzero"
+                      d="M144.317 85.269h223.368c15.381 0 29.391 6.325 39.567 16.494l.025-.024c10.163 10.164 16.477 24.193 16.477 39.599v189.728c0 15.401-6.326 29.425-16.485 39.584-10.159 10.159-24.183 16.484-39.584 16.484H144.317c-15.4 0-29.437-6.313-39.601-16.476-10.152-10.152-16.47-24.167-16.47-39.592V141.338c0-15.374 6.306-29.379 16.463-39.558l.078-.078c10.178-10.139 24.168-16.433 39.53-16.433zm59.98 204.329h-39.825l30.577-117.964h58.32l30.577 117.964h-39.825l-3.051-18.686h-33.725l-3.048 18.686zm15.645-81.726l-5.801 33.032h19.945l-5.61-33.032h-8.534zm74.007 81.726V171.634h37.749v117.964h-37.749zm161.348-35.797v30.763c0 3.165 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.586 5.752-5.751v-30.763c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zm0-70.639v30.762c0 3.163 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.589 5.752-5.752v-30.762c0-3.168-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.584-5.752 5.752zm0 141.278v30.763c0 3.165 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.587 5.752-5.752V324.44c0-3.165-2.587-5.751-5.752-5.751h-45.199c-3.165 0-5.752 2.586-5.752 5.751zm0-211.92v30.763c0 3.164 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.587 5.752-5.751V112.52c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zM56.703 253.801v30.763c0 3.165-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.586-5.752-5.751v-30.763c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zm0-70.639v30.762c0 3.163-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.589-5.752-5.752v-30.762c0-3.168 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.584 5.752 5.752zm0 141.278v30.763c0 3.165-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.587-5.752-5.752V324.44c0-3.165 2.587-5.751 5.752-5.751h45.199c3.165 0 5.752 2.586 5.752 5.751zm0-211.92v30.763c0 3.164-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.587-5.752-5.751V112.52c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zM346.579 415.7h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752v-45.199c0-3.165 2.586-5.752 5.751-5.752zM346.579 0h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752V5.752c0-3.165 2.586-5.752 5.751-5.752zm233.027 111.097H144.317a30.11 30.11 0 00-21.35 8.844l-.049.049a30.117 30.117 0 00-8.844 21.348v189.728c0 8.292 3.414 15.847 8.9 21.333 5.494 5.493 13.058 8.907 21.343 8.907h223.368c8.273 0 15.833-3.421 21.326-8.914s8.915-13.053 8.915-21.326V141.338c0-8.283-3.414-15.848-8.908-21.341v-.049c-5.454-5.456-13.006-8.851-21.333-8.851z"/>
+            </svg>
         </div>
 
 
+        <div :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
+             class="btn-icon live-edit-toolbar-buttons">
+            <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>
+        </div>
 
 
-        <div  style="margin-top:auto;">
+        <div style="margin-top:auto;">
             <Transition name="advanced">
-                <div  v-if=" advanced" style="width: 100%;margin-bottom: 20px">
-                    <div class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()"  :class="{'live-edit-right-sidebar-active': !!layers }">
-                        <v-tooltip activator="parent" location="start"><Lang>Layers</Lang></v-tooltip>
+                <div v-if=" advanced" style="width: 100%;margin-bottom: 20px">
+                    <div class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()"
+                         :class="{'live-edit-right-sidebar-active': !!layers }">
+                        <v-tooltip activator="parent" location="start">
+                            <Lang>Layers</Lang>
+                        </v-tooltip>
 
-                        <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                            <path d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
+                        <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px"
+                             viewBox="0 -960 960 960" width="24px">
+                            <path
+                                d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
                         </svg>
                         <Lang>Layers</Lang>
                     </div>
@@ -149,9 +167,15 @@
 
 
             <div v-on:click="handleAdvanced()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
-                class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-advanced">
-                <v-tooltip activator="parent" location="start"><Lang>Advanced</Lang></v-tooltip>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320Zm-40-120h80v-200h-80v200ZM370-80l-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm40-320Z"/></svg>
+                 class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-advanced">
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Advanced</Lang>
+                </v-tooltip>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                     fill="#e8eaed">
+                    <path
+                        d="M480-320q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320Zm-40-120h80v-200h-80v200ZM370-80l-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm40-320Z"/>
+                </svg>
 
             </div>
         </div>
@@ -165,9 +189,10 @@
 
 import ToolsButtons from "../RightSidebar/ToolsButtons.vue";
 import ToolbarMulilanguageSelector from "./ToolbarMulilanguageSelector.vue";
+import CurrentLayoutSettingsButtons from "./CurrentLayoutSettingsButtons.vue";
 import CSSGUIService from "../../../api-core/services/services/css-gui.service.js";
 
-let handleLayersChange = function(){
+let handleLayersChange = function () {
     this.layers = mw.top().app.liveEditWidgets.status.layersOpened;
 };
 
@@ -176,6 +201,7 @@ export default {
     components: {
         ToolsButtons,
         ToolbarMulilanguageSelector,
+        CurrentLayoutSettingsButtons,
 
     },
     props: {
@@ -189,29 +215,29 @@ export default {
             let active = mw.top().app.liveEdit.layoutHandle.getTarget();
             const selector = '.edit[data-layout-container] .module-layouts';
 
-             if(!active || !active.matches(selector)) {
+            if (!active || !active.matches(selector)) {
                 const doc = mw.top().app.canvas.getDocument();
-                const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight/2);
+                const scrollCenter = doc.defaultView.scrollY + (doc.defaultView.innerHeight / 2);
                 const docHeight = Math.max(doc.documentElement.clientHeight, doc.defaultView.innerHeight);
 
                 const arr = Array.from(doc.querySelectorAll(selector))
                 const activeIndex = arr
-                .map(node => {
-                    const rect = node.getBoundingClientRect();
-                    const rectTop = rect.top + doc.defaultView.scrollY;
+                    .map(node => {
+                        const rect = node.getBoundingClientRect();
+                        const rectTop = rect.top + doc.defaultView.scrollY;
 
-                    return {
-                        top: rectTop,
-                        visible: !(rect.bottom < 0 || rectTop - docHeight >= 0),
-                        node,
-                    };
-                })
-                .reduce(function(prev, curr, index) {
+                        return {
+                            top: rectTop,
+                            visible: !(rect.bottom < 0 || rectTop - docHeight >= 0),
+                            node,
+                        };
+                    })
+                    .reduce(function (prev, curr, index) {
 
-                    return (curr.visible && Math.abs(curr.top - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
-                }, -1);
+                        return (curr.visible && Math.abs(curr.top - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
+                    }, -1);
 
-                if(activeIndex >= 0) {
+                if (activeIndex >= 0) {
                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
 
@@ -219,8 +245,7 @@ export default {
             }
 
 
-
-            if(active && active.matches(selector)) {
+            if (active && active.matches(selector)) {
                 active.scrollIntoView();
                 mw.top().app.editor.dispatch('insertLayoutRequestOnBottom', active)
             }
@@ -229,7 +254,7 @@ export default {
         handleQuickEdit: function () {
             mw.app.liveEditWidgets.toggleQuickEditComponent()
         },
-        handleAdvanced () {
+        handleAdvanced() {
             this.advanced = !this.advanced;
         },
         handleLayers() {
@@ -245,14 +270,14 @@ export default {
 
             this.$refs.moreSettingsDropdown?.classList.remove('show');
 
-            if(name !== 'style-editor') {
+            if (name !== 'style-editor') {
                 CSSGUIService.hide()
             }
-            if(name === 'template-settings') {
+            if (name === 'template-settings') {
 
                 mw.top().app.templateSettingsWidget.toggle()
 
-            } else if(name === 'style-editor') {
+            } else if (name === 'style-editor') {
 
                 CSSGUIService.toggle()
 
@@ -289,7 +314,6 @@ export default {
 
     },
     mounted() {
-
 
 
         handleLayersChange = handleLayersChange.bind(this);
@@ -335,7 +359,7 @@ export default {
             });
 
 
-            if(mw.top().app.liveEditWidgets) {
+            if (mw.top().app.liveEditWidgets) {
                 mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
                 mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
             }
@@ -356,7 +380,7 @@ export default {
             } else if (show == 'style-editor') {
                 instance.buttonIsActive = false;
                 instance.buttonIsActiveStyleEditor = true;
-            }else if (show == 'template-settings-close') {
+            } else if (show == 'template-settings-close') {
                 instance.buttonIsActive = false;
                 instance.buttonIsActiveStyleEditor = false;
             } else {
@@ -364,7 +388,6 @@ export default {
                 instance.buttonIsActiveStyleEditor = false;
 
             }
-
 
 
         });
@@ -382,7 +405,7 @@ export default {
         });
         mw.top().app.guiEditorBox.on('hide', () => this.buttonIsActiveStyleEditor = false);
 
-        mw.top().app.readyPromise(()=>{
+        mw.top().app.readyPromise(() => {
             mw.top().app.liveEditWidgets.on('openQuickEditComponent', () => {
                 this.buttonIsActiveQuickEdit = true
             })

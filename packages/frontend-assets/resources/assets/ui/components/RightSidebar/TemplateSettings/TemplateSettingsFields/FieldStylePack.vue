@@ -292,11 +292,11 @@ export default {
                     });
                 });
 
-                if(
-                    typeof(previewDiv) != "undefined"
+                if (
+                    typeof (previewDiv) != "undefined"
                     && previewDiv
                 ) {
-                     //pply css variables to the preview div
+                    //pply css variables to the preview div
                     Object.keys(stylePack.properties).forEach(property => {
                         if (property.startsWith('--')) {
                             previewDiv.style.setProperty(property, stylePack.properties[property]);
@@ -344,7 +344,7 @@ export default {
             if (mw.top() && mw.top().app) {
 
 
-                if(!this.isSingleSettingMode) {
+                if (!this.isSingleSettingMode) {
                     mw.top().app.dispatch('stylePackGlobalReload', {
                         sourceComponentId: this.uniqueId,
                         appliedStylePack: stylePack,
@@ -462,7 +462,7 @@ export default {
                 this.injectFontsIntoIframe();
                 mw.top().tools.iframeAutoHeight(this.iframe);
                 const isDark = mw.top().app.theme.isDark();
-                 document.querySelectorAll('iframe.preview-iframe[srcdoc]')
+                document.querySelectorAll('iframe.preview-iframe[srcdoc]')
                     .forEach(frame => frame.contentDocument.documentElement.classList[isDark ? 'add' : 'remove']('dark'))
             };
 
@@ -965,7 +965,6 @@ export default {
         createStylePackElement(stylePack, index, iframeDoc) {
             const stylePackDiv = iframeDoc.createElement('div');
             stylePackDiv.className = 'style-pack-item';
-
 
 
             stylePackDiv.onclick = () => this.applyStylePack(stylePack);

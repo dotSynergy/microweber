@@ -19,9 +19,6 @@ import liveEditHelpers from "./live-edit-helpers.service.js";
 import {BGImageHandles} from "./handle-bg-image.js";
 
 
-
-
-
 export class LiveEdit {
 
 
@@ -41,6 +38,7 @@ export class LiveEdit {
 
         this.paused = false;
         this.activeNode = false;
+        this.clickedLayoutNode = false;
         this.lastMousePosition = null;
         this.liveEditHelpers = liveEditHelpers;
 
@@ -53,23 +51,39 @@ export class LiveEdit {
         }
 
 
+        mw.top().app.canvas.on('canvasDocumentClickStart', e => {
+            const {
+                pageX,
+                pageY,
+                clientX,
+                clientY,
+            } = e;
+            this.pointerCoordinates = {
+                pageX,
+                pageY,
+                clientX,
+                clientY,
+            }
+        })
 
 
-mw.top().app.canvas.on('canvasDocumentClickStart', e => {
-     const {
-        pageX,
-        pageY,
-        clientX,
-        clientY,
-    } = e;
-    this.pointerCoordinates = {
-        pageX,
-        pageY,
-        clientX,
-        clientY,
-    }
-})
+        mw.top().app.canvas.on('canvasDocumentClick', e => {
 
+            var node = e.target ? e.target : e;
+            if (node && node.classList.contains('module-layouts')) {
+                this.clickedLayoutNode = node;
+            } else if (node) {
+                var activeLayout = node.closest('.module-layouts');
+                if (activeLayout) {
+                    this.clickedLayoutNode = activeLayout;
+                }
+            } else {
+                this.clickedLayoutNode = false;
+
+            }
+
+
+        })
 
 
         var defaults = {
@@ -122,11 +136,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         this.dropIndicator = new DropIndicator(this.settings);
 
 
-
         this.elementHandleContent = new ElementHandleContent(this);
         this.moduleHandleContent = new ModuleHandleContent(this);
         this.layoutHandleContent = new LayoutHandleContent(this);
-
 
 
         this.layoutHandleContent.on('insertLayoutRequest', () => {
@@ -162,34 +174,33 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         };
 
 
-
         var elementHandle = this.elementHandle = new Handle({
             ...this.settings,
             $name: '$elementHandle',
             dropIndicator: this.dropIndicator,
             content: this.elementHandleContent.root,
 
-            handle:  '.mw-handle-drag-button-element' ,
+            handle: '.mw-handle-drag-button-element',
 
             document: this.settings.document,
             stateManager: this.settings.stateManager,
             resizable: true,
 
-            onPosition: function(menu, transform, off){
-                if(off.top < 50 ) {
+            onPosition: function (menu, transform, off) {
+                if (off.top < 50) {
                     menu.style.top = `calc(100% + 10px)`;
                 } else {
                     menu.style.top = ``;
                 }
 
             },
-            offsetMenuTransform: function(scroll, off, menu){
+            offsetMenuTransform: function (scroll, off, menu) {
                 let transform = -60;
-                if(scroll.y > (off.top - 20)) {
+                if (scroll.y > (off.top - 20)) {
                     transform = (scroll.y - (off.top - 20));
 
-                    if((transform + menu.offsetHeight + 30) > off.height) {
-                        transform =  (off.height - (menu.offsetHeight + 30))  ;
+                    if ((transform + menu.offsetHeight + 30) > off.height) {
+                        transform = (off.height - (menu.offsetHeight + 30));
                     }
                 }
                 return transform;
@@ -201,9 +212,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         elementHandle.on('hide', e => {
 
             const prev = elementHandle.getPreviousTarget();
-            if(prev) {
+            if (prev) {
                 const target = mw.tools.firstParentOrCurrentWithAnyOfClasses(prev, ['edit', 'safe-mode']);
-                if(lastPrevTarget !== target) {
+                if (lastPrevTarget !== target) {
                     mw.top().app?.richTextEditorAPI?.normalize(target);
                     lastPrevTarget = target;
                 }
@@ -222,7 +233,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             this.isResizing = false;
             var target = mw.top().app.liveEdit.handles.get('element').getTarget();
 
-            if(!target){
+            if (!target) {
                 return;
             }
 
@@ -230,25 +241,21 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 'max-width': '100%',
                 'width': target.style.width
             }
-            if(target.style.minHeight) {
+            if (target.style.minHeight) {
                 css['min-height'] = target.style.minHeight
             }
-            if(target.style.height) {
+            if (target.style.height) {
                 css['height'] = target.style.height
             }
             mw.top().app.cssEditor.style(target, css)
 
         });
 
-         elementHandle.on('targetChange', target => {
+        elementHandle.on('targetChange', target => {
             this.elementHandleContent.menu.setTarget(target);
 
 
-
-
-
-
-            if (target.className.includes('col-') || target.className.includes('no-resize') ) {
+            if (target.className.includes('col-') || target.className.includes('no-resize')) {
                 elementHandle.resizer.disable()
             } else {
                 elementHandle.resizer.enable()
@@ -270,18 +277,16 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             //mw.app.domTreeSelect(target)
 
 
-            const exceptions = ['edit', 'col', 'row', 'cloneable' ];
+            const exceptions = ['edit', 'col', 'row', 'cloneable'];
             const classNameNamespaces = ['col-', 'w-', 'h-'];
 
 
             let resizerEnabled = !Array.from(target.classList).find(cls => !!classNameNamespaces.find(c => cls.indexOf(c) === 0)) && !DomService.hasAnyOfClasses(target, exceptions) && !DomService.hasParentsWithClass(target, 'img-as-background');
 
 
-            if(resizerEnabled) {
+            if (resizerEnabled) {
                 resizerEnabled = !liveEditHelpers.targetIsIcon(target)
             }
-
-
 
 
             elementHandle.resizerEnabled(resizerEnabled)
@@ -297,7 +302,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             stateManager: this.settings.stateManager,
             resizable: false,
             id: 'mw-handle-item-module-menu',
-            handle:  '.mw-handle-drag-button-module' ,
+            handle: '.mw-handle-drag-button-module',
             setDraggableTarget: function (target) {
                 if (target.nodeType === 1) {
 
@@ -305,21 +310,21 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 }
                 return false;
             },
-            onPosition: function(menu, transform, off){
+            onPosition: function (menu, transform, off) {
 
-                if(off.top < 50 ) {
+                if (off.top < 50) {
                     menu.style.top = `calc(100% + 10px)`;
                 } else {
                     menu.style.top = ``;
                 }
             },
-            offsetMenuTransform: function(scroll, off, menu){
+            offsetMenuTransform: function (scroll, off, menu) {
                 let transform = -60;
-                if(scroll.y > (off.top - 20)) {
+                if (scroll.y > (off.top - 20)) {
                     transform = (scroll.y - (off.top - 20));
 
-                    if((transform + menu.offsetHeight + 30) > off.height) {
-                        transform =  (off.height - (menu.offsetHeight + 30))  ;
+                    if ((transform + menu.offsetHeight + 30) > off.height) {
+                        transform = (off.height - (menu.offsetHeight + 30));
                     }
                 }
                 return transform;
@@ -342,7 +347,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             });
         };
 
-        moduleHandle.on('targetChange', target =>  {
+        moduleHandle.on('targetChange', target => {
 
             scope.getModuleQuickSettings(target.dataset.type).then(function (settings) {
 
@@ -370,13 +375,13 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             document: this.settings.document,
             stateManager: this.settings.stateManager,
             type: 'layout',
-            offsetMenuTransform: function(scroll, off, menu){
+            offsetMenuTransform: function (scroll, off, menu) {
                 let transform = 10;
-                if(scroll.y > (off.top - 10)) {
+                if (scroll.y > (off.top - 10)) {
                     transform = (scroll.y - (off.top - 10));
 
-                    if((transform + menu.offsetHeight + 30) > off.height && menu.offsetHeight < off.height) {
-                        transform =  (off.height - (menu.offsetHeight + 30))  ;
+                    if ((transform + menu.offsetHeight + 30) > off.height && menu.offsetHeight < off.height) {
+                        transform = (off.height - (menu.offsetHeight + 30));
                     }
                 }
                 return transform;
@@ -394,7 +399,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         var title = scope.lang('Layout');
         this.layoutHandleContent.menu.setTitle(title)
-        layoutHandle.on('targetChange',  target => {
+        layoutHandle.on('targetChange', target => {
             scope.getLayoutQuickSettings(target.dataset.type).then(function (settings) {
 
                 mw.app.liveEdit.layoutHandleContent.menu.setMenu('dynamic', settings)
@@ -402,29 +407,27 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             });
 
 
-
             this.layoutHandleContent.menu.setTarget(target);
             this.layoutHandleContent.menu.setTitle(title);
 
 
             if (scope.elementAnalyzer.isEditOrInEdit(target)) {
-                if(this.layoutHandleContent.plusTop){
+                if (this.layoutHandleContent.plusTop) {
                     this.layoutHandleContent.plusTop.show();
                 }
-                if(this.layoutHandleContent.plusBottom){
+                if (this.layoutHandleContent.plusBottom) {
                     this.layoutHandleContent.plusBottom.show();
                 }
 
             } else {
-                if(this.layoutHandleContent.plusTop){
+                if (this.layoutHandleContent.plusTop) {
                     this.layoutHandleContent.plusTop.hide();
                 }
-                if(this.layoutHandleContent.plusBottom){
+                if (this.layoutHandleContent.plusBottom) {
                     this.layoutHandleContent.plusBottom.hide();
                 }
             }
             this.layoutHandleContent.positionButtons(target);
-
 
 
         });
@@ -465,15 +468,15 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
     }
 
     refreshElementHandle(target) {
-         mw.app.liveEdit.elementHandleContent.menu.setTarget(target);
+        mw.app.liveEdit.elementHandleContent.menu.setTarget(target);
     }
 
     refreshModuleHandle(target) {
-         mw.app.liveEdit.moduleHandleContent.menu.setTarget(target);
+        mw.app.liveEdit.moduleHandleContent.menu.setTarget(target);
     }
 
     refreshLayoutHandle(target) {
-         mw.app.liveEdit.layoutHandleContent.menu.setTarget(target);
+        mw.app.liveEdit.layoutHandleContent.menu.setTarget(target);
     }
 
 
@@ -481,29 +484,32 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         this.handles.hide();
         this.paused = true;
     }
+
     getSelectedNode() {
         return this.activeNode;
     }
+
     getSelectedElementNode() {
         var node = this.getSelectedNode();
         if (node && node.classList.contains('element')) {
             return node;
         }
         if (node) {
-            var  activeLayout = node.closest('.element');
-            if(activeLayout) {
+            var activeLayout = node.closest('.element');
+            if (activeLayout) {
                 return activeLayout;
             }
         }
     }
+
     getSelectedModuleNode() {
         var node = this.getSelectedNode();
         if (node && node.classList.contains('module')) {
             return node;
         }
         if (node) {
-            var  activeLayout = node.closest('.module');
-            if(activeLayout) {
+            var activeLayout = node.closest('.module');
+            if (activeLayout) {
                 return activeLayout;
             }
         }
@@ -511,40 +517,41 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
 
     getSelectedLayoutNode() {
-        var node = this.getSelectedNode();
+        var node = this.clickedLayoutNode;
+
+        if (node ) {
+            return node;
+        }
+
+        node = this.getSelectedNode();
         if (node && node.classList.contains('module-layouts')) {
             return node;
         }
         if (node) {
-           var  activeLayout = node.closest('.module-layouts');
-           if(activeLayout) {
-               return activeLayout;
-           }
+            var activeLayout = node.closest('.module-layouts');
+            if (activeLayout) {
+                return activeLayout;
+            }
         }
     }
 
     selectNode(target, event) {
 
 
-
-
-        if(target.nodeName === 'BODY') {
+        if (target.nodeName === 'BODY') {
 
             return
         }
 
 
-
-
-
-        if (this.handles.targetIsOrInsideHandle(target ) || this.handles.targetIsSelected(target, this.interactionHandle) ) {
+        if (this.handles.targetIsOrInsideHandle(target) || this.handles.targetIsSelected(target, this.interactionHandle)) {
 
             return
         }
 
 
-        if( target.isContentEditable ) {
-            if(target.nodeName === 'IMG') {
+        if (target.isContentEditable) {
+            if (target.nodeName === 'IMG') {
                 this.stopTyping()
                 mw.top().win.mw.app.liveEdit.handles.get('element').set(target);
 
@@ -552,23 +559,19 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             return;
         }
 
-        if(target.classList.contains('mw-free-layout-container')) {
+        if (target.classList.contains('mw-free-layout-container')) {
             target = DomService.firstParentOrCurrentWithClass(target, 'module-layouts')
         }
 
 
-
-
-
         this.activeNode = target;
-
 
 
         // const elements = this.observe.fromEvent(e);
         const elements = [];
         const directTargets = ['IMG'];
         const isIcon = liveEditHelpers.targetIsIcon(target);
-        if(isIcon){
+        if (isIcon) {
             elements.push(target);
         } else if (directTargets.indexOf(target.nodeName) !== -1) {
             elements.push(target);
@@ -579,7 +582,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         let first = elements[0];
 
-        if(!isIcon) {
+        if (!isIcon) {
             target = DomService.firstParentOrCurrentWithAnyOfClasses(elements[0], ['element', 'module', 'cloneable', 'layout', 'edit', 'mw-row']);
         }
 
@@ -589,38 +592,28 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         }
 
 
+        var elementTarget = this.handles.get('element').getTarget()
 
-
-        var elementTarget =  this.handles.get('element').getTarget()
-
-        if(target && !target.classList.contains('module') && elementTarget && elementTarget.contains(target) && elementTarget.isContentEditable) {
+        if (target && !target.classList.contains('module') && elementTarget && elementTarget.contains(target) && elementTarget.isContentEditable) {
             return
         }
-
-
-
-
-
 
 
         first = target;
 
 
+        if (target && target === elementTarget) {
 
-
-        if(target && target === elementTarget  ) {
-
-           if(typeof event !== 'undefined') {
-               event.preventDefault();
-               event.stopImmediatePropagation();
-               mw.app.editor.dispatch('editNodeRequest', target, event);
-           } else {
-               mw.app.editor.dispatch('editNodeRequest', target);
-           }
+            if (typeof event !== 'undefined') {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                mw.app.editor.dispatch('editNodeRequest', target, event);
+            } else {
+                mw.app.editor.dispatch('editNodeRequest', target);
+            }
 
 
         }
-
 
 
         this.document.querySelectorAll('[contenteditable]').forEach(node => {
@@ -635,17 +628,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         this.handles.hide();
 
 
-
-
-
-
         if (first) {
             first = this._hoverAndSelectExceptions(first)
             const type = this.elementAnalyzer.getType(first);
-
-
-
-
 
 
             if (type !== 'layout') {
@@ -671,7 +656,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                     this.handles.set('layout', first, undefined, event);
                 } else if (type === 'edit') {
                     this.handles.set('element', first, undefined, event);
-                }  else if (type === 'icon') {
+                } else if (type === 'icon') {
                     this.handles.set('element', first, undefined, event);
                 } else {
                     this.handles.hide();
@@ -688,9 +673,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
     }
 
-     _hoverAndSelectExceptionsForStrictMode = (target) => {
+    _hoverAndSelectExceptionsForStrictMode = (target) => {
 
-        if(!target) {
+        if (!target) {
             return false;
         }
 
@@ -698,17 +683,14 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         return isInRichText
 
-     }
+    }
 
-     _hoverAndSelectExceptions = (target) => {
+    _hoverAndSelectExceptions = (target) => {
 
         const strictMode = mw.top().app.strictMode();
 
 
-
-
-
-        if(strictMode) {
+        if (strictMode) {
             const strictException = this._hoverAndSelectExceptionsForStrictMode(target);
 
             return strictException;
@@ -717,9 +699,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         }
 
 
-
-
-        if(target) {
+        if (target) {
             if (target && target.classList && target.classList.contains('module-custom-fields')) {
                 var form = DomService.firstParentOrCurrentWithClass(target, 'module-contact-form');
                 if (form) {
@@ -728,41 +708,36 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             }
 
 
-
-
-
             if (target && target.parentNode && target.parentNode.classList.contains('module-layouts')) {
                 target = target.parentNode
             }
 
 
             // check if module is inaccesible and move the handle to the parent if its layout
-            var isInaccesible =  liveEditHelpers.targetIsInacesibleModule(target);
+            var isInaccesible = liveEditHelpers.targetIsInacesibleModule(target);
             if (isInaccesible) {
                 //check if parents are in layout
-               var isInLayout = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['module-layouts']);
-               if(isInLayout){
-                  target = isInLayout;
-               }
+                var isInLayout = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['module-layouts']);
+                if (isInLayout) {
+                    target = isInLayout;
+                }
             }
 
 
-
-
-            if(target && target.classList.contains('mw-empty-element') || target.classList.contains('mw-col-container')){
+            if (target && target.classList.contains('mw-empty-element') || target.classList.contains('mw-col-container')) {
                 const col = DomService.firstParentOrCurrentWithClass(target, 'mw-col');
-                if(col) {
+                if (col) {
                     target = col
                 }
             }
 
             const isIcon = liveEditHelpers.targetIsIcon(target);
 
-            if(isIcon) {
+            if (isIcon) {
                 return target
 
 
-            } else if(!target.classList.contains('cloneable')) {
+            } else if (!target.classList.contains('cloneable')) {
 
                 // var newTarget = mw.app.liveEdit.elementHandleContent.settingsTarget.getSettingsTarget(target);
                 // if (target !== newTarget) {
@@ -770,8 +745,8 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 // }
 
                 const hasCloneable = DomService.firstParentOrCurrentWithClass(target.parentElement, 'cloneable');
-                if(hasCloneable) {
-                    if((target.getBoundingClientRect().top - hasCloneable.getBoundingClientRect().top) < 5) {
+                if (hasCloneable) {
+                    if ((target.getBoundingClientRect().top - hasCloneable.getBoundingClientRect().top) < 5) {
                         target = hasCloneable;
                         hasCloneable.classList.add('element')
 
@@ -780,11 +755,10 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 }
             }
 
-            if(!DomService.parentsOrCurrentOrderMatchOrOnlyFirstOrNone(target, ['allow-select', 'no-select'])) {
+            if (!DomService.parentsOrCurrentOrderMatchOrOnlyFirstOrNone(target, ['allow-select', 'no-select'])) {
                 target = null;
             }
         }
-
 
 
         return target
@@ -798,16 +772,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         }
 
 
-
-
-
-
-
-
         const _eventsHandle = (e) => {
-
-
-
 
 
             var target = e.target ? e.target : e;
@@ -826,7 +791,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
 
         function isInViewport(el) {
-            if(!el || !el.parentNode) {
+            if (!el || !el.parentNode) {
                 return false;
             }
 
@@ -839,7 +804,6 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             const elWidth = el.offsetWidth;
 
 
-
             if (bounding.top >= -elHeight
                 && bounding.left >= -elWidth
                 && bounding.right <= (win.innerWidth || doc.documentElement.clientWidth) + elWidth
@@ -848,13 +812,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 return true;
             } else {
 
-                return  false
-             }
+                return false
+            }
         }
-
-
-
-
 
 
         const bgImageHandles = new BGImageHandles({
@@ -866,23 +826,20 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         let events, _hovered = [];
 
-         events = 'mousedown touchstart';
+        events = 'mousedown touchstart';
         // events = 'click';
         ElementManager(this.root).on('mousemove', (e) => {
-
-
 
 
             const hasBg = DomService.firstParentOrCurrentWithAnyOfClasses(e.target, ['background-image-holder', 'img-holder']);
 
 
-
-            if(hasBg  && this.canBeEditable(hasBg)) {
+            if (hasBg && this.canBeEditable(hasBg)) {
                 // bgImageHandles.setTarget(hasBg)
             }
 
 
-            var currentMousePosition = { x: e.pageX, y: e.pageY };
+            var currentMousePosition = {x: e.pageX, y: e.pageY};
             if (this.lastMousePosition) {
                 var distance = this.getDistance(this.lastMousePosition, currentMousePosition);
                 if (distance >= 3) {
@@ -901,9 +858,8 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             }
 
 
-
             if (this.paused || this.isResizing) {
-                if(bgImageHandles) {
+                if (bgImageHandles) {
                     bgImageHandles.hide();
                 }
                 this.interactionHandle.hide();
@@ -918,13 +874,13 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             let isTextInColumn = false;
             let isTextOnly = false;
 
-            if(e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
+            if (e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
                 isTextInColumn = e.target.className.indexOf('col-') !== -1;
             }
-            if(e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
+            if (e.target && e.target.className && typeof e.target.className.indexOf === 'function') {
                 isTextOnly = !!e.target.textContent.trim() && !e.target.firstElementChild;
             }
-            if(isTextInColumn && isTextOnly && this.elementAnalyzer.isEditOrInEdit(e.target)) {
+            if (isTextInColumn && isTextOnly && this.elementAnalyzer.isEditOrInEdit(e.target)) {
                 e.target.innerHTML = `<div class="element">${e.target.innerHTML}</div>`;
             }
 
@@ -938,31 +894,26 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             let moduleTarget = this.handles.get('module').getTarget();
 
 
-
-
-            if(!isInViewport(elementTarget)) {
+            if (!isInViewport(elementTarget)) {
                 this.handles.get('element').hide()
                 this.handles.get('element').set(null)
             }
 
-            if(!isInViewport(moduleTarget)) {
+            if (!isInViewport(moduleTarget)) {
                 this.handles.get('module').hide()
                 this.handles.get('module').set(null)
             }
             let target
 
-            if(liveEditHelpers.targetIsIcon(elements[0])) {
+            if (liveEditHelpers.targetIsIcon(elements[0])) {
                 target = elements[0]
             } else {
-                target= DomService.firstParentOrCurrentWithAnyOfClasses(elements[0], ['element', 'module', 'cloneable', 'edit', 'mw-row']);
+                target = DomService.firstParentOrCurrentWithAnyOfClasses(elements[0], ['element', 'module', 'cloneable', 'edit', 'mw-row']);
             }
-
 
 
             const layout = DomService.firstParentOrCurrentWithAnyOfClasses(e.target, ['module-layouts']);
             let layoutHasSelectedTarget = false;
-
-
 
 
             target = this._hoverAndSelectExceptions(target);
@@ -980,15 +931,13 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             }
 
 
-            if(target === this.interactionHandle.getTarget()) {
+            if (target === this.interactionHandle.getTarget()) {
                 this.interactionHandle.show();
                 return
             }
 
 
-            if (layout /*&& !target*/  ) {
-
-
+            if (layout /*&& !target*/) {
 
 
                 if (layout.contains(elementTarget)) {
@@ -1000,8 +949,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 }
 
 
-
-                if(!layoutHasSelectedTarget) {
+                if (!layoutHasSelectedTarget) {
                     this.handles.set('layout', layout);
                 } else {
                     this.handles.set('layout', null);
@@ -1009,17 +957,14 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 }
 
 
-
             }
-
-
 
 
             if (target && !this.handles.targetIsSelectedAndHandleIsNotHidden(target, this.interactionHandle) && !target.classList.contains('module-layouts')) {
                 var title = '';
                 if (target.dataset.mwTitle) {
                     title = target.dataset.mwTitle;
-                } else if ( liveEditHelpers.targetIsIcon(target) ) {
+                } else if (liveEditHelpers.targetIsIcon(target)) {
                     title = this.lang('Icon');
                 } else if (target.dataset.type) {
                     title = target.dataset.type;
@@ -1032,7 +977,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 } else if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(target.nodeName)) {
                     title = this.lang('Title ' + target.nodeName.replace('H', ''));
                 } else if (['DIV', 'MAIN', 'SECTION'].includes(target.nodeName)) {
-                    if(target.classList.contains('mw-row')) {
+                    if (target.classList.contains('mw-row')) {
                         title = this.lang('Columns');
                     } else {
                         title = this.lang('Block');
@@ -1041,7 +986,6 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
                 } else {
                     title = this.lang('Text');
                 }
-
 
 
                 this.interactionHandle.menu.setTitle(title);
@@ -1056,13 +1000,13 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
         let _dblclicktarget
 
         ElementManager(this.root).on('click', (e) => {
-            if(e && e.detail > 1){
+            if (e && e.detail > 1) {
                 e.preventDefault();
             }
         })
         ElementManager(this.root).on('dblclick', (e) => {
 
-            if(mw.app.isPreview()) {
+            if (mw.app.isPreview()) {
                 return;
             }
 
@@ -1078,9 +1022,6 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             }
 
 
-
-
-
             var selected = mw.app.liveEdit.elementHandle.getTarget();
             var module = mw.app.liveEdit.moduleHandle.getTarget();
             var layout = mw.app.liveEdit.layoutHandle.getTarget();
@@ -1089,16 +1030,14 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             var tagName = e.target.tagName.toLowerCase();
 
 
-
-            if(layout && !selected && !module) {
+            if (layout && !selected && !module) {
 
                 moduleSettingsDispatch(layout);
                 return false
             }
 
 
-
-            if(module && !selected && (module.contains(e.target) || e.target.id === 'mw-handle-item-module-root') ) {
+            if (module && !selected && (module.contains(e.target) || e.target.id === 'mw-handle-item-module-root')) {
 
                 moduleSettingsDispatch(module);
                 e.preventDefault();
@@ -1107,22 +1046,19 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             }
 
 
-
-
             var newTarget = mw.app.liveEdit.elementHandleContent.settingsTarget.getSettingsTarget(selected);
             if (selected !== newTarget) {
                 var selected = newTarget;
             }
 
 
-
-            if (selected && !selected.contains(_dblclicktarget) ) {
+            if (selected && !selected.contains(_dblclicktarget)) {
                 mw.app.editor.dispatch('editNodeRequest', selected);
-            } else if (selected &&  selected === _dblclicktarget) {
-                if(!selected.isContentEditable) {
-                    setTimeout(()=>{
+            } else if (selected && selected === _dblclicktarget) {
+                if (!selected.isContentEditable) {
+                    setTimeout(() => {
                         var sel = mw.top().app.richTextEditorAPI?.getSelection();
-                        if(sel && sel.rangeCount > 0) {
+                        if (sel && sel.rangeCount > 0) {
                             sel.collapseToStart();
                         }
                     }, 20);
@@ -1132,7 +1068,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
             } else if (!selected && e.target.classList.contains('edit') && e.target.style.backgroundImage) {
                 mw.app.editor.dispatch('editNodeRequest', e.target);
-            } else if(this.elementAnalyzer.isEditOrInEdit(selected)) {
+            } else if (this.elementAnalyzer.isEditOrInEdit(selected)) {
                 mw.app.editor.dispatch('editNodeRequest', selected);
             }
 
@@ -1144,7 +1080,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
             this.handles.get('element').set(null);
             this.handles.get('module').set(null);
             mw.app.canvas.getDocument().querySelectorAll('[contenteditable="true"]').forEach(node => {
-                if(node.classList.contains('element')) {
+                if (node.classList.contains('element')) {
 
                     node.removeAttribute('contentеditable')
                 } else {
@@ -1156,48 +1092,47 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         ElementManager(this.root).on(events, (e) => {
 
-            if(e.which === 1) {
-            _dblclicktarget = e.target;
+            if (e.which === 1) {
+                _dblclicktarget = e.target;
 
 
-            let _canSelectDuringPause = true;
+                let _canSelectDuringPause = true;
 
-            const _canSelect = !this.paused || _canSelectDuringPause;
-
-
-          //  var targetIsImageElement = liveEditHelpers.targetIsImageElement(target);
+                const _canSelect = !this.paused || _canSelectDuringPause;
 
 
-            if (_canSelect && !this.handles.targetIsOrInsideHandle(e.target ) ) {
+                //  var targetIsImageElement = liveEditHelpers.targetIsImageElement(target);
 
 
-
-                _eventsHandle(e);
-
-            } else {
+                if (_canSelect && !this.handles.targetIsOrInsideHandle(e.target)) {
 
 
-                if (this.handles.targetIsOrInsideHandle(e.target ) ) {
-                    return;
+                    _eventsHandle(e);
+
+                } else {
+
+
+                    if (this.handles.targetIsOrInsideHandle(e.target)) {
+                        return;
+                    }
+
+                    if (this.handles.targetIsSelected(e.target, this.interactionHandle)) {
+
+                        return
+                    }
+
+
+                    var elementTarget = this.elementHandle.getTarget();
+
+
+                    if (!elementTarget || (elementTarget && !elementTarget.contains(e.target))) {
+                        this.stopTyping()
+
+                    }
+
+
+                    // mw.app.liveEdit.play();
                 }
-
-                if ( this.handles.targetIsSelected(e.target, this.interactionHandle )) {
-
-                    return
-                }
-
-
-                var elementTarget = this.elementHandle.getTarget();
-
-
-                if ( !elementTarget || (elementTarget && !elementTarget.contains(e.target)) ) {
-                    this.stopTyping()
-
-                }
-
-
-                // mw.app.liveEdit.play();
-            }
             }
         });
 
@@ -1205,7 +1140,7 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
     };
 
     getClassesToKeep = function () {
-       var  classesToKeep = [
+        var classesToKeep = [
             'element',
             'no-typing',
             'safe-mode',
@@ -1225,9 +1160,9 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
     }
 
     getNoElementClasses = function () {
-        var _moveable = ['moveable-control', 'moveable-origin', 'moveable-line','moveable-direction', 'moveable-rotation', 'moveable-guideline-group']
-        var noelements = ['mw-ui-col','edit', 'mw-col-container', 'mw-ui-col-container','container', 'img-holder','module', ..._moveable];
-        var noelements_le = ['mw-le-spacer','background-image-holder','mw-layout-overlay-container','mw-le-resizer','mw-layout-overlay-container','mw-layout-overlay','mw-layout-overlay-background','mw-layout-overlay-background-image','mw-layout-overlay-wrapper'];
+        var _moveable = ['moveable-control', 'moveable-origin', 'moveable-line', 'moveable-direction', 'moveable-rotation', 'moveable-guideline-group']
+        var noelements = ['mw-ui-col', 'edit', 'mw-col-container', 'mw-ui-col-container', 'container', 'img-holder', 'module', ..._moveable];
+        var noelements_le = ['mw-le-spacer', 'background-image-holder', 'mw-layout-overlay-container', 'mw-le-resizer', 'mw-layout-overlay-container', 'mw-layout-overlay', 'mw-layout-overlay-background', 'mw-layout-overlay-background-image', 'mw-layout-overlay-wrapper'];
 
 
         var noelements_bs3 = mw.app.templateSettings.helperClasses.external_grids_col_classes;
@@ -1255,11 +1190,11 @@ mw.top().app.canvas.on('canvasDocumentClickStart', e => {
 
         let can = !DomService.hasAnyOfClasses(el, noelements);
 
-        if(!can) {
+        if (!can) {
             can = DomService.hasAnyOfClasses(el, exceptions);
         }
 
-        if(can && el && el.parentElement) {
+        if (can && el && el.parentElement) {
             can = !DomService.firstParentOrCurrent(el.parentElement, '[data-mw-free-element="true"]')
         }
 

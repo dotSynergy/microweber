@@ -37,7 +37,7 @@
 
 
 <!--                        <TemplateSettings></TemplateSettings>-->
-                        <TemplateSettingsTeleport ></TemplateSettingsTeleport> 
+                        <TemplateSettingsTeleport ></TemplateSettingsTeleport>
 
 
 <!--
@@ -78,7 +78,7 @@ OLD iframe is commented out, use the new TemplateSettings component instead
 }
 
 .live-edit-gui-editor-opened #live-edit-frame-holder {
-    right: var(--sidebar-end-size);
+    right: calc(var(--sidebar-end-size) + 50px);
 }
 </style>
 

@@ -119,7 +119,7 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => `
                 </div>
                 <div class="mw-ai-chat-box-actions">
                     <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>
-                    <button type="button" class="mw-ai-chat-box-action-send">${mw.top().app.iconService.icon('send')}</button>
+                    <button type="button" class="mw-ai-chat-box-action-send"><small>SEND</small> ${mw.top().app.iconService.icon('send')}</button>
                 </div>
             </div>
         </div>

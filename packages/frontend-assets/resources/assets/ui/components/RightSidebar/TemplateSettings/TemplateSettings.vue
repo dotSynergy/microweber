@@ -182,9 +182,6 @@
             />
 
 
-            <!-- AI Design Button -->
-            <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
-                                 @batch-update="handleBatchUpdate"/>
             <!-- Main settings list when at root path -->
             <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
                 <span
@@ -204,6 +201,11 @@
                     </a>
                 </div>
             </div>
+
+
+            <!-- AI Design Button -->
+            <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
+                                 @batch-update="handleBatchUpdate"/>
         </div>
     </div>
 

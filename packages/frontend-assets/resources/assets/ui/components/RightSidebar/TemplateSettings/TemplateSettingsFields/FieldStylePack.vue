@@ -829,8 +829,8 @@ export default {
                         if (preview.tag === 'h1' || preview.tag === 'h2' || preview.tag === 'h3' ||
                             preview.tag === 'h4' || preview.tag === 'h5' || preview.tag === 'h6') {
                             // Apply heading font styles
-                            if (styleProps['--mw-heading-font-family']) {
-                                component.style.fontFamily = styleProps['--mw-heading-font-family'];
+                            if (styleProps['--mw-body-font-family']) {
+                                component.style.fontFamily = styleProps['--mw-body-font-family'];
                             }
                             if (styleProps['--mw-heading-font-weight']) {
                                 component.style.fontWeight = styleProps['--mw-heading-font-weight'];
@@ -840,8 +840,8 @@ export default {
                             }
                         } else if (preview.tag === 'p' || preview.tag === 'div' || preview.tag === 'span') {
                             // Apply paragraph font styles
-                            if (styleProps['--mw-paragraph-font-family']) {
-                                component.style.fontFamily = styleProps['--mw-paragraph-font-family'];
+                            if (styleProps['--mw-body-font-family']) {
+                                component.style.fontFamily = styleProps['--mw-body-font-family'];
                             }
                             if (styleProps['--mw-paragraph-font-weight']) {
                                 component.style.fontWeight = styleProps['--mw-paragraph-font-weight'];
@@ -1013,8 +1013,8 @@ export default {
                         if (preview.tag === 'h1' || preview.tag === 'h2' || preview.tag === 'h3' ||
                             preview.tag === 'h4' || preview.tag === 'h5' || preview.tag === 'h6') {
                             // Apply heading font styles
-                            if (stylePack.properties['--mw-heading-font-family']) {
-                                component.style.fontFamily = stylePack.properties['--mw-heading-font-family'];
+                            if (stylePack.properties['--mw-body-font-family']) {
+                                component.style.fontFamily = stylePack.properties['--mw-body-font-family'];
                             }
                             if (stylePack.properties['--mw-heading-font-weight']) {
                                 component.style.fontWeight = stylePack.properties['--mw-heading-font-weight'];
@@ -1024,8 +1024,8 @@ export default {
                             }
                         } else if (preview.tag === 'p' || preview.tag === 'div' || preview.tag === 'span') {
                             // Apply paragraph font styles
-                            if (stylePack.properties['--mw-paragraph-font-family']) {
-                                component.style.fontFamily = stylePack.properties['--mw-paragraph-font-family'];
+                            if (stylePack.properties['--mw-body-font-family']) {
+                                component.style.fontFamily = stylePack.properties['--mw-body-font-family'];
                             }
                             if (stylePack.properties['--mw-paragraph-font-weight']) {
                                 component.style.fontWeight = stylePack.properties['--mw-paragraph-font-weight'];

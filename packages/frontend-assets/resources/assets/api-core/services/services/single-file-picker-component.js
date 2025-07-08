@@ -55,7 +55,7 @@ export class SingleFilePickerComponent extends MicroweberBaseClass {
                         <div data-fpc-action="selectFile">
                              <div data-fpc-action="preview"></div>
                         </div>
-                        <div class="d-flex gap-2 justify-content-between w-100">
+                        <div class="d-flex gap-2 justify-content-between ms-3">
                             <div class="form-control-live-edit-label-wrapper d-flex align-items-center">
                                 <button type="button" class="mw-liveedit-button-actions-component btn-sm js-select-file-${id}" data-fpc-action="selectFile" title="${mw.lang('Change')}">
 

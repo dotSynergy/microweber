@@ -8,12 +8,51 @@ export class LiveEditLayoutBackground extends BaseComponent {
     }
 
     getBackgroundCursor(node) {
-        if(node && node.style){
+        var bgCusrorUrl = null;
+
+        if (node && node.style) {
             var bg = node.style.cursor;
             if (bg) {
-                return bg;
+                bgCusrorUrl = bg;
             }
         }
+
+        //try get from computed
+        if (!bgCusrorUrl && node && node.ownerDocument && node.ownerDocument.defaultView) {
+            var computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+            if (computedStyle && computedStyle.cursor) {
+                bgCusrorUrl = computedStyle.cursor;
+            }
+        }
+
+        if (!bgCusrorUrl) {
+            var layoutNode = mw.top().app.liveEdit.getSelectedLayoutNode();
+
+            if (layoutNode && layoutNode.style && layoutNode.style.cursor) {
+                bgCusrorUrl = layoutNode.style.cursor;
+            }
+        }
+
+        // Extract URL from cursor property if it exists
+        if (bgCusrorUrl) {
+            console.log('Original cursor value:', bgCusrorUrl);
+            if (bgCusrorUrl.includes('url(')) {
+                var match = bgCusrorUrl.match(/url\(['"]?([^'")\s]+)['"]?\)/);
+                if (match && match[1]) {
+                    bgCusrorUrl = match[1];
+                }
+            } else if (bgCusrorUrl.includes(' ')) {
+                // Handle cases where cursor value is already parsed (e.g., "http://example.com/image.gif 0 0, auto")
+                var parts = bgCusrorUrl.split(' ');
+                console.log('Split parts:', parts);
+                if (parts.length > 0) {
+                    bgCusrorUrl = parts[0];
+                }
+            }
+            console.log('Final cursor URL:', bgCusrorUrl);
+        }
+
+        return bgCusrorUrl;
     }
     setBackgroundCursor(node, url) {
         mw.app.registerUndoState(node);

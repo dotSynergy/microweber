@@ -7,26 +7,64 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
     }
 
+
     getBackgroundCursor(node) {
-        if(node && node.style){
+        var bgCusrorUrl = null;
+
+        if (node && node.style) {
             var bg = node.style.cursor;
             if (bg) {
-                return bg;
+                bgCusrorUrl = bg;
             }
         }
+        //try get from computed
+        if (!bgCusrorUrl && node && node.ownerDocument && node.ownerDocument.defaultView) {
+            var computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+            if (computedStyle && computedStyle.cursor) {
+                bgCusrorUrl = computedStyle.cursor;
+            }
+        }
+
+        if (!bgCusrorUrl) {
+            var layoutNode = mw.top().app.liveEdit.getSelectedLayoutNode();
+
+            if (layoutNode && layoutNode.style && layoutNode.style.cursor) {
+                bgCusrorUrl = layoutNode.style.cursor;
+            }
+        }
+
+        // Extract URL from cursor property if it exists
+        if (bgCusrorUrl) {
+            if (bgCusrorUrl.includes('url(')) {
+                var match = bgCusrorUrl.match(/url\(['"]?([^'")\s]+)['"]?\)/);
+                if (match && match[1]) {
+                    bgCusrorUrl = match[1];
+                }
+            } else if (bgCusrorUrl.includes(' ')) {
+                // Handle cases where cursor value is already parsed (e.g., "http://example.com/image.gif 0 0, auto")
+                var parts = bgCusrorUrl.split(' ');
+                if (parts.length > 0) {
+                    bgCusrorUrl = parts[0];
+                }
+            }
+        }
+
+        return bgCusrorUrl;
     }
+
     setBackgroundCursor(node, url) {
         mw.app.registerUndoState(node);
         mw.app.registerAskUserToStay(true);
 
 
-        mw.top().app.cssEditor.temp(node, 'cursor',  `url("${url}") 0 0, auto`);
+        mw.top().app.cssEditor.temp(node, 'cursor', `url("${url}") 0 0, auto`);
 
         mw.top().app.registerChangedState(node);
     }
+
     getBackgroundImage(node) {
 
-        if(node && node.style){
+        if (node && node.style) {
             var bg = node.style.backgroundImage;
             if (bg) {
                 bg = bg.replace('url(', '');
@@ -37,11 +75,11 @@ export class LiveEditLayoutBackground extends BaseComponent {
         }
 
     }
+
     setBackgroundImage(node, url) {
         mw.app.registerUndoState(node);
         mw.app.registerAskUserToStay(true);
         let bg
-
 
 
         if (!url) {
@@ -70,7 +108,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
             };
             mw.top().options.tempOption(isInsideBackgroundModule, optionsBg);
 
-            if(url != '') {
+            if (url != '') {
 
                 //remove bg video option
                 var optionsVideo = {
@@ -79,7 +117,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
                     module: 'background',
                     value: 'none'
                 };
-                mw.top().options.tempOption(isInsideBackgroundModule,optionsVideo);
+                mw.top().options.tempOption(isInsideBackgroundModule, optionsVideo);
 
             }
 
@@ -92,7 +130,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
     }
 
     getBackgroundImageSize(node) {
-        if(node && node.style){
+        if (node && node.style) {
             var bg = node.style.backgroundSize;
             return (bg || '').trim() || 'auto';
         }
@@ -102,7 +140,6 @@ export class LiveEditLayoutBackground extends BaseComponent {
         mw.app.registerUndoState(node);
         mw.app.registerAskUserToStay(true);
         let bg
-
 
 
         if (!url) {
@@ -115,8 +152,6 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
         node.innerHTML = ``;
         node.style.backgroundSize = bg;
-
-
 
 
         var isInsideBackgroundModule = liveEditHelpers.targetGetFirstModuleOfType(node, 'background');
@@ -134,8 +169,6 @@ export class LiveEditLayoutBackground extends BaseComponent {
             mw.top().options.tempOption(isInsideBackgroundModule, optionsBg);
 
 
-
-
         }
 
 
@@ -143,8 +176,8 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
     }
 
-    getBackgroundVideo(node){
-        if(node && node.dataset && node.dataset.mwvideo){
+    getBackgroundVideo(node) {
+        if (node && node.dataset && node.dataset.mwvideo) {
             return node.dataset.mwvideo;
         }
     }
@@ -152,7 +185,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
     setBackgroundVideo(node, url) {
         mw.app.registerAskUserToStay(true);
         mw.app.registerUndoState(node);
-        if(!url) {
+        if (!url) {
             url = ''
         }
         url = url.toString();
@@ -172,7 +205,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
         var isInsideBackgroundModule = liveEditHelpers.targetGetFirstModuleOfType(node, 'background');
         if (isInsideBackgroundModule) {
-            if(url != '' && url != 'none') {
+            if (url != '' && url != 'none') {
                 //remove bg image option
                 var optionsBg = {
                     group: isInsideBackgroundModule.id,
@@ -183,7 +216,7 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
                 mw.top().options.tempOption(isInsideBackgroundModule, optionsBg);
             }
-           //set bg video option
+            //set bg video option
             var optionsVideo = {
                 group: isInsideBackgroundModule.id,
                 key: 'data-background-video',
@@ -191,32 +224,34 @@ export class LiveEditLayoutBackground extends BaseComponent {
                 value: url
             };
 
-            mw.top().options.tempOption(isInsideBackgroundModule,optionsVideo);
+            mw.top().options.tempOption(isInsideBackgroundModule, optionsVideo);
 
         }
-
 
 
         mw.top().app.registerChangedState(node);
 
     }
-    getBackgroundPosition(node){
-        if(node && node.style){
+
+    getBackgroundPosition(node) {
+        if (node && node.style) {
             var bg = node.style.backgroundPosition;
             if (bg) {
                 return bg;
             }
         }
     }
-    setBackgroundPosition(node,position) {
+
+    setBackgroundPosition(node, position) {
         mw.app.registerUndoState(node);
         mw.app.registerAskUserToStay(true);
         node.style.backgroundPosition = position;
         mw.top().app.registerChangedState(node);
 
     }
-    getBackgroundColor(node){
-        if(node && node.style){
+
+    getBackgroundColor(node) {
+        if (node && node.style) {
             var bg = node.style.backgroundColor;
 
             if (bg) {
@@ -224,10 +259,11 @@ export class LiveEditLayoutBackground extends BaseComponent {
             }
         }
     }
-    setBackgroundColor(node,color) {
+
+    setBackgroundColor(node, color) {
         mw.app.registerUndoState(node);
 
-        if(color==''){
+        if (color == '') {
             node.style.backgroundColor = null;
         } else {
             node.style.backgroundColor = color;
@@ -249,21 +285,14 @@ export class LiveEditLayoutBackground extends BaseComponent {
                 value: color
             };
 
-            mw.top().options.tempOption(isInsideBackgroundModule,optionsBg);
+            mw.top().options.tempOption(isInsideBackgroundModule, optionsBg);
 
 
         }
 
 
-
-
-
         mw.top().app.registerChangedState(node);
     }
-
-
-
-
 
 
 }

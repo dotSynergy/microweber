@@ -7,11 +7,11 @@
         <div class="layout-modules-header" v-if="currentLayoutTitle">
             <span class="layout-title">{{ currentLayoutTitle }}</span>
         </div>
-        <div class="modules-buttons">
-            <div
+        <div class="modules-buttons">            <div
                 v-for="module in currentLayoutModules"
                 :key="module.id"
                 @click="openModuleSettings(module)"
+                @mouseenter="onModuleHover(module)"
                 class="btn-icon module-settings-button"
                 :class="{ 'active': module.isActive }"
                 :title="module.title || module.type"
@@ -355,8 +355,7 @@ export default {
 
             return iconMap[module.type.toLowerCase()] ||
                 '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
-        },
-        openModuleSettings(module) {
+        },        openModuleSettings(module) {
             try {
                 // Use Microweber's module settings system
                 if (window.mw?.top()?.app?.editor?.dispatch && module.element) {
@@ -381,6 +380,17 @@ export default {
                 }
             } catch (error) {
                 console.error('Error opening module settings:', error);
+            }
+        },
+
+        onModuleHover(module) {
+            try {
+                // Set the target element handle on hover
+                if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && module.element) {
+                    window.mw.top().app.liveEdit.elementHandle.set(module.element);
+                }
+            } catch (error) {
+                console.error('Error setting element handle on hover:', error);
             }
         }
     }

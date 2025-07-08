@@ -145,10 +145,10 @@ export default {
                 });
 
 
-                mw.top().app.on('moduleInserted', function () {
+                mw.top().app.on('moduleInserted', () => {
                     this.updateCurrentLayout();
                 })
-                mw.top().app.on('layoutCloned', function () {
+                mw.top().app.on('layoutCloned', () => {
                     this.updateCurrentLayout();
                 })
                 window.mw.app.canvas.on('canvasDocumentClick', () => {

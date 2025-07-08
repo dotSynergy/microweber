@@ -1,0 +1,277 @@
+<template>
+    <div v-show="isTextElement">
+        <div class="current-node-text-edit" v-if="isTextElement">
+            <div
+                @click="editCurrentNode"
+                @mouseenter="onNodeHover"
+                class="btn-icon text-edit-button"
+                :class="{ 'active': isEditing }"
+                title="Edit Text"
+            >
+                <v-tooltip activator="parent" location="start">
+                    Edit Text
+                </v-tooltip>
+                <span v-html="getTextEditIcon()"></span>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.current-node-text-edit {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.text-edit-button {
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.text-edit-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.text-edit-button.active {
+
+    background: rgba(33, 37, 41, 0.16);
+    border-color: rgb(56, 54, 54);
+    color: #383636;
+    box-shadow: 0 0 4px rgb(70, 73, 84);
+
+}
+
+.text-edit-button:active {
+    transform: scale(0.95);
+}
+
+.text-edit-button :deep(svg) {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.text-edit-button :deep(img) {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+</style>
+
+<script>
+export default {
+    name: 'CurrentNodeTextEditButton',
+    data() {
+        return {
+            currentElement: null,
+            isTextElement: false,
+            isEditing: false,
+            updateInterval: null
+        };
+    },
+    mounted() {
+        mw.app.on('ready', event => {
+            this.setupEventListeners();
+            this.updateCurrentNode();
+
+            // Update periodically to catch dynamic changes
+            this.updateInterval = setInterval(() => {
+                this.updateCurrentNode();
+            }, 1000);
+        });
+    },
+    beforeUnmount() {
+        this.cleanupEventListeners();
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
+    },
+    methods: {
+        setupEventListeners() {
+            // Listen for canvas changes
+            if (window.mw?.app?.canvas) {
+                window.mw.app.canvas.on('liveEditCanvasLoaded', () => {
+                    this.updateCurrentNode();
+                });
+
+                window.mw.app.canvas.on('canvasDocumentClick', () => {
+                    // Delay update to allow for element selection
+                    setTimeout(() => {
+                        this.updateCurrentNode();
+                    }, 100);
+                });
+            }
+
+            // Listen for editor events
+            if (window.mw?.app?.editor) {
+                //cjecl of is connenteditable
+
+                window.mw.app.editor.on('editNodeRequest', () => {
+                    this.isEditing = true;
+                });
+
+                window.mw.app.editor.on('editNodeEnd', () => {
+                    this.isEditing = false;
+                    this.updateCurrentNode(); // Refresh current node after editing ends
+                });
+
+
+
+
+
+
+                // window.mw.app.editor.on('editNodeRequest', () => {
+                //     this.isEditing = true;
+                // });
+                //
+                // window.mw.app.editor.on('editNodeEnd', () => {
+                //     this.isEditing = false;
+                // });
+            }
+        },
+
+        cleanupEventListeners() {
+            // Clean up any event listeners if needed
+        },
+
+        updateCurrentNode() {
+            try {
+                const activeElement = window.mw.top().app.liveEdit.getSelectedElementNode();
+
+                if (activeElement !== this.currentElement) {
+                    this.currentElement = activeElement;
+                    this.checkIfTextElement();
+                }
+            } catch (error) {
+                console.warn('Error updating current node:', error);
+                this.currentElement = null;
+                this.isTextElement = false;
+            }
+        }, checkIfTextElement() {
+            if (!this.currentElement) {
+                this.isTextElement = false;
+                return;
+            }
+
+            // Use Microweber's built-in isEditable check first
+            if (window.mw?.tools?.isEditable) {
+                this.isTextElement = window.mw.tools.isEditable(this.currentElement);
+
+                //check is editing
+                if (this.isTextElement && this.currentElement.contentEditable === 'true') {
+                    this.isEditing = true;
+                } else {
+                    this.isEditing = false;
+                }
+
+
+                return;
+            }
+
+            // Fallback to manual checks if mw.tools.isEditable is not available
+            const tagName = this.currentElement.tagName.toLowerCase();
+            const textElements = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'a', 'strong', 'em', 'b', 'i', 'u', 'small', 'mark', 'del', 'ins', 'sub', 'sup'];
+
+            // Check if it's a text element or has editable content
+            this.isTextElement = textElements.includes(tagName) ||
+                this.currentElement.contentEditable === 'true' ||
+                this.currentElement.hasAttribute('contenteditable') ||
+                this.currentElement.classList.contains('editable') ||
+                this.hasTextContent();
+        },
+
+        hasTextContent() {
+            if (!this.currentElement) return false;
+
+            // Check if element has direct text content (not just from child elements)
+            const textContent = this.currentElement.textContent || '';
+            const hasText = textContent.trim().length > 0;
+
+            // Check if element has no block-level children (likely contains text)
+            const blockElements = this.currentElement.querySelectorAll('div, p, h1, h2, h3, h4, h5, h6, section, article, aside, nav, header, footer, main');
+            const hasBlockChildren = blockElements.length > 0;
+
+            return hasText && !hasBlockChildren;
+        },
+
+        editCurrentNode() {
+            try {
+                if (!this.currentElement) {
+                    console.warn('No current element to edit');
+                    return;
+                }
+
+                // Set the editing state
+                this.isEditing = true;
+
+                // Dispatch the edit node request using Microweber's editor system
+                if (window.mw?.app?.editor?.dispatch) {
+                    window.mw.app.editor.dispatch('editNodeRequest', this.currentElement);
+                } else if (window.mw?.top()?.app?.editor?.dispatch) {
+                    window.mw.top().app.editor.dispatch('editNodeRequest', this.currentElement);
+                } else {
+                    console.warn('Editor dispatch method not available');
+                    // Fallback: try to make element editable
+                    this.makeElementEditable();
+                }
+            } catch (error) {
+                console.error('Error editing current node:', error);
+                this.isEditing = false;
+            }
+        },
+
+        makeElementEditable() {
+            if (this.currentElement) {
+                this.currentElement.contentEditable = true;
+                this.currentElement.focus();
+
+                // Select all text content
+                const range = document.createRange();
+                range.selectNodeContents(this.currentElement);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        },
+
+        onNodeHover() {
+            try {
+                // Set the target element handle on hover
+                if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && this.currentElement) {
+                    window.mw.top().app.liveEdit.elementHandle.set(this.currentElement);
+                }
+            } catch (error) {
+                console.error('Error setting element handle on hover:', error);
+            }
+        },
+
+        getTextEditIcon() {
+            // Try to get text edit icon from Microweber's icon service
+            if (window.mw?.top()?.app?.iconService?.icon) {
+                const icon = window.mw.top().app.iconService.icon('text-edit') ||
+                    window.mw.top().app.iconService.icon('edit') ||
+                    window.mw.top().app.iconService.icon('pencil');
+
+                if (icon) {
+                    return icon;
+                }
+            }
+
+            // Fallback to a basic text edit icon
+            return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+        }
+    }
+};
+</script>

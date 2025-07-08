@@ -119,7 +119,7 @@ export default {
 
         mw.app.on('ready', event => {
 
- 
+
             this.setupEventListeners();
             this.updateCurrentLayout();
 

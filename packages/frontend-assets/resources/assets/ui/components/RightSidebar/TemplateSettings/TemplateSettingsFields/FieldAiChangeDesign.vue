@@ -1,5 +1,5 @@
 <template>
-    <div class="position-relative">
+    <div class="position-relative mt-5">
         <div ref="aiChatFormBox"></div>
         <div v-if="loading" class="text-center mt-2">AI is thinking...</div>
         <div v-if="error" class="text-danger mt-2">{{ error }}</div>
@@ -407,16 +407,16 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 /* Modern AI Chat Text Field Styling */
 :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 2px solid #e2e8f0;
+    background: #ffffff;
+    border: 1px solid #e1e5e9;
     border-radius: 12px;
-    padding: 16px 20px;
+    padding: 24px 20px 16px 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
     line-height: 1.5;
-    color: #334155;
+    color: #2d3748;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     resize: vertical;
     min-height: 100px;
     width: 100%;
@@ -426,26 +426,28 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:focus) {
     border-color: #3b82f6;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
 }
 
 :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder) {
-    color: #64748b;
+    color: #a0aec0;
     font-style: italic;
-    opacity: 0.7;
+    opacity: 1;
 }
 
 :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:hover) {
-    border-color: #64748b;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e0;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* AI Chat Box Container */
 :deep(.mw-ai-chat-box) {
     position: relative;
     margin-bottom: 16px;
+    margin-top: 12px;
 }
 
 :deep(.mw-ai-chat-box::before) {
@@ -529,7 +531,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 /* Responsive Design */
 @media (max-width: 768px) {
     :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
-        padding: 14px 16px;
+        padding: 22px 16px 14px 16px;
         font-size: 16px; /* Prevents zoom on iOS */
         min-height: 80px;
     }
@@ -543,17 +545,17 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field) {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border-color: #475569;
-        color: #e2e8f0;
+        background: #ffffff;
+        border-color: #e1e5e9;
+        color: #2d3748;
     }
 
     :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder) {
-        color: #94a3b8;
+        color: #a0aec0;
     }
 
     :deep(.mw-ai-chat-box .mw-ai-chat-box-area-field:focus) {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        background: #ffffff;
         border-color: #3b82f6;
     }
 }

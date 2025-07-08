@@ -28,7 +28,7 @@
 
             </div>
             <!-- Choose where to edit toggle -->
-            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper mt-3 mb-3"
+            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper"
                  v-show="!isSingleSettingMode">
                 <label class="live-edit-label mb-3">Choose where to edit</label>
 
@@ -424,8 +424,7 @@ export default {
                 window.mw.top().app.__vueTemplateSettingsInstance = null; // Clear instance reference
             }
         }
-    }, watch: {
-        applyMode(newMode, oldMode) {
+    }, watch: {        applyMode(newMode, oldMode) {
             if (newMode !== oldMode) {
                 this.updateLayoutIdDisplay();
                 this.initializeStyleValues();
@@ -435,15 +434,41 @@ export default {
                 } else {
                     this.existingLayoutSelectors = [];
                     this.existingLayoutSelectorsInitialized = false;
+                }                // Trigger global reload events for style preview updates when mode changes via watcher
+                console.log('Apply mode watcher triggered, mode changed from', oldMode, 'to', newMode);
+                
+                // Trigger style pack global reload for preview components
+                if (window.mw?.top()?.app) {
+                    window.mw.top().app.dispatch('stylePackGlobalReload', {
+                        reason: 'applyModeWatcherChanged',
+                        newMode: newMode,
+                        oldMode: oldMode,
+                        isLayoutMode: newMode === 'layout',
+                        isTemplateMode: newMode === 'template'
+                    });
                 }
             }
-        }, activeLayoutId(newId, oldId) {
+        },activeLayoutId(newId, oldId) {
             if (newId !== oldId) {
                 const newActiveLayout = newId === 'None' || !newId ? null : window.mw?.top()?.app?.canvas?.getDocument()?.getElementById(newId);
                 this.initializeStyleValues();
 
                 if (this.isLayoutMode) {
                     this.fetchExistingLayoutSelectors();
+                }                // Trigger global reload events for style preview updates when layout changes in single layout editing mode
+                if (this.isSingleSettingMode && this.isLayoutMode) {
+                    console.log('Layout changed in single layout editing mode, triggering global reload events');
+                    
+                    // Trigger style pack global reload for preview components
+                    if (window.mw?.top()?.app) {
+                        window.mw.top().app.dispatch('stylePackGlobalReload', {
+                            reason: 'layoutChanged',
+                            newLayoutId: newId,
+                            oldLayoutId: oldId,
+                            isSingleSettingMode: true,
+                            isLayoutMode: true
+                        });
+                    }
                 }
             }
         },
@@ -1137,7 +1162,7 @@ export default {
         openSelectedLayoutSettings() {
             if (!this.activeLayoutId || this.activeLayoutId === 'None') return;
 
-            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getElementById(this.activeLayoutId);
+            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getDocument().getElementById(this.activeLayoutId);
             if (firstLayoutElement) {
                 window.mw.top().app.editor.dispatch('onLayoutSettingsRequest', firstLayoutElement);
             }
@@ -1476,9 +1501,7 @@ export default {
                     }, 500);
                 }
             }, 500); // Increased delay to 500ms
-        },
-
-        handleApplyModeChange(newMode) {
+        },        handleApplyModeChange(newMode) {
             console.log('Apply mode changing from', this.applyMode, 'to', newMode);
 
             if (typeof newMode === 'string') {
@@ -1497,6 +1520,17 @@ export default {
             } else {
                 this.existingLayoutSelectors = [];
                 this.existingLayoutSelectorsInitialized = false;
+            }            // Trigger global reload events for style preview updates when switching modes
+            console.log('Apply mode changed to:', this.applyMode, '- triggering global reload events');
+            
+            // Trigger style pack global reload for preview components
+            if (window.mw?.top()?.app) {
+                window.mw.top().app.dispatch('stylePackGlobalReload', {
+                    reason: 'applyModeChanged',
+                    newMode: this.applyMode,
+                    isLayoutMode: this.isLayoutMode,
+                    isTemplateMode: this.isTemplateMode
+                });
             }
 
             console.log('Apply mode changed to:', this.applyMode);

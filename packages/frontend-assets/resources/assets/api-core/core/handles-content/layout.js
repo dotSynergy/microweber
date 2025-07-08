@@ -177,7 +177,7 @@ export class LayoutHandleContent {
                 title: this.rootScope.lang('Settings'),
                 text: '',
                 icon: mw.top().app.iconService.icon('settings'),
-                className: 'mw-handle-button-xwide mw-handle-edit-layout-button',
+                className: 'mw-handle-edit-layout-button',
                 action: function(target) {
 
                     layoutSettingsDispatch(target);
@@ -239,11 +239,10 @@ export class LayoutHandleContent {
 
                 },
                 onTarget: (target, selfNode) => {
-                    if(DomService.parentsOrCurrentOrderMatchOrOnlyFirst(target.parentNode, ['edit', 'module'])) {
-                        selfNode.style.display = '';
-                    } else {
-                        selfNode.style.display = 'none';
-                    }
+                    const enabled = DomService.parentsOrCurrentOrderMatchOrOnlyFirst(target.parentNode, ['edit', 'module']);
+                    selfNode.classList[!enabled ? 'add' : 'remove']('mw-le-handle-menu-button-disabled');
+
+
                 }
 
             },

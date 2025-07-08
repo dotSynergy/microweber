@@ -235,6 +235,13 @@ export const Handle = function (options) {
         this.show();
 
 
+        const templateFilter = target.getAttribute('template-filter');
+        const isheaderOrFooterLike = ['menus', 'footers'].includes(templateFilter);
+
+        this.wrapper.attr('template-filter', templateFilter);
+        this.wrapper.attr('data-header-footer', isheaderOrFooterLike);
+
+
         this.draggable.setElement(target);
         if(_currentTarget !== target || forced) {
             _currentTarget = target;

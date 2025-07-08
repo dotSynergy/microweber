@@ -137,6 +137,13 @@ export default {
                     this.updateCurrentLayout();
                 });
 
+
+                mw.top().app.on('moduleInserted', function () {
+                    this.updateCurrentLayout();
+                })
+                mw.top().app.on('layoutCloned', function () {
+                    this.updateCurrentLayout();
+                })
                 window.mw.app.canvas.on('canvasDocumentClick', () => {
                     // Delay update to allow for layout selection
                     setTimeout(() => {

@@ -553,7 +553,8 @@ html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field {
 
 .dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder,
 html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {
-    color: #94a3b8;
+    color: #ffffff;
+    opacity: 0.7;
 }
 
 .dark .mw-ai-chat-box .mw-ai-chat-box-area-field:focus,

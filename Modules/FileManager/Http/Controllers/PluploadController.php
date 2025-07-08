@@ -364,11 +364,10 @@ class PluploadController extends Controller
         $fileName = preg_replace("/[\/\&%#\$]/", "_", $fileName);
         $fileName = preg_replace("/[\"\']/", " ", $fileName);
         $fileName = str_replace(array('(', ')', "'", "!", "`", "*", "#", "<", ">"), '-', $fileName);
-        $fileName = str_replace(' ', '-', $fileName);
-        $fileName = str_replace('..', '-', $fileName);
+        $fileName = str_replace(' ', '-', $fileName);        $fileName = str_replace('..', '-', $fileName);
         $fileName = strtolower($fileName);
         $fileName = mw()->url_manager->clean_url_wrappers($fileName);
-        $fileName = get_file_extension($fileName);
+        $fileName = pathinfo($fileName, PATHINFO_FILENAME);
         $fileName = $fileName . '.' . $fileNameExtension;
 
 

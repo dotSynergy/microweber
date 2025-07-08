@@ -9,7 +9,7 @@ class BtnModule extends BaseModule
 {
     public static string $name = 'Button';
     public static string $module = 'btn';
-    public static string $icon = 'heroicon-o-rectangle-stack';
+    public static string $icon = 'modules.btn-icon';
     public static string $categories = 'other';
     public static int $position = 2;
     public static string $settingsComponent = BtnModuleSettings::class;

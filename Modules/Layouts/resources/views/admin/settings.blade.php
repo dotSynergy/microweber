@@ -15,19 +15,19 @@
                     .change-layout-background-wrapper {
                         max-width: 90%;
                     }
-                    
+
                     .tab-indicator {
                         position: relative;
                         overflow: visible;
                     }
-                    
+
                     .tab-indicator::after {
                         content: '';
                         position: absolute;
-                        top: -8px;
+                        top: -12px;
                         right: -8px;
-                        width: 16px;
-                        height: 16px;
+                        width: 24px;
+                        height: 24px;
                         border-radius: 50%;
                         border: 2px solid #fff;
                         background-size: cover;
@@ -35,17 +35,17 @@
                         display: none;
                         z-index: 10;
                     }
-                    
+
                     .tab-indicator.has-image::after {
                         display: block;
                         background-image: var(--bg-image);
                     }
-                    
+
                     .tab-indicator.has-color::after {
                         display: block;
                         background-color: var(--bg-color);
                     }
-                    
+
                     .tab-indicator.has-video::after {
                         display: block;
                         background-color: #007bff;
@@ -55,7 +55,7 @@
                         line-height: 12px;
                         text-align: center;
                     }
-                    
+
                     .tab-indicator.has-cursor::after {
                         display: block;
                         background-color: #6c757d;

@@ -139,8 +139,7 @@
         </div>
 
 
-        <div :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
-             class="btn-icon live-edit-toolbar-buttons">
+        <div :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }">
             <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>
         </div>
 

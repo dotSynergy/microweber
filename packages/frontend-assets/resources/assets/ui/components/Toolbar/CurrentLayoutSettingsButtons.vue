@@ -3,11 +3,8 @@
 
         <hr>
 
-
-        <div class="layout-modules-header" v-if="currentLayoutTitle">
-            <span class="layout-title">{{ currentLayoutTitle }}</span>
-        </div>
-        <div class="modules-buttons">            <div
+        <div class="modules-buttons">
+            <div
                 v-for="module in currentLayoutModules"
                 :key="module.id"
                 @click="openModuleSettings(module)"
@@ -22,6 +19,9 @@
                 <span v-html="getModuleIcon(module)"></span>
             </div>
         </div>
+
+        <hr>
+
     </div>
 </template>
 

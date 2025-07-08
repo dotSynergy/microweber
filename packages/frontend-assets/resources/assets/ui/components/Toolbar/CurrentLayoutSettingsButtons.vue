@@ -329,7 +329,7 @@ export default {
                     // Check if it's a base64 data URI (like the content module)
                     if (info.icon.startsWith('data:image/svg+xml;base64,')) {
                         // Convert base64 to img tag for better rendering
-                        return `<img src="${info.icon}" alt="${info.name || module.type}" style="width: 16px; height: 16px;" />`;
+                        return `<img src="${info.icon}" alt="${info.name || module.type}" style="width: 24px; height: 24px;" />`;
                     }
                     // Check if it's already an SVG string
                     else if (info.icon.includes('<svg')) {

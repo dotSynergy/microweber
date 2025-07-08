@@ -331,7 +331,8 @@ abstract class LiveEditModuleSettings extends Page
             $selectedSkin = 'default';
         }
 
-
+        $selectedSkin = str_replace('/', '.', $selectedSkin);
+        $selectedSkin = str_replace('\\', '.', $selectedSkin);
 
 
         $curretSkinSettingsFromJson = [];

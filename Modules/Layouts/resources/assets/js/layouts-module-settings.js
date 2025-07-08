@@ -38,7 +38,14 @@ export default function layoutSettings(activeTab, optionGroup) {
             this.handleReadyLayoutSettingLoaded();
         },
         getTargets() {
-            const target = mw.top().app.liveEdit.handles.get('layout').getTarget();
+
+
+            let target = mw.top().app.liveEdit.handles.get('layout').getTarget();
+            if (!target) {
+                target = window.mw.top().app.liveEdit.getSelectedLayoutNode();
+            }
+
+
             let bg, bgOverlay, bgNode;
             if (target) {
                 bg = target.querySelector('.mw-layout-background-block');
@@ -92,7 +99,7 @@ export default function layoutSettings(activeTab, optionGroup) {
                 Livewire.dispatch('close-modal', {id: this.modalId})
             }
 
-           // $("form[wire\\:submit\\.prevent=\"callMountedAction\"]").promise().done((self) => { console.log(self); });
+            // $("form[wire\\:submit\\.prevent=\"callMountedAction\"]").promise().done((self) => { console.log(self); });
 
 
             setTimeout(() => {
@@ -100,10 +107,9 @@ export default function layoutSettings(activeTab, optionGroup) {
             }, 2000);
 
 
-
         },
 
-        changeBackgroundSize(size){
+        changeBackgroundSize(size) {
             const {bg, bgOverlay, bgNode, target} = this.getTargets();
             mw.top().app.layoutBackground.setBackgroundImageSize(bgNode, size);
 

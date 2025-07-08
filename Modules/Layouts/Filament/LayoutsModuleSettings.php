@@ -21,7 +21,7 @@ class LayoutsModuleSettings extends LiveEditModuleSettings
     public function form(Form $form): Form
     {
 
-       $optionGroup = $this->getOptionGroup();
+        $optionGroup = $this->getOptionGroup();
         return $form
             ->schema([
                 Tabs::make('Layout settings')
@@ -29,7 +29,7 @@ class LayoutsModuleSettings extends LiveEditModuleSettings
                         Tabs\Tab::make('Layout settings')
                             ->schema([
                                 View::make('modules.layouts::admin.settings')->viewData([
-'optionGroup' => $optionGroup
+                                    'optionGroup' => $optionGroup
                                 ]),
                             ]),
                         Tabs\Tab::make('Design')

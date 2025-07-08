@@ -44,7 +44,7 @@
 
                         </div>
                         <div class="edit-mode-text">
-                            <div class="edit-mode-subtitle live-edit-label mb-0">Edit global template styles</div>
+                            <div class="edit-mode-subtitle mb-0">Edit global template styles</div>
                         </div>
                     </div>
 
@@ -59,7 +59,7 @@
 
                         </div>
                         <div class="edit-mode-text">
-                            <div class="edit-mode-subtitle live-edit-label mb-0">Edit specific layout styles</div>
+                            <div class="edit-mode-subtitle mb-0">Edit specific layout styles</div>
                         </div>
                     </div>
                 </div>

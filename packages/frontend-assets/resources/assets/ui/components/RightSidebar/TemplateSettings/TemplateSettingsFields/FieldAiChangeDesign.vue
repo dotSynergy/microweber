@@ -4,24 +4,7 @@
         <label class="live-edit-label mb-2">MAKE YOUR WEBSITE FASTER WITH AI</label>
         <div :class="{'d-none': !isAIAvailable}" class="ai-change-template-design-button"></div>
 
-
-        <div v-if="!showAIChatForm">
-            <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Change Design with AI" class="btn btn-link mw-admin-action-links mw-adm-liveedit-tabs"
-                    @click="toggleAIChatForm" :disabled="!isAIAvailable">
-                Go with AI
-            </button>
-        </div>
-
-        <div v-show="showAIChatForm" class="mt-2 position-relative">
-
-            <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Close Change Design with AI" class="close-btn"
-                    @click="toggleAIChatForm">
-                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
-            </button>
-
-
+        <div class="mt-2 position-relative">
             <!-- Buttons to switch between form types -->
             <div ref="aiChatFormBox"></div>
             <!-- Shared UI elements -->
@@ -41,7 +24,6 @@ export default {
     data() {
         return {
             supportedFonts: [],
-            showAIChatForm: false,
             aiFormType: 'simple', // Default to simple form
             aiChatFormInstance: null,
             loading: false,
@@ -249,23 +231,6 @@ export default {
             return valuesForEdit;
         },
 
-        toggleAIChatForm() {
-            this.showAIChatForm = !this.showAIChatForm;
-            this.error = null;
-            this.aiMessage = '';
-
-            if (this.showAIChatForm && this.aiFormType === 'advanced' && !this.aiChatFormInstance && this.$refs.aiChatFormContainer) {
-                try {
-                    this.initAIChatForm();
-                } catch (e) {
-                    console.error('Error initializing AIChatForm', e);
-                    this.aiFormType = 'simple'; // Fallback to simple form
-                    this.error = 'Advanced form is not available. Using simple form.';
-                }
-            }
-        },
-
-
         initAIChatForm() {
             this.aiChatFormInstance = new AIChatForm({
                 multiLine: true,
@@ -447,18 +412,4 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 .position-relative {
     position: relative;
 }
-
-.close-btn {
-    position: absolute;
-    top: -31px;
-    right: -8px;
-    padding: 5px;
-    margin: 0;
-    line-height: 1;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 10;
-}
-
 </style>

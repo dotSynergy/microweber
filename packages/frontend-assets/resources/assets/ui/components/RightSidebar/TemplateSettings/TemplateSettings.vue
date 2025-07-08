@@ -81,31 +81,6 @@
             </div>
 
 
-            <!-- AI Design Button -->
-            <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
-                                 @batch-update="handleBatchUpdate"/>
-            <!-- Main settings list when at root path -->
-            <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
-                <span
-                    class="fs-2 font-weight-bold settings-main-group d-flex align-items-center justify-content-between">
-                    Styles
-                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Reset stylesheet settings" class="reset-template-settings-and-stylesheet-button"
-                            @click="resetAllDesignSelectorsValuesSettings">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="http://www.w3.org/2000/svg" width="20px"
-                             fill="currentColor"><path
-                            d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
-                    </button>
-                </span>
-
-                <div v-for="(settingGroup, index) in mainStyleGroups" :key="index" class="my-3">
-                    <a @click="navigateTo(settingGroup.url)"
-                       :class="['', '', 'settings-main-group', 'cursor-pointer', '', settingGroup.class]">
-                        {{ settingGroup.title }}
-                    </a>
-                </div>
-            </div>
-
             <!-- Settings detail when not at root path -->
             <div v-if="currentPath !== '/' && currentSetting && showStyleSettings !== 'styleEditor'">
 
@@ -203,6 +178,32 @@
                 @settings-updated="handleSettingsUpdated"
                 @load-more-fonts="loadMoreFonts"
             />
+
+
+            <!-- AI Design Button -->
+            <FieldAiChangeDesign v-if="hasStyleSettings && !isSingleSettingMode" :is-ai-available="isAIAvailable"
+                                 @batch-update="handleBatchUpdate"/>
+            <!-- Main settings list when at root path -->
+            <div v-if="currentPath === '/' && hasStyleSettings && !isSingleSettingMode" class="mt-5">
+                <span
+                    class="fs-2 font-weight-bold settings-main-group d-flex align-items-center justify-content-between">
+                    Styles
+                    <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Reset stylesheet settings" class="reset-template-settings-and-stylesheet-button"
+                            @click="resetAllDesignSelectorsValuesSettings">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="http://www.w3.org/2000/svg" width="20px"
+                             fill="currentColor"><path
+                            d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+                    </button>
+                </span>
+
+                <div v-for="(settingGroup, index) in mainStyleGroups" :key="index" class="my-3">
+                    <a @click="navigateTo(settingGroup.url)"
+                       :class="['', '', 'settings-main-group', 'cursor-pointer', '', settingGroup.class]">
+                        {{ settingGroup.title }}
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -30,7 +30,7 @@
                 <div id="ai-gui-editor" ref="wrapper"></div>
 
 
-                <div class="form-control-live-edit-label-wrapper my-3">
+                <div class="form-control-live-edit-label-wrapper my-3 d-none">
                     <input class="form-control-live-edit-input " type="text" v-model="aiMessage"
                            placeholder="Make text bigger..."
                            @keyup.enter="submitAiRequest"/>

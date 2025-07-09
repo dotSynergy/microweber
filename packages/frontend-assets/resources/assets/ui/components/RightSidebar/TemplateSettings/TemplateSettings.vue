@@ -1,7 +1,7 @@
 <template>
 
 
-    <div class="p-3">
+    <div>
         <div v-if="isLoading" class="text-center">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -436,7 +436,7 @@ export default {
                     this.existingLayoutSelectorsInitialized = false;
                 }                // Trigger global reload events for style preview updates when mode changes via watcher
                 console.log('Apply mode watcher triggered, mode changed from', oldMode, 'to', newMode);
-                
+
                 // Trigger style pack global reload for preview components
                 if (window.mw?.top()?.app) {
                     window.mw.top().app.dispatch('stylePackGlobalReload', {
@@ -458,7 +458,7 @@ export default {
                 }                // Trigger global reload events for style preview updates when layout changes in single layout editing mode
                 if (this.isSingleSettingMode && this.isLayoutMode) {
                     console.log('Layout changed in single layout editing mode, triggering global reload events');
-                    
+
                     // Trigger style pack global reload for preview components
                     if (window.mw?.top()?.app) {
                         window.mw.top().app.dispatch('stylePackGlobalReload', {
@@ -1522,7 +1522,7 @@ export default {
                 this.existingLayoutSelectorsInitialized = false;
             }            // Trigger global reload events for style preview updates when switching modes
             console.log('Apply mode changed to:', this.applyMode, '- triggering global reload events');
-            
+
             // Trigger style pack global reload for preview components
             if (window.mw?.top()?.app) {
                 window.mw.top().app.dispatch('stylePackGlobalReload', {

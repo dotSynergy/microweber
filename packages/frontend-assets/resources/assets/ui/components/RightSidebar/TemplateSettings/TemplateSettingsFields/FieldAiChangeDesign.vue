@@ -414,9 +414,9 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     font-size: 14px;
     line-height: 1.5;
     color: #2d3748;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    resize: vertical;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+    resize: none;
     min-height: 100px;
     width: 100%;
     outline: none;

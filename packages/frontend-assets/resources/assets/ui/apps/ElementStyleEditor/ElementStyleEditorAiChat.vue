@@ -31,7 +31,8 @@
 
 
                 <div class="form-control-live-edit-label-wrapper my-3">
-                    <input  class="form-control-live-edit-input " type="text" v-model="aiMessage" placeholder="Make text bigger..."
+                    <input class="form-control-live-edit-input " type="text" v-model="aiMessage"
+                           placeholder="Make text bigger..."
                            @keyup.enter="submitAiRequest"/>
                     <button class="btn btn-link ms-auto" @click="submitAiRequest">Send</button>
                     <div v-if="loading" class="text-center">AI is thinking...</div>
@@ -45,8 +46,7 @@
 
 <script>
 
-import { AIChatForm } from '../../../components/ai-chat';
-
+import {AIChatForm} from '../../../components/ai-chat';
 
 
 export default {
@@ -59,7 +59,6 @@ export default {
             placeholder: mw.lang('Make text bigger')
         });
         target.appendChild(aiChatForm.form);
-
 
 
         aiChatForm.on('submit', val => {
@@ -109,7 +108,6 @@ export default {
                 'margin-right',
 
 
-
                 'padding',
                 'padding-top',
                 'padding-bottom',
@@ -152,18 +150,9 @@ export default {
                 'border-right-style',
 
 
-
-
-
-
-
-
                 'box-shadow',
                 'filter',
                 'opacity',
-
-
-
 
 
             ],

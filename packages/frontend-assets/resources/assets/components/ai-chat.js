@@ -66,19 +66,6 @@ const AIChatFormCSS= `
         box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
      }
 
-     .mw-ai-chat-box .mw-ai-chat-box-area-field{
-        width: 100%;
-        resize: none;
-        background: transparent;
-        border-color: transparent;
-        min-height: 65px;
-        display: block;
-        outline: none !important;
-        padding-bottom: 60px;
-        border-radius: 7px !important;
-        border-width: 0px !important;
-        box-shadow: none
-      }
 
       html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field{
 

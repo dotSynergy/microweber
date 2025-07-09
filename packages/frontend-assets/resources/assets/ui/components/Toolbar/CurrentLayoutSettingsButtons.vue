@@ -1,13 +1,14 @@
-<template>    <div class="current-layout-modules" v-if="currentLayoutModules.length > 0">
+<template>
+    <div v-if="currentLayoutModules.length > 0" class="current-layout-modules">
 
         <hr>
 
         <!-- Add Module Button -->
         <div class="add-module-section">
             <div
-                @click="insertModuleIntoLayout"
                 class="btn-icon add-module-button"
                 title="Insert Module"
+                @click="insertModuleIntoLayout"
             >
                 <v-tooltip activator="parent" location="start">
                     Insert Module
@@ -20,11 +21,11 @@
             <div
                 v-for="module in currentLayoutModules"
                 :key="module.id"
-                @click="openModuleSettings(module)"
-                @mouseenter="onModuleHover(module)"
-                class="btn-icon module-settings-button"
                 :class="{ 'active': module.isActive }"
                 :title="module.title || module.type"
+                class="btn-icon module-settings-button"
+                @click="openModuleSettings(module)"
+                @mouseenter="onModuleHover(module)"
             >
                 <v-tooltip activator="parent" location="start">
                     {{ module.title || module.type }}
@@ -442,7 +443,7 @@ export default {
             } catch (error) {
                 console.error('Error opening module settings:', error);
             }
-        },        onModuleHover(module) {
+        }, onModuleHover(module) {
             try {
                 // Set the target element handle on hover
                 if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && module.element) {
@@ -456,8 +457,14 @@ export default {
         insertModuleIntoLayout() {
             try {
                 // Get the current layout element as the target
-                const targetElement = this.getCurrentLayoutElement();
-                
+
+                const targetElement = mw.top().app.liveEdit.elementHandle.getTarget()
+                    || window.mw.top().app.liveEdit.getSelectedNode()
+                    || window.mw.top().app.liveEdit.getSelectedElementNode()
+                    || this.getCurrentLayoutElement();
+
+
+                console.log('Inserting module into element:', targetElement);
                 if (targetElement && window.mw?.app?.editor?.dispatch) {
                     // Dispatch the insert module request with the layout as target
                     window.mw.app.editor.dispatch('insertModuleRequest', targetElement);

@@ -171,8 +171,9 @@ export default {
             try {
 
 
-                const activeElement = mw.top().app.liveEdit.elementHandle.getTarget();
-                //     || window.mw.top().app.liveEdit.getSelectedElementNode();
+                const activeElement = mw.top().app.liveEdit.elementHandle.getTarget()
+                      || window.mw.top().app.liveEdit.getSelectedNode()
+                      || window.mw.top().app.liveEdit.getSelectedElementNode();
 
                 if (activeElement !== this.currentElement) {
                     this.currentElement = activeElement;

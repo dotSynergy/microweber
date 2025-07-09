@@ -1,12 +1,12 @@
 <template>
     <div v-show="isTextElement">
-        <div class="current-node-text-edit" v-if="isTextElement">
+        <div v-if="isTextElement" class="current-node-text-edit">
             <div
+                :class="{ 'active': isEditing }"
+                class="btn-icon text-edit-button"
+                title="Edit Text"
                 @click="editCurrentNode"
                 @mouseenter="onNodeHover"
-                class="btn-icon text-edit-button"
-                :class="{ 'active': isEditing }"
-                title="Edit Text"
             >
                 <v-tooltip activator="parent" location="start">
                     Edit Text
@@ -72,13 +72,19 @@
 
 <script>
 export default {
-    name: 'CurrentNodeTextEditButton',
-    data() {
+    name: 'CurrentNodeTextEditButton', data() {
         return {
             currentElement: null,
             isTextElement: false,
             isEditing: false,
-            updateInterval: null
+            updateInterval: null,
+            // Store event handler references for cleanup
+            eventHandlers: {
+                liveEditCanvasLoaded: null,
+                canvasDocumentClick: null,
+                editNodeRequest: null,
+                editNodeEnd: null
+            }
         };
     },
     mounted() {
@@ -102,48 +108,63 @@ export default {
         setupEventListeners() {
             // Listen for canvas changes
             if (window.mw?.app?.canvas) {
-                window.mw.app.canvas.on('liveEditCanvasLoaded', () => {
+                this.eventHandlers.liveEditCanvasLoaded = () => {
                     this.updateCurrentNode();
-                });
+                };
 
-                window.mw.app.canvas.on('canvasDocumentClick', () => {
+                this.eventHandlers.canvasDocumentClick = () => {
                     // Delay update to allow for element selection
                     setTimeout(() => {
                         this.updateCurrentNode();
                     }, 100);
-                });
+                };
+
+                window.mw.app.canvas.on('liveEditCanvasLoaded', this.eventHandlers.liveEditCanvasLoaded);
+                window.mw.app.canvas.on('canvasDocumentClick', this.eventHandlers.canvasDocumentClick);
             }
 
             // Listen for editor events
             if (window.mw?.app?.editor) {
-                //cjecl of is connenteditable
-
-                window.mw.app.editor.on('editNodeRequest', () => {
+                this.eventHandlers.editNodeRequest = () => {
                     this.isEditing = true;
-                });
+                };
 
-                window.mw.app.editor.on('editNodeEnd', () => {
+                this.eventHandlers.editNodeEnd = () => {
                     this.isEditing = false;
                     this.updateCurrentNode(); // Refresh current node after editing ends
-                });
+                };
 
-
-
-
-
-
-                // window.mw.app.editor.on('editNodeRequest', () => {
-                //     this.isEditing = true;
-                // });
-                //
-                // window.mw.app.editor.on('editNodeEnd', () => {
-                //     this.isEditing = false;
-                // });
+                window.mw.app.editor.on('editNodeRequest', this.eventHandlers.editNodeRequest);
+                window.mw.app.editor.on('editNodeEnd', this.eventHandlers.editNodeEnd);
             }
-        },
+        }, cleanupEventListeners() {
+            // Clean up canvas event listeners
+            if (window.mw?.app?.canvas) {
+                if (this.eventHandlers.liveEditCanvasLoaded) {
+                    window.mw.app.canvas.off('liveEditCanvasLoaded', this.eventHandlers.liveEditCanvasLoaded);
+                }
+                if (this.eventHandlers.canvasDocumentClick) {
+                    window.mw.app.canvas.off('canvasDocumentClick', this.eventHandlers.canvasDocumentClick);
+                }
+            }
 
-        cleanupEventListeners() {
-            // Clean up any event listeners if needed
+            // Clean up editor event listeners
+            if (window.mw?.app?.editor) {
+                if (this.eventHandlers.editNodeRequest) {
+                    window.mw.app.editor.off('editNodeRequest', this.eventHandlers.editNodeRequest);
+                }
+                if (this.eventHandlers.editNodeEnd) {
+                    window.mw.app.editor.off('editNodeEnd', this.eventHandlers.editNodeEnd);
+                }
+            }
+
+            // Clear event handler references
+            this.eventHandlers = {
+                liveEditCanvasLoaded: null,
+                canvasDocumentClick: null,
+                editNodeRequest: null,
+                editNodeEnd: null
+            };
         },
 
         updateCurrentNode() {

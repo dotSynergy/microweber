@@ -835,7 +835,7 @@ export class LiveEdit {
 
 
             if (hasBg && this.canBeEditable(hasBg)) {
-                // bgImageHandles.setTarget(hasBg)
+                bgImageHandles.setTarget(hasBg)
             }
 
 

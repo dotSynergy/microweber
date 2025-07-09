@@ -138,13 +138,14 @@ export class ElementActions extends MicroweberBaseClass {
         }
 
 
-        mw.confirm('<span>Are you sure you want to delete this element?</span>', () => {
+        mw.confirm(mw.lang('Are you sure you want to delete this element') + '?', () => {
             var edit = mw.tools.firstParentOrCurrentWithAnyOfClasses(el, ['regular-mode', 'edit', 'safe-mode']);
 
             if (edit) {
                 mw.app.registerSyncAction(edit, true);
             }
-            el.remove()
+            el.remove();
+            mw.top().app.liveEdit.elementHandle.hide()
             if (edit) {
 
                 mw.app.liveEdit.handles.get('element').set(null);

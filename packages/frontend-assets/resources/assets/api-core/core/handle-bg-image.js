@@ -18,6 +18,7 @@ export class BGImageHandles {
         const handleIcons = new HandleIcons();
 
 
+
         const primaryMenu = [
             {
                 title: 'Edit' ,

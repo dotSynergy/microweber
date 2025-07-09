@@ -539,6 +539,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
         mw.top().app.on('editChanged', this.editChangeSyncHandle);
         mw.top().app.on('stateChange', this.editChangeSyncHandle);
+        mw.top().app.on('layoutCloned', this.editChangeSyncHandle);
+        mw.top().app.on('layoutDeleted', this.editChangeSyncHandle);
 
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
@@ -599,6 +601,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     sync(edit) {
+
          if(this.settings.disableSync) {
             return
         }

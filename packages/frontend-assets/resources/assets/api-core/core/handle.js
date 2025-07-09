@@ -190,7 +190,7 @@ export const Handle = function (options) {
 
          this.wrapper.css({
             top:  off.top,
-            left:  off.left,
+            left:  off.left - ( this.wrapper.get(0).ownerDocument.documentElement.offsetLeft ),
             width: off.width,
             height
         });

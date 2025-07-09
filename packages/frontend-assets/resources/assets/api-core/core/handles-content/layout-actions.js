@@ -5,6 +5,8 @@ import {DomHelpers} from "../../../tools/domhelpers.js";
 
 export const afterLayoutChange = target => {
     const edit = mw.tools.firstParentOrCurrentWithClass(target, 'edit');
+    mw.top().app.liveEdit.layoutHandle.hide()
+
     if(edit) {
         const canHasLayout = edit.dataset.layoutContainer !== undefined;
         if(canHasLayout) {
@@ -156,6 +158,8 @@ export class LayoutActions extends MicroweberBaseClass {
             if(edit && edit.innerHTML && edit.innerHTML.trim() === '') {
                 edit.innerHTML = '<!-- add content here -->';
             }
+
+            mw.app.dispatch('layoutDeleted', edit);
 
             afterLayoutChange(edit)
         })

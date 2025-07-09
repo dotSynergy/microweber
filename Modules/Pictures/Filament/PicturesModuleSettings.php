@@ -39,17 +39,7 @@ class PicturesModuleSettings extends LiveEditModuleSettings
                         Tabs\Tab::make('Main settings')
                             ->schema([
 
-                                ToggleButtons::make('options.data-use-from-post')
-                                    ->visible($relType == 'module' and $relId > 0)
-                                    ->label('Use images from post')
-                                    ->helperText('Use images from the post')
-                                    ->live()
-                                    ->inline()
-                                    ->options([
-                                        'n' => 'No',
-                                        'y' => 'Yes',
-                                    ])
-                                    ->default('n'),
+
 
 
                                 MwMediaBrowser::make('mediaIds')
@@ -69,6 +59,20 @@ class PicturesModuleSettings extends LiveEditModuleSettings
                             ]),
                         Tabs\Tab::make('Design')
                             ->schema($this->getTemplatesFormSchema()),
+
+                        Tabs\Tab::make('Advanced')
+                            ->schema([ToggleButtons::make('options.data-use-from-post')
+                                ->visible($relType == 'module' and $relId > 0)
+                                ->label('Use images from post')
+                                ->helperText('Use images from the post')
+                                ->live()
+                                ->inline()
+                                ->options([
+                                    'n' => 'No',
+                                    'y' => 'Yes',
+                                ])
+                                ->default('n')
+                                ])
                     ]),
             ]);
     }

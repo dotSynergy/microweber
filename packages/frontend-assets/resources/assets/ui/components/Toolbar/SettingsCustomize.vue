@@ -139,7 +139,10 @@
         </div>
 
 
-        <div :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }">
+
+        <div>
+            <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
+
             <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>
         </div>
 
@@ -189,6 +192,7 @@
 import ToolsButtons from "../RightSidebar/ToolsButtons.vue";
 import ToolbarMulilanguageSelector from "./ToolbarMulilanguageSelector.vue";
 import CurrentLayoutSettingsButtons from "./CurrentLayoutSettingsButtons.vue";
+import CurrentNodeTextEditButton from "./CurrentNodeTextEditButton.vue";
 import CSSGUIService from "../../../api-core/services/services/css-gui.service.js";
 
 let handleLayersChange = function () {
@@ -200,6 +204,7 @@ export default {
     components: {
         ToolsButtons,
         ToolbarMulilanguageSelector,
+        CurrentNodeTextEditButton,
         CurrentLayoutSettingsButtons,
 
     },

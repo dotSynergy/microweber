@@ -8,14 +8,24 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Livewire\Livewire;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
+use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
 use Modules\Multilanguage\Livewire\LanguagesTable;
 
 class MultilanguageSettings extends LiveEditModuleSettings
 {
     public string $module = 'multilanguage';
+    public string $optionGroup = 'multilanguage_settings';
+
+    public array $optionGroups = [
+        'multilanguage_settings',
+        'website'
+    ];
 
     public function form(Form $form): Form
     {
@@ -30,12 +40,29 @@ class MultilanguageSettings extends LiveEditModuleSettings
                     ->tabs([
                         Tabs\Tab::make('Languages')
                             ->schema([
-                                Section::make('Manage Languages')
-                                    ->schema([
-                                        \Filament\Forms\Components\Livewire::make(LanguagesTable::class)
-                                    ]),
-                            ]),
+                                Actions::make([
 
+                                    Action::make('Edit languages')
+                                        ->openUrlInNewTab()
+                                        ->label('Edit Languages')
+                                        ->icon('heroicon-o-globe-alt')
+                                        ->url(MultilanguageSettingsAdmin::getUrl(), shouldOpenInNewTab: true),
+
+                                ]),
+
+//                                Toggle::make('options.multilanguage.is_active')
+//                                    ->label('Multilanguage is active')
+//                                    ->helperText('Enable or disable multilanguage functionality for your website')
+//                                    ->live(),
+//
+//
+//                                Section::make('Manage Languages')
+//                                    ->visible(fn(Get $get) => $get('options.multilanguage.is_active') === true)
+//
+//                                    ->schema([
+//                                        \Filament\Forms\Components\Livewire::make(LanguagesTable::class)
+//                                    ]),
+                            ]),
 
 
                         // Add template settings

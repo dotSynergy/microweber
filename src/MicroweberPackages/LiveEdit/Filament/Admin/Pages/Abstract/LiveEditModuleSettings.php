@@ -67,6 +67,24 @@ abstract class LiveEditModuleSettings extends Page
                 $fieldStatePath = $field->getStatePath();
                 $fieldStatePath = array_undot_str($fieldStatePath);
 
+////  todo
+///  this is tricky for the nested options, need to be fixed
+//                if(isset($fieldStatePath['options']) and is_array($fieldStatePath['options'])){
+//                    foreach ($fieldStatePath['options'] as $optionKey => $optionValue) {
+//                        if (isset($this->options[$optionKey]) and $this->options[$optionKey] == '') {
+//
+//                            if(!$optionValue){
+//                                $optionValue = get_option($optionKey, $this->getOptionGroup(), false, $this->module);
+//                            }
+//                            $this->options[$optionKey] = $optionValue;
+//                        }
+//                    }
+//                } elseif (isset($fieldStatePath['options']) and !empty($fieldStatePath['options'])) {
+//                    if (!isset($this->options[$fieldStatePath['options']])) {
+//                        $this->options[$fieldStatePath['options']] = '';
+//                    }
+//                }
+
                 if (isset($fieldStatePath['options'])) {
                     $this->options[$fieldStatePath['options']] = '';
                 }

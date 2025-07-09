@@ -8,7 +8,7 @@ use Modules\Content\Models\Content;
 
 class ContentModule extends BaseModule
 {
-    public static string $name = 'Content Module';
+    public static string $name = 'Content';
     public static string $module = 'content';
     public static string $icon = 'modules.content-icon';
     public static string $categories = 'content';

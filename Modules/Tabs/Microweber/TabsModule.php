@@ -8,7 +8,7 @@ use Modules\Tabs\Models\Tab;
 
 class TabsModule extends BaseModule
 {
-    public static string $name = 'Tabs Module';
+    public static string $name = 'Tabs';
     public static string $module = 'tabs';
     public static string $icon = 'modules.tabs-icon';
     public static string $categories = 'content';

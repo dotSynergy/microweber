@@ -133,16 +133,32 @@ class ModulesApiLiveEdit extends Controller
 
 
                 foreach ($modulesFromRegistry as $modkey => $mod) {
+
+
                     if (isset($mod['icon']) and ($mod['icon'])) {
-                        try {
 
-                            //  $mod['icon'] = 'data:image/svg+xml;utf8,'.$this->encodeURIComponent(svg($mod['icon'])->toHtml());
-                            $mod['icon'] = 'data:image/svg+xml;base64,' . base64_encode(svg($mod['icon'])->toHtml());
-                            //  $mod['icon'] = svg($mod['icon'])->toHtml();
-                        } catch (\Exception $e) {
+                        //if icone contains <svg> tag, then convert it to base64
+                        if ($mod['icon'] and strpos($mod['icon'], '<svg') !== false) {
+                            $mod['icon'] = 'data:image/svg+xml;base64,' . base64_encode($mod['icon']);
+                        } elseif ($mod['icon'] and strpos($mod['icon'], 'data:image/svg+xml') !== false) {
+                            $mod['icon'] = str_replace('data:image/svg+xml;utf8,', '', $mod['icon']);
+                            $mod['icon'] = 'data:image/svg+xml;base64,' . base64_encode($mod['icon']);
+                        } elseif ($mod['icon'] and strpos($mod['icon'], 'data:image/svg+xml;base64,') !== false) {
+                            $mod['icon'] = str_replace('data:image/svg+xml;base64,', '', $mod['icon']);
+                        } else {
 
-                            $mod['icon'] = '';
+                            try {
+
+                                //  $mod['icon'] = 'data:image/svg+xml;utf8,'.$this->encodeURIComponent(svg($mod['icon'])->toHtml());
+                                $mod['icon'] = 'data:image/svg+xml;base64,' . base64_encode(svg($mod['icon'])->toHtml());
+                                //  $mod['icon'] = svg($mod['icon'])->toHtml();
+                            } catch (\Exception $e) {
+
+                                $mod['icon'] = '';
+                            }
                         }
+
+
 
                     } else {
 

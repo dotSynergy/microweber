@@ -13,7 +13,7 @@ use Modules\CookieNotice\Services\CookieNoticeManager;
 
 class CookieNoticeModule extends BaseModule
 {
-    public static string $name = 'CookieNoticeModule';
+    public static string $name = 'Cookie Notice';
     public static string $module = 'cookie_notice';
     public static string $icon = 'heroicon-o-user-group';
     public static string $categories = 'mics';

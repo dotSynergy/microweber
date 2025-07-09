@@ -9,7 +9,7 @@ use Modules\Post\Models\Post;
 
 class PostModule extends ContentModule
 {
-    public static string $name = 'Posts Module';
+    public static string $name = 'Posts';
     public static string $module = 'posts';
     public static string $icon = 'modules.post-icon';
     public static string $categories = 'posts';

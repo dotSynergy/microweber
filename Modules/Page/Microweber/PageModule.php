@@ -9,7 +9,7 @@ use Modules\Page\Models\Page;
 
 class PageModule extends ContentModule
 {
-    public static string $name = 'Pages Module';
+    public static string $name = 'Pages';
     public static string $module = 'pages';
     public static string $icon = 'modules.page-icon';
     public static string $categories = 'pages';

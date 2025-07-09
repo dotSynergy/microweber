@@ -12,7 +12,7 @@ class PicturesModule extends BaseModule
     /**
      * Module configuration
      */
-    public static string $name = 'Pictures Module';
+    public static string $name = 'Pictures';
     public static string $module = 'pictures';
     public static string $icon = 'modules.pictures-icon';
     public static string $categories = 'media';

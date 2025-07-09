@@ -10,7 +10,7 @@ use \MicroweberPackages\Option\Models\Option;
 
 class ProductsModule extends ContentModule
 {
-    public static string $name = 'Products Module';
+    public static string $name = 'Products';
     public static string $module = 'shop/products';
     public static string $icon = 'modules.product-icon';
     public static string $categories = 'products';

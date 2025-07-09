@@ -13,7 +13,7 @@ class TestimonialsModule extends BaseModule
     /**
      * Module configuration
      */
-    public static string $name = 'Testimonials Module';
+    public static string $name = 'Testimonials';
     public static string $module = 'testimonials';
     public static string $icon = 'modules.testimonials-icon';
     public static string $categories = 'content';

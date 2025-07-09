@@ -8,7 +8,7 @@ use Modules\Accordion\Models\Accordion;
 
 class AccordionModule extends BaseModule
 {
-    public static string $name = 'Accordion Module';
+    public static string $name = 'Accordion';
     public static string $module = 'accordion';
     public static string $icon = 'modules.accordion-icon';
     public static string $categories = 'content';

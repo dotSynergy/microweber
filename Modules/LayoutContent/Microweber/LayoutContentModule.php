@@ -13,7 +13,7 @@ class LayoutContentModule extends BaseModule
     /**
      * Module configuration
      */
-    public static string $name = 'Layout Content Module';
+    public static string $name = 'Layout Content';
     public static string $module = 'layout_content';
     public static string $icon = 'modules.layout_content-icon';
     public static string $categories = 'content';

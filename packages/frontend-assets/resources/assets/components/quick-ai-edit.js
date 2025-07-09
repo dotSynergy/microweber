@@ -1172,9 +1172,11 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
             currentStep++;
             mw.top().spinnerProgress({}).set(currentStep * step,mw.lang('Generating images') + '...')
 
-            let images_prompt = `Generate images related to the subject: ${about}
-            The images should made for the websites context, and should be suitable for use in a website context.
-            The images should be suitable for use in a website context.
+            let images_prompt = `Generate website assets related to the subject: ${about}
+            The images should made for the websites context, and should be suitable for use in a website element00.
+            The images should be suitable for use in a website assets such as banners, backgrounds, and other website elements.
+            The image should represent the subject of the website, and should be suitable for use in a website context.
+            Important: Do not make full website images, but rather website assets that can be used in a website context.
              `;
 
 

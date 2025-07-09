@@ -1,7 +1,20 @@
-<template>
-    <div class="current-layout-modules" v-if="currentLayoutModules.length > 0">
+<template>    <div class="current-layout-modules" v-if="currentLayoutModules.length > 0">
 
         <hr>
+
+        <!-- Add Module Button -->
+        <div class="add-module-section">
+            <div
+                @click="insertModuleIntoLayout"
+                class="btn-icon add-module-button"
+                title="Insert Module"
+            >
+                <v-tooltip activator="parent" location="start">
+                    Insert Module
+                </v-tooltip>
+                <span>+</span>
+            </div>
+        </div>
 
         <div class="modules-buttons">
             <div
@@ -57,6 +70,40 @@
     flex-direction: column;
     gap: 8px;
     align-items: center;
+}
+
+.add-module-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+.add-module-button {
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(0, 134, 219, 0.2);
+    border: 1px solid rgba(0, 134, 219, 0.4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    color: #0086db;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.add-module-button:hover {
+    background: rgba(0, 134, 219, 0.3);
+    border-color: rgba(0, 134, 219, 0.6);
+    transform: scale(1.05);
+}
+
+.add-module-button:active {
+    transform: scale(0.95);
 }
 
 .module-settings-button {
@@ -395,9 +442,7 @@ export default {
             } catch (error) {
                 console.error('Error opening module settings:', error);
             }
-        },
-
-        onModuleHover(module) {
+        },        onModuleHover(module) {
             try {
                 // Set the target element handle on hover
                 if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && module.element) {
@@ -405,6 +450,22 @@ export default {
                 }
             } catch (error) {
                 console.error('Error setting element handle on hover:', error);
+            }
+        },
+
+        insertModuleIntoLayout() {
+            try {
+                // Get the current layout element as the target
+                const targetElement = this.getCurrentLayoutElement();
+                
+                if (targetElement && window.mw?.app?.editor?.dispatch) {
+                    // Dispatch the insert module request with the layout as target
+                    window.mw.app.editor.dispatch('insertModuleRequest', targetElement);
+                } else {
+                    console.warn('Cannot insert module: target element or editor not available');
+                }
+            } catch (error) {
+                console.error('Error inserting module into layout:', error);
             }
         }
     }

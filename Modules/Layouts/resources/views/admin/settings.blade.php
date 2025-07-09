@@ -48,12 +48,13 @@
 
                     .tab-indicator.has-video::after {
                         display: block;
-                        background-color: #007bff;
+                        background-color: black;
                         content: '▶';
                         color: white;
-                        font-size: 8px;
-                        line-height: 12px;
-                        text-align: center;
+                        font-size: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     }
 
                     .tab-indicator.has-cursor::after {

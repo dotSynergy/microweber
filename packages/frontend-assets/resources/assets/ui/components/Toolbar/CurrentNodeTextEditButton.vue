@@ -58,8 +58,8 @@
 }
 
 .text-edit-button :deep(svg) {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
     fill: currentColor;
 }
 

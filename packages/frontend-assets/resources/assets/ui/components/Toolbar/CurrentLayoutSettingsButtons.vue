@@ -14,7 +14,8 @@
                     Insert Module
                 </v-tooltip>
                 <span>
-                   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z"/></svg>
+                   <svg fill="currentColor" height="24px" viewBox="0 -960 960 960" width="24px"
+                        xmlns="http://www.w3.org/2000/svg"><path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z"/></svg>
                 </span>
             </div>
         </div>
@@ -81,7 +82,6 @@
     justify-content: center;
     padding: 0 5px;
 }
-
 
 
 .module-settings-button {
@@ -424,7 +424,14 @@ export default {
             try {
                 // Set the target element handle on hover
                 if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && module.element) {
-                    window.mw.top().app.liveEdit.elementHandle.set(module.element);
+
+                    if(module.type !== 'layouts' && module.type != 'background'){
+                        window.mw.top().app.liveEdit.elementHandle.set(module.element, true);
+
+                    }
+
+
+
                 }
             } catch (error) {
                 console.error('Error setting element handle on hover:', error);
@@ -435,9 +442,10 @@ export default {
             try {
                 // Get the current layout element as the target
 
-                const targetElement = mw.top().app.liveEdit.elementHandle.getTarget()
-                    || window.mw.top().app.liveEdit.getSelectedNode()
+                const targetElement =
+                    window.mw.top().app.liveEdit.getSelectedNode()
                     || window.mw.top().app.liveEdit.getSelectedElementNode()
+                    || mw.top().app.liveEdit.elementHandle.getTarget()
                     || this.getCurrentLayoutElement();
 
 

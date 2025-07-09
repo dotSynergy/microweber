@@ -47,9 +47,9 @@ export default function layoutSettings(activeTab, optionGroup) {
         getTargets() {
 
 
-            let target =  target = window.mw.top().app.liveEdit.getSelectedLayoutNode();
+            let target = window.mw.top().app.liveEdit.getSelectedLayoutNode();
             if (!target) {
-                mw.top().app.liveEdit.handles.get('layout').getTarget();
+                target = mw.top().app.liveEdit.handles.get('layout').getTarget();
             }
 
 

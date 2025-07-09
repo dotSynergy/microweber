@@ -93,9 +93,9 @@ export default {
             this.updateCurrentNode();
 
             // Update periodically to catch dynamic changes
-            this.updateInterval = setInterval(() => {
-                this.updateCurrentNode();
-            }, 1000);
+            // this.updateInterval = setInterval(() => {
+            //     this.updateCurrentNode();
+            // }, 1000);
         });
     },
     beforeUnmount() {
@@ -169,7 +169,10 @@ export default {
 
         updateCurrentNode() {
             try {
-                const activeElement = window.mw.top().app.liveEdit.getSelectedElementNode();
+
+
+                const activeElement = mw.top().app.liveEdit.elementHandle.getTarget();
+                //     || window.mw.top().app.liveEdit.getSelectedElementNode();
 
                 if (activeElement !== this.currentElement) {
                     this.currentElement = activeElement;
@@ -188,6 +191,8 @@ export default {
 
             // Use Microweber's built-in isEditable check first
             if (window.mw?.tools?.isEditable) {
+
+
                 this.isTextElement = window.mw.tools.isEditable(this.currentElement);
 
                 //check is editing
@@ -201,31 +206,8 @@ export default {
                 return;
             }
 
-            // Fallback to manual checks if mw.tools.isEditable is not available
-            const tagName = this.currentElement.tagName.toLowerCase();
-            const textElements = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'a', 'strong', 'em', 'b', 'i', 'u', 'small', 'mark', 'del', 'ins', 'sub', 'sup'];
-
-            // Check if it's a text element or has editable content
-            this.isTextElement = textElements.includes(tagName) ||
-                this.currentElement.contentEditable === 'true' ||
-                this.currentElement.hasAttribute('contenteditable') ||
-                this.currentElement.classList.contains('editable') ||
-                this.hasTextContent();
         },
 
-        hasTextContent() {
-            if (!this.currentElement) return false;
-
-            // Check if element has direct text content (not just from child elements)
-            const textContent = this.currentElement.textContent || '';
-            const hasText = textContent.trim().length > 0;
-
-            // Check if element has no block-level children (likely contains text)
-            const blockElements = this.currentElement.querySelectorAll('div, p, h1, h2, h3, h4, h5, h6, section, article, aside, nav, header, footer, main');
-            const hasBlockChildren = blockElements.length > 0;
-
-            return hasText && !hasBlockChildren;
-        },
 
         editCurrentNode() {
             try {
@@ -234,48 +216,19 @@ export default {
                     return;
                 }
 
+
                 // Set the editing state
                 this.isEditing = true;
-
-                // Dispatch the edit node request using Microweber's editor system
-                if (window.mw?.app?.editor?.dispatch) {
-                    window.mw.app.editor.dispatch('editNodeRequest', this.currentElement);
-                } else if (window.mw?.top()?.app?.editor?.dispatch) {
-                    window.mw.top().app.editor.dispatch('editNodeRequest', this.currentElement);
-                } else {
-                    console.warn('Editor dispatch method not available');
-                    // Fallback: try to make element editable
-                    this.makeElementEditable();
-                }
+                window.mw.app.editor.dispatch('editNodeRequest', this.currentElement);
             } catch (error) {
                 console.error('Error editing current node:', error);
                 this.isEditing = false;
             }
         },
 
-        makeElementEditable() {
-            if (this.currentElement) {
-                this.currentElement.contentEditable = true;
-                this.currentElement.focus();
-
-                // Select all text content
-                const range = document.createRange();
-                range.selectNodeContents(this.currentElement);
-                const selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(range);
-            }
-        },
 
         onNodeHover() {
-            try {
-                // Set the target element handle on hover
-                if (window.mw?.top()?.app?.liveEdit?.elementHandle?.set && this.currentElement) {
-                    window.mw.top().app.liveEdit.elementHandle.set(this.currentElement);
-                }
-            } catch (error) {
-                console.error('Error setting element handle on hover:', error);
-            }
+
         },
 
         getTextEditIcon() {

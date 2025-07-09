@@ -228,10 +228,7 @@ export default {
             let layoutElement = window.mw.top().app.liveEdit.getSelectedLayoutNode();
 
             return layoutElement;
-        },
-
-
-        extractLayoutModules(layoutElement) {
+        },        extractLayoutModules(layoutElement) {
             this.currentLayoutModules = [];
             this.currentLayoutTitle = '';
 
@@ -242,8 +239,8 @@ export default {
             // Get layout title
             this.currentLayoutTitle = this.getLayoutTitle(layoutElement);
 
-            // Find all modules within this layout
-            const modules = layoutElement.querySelectorAll('.module[data-type]:not([data-type=""]):not(.module-layouts)');
+            // Find only direct child modules within this layout (not nested modules inside other modules)
+            const modules = this.getDirectChildModules(layoutElement);
             const moduleData = [];
 
             modules.forEach((moduleElement, index) => {
@@ -281,10 +278,48 @@ export default {
 
             if (layoutName) {
                 return layoutName.length > 15 ? layoutName.substring(0, 15) + '...' : layoutName;
-            }
+            }            return 'Layout';
+        },
 
-            return 'Layout';
-        }, getModuleTitle(moduleElement, moduleType) {
+        getDirectChildModules(layoutElement) {
+            // Get only direct child modules, not nested modules inside other modules
+            const allModules = layoutElement.querySelectorAll('.module[data-type]:not([data-type=""]):not(.module-layouts)');
+            const directChildModules = [];
+
+            allModules.forEach(moduleElement => {
+                // Check if this module is a direct child of the layout
+                // by verifying that there's no other module between this one and the layout
+                let parent = moduleElement.parentElement;
+                let isDirectChild = false;
+
+                while (parent && parent !== layoutElement) {
+                    // If we encounter another module element on the way up, 
+                    // this means our module is nested inside another module
+                    if (parent.classList.contains('module') && 
+                        parent.hasAttribute('data-type') && 
+                        parent.getAttribute('data-type') !== '' &&
+                        !parent.classList.contains('module-layouts')) {
+                        isDirectChild = false;
+                        break;
+                    }
+                    parent = parent.parentElement;
+                }
+
+                // If we reached the layout without encountering another module,
+                // this is a direct child
+                if (parent === layoutElement) {
+                    isDirectChild = true;
+                }
+
+                if (isDirectChild) {
+                    directChildModules.push(moduleElement);
+                }
+            });
+
+            return directChildModules;
+        },
+
+        getModuleTitle(moduleElement, moduleType) {
             // Try to get module info from Microweber's module system first
             if (window.mw?.top()?.app?.modules) {
                 const info = window.mw.top().app.modules.getModuleInfo(moduleType);

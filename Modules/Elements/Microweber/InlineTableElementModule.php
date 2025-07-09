@@ -10,7 +10,7 @@ class InlineTableElementModule extends BaseModule
     public static string $module = 'inline-table';
     public static string $icon = 'modules.elements-table';
     public static string $categories = 'essentials';
-    public static int $position = 5;
+    public static int $position = 15;
     public static string $templatesNamespace = 'modules.elements::templates.inline-table';
     public static bool $isStaticElement = true;
 

@@ -11,7 +11,7 @@ class GoogleMapsModule extends BaseModule
     public static string $module = 'google_maps';
     public static string $icon = 'heroicon-o-map';
     public static string $categories = 'maps, location';
-    public static int $position = 1;
+    public static int $position = 10;
     public static string $settingsComponent = GoogleMapsModuleSettings::class;
     public static string $templatesNamespace = 'modules.google_maps::templates';
 

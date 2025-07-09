@@ -10,7 +10,7 @@ class EmptyElementModule extends BaseModule
     public static string $module = 'empty';
     public static string $icon = 'modules.elements-empty';
     public static string $categories = 'essentials';
-    public static int $position = 3;
+    public static int $position = 9;
     public static string $templatesNamespace = 'modules.elements::templates.empty';
     public static bool $isStaticElement = true;
 

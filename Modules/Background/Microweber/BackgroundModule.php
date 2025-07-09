@@ -13,7 +13,7 @@ class BackgroundModule extends BaseModule
     public static string $categories = 'media';
     public static string $templatesNamespace = 'modules.background::templates';
     public static string $settingsComponent = BackgroundModuleSettings::class;
-    public static int $position = 1;
+    public static int $position = 100;
 
     public function getViewData(): array
     {

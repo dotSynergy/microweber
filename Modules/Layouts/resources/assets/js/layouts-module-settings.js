@@ -25,6 +25,9 @@ export default function layoutSettings(activeTab, optionGroup) {
 
             let targets = this.getTargets();
 
+
+
+
             if (targets.bg) {
                 // add to support
                 this.supports.push('image');
@@ -51,6 +54,9 @@ export default function layoutSettings(activeTab, optionGroup) {
             if (!target) {
                 target = mw.top().app.liveEdit.handles.get('layout').getTarget();
             }
+
+
+
 
 
             let bg, bgOverlay, bgNode;
@@ -156,7 +162,13 @@ export default function layoutSettings(activeTab, optionGroup) {
         handleReadyLayoutSettingLoaded() {
             let {bg, bgOverlay, bgNode, target, modulesList} = this.getTargets();
             let bgImage = mw.top().app.layoutBackground.getBackgroundImage(bgNode);
-            let bgVideo = mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
+
+            let bgVideo =  mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
+
+
+
+
+
             let bgCursor = mw.top().app.layoutBackground.getBackgroundCursor(bgNode);
             let bgSize = mw.top().app.layoutBackground.getBackgroundImageSize(bgNode);
             if (!bgSize) {

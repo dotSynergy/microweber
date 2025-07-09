@@ -176,12 +176,22 @@ export class LiveEditLayoutBackground extends BaseComponent {
 
     }
 
-    getBackgroundVideo(node) {
-        if (node && node.dataset && node.dataset.mwvideo) {
+
+    getBackgroundVideo(node){
+        if(node && node.dataset && node.dataset.mwvideo){
             return node.dataset.mwvideo;
         }
-    }
 
+        // Check if there's a video element inside the node
+        if(node) {
+            var videoElement = node.querySelector('video');
+            if(videoElement && videoElement.src) {
+                return videoElement.src;
+            }
+        }
+
+        return null;
+    }
     setBackgroundVideo(node, url) {
         mw.app.registerAskUserToStay(true);
         mw.app.registerUndoState(node);

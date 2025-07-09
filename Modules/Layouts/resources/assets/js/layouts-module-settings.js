@@ -47,9 +47,9 @@ export default function layoutSettings(activeTab, optionGroup) {
         getTargets() {
 
 
-            let target = mw.top().app.liveEdit.handles.get('layout').getTarget();
+            let target =  target = window.mw.top().app.liveEdit.getSelectedLayoutNode();
             if (!target) {
-                target = window.mw.top().app.liveEdit.getSelectedLayoutNode();
+                mw.top().app.liveEdit.handles.get('layout').getTarget();
             }
 
 
@@ -123,21 +123,21 @@ export default function layoutSettings(activeTab, optionGroup) {
         },        // Add method to update background states
         updateBackgroundStates() {
             let {bg, bgOverlay, bgNode, target} = this.getTargets();
-            
+
             // Check for background image
             let bgImage = mw.top().app.layoutBackground.getBackgroundImage(bgNode);
             this.hasBackgroundImage = !!bgImage;
             this.backgroundImagePreview = bgImage;
-            
+
             // Check for background video
             let bgVideo = mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
             this.hasBackgroundVideo = !!bgVideo;
-            
+
             // Check for background color
             let bgColor = mw.top().app.layoutBackground.getBackgroundColor(bgOverlay);
             this.hasBackgroundColor = !!bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent';
             this.backgroundColorPreview = bgColor;
-            
+
             // Check for cursor - only show if there's actually a cursor image set
             let bgCursor = mw.top().app.layoutBackground.getBackgroundCursor(bgNode);
             this.hasBackgroundCursor = !!bgCursor && bgCursor.trim() !== '' && bgCursor.trim() !== 'auto';

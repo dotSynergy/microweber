@@ -104,16 +104,23 @@ class OpenAiDriver extends BaseDriver
 
         $schema = null;
         if (isset($options['schema']) and $options['schema']) {
+
+            if(is_string($options['schema'])){
+                $options['schema'] = @json_decode($options['schema']);
+            }
+
             $schema = $options['schema'];
+
         }
 
         // Add JSON schema response format if provided
         if ($schema !== null) {
 
             $params['response_format'] = [
-                'type' => 'json_schema',
+                'type' => 'json_object',
+                //'schema' => $schema
                 //          'name' => 'json_schema',
-                'json_schema' => ['name' => 'json_schema', 'schema' => $schema],
+              //  'json_schema' => ['name' => 'json_schema', 'schema' => $schema],
             ];
         }
 

@@ -739,69 +739,64 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
     applyJSON(json = [], extend = true) {
 
+        // Function to recursively find all content arrays in the data structure
+        const findAllContent = (obj, contentItems = []) => {
+            if (!obj || typeof obj !== 'object') {
+                return contentItems;
+            }
 
+            // If this object has a content property that's an array, add all items to our collection
+            if (obj.content && Array.isArray(obj.content)) {
+                contentItems.push(...obj.content);
+            }
 
+            // Recursively search through all properties of this object
+            Object.keys(obj).forEach(key => {
+                const value = obj[key];
+                if (Array.isArray(value)) {
+                    // If it's an array, search through each item
+                    value.forEach(item => {
+                        findAllContent(item, contentItems);
+                    });
+                } else if (value && typeof value === 'object') {
+                    // If it's an object, search through it
+                    findAllContent(value, contentItems);
+                }
+            });
 
+            return contentItems;
+        };
 
-
-        // Enhanced recursive function to process nodes at any depth
-        const processAllNodesAtAnyDepth = (node) => {
-            // Base case: if node is null or undefined, just return
-            if (!node) return;
-
-            // 1. Process this individual node if it has text content
-            if (node.id && node.text !== undefined) {
-                const input = document.getElementById(`data-node-id-${node.id}`);
-                const target = this.settings.document.getElementById(`${node.id}`);
-
+        // Process individual content items
+        const processContentItem = (item) => {
+            if (item && item.id && item.text !== undefined) {
+                const input = document.getElementById(`data-node-id-${item.id}`);
+                const target = this.settings.document.getElementById(`${item.id}`);
 
                 if (input) {
-                    input.value = node.text;
-
+                    input.value = item.text;
                 }
 
                 if (target) {
-                    target.textContent = node.text;
+                    target.textContent = item.text;
                     mw.top().app.registerChangedState(target);
-
-                }
-            }
-
-            // 2. Check if this is a content array directly
-            if (Array.isArray(node)) {
-                node.forEach(item => processAllNodesAtAnyDepth(item));
-                return;
-            }
-
-            // 3. Process content property (if it exists)
-            if (node.content) {
-                if (Array.isArray(node.content)) {
-                    // Process array of content
-                    node.content.forEach(item => processAllNodesAtAnyDepth(item));
-                } else {
-                    // Process single content object
-                    processAllNodesAtAnyDepth(node.content);
-                }
-            }
-
-            // 4. Process children property (if it exists)
-            if (node.children) {
-                if (Array.isArray(node.children)) {
-                    // Process array of children
-                    node.children.forEach(child => processAllNodesAtAnyDepth(child));
-                } else {
-                    // Process single child object
-                    processAllNodesAtAnyDepth(node.children);
                 }
             }
         };
 
-        // Process all top-level nodes using the enhanced recursive function
-        json.forEach(node => {
-            processAllNodesAtAnyDepth(node);
+        // Handle case where json is wrapped in a success response object
+        let processData = json;
+        if (json.success === true && json.data) {
+            processData = json.data;
+        }
+
+        // Find all content items recursively throughout the entire data structure
+        const allContentItems = findAllContent(processData);
+
+        // Process each content item
+        allContentItems.forEach(item => {
+            processContentItem(item);
         });
-
-
     }
 
     getType(obj) {
@@ -844,7 +839,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
                 let parentEditClosesIdElement = parentEdit.closest('id');
                 let parentEditClosesId = null;
                 if (parentEditClosesIdElement) {
-                    parentEditClosesId = parentEditClosesId.id;
+                    parentEditClosesId = parentEditClosesIdElement.id;
                 }
 
                 let sectionTitle;
@@ -1101,39 +1096,9 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
             }
 
             if (resData) {
-
-                    // Handle case where json is wrapped in a response object
-                if (resData.success === true && resData.data) {
-                    resData = resData.data;
-                }
-
-                // Handle direct data property
-                if (resData.data) {
-                    resData = resData.data;
-                }
-
-                // Check for content array at the top level
-                if (resData.content && Array.isArray(resData.content)) {
-                    resData = resData.content;
-                }
-                if (resData.items && Array.isArray(resData.items)) {
-                    resData = resData.items;
-                }
-
-                // Handle case where resData is a single object rather than an array
-                if (!Array.isArray(resData)) {
-                    resData = [resData];
-                }
-
-
-
-                if(resData && resData.length > 0 && !resData[0].$schema) {
-                    scope.applyJSON(resData);
-                } else if(retryCount < maxRetry) {
-                    await getTexts();
-                }
-
-            } else if(retryCount < maxzRetry) {
+                // Pass the entire response to applyJSON - it will handle the structure internally
+                scope.applyJSON(textRes);
+            } else if(retryCount < maxRetry) {
                 await getTexts();
             }
         }

@@ -259,7 +259,8 @@ export const Draggable = function (options, rootSettings) {
                 const isImage = images.indexOf(file.type) !== -1;
                 const isVideo = videos.indexOf(file.type) !== -1;
 
-                const canUpload = false// isImage || isVideo;
+
+                const canUpload =   isImage/* || isVideo*/;
 
 
 
@@ -270,7 +271,7 @@ export const Draggable = function (options, rootSettings) {
 
                 mw.spinner({element: document.body, decorate: true});
 
-                mw.uploader().uploadFile(file, function(res){
+                mw.upload().uploadFile(file, function(res){
 
                     var edit = DomService.firstParentWithAnyOfClasses(scope.target, ['edit'])
 

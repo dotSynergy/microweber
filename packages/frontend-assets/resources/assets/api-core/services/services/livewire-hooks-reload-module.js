@@ -19,7 +19,7 @@ export class LivewireHooksReloadModule {
                 // make unique
                 this.modulesForReload = [...new Set(this.modulesForReload)];
 
-                console.log('performModulesReload', this.modulesForReload);
+
 
                 for (let i = 0; i < this.modulesForReload.length; i++) {
                     let moduleId = this.modulesForReload[i];

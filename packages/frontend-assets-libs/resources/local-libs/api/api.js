@@ -591,6 +591,7 @@ mw.requireAsync = (url, key) => {
 
   mw.reload_module = function(module, callback) {
 
+console.log(2, module)
     if(Array.isArray(module)){
         var l = module.length, i=0, w = 1;
         for( ; i<l; i++){
@@ -601,12 +602,7 @@ mw.requireAsync = (url, key) => {
             }
             $( this ).trigger('ModuleReload')
 
-              //
-              // if(self !== top && top && top.mw) {
-              //     if (module[i] && module[i].id) {
-              //         mw.top().app.dispatch('onModuleReloaded', module[i].id);
-              //     }
-              // }
+            mw.top().app.dispatch('moduleReloaded', module[i]);
 
           });
         }
@@ -675,6 +671,7 @@ mw.requireAsync = (url, key) => {
                               callback.call();
                           }
                           $( document ).trigger('ModuleReload')
+                          mw.top().app.dispatch('moduleReloaded', m[i]);
                       })
                   }
               })(callback)

@@ -89,20 +89,29 @@ const AIChatFormCSS= `
 
 
 
-const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => `
+const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
+
+    let optionsTpl = '';
+
+    if(Array.isArray(options)) {
+        optionsTpl = `
+            <select class="mw-native-select" name="chatOptions">
+                <button>
+                    <selectedcontent></selectedcontent>
+                </button>
+                <option value="" selected disabled>${mw.lang('Choose action')}</option>
+                ${options.map(o => `<option value="${o.id}" ${o.selected ? 'selected' : ''}>${o.content}</option>`).join('')}
+            </select>
+        `;
+    }
+
+    const tpl = `
     <div class="mw-ai-chat-box" style="display:${hasChat ? '' : 'none'}">
         <div class="mw-ai-chat-box-area">
             <${multiLine ? 'textarea' : 'input' } class="mw-ai-chat-box-area-field" placeholder="${placeholder || mw.lang('Enter topic')}">${multiLine ? '</textarea>' : ''}
             <div class="mw-ai-chat-box-footer">
                 <div class="mw-ai-chat-box-options">
-                ${options ? `
-                    <select class="mw-native-select" name="chatOptions">
-                        <button>
-                            <selectedcontent></selectedcontent>
-                        </button>
-                        <option value="" selected disabled>${mw.lang('Choose action')}</option>
-                        ${options.map(o => `<option value="${o.id}" ${o.selected ? 'selected' : ''}>${o.content}</option>`).join('')}
-                    </select>`: ''}
+                ${options}
                 </div>
                 <div class="mw-ai-chat-box-actions">
                     <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>
@@ -113,7 +122,9 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => `
      </div>
 
      <style>${AIChatFormCSS}</style>
-`;
+`
+return tpl;
+};
 
 
 

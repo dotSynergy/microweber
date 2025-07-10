@@ -16,8 +16,9 @@ class SetupWizardController extends AdminController
         $getTemplates = site_templates();
         $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
         $templateNamesOnTop=[
-            'Big2',
+
             'Yummy2',
+            'Big2',
             'Freelancer2',
             'Coffeeshop2',
             'Resume2',

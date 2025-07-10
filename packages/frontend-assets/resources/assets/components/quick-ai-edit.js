@@ -302,7 +302,7 @@ class QuickEditGUI {
 
         })
         inp.addEventListener('focus', e => {
-            obj.node.scrollIntoView({behavior: "smooth", block: "center", inline: "start"});
+            obj.node.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
             mw.top().app.liveEdit.handles.get('element').set(obj.node);
             mw.top().app.liveEdit.handles.get('module').hide();
             mw.top().app.liveEdit.handles.get('layout').hide();
@@ -541,6 +541,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         mw.top().app.on('stateChange', this.editChangeSyncHandle);
         mw.top().app.on('layoutCloned', this.editChangeSyncHandle);
         mw.top().app.on('layoutDeleted', this.editChangeSyncHandle);
+        mw.top().app.on('moduleReloaded', this.editChangeSyncHandle)
+        mw.top().app.on('onModuleReloaded', this.editChangeSyncHandle)
 
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
@@ -601,6 +603,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     sync(edit) {
+
 
          if(this.settings.disableSync) {
             return

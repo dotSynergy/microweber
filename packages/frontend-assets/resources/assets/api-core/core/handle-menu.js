@@ -118,9 +118,12 @@ export const HandleMenu = function(options) {
 
     };
 
-
+    const titleMap = {
+        btn: 'Button'
+    }
 
     this.setTitle = function (title, icon){
+        title = mw.lang(titleMap[title] || title);
         titleText.html(title || '');
         titleIcon.html( icon || '');
     };

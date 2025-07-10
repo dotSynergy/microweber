@@ -457,8 +457,12 @@ html[dir="rtl"] {
     }
 }
 
+.mw-le-handle-menu-title-text p::first-letter {
+    text-transform: capitalize;
+}
 .mw-le-handle-menu-title-text {
     font-size: 12px;
+
 }
 
 

@@ -250,7 +250,6 @@ mw.reload_module_everywhere = function(module, eachCallback) {
 };
 
 mw.reload_module = async function(module, callback) {
-
     if(module.constructor === [].constructor){
         var l = module.length, i=0, w = 1;
         for( ; i<l; i++){
@@ -260,6 +259,7 @@ mw.reload_module = async function(module, callback) {
                     callback.call();
                 }
                 $( this ).trigger('ModuleReload')
+                mw.top().app.dispatch('moduleReloaded', module[i]);
             });
         }
         return false;
@@ -311,6 +311,7 @@ mw.reload_module = async function(module, callback) {
                                     callback.call();
                                 }
                                 $( document ).trigger('ModuleReload')
+                                mw.top().app.dispatch('moduleReloaded', m[i]);
                             })
                         }
                     })(callback)

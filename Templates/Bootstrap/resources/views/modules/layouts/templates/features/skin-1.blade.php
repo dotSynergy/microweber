@@ -33,7 +33,7 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
         <h2 class="pb-2 border-bottom">Columns with icons</h2>
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
             <div class="feature col">
-                <div class="feature-icon bg-primary bg-gradient">
+                <div class="feature-icon  ">
                     <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"/></svg>
                 </div>
                 <h2>Featured title</h2>
@@ -44,7 +44,7 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
                 </a>
             </div>
             <div class="feature col">
-                <div class="feature-icon bg-primary bg-gradient">
+                <div class="feature-icon  ">
                     <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"/></svg>
                 </div>
                 <h2>Featured title</h2>
@@ -55,7 +55,7 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
                 </a>
             </div>
             <div class="feature col">
-                <div class="feature-icon bg-primary bg-gradient">
+                <div class="feature-icon  ">
                     <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
                 </div>
                 <h2>Featured title</h2>

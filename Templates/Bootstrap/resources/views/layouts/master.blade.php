@@ -28,7 +28,7 @@
 <body class="{!! helper_body_classes() !!}">
 <div class="main">
     <div class="navigation-holder">
-        <module type="layouts" template="menus/skin-4" template-filter="menus" id="header-layout"/>
+        <module type="layouts" template="menus/skin-1" template-filter="menus" id="header-layout"/>
     </div>
 
     @yield('content')

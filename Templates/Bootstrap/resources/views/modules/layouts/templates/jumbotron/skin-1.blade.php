@@ -37,7 +37,7 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
             </a>
         </div>
 
-        <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="p-5 mb-4  rounded-3">
             <div class="container mw-layout-container-fluid mw-layout-container py-5">
                 <h1 class="display-5 fw-bold">Custom jumbotron</h1>
                 <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
@@ -47,14 +47,14 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
 
         <div class="row align-items-md-stretch">
             <div class="col-md-6">
-                <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <div class="h-100 p-5  rounded-3">
                     <h2>Change the background</h2>
                     <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
                     <module type="btn" button_style="btn btn-outline-light" button_text="Example button"/>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="h-100 p-5 bg-light border rounded-3">
+                <div class="h-100 p-5  border rounded-3">
                     <h2>Add borders</h2>
                     <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
                     <module type="btn" button_style="btn btn-outline-secondary" button_text="Example button"/>

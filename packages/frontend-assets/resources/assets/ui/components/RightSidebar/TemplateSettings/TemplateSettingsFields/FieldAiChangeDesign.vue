@@ -406,7 +406,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 }
 
 /* Modern AI Chat Text Field Styling */
-.mw-ai-chat-box .mw-ai-chat-box-area-field {
+.mw-ai-chat-box {
     border: 1px solid #e1e5e9 !important;
     border-radius: 12px;
     padding: 24px 20px 16px 20px;
@@ -506,25 +506,10 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     left: 100%;
 }
 
-/* Loading and Error States */
-.text-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #6366f1;
-    font-weight: 500;
+.mw-ai-chat-box-area-field {
+    background: transparent !important;
 }
 
-.text-danger {
-    color: #ef4444;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 500;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -540,14 +525,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     }
 }
 
-/* Dark Mode Support */
-.dark .mw-ai-chat-box .mw-ai-chat-box-area-field,
-html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field {
-    background: #374151;
-    border-color: #4b5563;
-    color: #e2e8f0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
 
 .dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder,
 html.dark .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {

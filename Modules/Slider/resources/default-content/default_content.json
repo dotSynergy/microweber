@@ -5,7 +5,7 @@
             "description": "Discover amazing products and services",
             "media": "{SITE_URL}modules/slider/img/default-slide-1.jpg",
             "button_text": "Learn More",
-            "link": "#",
+            "link": "",
             "position": 0,
             "settings": {
                 "alignItems": "center",
@@ -29,7 +29,7 @@
             "description": "Check out our latest deals and promotions",
             "media": "{SITE_URL}modules/slider/img/default-slide-2.jpg",
             "button_text": "View Offers",
-            "link": "#",
+            "link": "",
             "position": 1,
             "settings": {
                 "alignItems": "center",
@@ -53,7 +53,7 @@
             "description": "We're dedicated to providing the best experience",
             "media": "{SITE_URL}modules/slider/img/default-slide-3.jpg",
             "button_text": "Contact Us",
-            "link": "#",
+            "link": "",
             "position": 2,
             "settings": {
                 "alignItems": "center",

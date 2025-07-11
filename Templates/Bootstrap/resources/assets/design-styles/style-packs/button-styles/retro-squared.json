@@ -1,0 +1,48 @@
+{
+    "settings": [
+        {
+            "title": "Button Style: Retro Squared",
+            "description": "Square buttons with thick borders",
+            "fieldType": "stylePack",
+            "selectors": [
+                ":root"
+            ],
+            "previewElementsFormat": "flexZoom",
+            "previewElements": [
+                {
+                    "tag": "button",
+                    "class": "btn",
+                    "label": "Button"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-secondary",
+                    "label": "Secondary"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-outline",
+                    "label": "Outline"
+                }
+            ],
+            "rootSelector": ":root",
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Retro Squared",
+                        "properties": {
+                            "--mw-btn-border-radius": "0px",
+                            "--mw-btn-border-size": "3px",
+                            "--mw-btn-font-size": "14px",
+                            "--mw-btn-padding-block": "12px",
+                            "--mw-btn-padding-inline": "18px",
+                            "--mw-btn-secondary-border-radius": "0px",
+                            "--mw-btn-outline-border-radius": "0px"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+

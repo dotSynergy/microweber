@@ -1,0 +1,311 @@
+{
+    "settings": [
+        {
+            "title": "Font styles",
+            "description": "Pick the font styles you want to use for your site.",
+            "fieldType": "stylePack",
+
+            "selectors": [
+                ":root"
+            ],
+            "previewElementsFormat": "block",
+            "previewElements": [
+                {
+                    "tag": "h1",
+                    "class": "",
+                    "label": "Heading"
+                },
+                {
+                    "tag": "p",
+                    "class": "",
+                    "label": "This is your paragraph."
+                }
+            ],
+            "rootSelector": ":root",
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Arial, sans-serif",
+                        "properties": {
+                            "--mw-body-font-family": "Arial, sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "32px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Georgia, serif",
+                        "properties": {
+                            "--mw-body-font-family": "Georgia, serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "18px"
+                        }
+                    },
+                    {
+                        "label": "'Courier New', monospace",
+                        "properties": {
+                            "--mw-body-font-family": "'Courier New', monospace",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "28px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "14px"
+                        }
+                    },
+                    {
+                        "label": "Roboto - Modern Sans",
+                        "properties": {
+                            "--mw-body-font-family": "'Roboto', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Montserrat - Bold & Clean",
+                        "properties": {
+                            "--mw-body-font-family": "'Montserrat', sans-serif",
+                            "--mw-heading-font-weight": "800",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Poppins - Friendly Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Poppins', sans-serif",
+                            "--mw-heading-font-weight": "600",
+                            "--mw-heading-font-size": "32px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Playfair - Elegant Serif",
+                        "properties": {
+                            "--mw-body-font-family": "'Playfair Display', serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "38px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "17px"
+                        }
+                    },
+                    {
+                        "label": "Raleway - Thin & Elegant",
+                        "properties": {
+                            "--mw-body-font-family": "'Raleway', sans-serif",
+                            "--mw-heading-font-weight": "300",
+                            "--mw-heading-font-size": "38px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Oswald - Strong & Bold",
+                        "properties": {
+                            "--mw-body-font-family": "'Oswald', sans-serif",
+                            "--mw-heading-font-weight": "600",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Work Sans - Minimalist",
+                        "properties": {
+                            "--mw-body-font-family": "'Work Sans', sans-serif",
+                            "--mw-heading-font-weight": "500",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "DM Sans - Contemporary",
+                        "properties": {
+                            "--mw-body-font-family": "'DM Sans', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Manrope - Variable Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Manrope', sans-serif",
+                            "--mw-heading-font-weight": "800",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Syne - Futuristic Bold",
+                        "properties": {
+                            "--mw-body-font-family": "'Syne', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "38px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Space Grotesk - Tech Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Space Grotesk', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "32px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Fraunces/Urbanist - Contrast",
+                        "properties": {
+                            "--mw-body-font-family": "'Fraunces', serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "17px"
+                        }
+                    },
+                    {
+                        "label": "Archivo - Clean Geometric",
+                        "properties": {
+                            "--mw-body-font-family": "'Archivo', sans-serif",
+                            "--mw-heading-font-weight": "600",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Plus Jakarta Sans - Startup",
+                        "properties": {
+                            "--mw-body-font-family": "'Plus Jakarta Sans', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Albert Sans - Neo Grotesque",
+                        "properties": {
+                            "--mw-body-font-family": "'Albert Sans', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "32px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Outfit - Minimal Clean",
+                        "properties": {
+                            "--mw-body-font-family": "'Outfit', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Libre Franklin - Contemporary",
+                        "properties": {
+                            "--mw-body-font-family": "'Libre Franklin', sans-serif",
+                            "--mw-heading-font-weight": "800",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Crimson Pro - Modern Serif",
+                        "properties": {
+                            "--mw-body-font-family": "'Crimson Pro', serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "38px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "17px"
+                        }
+                    },
+                    {
+                        "label": "Rubik - Rounded Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Rubik', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "35px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Quicksand - Rounded Geometric",
+                        "properties": {
+                            "--mw-body-font-family": "'Quicksand', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Public Sans - Clean Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Public Sans', sans-serif",
+                            "--mw-heading-font-weight": "800",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Lora - Contemporary Serif",
+                        "properties": {
+                            "--mw-body-font-family": "'Lora', serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "36px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "17px"
+                        }
+                    },
+                    {
+                        "label": "Inter - Tech Professional",
+                        "properties": {
+                            "--mw-body-font-family": "'Inter', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "34px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Unbounded - Expressive Modern",
+                        "properties": {
+                            "--mw-body-font-family": "'Unbounded', sans-serif",
+                            "--mw-heading-font-weight": "600",
+                            "--mw-heading-font-size": "32px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    },
+                    {
+                        "label": "Bricolage - Fresh Geometric",
+                        "properties": {
+                            "--mw-body-font-family": "'Bricolage Grotesque', sans-serif",
+                            "--mw-heading-font-weight": "700",
+                            "--mw-heading-font-size": "35px",
+                            "--mw-paragraph-font-weight": "400",
+                            "--mw-paragraph-font-size": "16px"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

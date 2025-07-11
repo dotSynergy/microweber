@@ -12,13 +12,8 @@
 
     {{-- Vite CSS --}}
 
+    <link rel="stylesheet" href="{{ asset('templates/bootstrap/dist/build/app.css') }}">
 
-    @if(!lang_is_rtl())
-        <link rel="stylesheet" href="{{ asset('templates/bootstrap/dist/build/app.css') }}">
-    @else
-
-         <link rel="stylesheet" href="{{ asset('templates/bootstrap/dist/build/app-rtl.css') }}">
-    @endif
 
     <script>
         mw

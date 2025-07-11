@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Sakura Bloom",
+            "description": "A soft, floral palette inspired by cherry blossoms.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Sakura Bloom",
+                        "properties": {
+                            "--mw-background-color": "#f9f4ef",
+                            "--mw-primary-color": "#8c7851",
+                            "--mw-body-color": "#4a4039",
+                            "--mw-heading-color": "#2c2824",
+                            "--mw-paragraph-color": "#4a4039",
+                            "--mw-link-color": "#8c7851",
+                            "--mw-link-hover-color": "#6d5d3f",
+                            "--mw-btn-background-color": "#8c7851",
+                            "--mw-btn-background-hover-color": "#6d5d3f",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#8c7851",
+                            "--mw-form-control-background": "#f3ede3",
+                            "--mw-form-control-border-color": "#d5c7b2",
+                            "--mw-top-header-background-color": "#e8ddcb",
+                            "--mw-header-background-color": "#f9f4ef",
+                            "--mw-header-link-color": "#4a4039",
+                            "--mw-header-link-hover-color": "#8c7851",
+                            "--mw-top-header-link-color": "#4a4039",
+                            "--mw-top-header-link-hover-color": "#8c7851",
+                            "--mw-top-header-button-background-color": "#8c7851",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#8c7851",
+                            "--mw-section-background-color": "#f0e9df"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Minty Fresh",
+            "description": "A clean, refreshing palette with mint greens and soft whites.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Minty Fresh",
+                        "properties": {
+                            "--mw-background-color": "#ffffff",
+                            "--mw-primary-color": "#c9a87a",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#1a1a1a",
+                            "--mw-paragraph-color": "#4a4a4a",
+                            "--mw-link-color": "#c9a87a",
+                            "--mw-link-hover-color": "#b89668",
+                            "--mw-btn-background-color": "#c9a87a",
+                            "--mw-btn-background-hover-color": "#b89668",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#c9a87a",
+                            "--mw-form-control-background": "#fafafa",
+                            "--mw-form-control-border-color": "#e0e0e0",
+                            "--mw-top-header-background-color": "#1a1a1a",
+                            "--mw-header-background-color": "#ffffff",
+                            "--mw-header-link-color": "#4a4a4a",
+                            "--mw-header-link-hover-color": "#c9a87a",
+                            "--mw-top-header-link-color": "#cccccc",
+                            "--mw-top-header-link-hover-color": "#c9a87a",
+                            "--mw-top-header-button-background-color": "#c9a87a",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#c9a87a",
+                            "--mw-section-background-color": "#fafafa"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

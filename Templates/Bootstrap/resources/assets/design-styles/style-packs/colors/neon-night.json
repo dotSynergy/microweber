@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Neon Night",
+            "description": "A vibrant neon-inspired color palette.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Neon Night",
+                        "properties": {
+                            "--mw-background-color": "#f8f9ff",
+                            "--mw-primary-color": "#94b3fd",
+                            "--mw-body-color": "#5e5e5e",
+                            "--mw-heading-color": "#424242",
+                            "--mw-paragraph-color": "#5e5e5e",
+                            "--mw-link-color": "#94b3fd",
+                            "--mw-link-hover-color": "#7a9ef7",
+                            "--mw-btn-background-color": "#94b3fd",
+                            "--mw-btn-background-hover-color": "#7a9ef7",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#94b3fd",
+                            "--mw-form-control-background": "#ffffff",
+                            "--mw-form-control-border-color": "#e3e7ff",
+                            "--mw-top-header-background-color": "#ffffff",
+                            "--mw-header-background-color": "#f8f9ff",
+                            "--mw-header-link-color": "#5e5e5e",
+                            "--mw-header-link-hover-color": "#94b3fd",
+                            "--mw-top-header-link-color": "#5e5e5e",
+                            "--mw-top-header-link-hover-color": "#94b3fd",
+                            "--mw-top-header-button-background-color": "#94b3fd",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#94b3fd",
+                            "--mw-section-background-color": "#f0f3ff"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

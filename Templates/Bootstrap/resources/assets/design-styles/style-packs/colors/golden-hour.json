@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Golden Hour",
+            "description": "A warm, golden palette inspired by sunset light.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Golden Hour",
+                        "properties": {
+                            "--mw-background-color": "#ffffff",
+                            "--mw-primary-color": "#ff4d8d",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#111111",
+                            "--mw-paragraph-color": "#555555",
+                            "--mw-link-color": "#ff4d8d",
+                            "--mw-link-hover-color": "#ff287c",
+                            "--mw-btn-background-color": "linear-gradient(45deg, #ff4d8d, #ff8a32)",
+                            "--mw-btn-background-hover-color": "linear-gradient(45deg, #ff287c, #ff7719)",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "transparent",
+                            "--mw-form-control-background": "#f8f8f8",
+                            "--mw-form-control-border-color": "#eeeeee",
+                            "--mw-top-header-background-color": "#ffffff",
+                            "--mw-header-background-color": "#ffffff",
+                            "--mw-header-link-color": "#555555",
+                            "--mw-header-link-hover-color": "#ff4d8d",
+                            "--mw-top-header-link-color": "#555555",
+                            "--mw-top-header-link-hover-color": "#ff4d8d",
+                            "--mw-top-header-button-background-color": "linear-gradient(45deg, #ff4d8d, #ff8a32)",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#ff4d8d",
+                            "--mw-section-background-color": "#f8f8f8"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

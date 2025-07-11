@@ -1,0 +1,45 @@
+{
+    "settings": [
+        {
+            "title": "Citrus Splash",
+            "description": "A zesty, energetic palette with citrus orange, lime, and yellow.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Citrus Splash",
+                        "properties": {
+                            "--mw-background-color": "#fcfcfc",
+                            "--mw-primary-color": "#8e44ad",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#2c2c2c",
+                            "--mw-paragraph-color": "#444444",
+                            "--mw-link-color": "#8e44ad",
+                            "--mw-link-hover-color": "#703688",
+                            "--mw-btn-background-color": "#8e44ad",
+                            "--mw-btn-background-hover-color": "#703688",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#8e44ad",
+                            "--mw-btn-secondary-background-color": "#9b59b6",
+                            "--mw-btn-secondary-background-hover-color": "#8e44ad",
+                            "--mw-form-control-background": "#f9f9f9",
+                            "--mw-form-control-border-color": "#d5d5d5",
+                            "--mw-top-header-background-color": "#8e44ad",
+                            "--mw-header-background-color": "#fcfcfc",
+                            "--mw-header-link-color": "#444444",
+                            "--mw-header-link-hover-color": "#8e44ad",
+                            "--mw-top-header-link-color": "#ffffff",
+                            "--mw-top-header-link-hover-color": "#e0cff3",
+                            "--mw-top-header-button-background-color": "#703688",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#e0cff3",
+                            "--mw-section-background-color": "#f7f7f7"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

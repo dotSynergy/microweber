@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Cyber Mint",
+            "description": "A futuristic mint and blue color palette.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Cyber Mint",
+                        "properties": {
+                            "--mw-background-color": "#ffffff",
+                            "--mw-primary-color": "#0066ff",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#111827",
+                            "--mw-paragraph-color": "#4b5563",
+                            "--mw-link-color": "#0066ff",
+                            "--mw-link-hover-color": "#004bc3",
+                            "--mw-btn-background-color": "#0066ff",
+                            "--mw-btn-background-hover-color": "#004bc3",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#0066ff",
+                            "--mw-form-control-background": "#f9fafb",
+                            "--mw-form-control-border-color": "#d1d5db",
+                            "--mw-top-header-background-color": "#f9fafb",
+                            "--mw-header-background-color": "#ffffff",
+                            "--mw-header-link-color": "#4b5563",
+                            "--mw-header-link-hover-color": "#0066ff",
+                            "--mw-top-header-link-color": "#4b5563",
+                            "--mw-top-header-link-hover-color": "#0066ff",
+                            "--mw-top-header-button-background-color": "#0066ff",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#0066ff",
+                            "--mw-section-background-color": "#f9fafb"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

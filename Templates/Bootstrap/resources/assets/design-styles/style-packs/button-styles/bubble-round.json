@@ -1,0 +1,48 @@
+{
+    "settings": [
+        {
+            "title": "Button Style: Bubble Round",
+            "description": "Highly rounded, softer buttons",
+            "fieldType": "stylePack",
+            "selectors": [
+                ":root"
+            ],
+            "previewElementsFormat": "flexZoom",
+            "previewElements": [
+                {
+                    "tag": "button",
+                    "class": "btn",
+                    "label": "Button"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-secondary",
+                    "label": "Secondary"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-outline",
+                    "label": "Outline"
+                }
+            ],
+            "rootSelector": ":root",
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Bubble Round",
+                        "properties": {
+                            "--mw-btn-border-radius": "30px",
+                            "--mw-btn-border-size": "1px",
+                            "--mw-btn-font-size": "16px",
+                            "--mw-btn-padding-block": "14px",
+                            "--mw-btn-padding-inline": "30px",
+                            "--mw-btn-secondary-border-radius": "30px",
+                            "--mw-btn-outline-border-radius": "30px"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+

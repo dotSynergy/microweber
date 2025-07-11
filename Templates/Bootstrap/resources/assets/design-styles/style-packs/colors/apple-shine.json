@@ -1,0 +1,45 @@
+{
+    "settings": [
+        {
+            "title": "Apple Shine",
+            "description": "",
+            "fieldType": "stylePack",
+            "selectors": [
+                ":root"
+            ],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Apple Shine",
+                        "properties": {
+                            "--mw-background-color": "#ffffff",
+                            "--mw-primary-color": "#3498db",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#222222",
+                            "--mw-paragraph-color": "#555555",
+                            "--mw-link-color": "#3498db",
+                            "--mw-link-hover-color": "#2980b9",
+                            "--mw-btn-background-color": "#3498db",
+                            "--mw-btn-background-hover-color": "#2980b9",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#3498db",
+                            "--mw-form-control-background": "#f8f9fa",
+                            "--mw-form-control-border-color": "#e2e8f0",
+                            "--mw-top-header-background-color": "#f8f9fa",
+                            "--mw-header-background-color": "#ffffff",
+                            "--mw-header-link-color": "#333333",
+                            "--mw-header-link-hover-color": "#3498db",
+                            "--mw-top-header-link-color": "#555555",
+                            "--mw-top-header-link-hover-color": "#3498db",
+                            "--mw-top-header-button-background-color": "#3498db",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#3498db",
+                            "--mw-section-background-color": "#f8f9fa"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

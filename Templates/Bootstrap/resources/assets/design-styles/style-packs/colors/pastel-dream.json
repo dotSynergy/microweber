@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Pastel Dream",
+            "description": "A soft pastel-inspired color palette.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Pastel Dream",
+                        "properties": {
+                            "--mw-background-color": "#0f172a",
+                            "--mw-primary-color": "#38bdf8",
+                            "--mw-body-color": "#e2e8f0",
+                            "--mw-heading-color": "#f8fafc",
+                            "--mw-paragraph-color": "#cbd5e1",
+                            "--mw-link-color": "#38bdf8",
+                            "--mw-link-hover-color": "#7dd3fc",
+                            "--mw-btn-background-color": "rgba(56, 189, 248, 0.2)",
+                            "--mw-btn-background-hover-color": "rgba(56, 189, 248, 0.35)",
+                            "--mw-btn-text-color": "#38bdf8",
+                            "--mw-btn-text-hover-color": "#7dd3fc",
+                            "--mw-btn-border-color": "rgba(56, 189, 248, 0.5)",
+                            "--mw-form-control-background": "rgba(255, 255, 255, 0.05)",
+                            "--mw-form-control-border-color": "rgba(255, 255, 255, 0.1)",
+                            "--mw-top-header-background-color": "rgba(15, 23, 42, 0.8)",
+                            "--mw-header-background-color": "rgba(15, 23, 42, 0.6)",
+                            "--mw-header-link-color": "#cbd5e1",
+                            "--mw-header-link-hover-color": "#38bdf8",
+                            "--mw-top-header-link-color": "#cbd5e1",
+                            "--mw-top-header-link-hover-color": "#38bdf8",
+                            "--mw-top-header-button-background-color": "rgba(56, 189, 248, 0.2)",
+                            "--mw-top-header-button-text-color": "#38bdf8",
+                            "--mw-top-header-primary-color": "#38bdf8",
+                            "--mw-section-background-color": "#172035"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

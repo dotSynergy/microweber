@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Urban Concrete",
+            "description": "A modern, urban-inspired palette with cool grays and steel blues.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Urban Concrete",
+                        "properties": {
+                            "--mw-background-color": "#ffffff",
+                            "--mw-primary-color": "#4b5563",
+                            "--mw-body-color": "#374151",
+                            "--mw-heading-color": "#111827",
+                            "--mw-paragraph-color": "#374151",
+                            "--mw-link-color": "#4b5563",
+                            "--mw-link-hover-color": "#374151",
+                            "--mw-btn-background-color": "#4b5563",
+                            "--mw-btn-background-hover-color": "#374151",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#4b5563",
+                            "--mw-form-control-background": "#f9fafb",
+                            "--mw-form-control-border-color": "#d1d5db",
+                            "--mw-top-header-background-color": "#f3f4f6",
+                            "--mw-header-background-color": "#ffffff",
+                            "--mw-header-link-color": "#374151",
+                            "--mw-header-link-hover-color": "#4b5563",
+                            "--mw-top-header-link-color": "#374151",
+                            "--mw-top-header-link-hover-color": "#4b5563",
+                            "--mw-top-header-button-background-color": "#4b5563",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#4b5563",
+                            "--mw-section-background-color": "#f9fafb"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

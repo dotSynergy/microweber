@@ -1,0 +1,45 @@
+{
+    "settings": [
+        {
+            "title": "Blueberry Pie",
+            "description": "A rich, modern palette with deep blues and creamy highlights.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Blueberry Pie",
+                        "properties": {
+                            "--mw-background-color": "#f9f7f4",
+                            "--mw-primary-color": "#e74c3c",
+                            "--mw-body-color": "#2c2c2c",
+                            "--mw-heading-color": "#1a1a1a",
+                            "--mw-paragraph-color": "#444444",
+                            "--mw-link-color": "#e74c3c",
+                            "--mw-link-hover-color": "#c0392b",
+                            "--mw-btn-background-color": "#e74c3c",
+                            "--mw-btn-background-hover-color": "#c0392b",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#e74c3c",
+                            "--mw-form-control-background": "#ffffff",
+                            "--mw-form-control-border-color": "#e0e0e0",
+
+
+                            "--mw-top-header-background-color": "#1a1a1a",
+                            "--mw-header-background-color": "#f9f7f4",
+                            "--mw-header-link-color": "#2c2c2c",
+                            "--mw-header-link-hover-color": "#e74c3c",
+                            "--mw-top-header-link-color": "#cccccc",
+                            "--mw-top-header-link-hover-color": "#e74c3c",
+                            "--mw-top-header-button-background-color": "#e74c3c",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#e74c3c",
+                            "--mw-section-background-color": "#f0ede8"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

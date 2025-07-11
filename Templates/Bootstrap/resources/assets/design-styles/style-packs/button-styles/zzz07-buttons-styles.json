@@ -1,0 +1,72 @@
+{
+    "settings": [
+        {
+            "title": "Button styles",
+            "description": "Pick the button styles you want to use for your site.",
+            "fieldType": "stylePack",
+            "selectors": [
+                ":root"
+            ],
+            "previewElementsFormat": "flexZoom",
+
+            "previewElements": [
+                {
+                    "tag": "button",
+                    "class": "btn",
+                    "label": "Button"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-secondary",
+                    "label": "Secondary"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-outline",
+                    "label": "Outline"
+                }
+            ],
+            "rootSelector": ":root",
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Buttons Style 1",
+                        "properties": {
+                            "--mw-btn-border-radius": "4px",
+                            "--mw-btn-border-size": "1px",
+                            "--mw-btn-font-size": "16px",
+                            "--mw-btn-padding-block": "10px",
+                            "--mw-btn-padding-inline": "20px",
+                            "--mw-btn-secondary-border-radius": "4px",
+                            "--mw-btn-outline-border-radius": "4px"
+                        }
+                    },
+                    {
+                        "label": "Buttons Style 2",
+                        "properties": {
+                            "--mw-btn-border-radius": "40px",
+                            "--mw-btn-border-size": "10px",
+                            "--mw-btn-font-size": "16px",
+                            "--mw-btn-padding-block": "10px",
+                            "--mw-btn-padding-inline": "20px",
+                            "--mw-btn-secondary-border-radius": "14px",
+                            "--mw-btn-outline-border-radius": "14px"
+                        }
+                    },
+                    {
+                        "label": "Buttons Style 3",
+                        "properties": {
+                            "--mw-btn-border-radius": "0px",
+                            "--mw-btn-border-size": "0px",
+                            "--mw-btn-font-size": "12px",
+                            "--mw-btn-padding-block": "0px",
+                            "--mw-btn-padding-inline": "0px",
+                            "--mw-btn-secondary-border-radius": "4px",
+                            "--mw-btn-outline-border-radius": "4px"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

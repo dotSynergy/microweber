@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Sunset Boulevard",
+            "description": "A warm, modern sunset-inspired palette.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Sunset Boulevard",
+                        "properties": {
+                            "--mw-background-color": "#fdfbf7",
+                            "--mw-primary-color": "#ef824c",
+                            "--mw-body-color": "#3b3b40",
+                            "--mw-heading-color": "#202022",
+                            "--mw-paragraph-color": "#3b3b40",
+                            "--mw-link-color": "#ef824c",
+                            "--mw-link-hover-color": "#e06c33",
+                            "--mw-btn-background-color": "#ef824c",
+                            "--mw-btn-background-hover-color": "#e06c33",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#ef824c",
+                            "--mw-form-control-background": "#ffffff",
+                            "--mw-form-control-border-color": "#e9e4d9",
+                            "--mw-top-header-background-color": "#202022",
+                            "--mw-header-background-color": "#fdfbf7",
+                            "--mw-header-link-color": "#3b3b40",
+                            "--mw-header-link-hover-color": "#ef824c",
+                            "--mw-top-header-link-color": "#e9e4d9",
+                            "--mw-top-header-link-hover-color": "#ef824c",
+                            "--mw-top-header-button-background-color": "#ef824c",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#ef824c",
+                            "--mw-section-background-color": "#f8f6f0"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

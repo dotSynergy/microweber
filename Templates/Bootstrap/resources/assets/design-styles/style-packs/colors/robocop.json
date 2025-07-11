@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Robocop",
+            "description": "A sleek, futuristic palette with metallic blues and silvers.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Robocop",
+                        "properties": {
+                            "--mw-background-color": "#090b18",
+                            "--mw-primary-color": "#00f9ff",
+                            "--mw-body-color": "#d1e3ff",
+                            "--mw-heading-color": "#ffffff",
+                            "--mw-paragraph-color": "#b4c7e9",
+                            "--mw-link-color": "#00f9ff",
+                            "--mw-link-hover-color": "#ff00e4",
+                            "--mw-btn-background-color": "linear-gradient(90deg, #00f9ff, #00f29a)",
+                            "--mw-btn-background-hover-color": "linear-gradient(90deg, #00f9ff, #00c2ff)",
+                            "--mw-btn-text-color": "#000000",
+                            "--mw-btn-text-hover-color": "#000000",
+                            "--mw-btn-border-color": "transparent",
+                            "--mw-form-control-background": "rgba(255, 255, 255, 0.03)",
+                            "--mw-form-control-border-color": "#00f9ff",
+                            "--mw-top-header-background-color": "rgba(0, 0, 0, 0.5)",
+                            "--mw-header-background-color": "rgba(9, 11, 24, 0.9)",
+                            "--mw-header-link-color": "#b4c7e9",
+                            "--mw-header-link-hover-color": "#00f9ff",
+                            "--mw-top-header-link-color": "#b4c7e9",
+                            "--mw-top-header-link-hover-color": "#00f9ff",
+                            "--mw-top-header-button-background-color": "linear-gradient(90deg, #00f9ff, #00f29a)",
+                            "--mw-top-header-button-text-color": "#000000",
+                            "--mw-top-header-primary-color": "#00f9ff",
+                            "--mw-section-background-color": "#0d0e20"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

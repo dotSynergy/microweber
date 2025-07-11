@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Lavender Fields",
+            "description": "A soothing palette with lavender, purple, and soft green accents.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Lavender Fields",
+                        "properties": {
+                            "--mw-background-color": "#f6f9fc",
+                            "--mw-primary-color": "#4d7cff",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#18273a",
+                            "--mw-paragraph-color": "#546781",
+                            "--mw-link-color": "#4d7cff",
+                            "--mw-link-hover-color": "#3a69ff",
+                            "--mw-btn-background-color": "#4d7cff",
+                            "--mw-btn-background-hover-color": "#3a69ff",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#4d7cff",
+                            "--mw-form-control-background": "#ffffff",
+                            "--mw-form-control-border-color": "#e2e8f0",
+                            "--mw-top-header-background-color": "#ffffff",
+                            "--mw-header-background-color": "#f6f9fc",
+                            "--mw-header-link-color": "#546781",
+                            "--mw-header-link-hover-color": "#4d7cff",
+                            "--mw-top-header-link-color": "#546781",
+                            "--mw-top-header-link-hover-color": "#4d7cff",
+                            "--mw-top-header-button-background-color": "#4d7cff",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#4d7cff",
+                            "--mw-section-background-color": "#eef3f9"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

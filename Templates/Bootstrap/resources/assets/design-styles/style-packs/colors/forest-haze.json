@@ -1,0 +1,43 @@
+{
+    "settings": [
+        {
+            "title": "Forest Haze",
+            "description": "A calming, earthy palette inspired by misty forests.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Forest Haze",
+                        "properties": {
+                            "--mw-background-color": "#121212",
+                            "--mw-primary-color": "#6d5dfc",
+                            "--mw-body-color": "#e0e0e0",
+                            "--mw-heading-color": "#ffffff",
+                            "--mw-paragraph-color": "#cccccc",
+                            "--mw-link-color": "#6d5dfc",
+                            "--mw-link-hover-color": "#8e80ff",
+                            "--mw-btn-background-color": "#6d5dfc",
+                            "--mw-btn-background-hover-color": "#8e80ff",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#6d5dfc",
+                            "--mw-form-control-background": "#2a2a2a",
+                            "--mw-form-control-border-color": "#444444",
+                            "--mw-top-header-background-color": "#0a0a0a",
+                            "--mw-header-background-color": "#1a1a1a",
+                            "--mw-header-link-color": "#cccccc",
+                            "--mw-header-link-hover-color": "#6d5dfc",
+                            "--mw-top-header-link-color": "#a0a0a0",
+                            "--mw-top-header-link-hover-color": "#6d5dfc",
+                            "--mw-top-header-button-background-color": "#6d5dfc",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#6d5dfc",
+                            "--mw-section-background-color": "#1a1a1a"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

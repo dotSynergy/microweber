@@ -1,0 +1,45 @@
+{
+    "settings": [
+        {
+            "title": "Arctic Frost",
+            "description": "A crisp, icy palette with cool blues and whites.",
+            "fieldType": "stylePack",
+            "selectors": [":root"],
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Arctic Frost",
+                        "properties": {
+                            "--mw-background-color": "#f7f9fc",
+                            "--mw-primary-color": "#2c3e50",
+                            "--mw-body-color": "#333333",
+                            "--mw-heading-color": "#1a2533",
+                            "--mw-paragraph-color": "#455a64",
+                            "--mw-link-color": "#2c3e50",
+                            "--mw-link-hover-color": "#1abc9c",
+                            "--mw-btn-background-color": "#2c3e50",
+                            "--mw-btn-background-hover-color": "#1abc9c",
+                            "--mw-btn-text-color": "#ffffff",
+                            "--mw-btn-text-hover-color": "#ffffff",
+                            "--mw-btn-border-color": "#2c3e50",
+                            "--mw-btn-secondary-background-color": "#95a5a6",
+                            "--mw-btn-secondary-background-hover-color": "#7f8c8d",
+                            "--mw-form-control-background": "#ffffff",
+                            "--mw-form-control-border-color": "#bdc3c7",
+                            "--mw-top-header-background-color": "#2c3e50",
+                            "--mw-header-background-color": "#f7f9fc",
+                            "--mw-header-link-color": "#2c3e50",
+                            "--mw-header-link-hover-color": "#1abc9c",
+                            "--mw-top-header-link-color": "#ffffff",
+                            "--mw-top-header-link-hover-color": "#1abc9c",
+                            "--mw-top-header-button-background-color": "#1abc9c",
+                            "--mw-top-header-button-text-color": "#ffffff",
+                            "--mw-top-header-primary-color": "#1abc9c",
+                            "--mw-section-background-color": "#eef2f7"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,48 @@
+{
+    "settings": [
+        {
+            "title": "Button Style: Thick Border",
+            "description": "Buttons with extra prominent borders",
+            "fieldType": "stylePack",
+            "selectors": [
+                ":root"
+            ],
+            "previewElementsFormat": "flexZoom",
+            "previewElements": [
+                {
+                    "tag": "button",
+                    "class": "btn",
+                    "label": "Button"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-secondary",
+                    "label": "Secondary"
+                },
+                {
+                    "tag": "button",
+                    "class": "btn btn-outline",
+                    "label": "Outline"
+                }
+            ],
+            "rootSelector": ":root",
+            "fieldSettings": {
+                "styleProperties": [
+                    {
+                        "label": "Thick Border",
+                        "properties": {
+                            "--mw-btn-border-radius": "6px",
+                            "--mw-btn-border-size": "4px",
+                            "--mw-btn-font-size": "16px",
+                            "--mw-btn-padding-block": "8px",
+                            "--mw-btn-padding-inline": "20px",
+                            "--mw-btn-secondary-border-radius": "6px",
+                            "--mw-btn-outline-border-radius": "6px"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+

@@ -405,16 +405,22 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     position: relative;
 }
 
+.mw-ai-chat-box {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px;
+}
+
 /* Modern AI Chat Text Field Styling */
 .mw-ai-chat-box .mw-ai-chat-box-area-field {
-    border: 1px solid #e1e5e9 !important;
-    border-radius: 12px;
+
     padding: 24px 20px 16px 20px;
     font-size: 14px;
     line-height: 1.5;
     color: #2d3748;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
     resize: none;
     min-height: 100px;
     width: 100%;
@@ -422,12 +428,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     position: relative;
 }
 
-.mw-ai-chat-box .mw-ai-chat-box-area-field:focus {
-    border-color: #3b82f6;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
 
 .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {
     color: #a0aec0;
@@ -435,11 +435,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     opacity: 1;
 }
 
-.mw-ai-chat-box .mw-ai-chat-box-area-field:hover {
-    border-color: #cbd5e0;
-    background: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
 
 /* AI Chat Box Container */
 .mw-ai-chat-box {

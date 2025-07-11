@@ -14,7 +14,7 @@ class WhiteLabelModule extends BaseModule
     public static int $position = 500;
     public static string $settingsComponent = WhiteLabelSettingsAdminSettingsPage::class;
     public static string $templatesNamespace = 'modules.white_label::templates';
-
+    protected static bool $shouldRegisterNavigation = false;
     public function render()
     {
         $viewData = $this->getViewData();

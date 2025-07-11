@@ -10,7 +10,7 @@ use Modules\Teamcard\Models\Teamcard;
 
 class ContactFormModule extends BaseModule
 {
-    public static string $name = 'ContactForm';
+    public static string $name = 'Contact Form';
     public static string $module = 'contact_form';
     public static string $icon = 'heroicon-o-user-group';
     public static string $categories = 'forms';

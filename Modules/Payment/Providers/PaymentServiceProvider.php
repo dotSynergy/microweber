@@ -78,6 +78,6 @@ class PaymentServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerResource(PaymentProviderResource::class);
         FilamentRegistry::registerResource(PaymentResource::class);
 
-        Microweber::module(PaymentModule::class);
+       // Microweber::module(PaymentModule::class);
     }
 }

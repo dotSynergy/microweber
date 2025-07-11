@@ -133,6 +133,7 @@ trait ManagesModules
                 'icon' => $module::getIcon(),
                 'position' => $module::getPosition() ?? 0,
                 'as_element' => $module::isStaticElement() ?? null,
+                'registers_in_navigation' => $module::shouldRegisterNavigtion() ?? null,
             ];
         }
         //sort by position

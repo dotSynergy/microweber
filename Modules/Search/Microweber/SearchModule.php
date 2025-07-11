@@ -12,7 +12,7 @@ class SearchModule extends BaseModule
     public static string $module = 'search';
     public static string $icon = 'modules.search-icon';
     public static string $categories = 'miscellaneous';
-    public static int $position = 34;
+    public static int $position = 100;
     public static string $settingsComponent = SearchSettings::class;
     public static string $templatesNamespace = 'modules.search::templates';
 

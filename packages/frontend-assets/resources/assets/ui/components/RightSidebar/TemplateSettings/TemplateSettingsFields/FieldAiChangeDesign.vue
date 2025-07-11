@@ -414,12 +414,13 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 /* Modern AI Chat Text Field Styling */
 .mw-ai-chat-box .mw-ai-chat-box-area-field {
 
-
     padding: 24px 20px 16px 20px;
     font-size: 14px;
     line-height: 1.5;
     color: #2d3748;
+    border: none !important;
     background: transparent !important;
+    box-shadow: none !important;
     resize: none;
     min-height: 100px;
     width: 100%;
@@ -427,12 +428,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     position: relative;
 }
 
-.mw-ai-chat-box:focus {
-    border-color: #3b82f6;
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 2px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
-}
 
 .mw-ai-chat-box .mw-ai-chat-box-area-field::placeholder {
     color: #a0aec0;
@@ -440,11 +435,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
     opacity: 1;
 }
 
-.mw-ai-chat-box .mw-ai-chat-box-area-field:hover {
-    border-color: #cbd5e0;
-    background: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
 
 /* AI Chat Box Container */
 .mw-ai-chat-box {

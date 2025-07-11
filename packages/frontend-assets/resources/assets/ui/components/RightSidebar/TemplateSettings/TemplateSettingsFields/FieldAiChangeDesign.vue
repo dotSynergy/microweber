@@ -407,7 +407,6 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
 
 /* Modern AI Chat Text Field Styling */
 .mw-ai-chat-box .mw-ai-chat-box-area-field {
-    background: #ffffff !important;
     border: 1px solid #e1e5e9 !important;
     border-radius: 12px;
     padding: 24px 20px 16px 20px;

@@ -4,8 +4,8 @@ const AIChatFormCSS= `
      .mw-ai-chat-box-footer{
         position: absolute;
         width: 100%;
-        bottom: 0;
-        padding: 10px;
+        bottom: 15px;
+        padding: 0 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -48,7 +48,7 @@ const AIChatFormCSS= `
         background: rgb(205 205 205);
         border: none;
         border-radius: 20px;
-
+        padding-bottom: 50px;
      }
 
     html.dark .mw-ai-chat-box-area textareat::placeholder {
@@ -105,13 +105,15 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
         `;
     }
 
+
+
     const tpl = `
     <div class="mw-ai-chat-box" style="display:${hasChat ? '' : 'none'}">
         <div class="mw-ai-chat-box-area">
             <${multiLine ? 'textarea' : 'input' } class="mw-ai-chat-box-area-field" placeholder="${placeholder || mw.lang('Enter topic')}">${multiLine ? '</textarea>' : ''}
             <div class="mw-ai-chat-box-footer">
                 <div class="mw-ai-chat-box-options">
-                ${options}
+                ${optionsTpl}
                 </div>
                 <div class="mw-ai-chat-box-actions">
                     <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>

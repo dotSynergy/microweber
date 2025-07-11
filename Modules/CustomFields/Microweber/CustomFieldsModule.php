@@ -12,10 +12,10 @@ class CustomFieldsModule extends BaseModule
     public static string $module = 'custom_fields';
     public static string $icon = 'modules.custom-fields-icon';
     public static string $categories = 'forms';
-    public static int $position = 57;
+    public static int $position = 100;
     public static string $settingsComponent = CustomFieldsModuleSettings::class;
     public static string $templatesNamespace = 'modules.custom_fields::templates';
-
+    protected static bool $shouldRegisterNavigation = false;
     public function render()
     {
         $viewData = $this->getViewData();

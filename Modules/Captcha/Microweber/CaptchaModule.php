@@ -14,7 +14,7 @@ class CaptchaModule extends BaseModule
     public static int $position = 300;
     public static string $settingsComponent = CaptchaModuleSettings::class;
     public static string $templatesNamespace = 'modules.captcha::templates';
-
+    protected static bool $shouldRegisterNavigation = false;
     public function render()
     {
         $viewData = $this->getViewData();

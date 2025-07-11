@@ -469,13 +469,11 @@
 
         var createOptions = function (holder) {
 
+
+
             if(holder && scope.settings.iconOptions) {
                 if(scope.settings.iconOptions.size) {
-                    var label = mw.element(`
-                        <div class="mw-icon-selector-flex my-2">
-                            <label class="mw-icon-selector-control-label live-edit-label px-0">${mw.lang('Size')}</label>
-                        </div>
-                    `);
+
 
 
 
@@ -486,7 +484,7 @@
                     }
 
 
-                    holder.innerHTML = `
+                    holder.html( `
                         <div class="mw-icon-selector-flex my-2">
                             <label class="mw-icon-selector-control-label live-edit-label px-0">${mw.lang('Size')}</label>
                         </div>
@@ -497,7 +495,7 @@
                                 <kbd>px</kbd>
                             </span>
                         </div>
-                    `;
+                    `);
 
 
                     var sizeinput = mw.element(`.form-control`, holder);

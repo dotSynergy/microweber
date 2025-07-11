@@ -541,8 +541,13 @@ export class QuickEditComponent extends MicroweberBaseClass {
         mw.top().app.on('stateChange', this.editChangeSyncHandle);
         mw.top().app.on('layoutCloned', this.editChangeSyncHandle);
         mw.top().app.on('layoutDeleted', this.editChangeSyncHandle);
-        mw.top().app.on('moduleReloaded', this.editChangeSyncHandle)
-        mw.top().app.on('onModuleReloaded', this.editChangeSyncHandle)
+        mw.top().app.on('moduleReloaded', this.editChangeSyncHandle);
+        mw.top().app.on('onModuleReloaded', this.editChangeSyncHandle);
+
+
+        mw.top().app.canvas.on('liveEditCanvasLoaded', this.editChangeSyncHandle);
+
+
 
         this.isGlobal = this.settings.root === this.settings.root.ownerDocument.body;
 
@@ -610,14 +615,19 @@ export class QuickEditComponent extends MicroweberBaseClass {
         }
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
+            console.log(1)
             if (this.isGlobal || edit === this.settings.root) {
+                console.log(2)
                 let shoultSync = !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
                 if (shoultSync) {
-
+console.log(3)
                         try {
                             if(this._editorNode && this._editorNode.parentElement){
                             const editorParent = this._editorNode.parentElement;
                             editorParent.appendChild(this.editor());
+                            console.log(4)
+                            console.log(editorParent)
+                            console.log(this.editor())
                             }
                         } catch ( e) {
                             console.error('Error appending editor:', e);

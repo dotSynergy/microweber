@@ -11,7 +11,7 @@ class CategoryModule extends BaseModule
     public static string $module = 'categories';
     public static string $icon = 'modules.category-icon';
     public static string $categories = 'navigation';
-    public static int $position = 1;
+    public static int $position = 50;
     public static string $settingsComponent = CategoryModuleSettings::class;
     public static string $templatesNamespace = 'modules.category::templates';
 

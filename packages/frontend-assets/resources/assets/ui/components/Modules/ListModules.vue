@@ -50,11 +50,8 @@
                         Looking for <strong>{{filterKeyword}}</strong>
                     </div>
 
-                    <div v-if="modulesCategoriesList.length > 0" v-for="category in modulesCategoriesList" class="modules-list-block-category-section">
-                        <div class="w-100 pt-3 text-capitalize px-3" v-show="typeof category === 'string'">
-                            <h4 class="mb-2">{{category}}</h4>
-                        </div>
-                        <div v-for="item in modulesListFiltered[category]"
+                    <div v-if="modulesListFiltered.length > 0" class="row">
+                        <div v-for="item in modulesListFiltered"
                              class="col-sm-6 col-12 px-3 mb-1 mw-modules-list-block-item d-flex align-items-center p-2 modules-list-block-item-is-locked-false cursor-pointer"
                              v-on:click="insertModule(item)"
                              :title="item.name"
@@ -68,13 +65,9 @@
                             <div class="modules-list-block-item-description">{{ item.description }}</div>
                         </div>
                     </div>
-                    <h1 v-else>
-
-                        <div class="alert " role="alert">
-
-                            <h5 class="text-secondary fw-normal">No results for <strong>{{filterKeyword}}</strong></h5>
-                        </div>
-                    </h1>
+                    <div v-else class="alert" role="alert">
+                        <h5 class="text-secondary fw-normal">No results for <strong>{{filterKeyword}}</strong></h5>
+                    </div>
 
                     <div class="modules-list-block-no-results" style="display: none;">Nothing found...</div>
 
@@ -180,7 +173,6 @@ export default {
             this.showModal = false;
         },
         filterModules() {
-
             let filterKeyword = this.filterKeyword.trim();
             let modulesFiltered = this.modulesList || [];
 
@@ -204,28 +196,10 @@ export default {
                 });
             }
 
-            let instance = this;
-            instance.modulesListFiltered = [];
-            instance.modulesCategoriesList = [];
-            modulesFiltered.forEach(function(moduleElement) {
-
-
-
-                if(notAllowedModules.includes(moduleElement.name)){
-                    return;
-                }
-
-                if (!instance.modulesCategoriesList.includes(moduleElement.categories)) {
-                    instance.modulesCategoriesList.push(moduleElement.categories);
-                }
-
-                if (!instance.modulesListFiltered[moduleElement.categories]) {
-                    instance.modulesListFiltered[moduleElement.categories] = [];
-                }
-                instance.modulesListFiltered[moduleElement.categories].push(moduleElement);
+            // Filter out not allowed modules
+            this.modulesListFiltered = modulesFiltered.filter(moduleElement => {
+                return !notAllowedModules.includes(moduleElement.name);
             });
-
-
         }
     },
     watch: {
@@ -307,12 +281,11 @@ export default {
     data() {
         return {
 
-            insertModulePosition: 'top',  // insert module on top or bottom
+            insertModulePosition: 'top',
             filterKeyword: '',
             category: '',
             modulesList: [],
             modulesListFiltered: [],
-            modulesCategoriesList: [],
             showModal: false,
             target: null,
             insertModuleMode: 'insertModuleDefault',
@@ -321,6 +294,33 @@ export default {
 }
 </script>
 
+<style>
+.close-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+
+
+.close-modal-button:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.modules-list {
+    position: relative;
+}
+</style>
 <style>
 .close-modal-button {
     position: absolute;

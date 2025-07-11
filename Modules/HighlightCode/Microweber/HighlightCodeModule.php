@@ -11,7 +11,7 @@ class HighlightCodeModule extends BaseModule
     public static string $module = 'highlight_code';
     public static string $icon = 'heroicon-o-map';
     public static string $categories = 'other';
-    public static int $position = 1;
+    public static int $position = 1000;
     public static string $settingsComponent = HighlightCodeModuleSettings::class;
     public static string $templatesNamespace = 'modules.highlight_code::templates';
 

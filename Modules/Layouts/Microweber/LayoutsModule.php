@@ -21,6 +21,8 @@ class LayoutsModule extends BaseModule
     public static int $position = 1;
     public static string $settingsComponent = LayoutsModuleSettings::class;
     public static string $templatesNamespace = 'modules.layouts::templates';
+    protected static bool $shouldRegisterNavigation = false;
+
 
     public function render()
     {

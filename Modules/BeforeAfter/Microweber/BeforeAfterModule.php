@@ -11,7 +11,7 @@ class BeforeAfterModule extends BaseModule
     public static string $module = 'before_after';
     public static string $icon = 'modules.before_after-icon';
     public static string $categories = 'media';
-    public static int $position = 3;
+    public static int $position = 13;
     public static string $settingsComponent = BeforeAfterModuleSettings::class;
 
     public static string $templatesNamespace = 'modules.before_after::templates';

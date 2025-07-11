@@ -62,16 +62,192 @@ class TemplateStylesSettingsReader
         }
     }
 
+    /**
+     * Process mergeFieldSettingsStylePropertiesFromFolders for a style property
+     *
+     * @param array &$styleProperty The style property to process (passed by reference)
+     * @return void
+     */
+    private function processMergeFieldSettingsStylePropertiesFromFolders(&$styleProperty)
+    {
+        if (!isset($styleProperty['mergeFieldSettingsStylePropertiesFromFolders']) ||
+            !is_array($styleProperty['mergeFieldSettingsStylePropertiesFromFolders']) ||
+            empty($styleProperty['mergeFieldSettingsStylePropertiesFromFolders'])) {
+            return;
+        }
+
+        $foldersToMerge = $styleProperty['mergeFieldSettingsStylePropertiesFromFolders'];
+
+        foreach ($foldersToMerge as $folderPath) {
+            $fullFolderPath = $this->templateDir . DS . $folderPath;
+            $fullFolderPath = $this->normalizePath($fullFolderPath);
+
+            if (!is_dir($fullFolderPath)) {
+                continue;
+            }
+
+            $jsonFiles = glob($fullFolderPath . DS . '*.json');
+            if (!is_array($jsonFiles)) {
+                continue;
+            }
+
+            foreach ($jsonFiles as $jsonFilePath) {
+                if (!is_file($jsonFilePath)) {
+                    continue;
+                }
+
+                $settingsFromFile = @file_get_contents($jsonFilePath);
+                if ($settingsFromFile === false) {
+                    continue;
+                }
+
+                $settingsFromFile = @json_decode($settingsFromFile, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    continue;
+                }
+
+                // Look for style properties in the file's structure
+                if (isset($settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'])) {
+                    $propertiesToMerge = $settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'];
+                    
+                    // Initialize properties array if it doesn't exist
+                    if (!isset($styleProperty['properties'])) {
+                        $styleProperty['properties'] = [];
+                    }
+                    
+                    // Merge the properties
+                    $styleProperty['properties'] = array_merge($styleProperty['properties'], $propertiesToMerge);
+                }
+            }
+        }
+    }
+
     private function processStyleProperties(&$settings)
     {
+        // Process mergeFieldSettingsStylePropertiesFromFolders at the fieldSettings level
+        if (isset($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFolders']) &&
+            is_array($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFolders']) &&
+            !empty($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFolders'])) {
+            
+            $foldersToMerge = $settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFolders'];
+            
+            foreach ($foldersToMerge as $folderPath) {
+                $fullFolderPath = $this->templateDir . DS . $folderPath;
+                $fullFolderPath = $this->normalizePath($fullFolderPath);
+
+                if (!is_dir($fullFolderPath)) {
+                    continue;
+                }
+
+                $jsonFiles = glob($fullFolderPath . DS . '*.json');
+                if (!is_array($jsonFiles)) {
+                    continue;
+                }
+
+                foreach ($jsonFiles as $jsonFilePath) {
+                    if (!is_file($jsonFilePath)) {
+                        continue;
+                    }
+
+                    $settingsFromFile = @file_get_contents($jsonFilePath);
+                    if ($settingsFromFile === false) {
+                        continue;
+                    }
+
+                    $settingsFromFile = @json_decode($settingsFromFile, true);
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        continue;
+                    }
+
+                    // Look for style properties in the file's structure
+                    if (isset($settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'])) {
+                        $propertiesToMerge = $settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'];
+                        
+                        // Initialize styleProperties array if it doesn't exist
+                        if (!isset($settings['fieldSettings']['styleProperties'])) {
+                            $settings['fieldSettings']['styleProperties'] = [];
+                        }
+                        
+                        // Create a new style property entry with the merged properties
+                        $filename = basename($jsonFilePath, '.json');
+                        $label = ucwords(str_replace('-', ' ', $filename));
+                        
+                        $newStyleProperty = [
+                            'label' => $label,
+                            'properties' => $propertiesToMerge
+                        ];
+                        
+                        // Check if style property with same label already exists
+                        if (!$this->stylePropertyExists($settings['fieldSettings']['styleProperties'], $newStyleProperty)) {
+                            $settings['fieldSettings']['styleProperties'][] = $newStyleProperty;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Process mergeFieldSettingsStylePropertiesFromFiles at the fieldSettings level
+        if (isset($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFiles']) &&
+            is_array($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFiles']) &&
+            !empty($settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFiles'])) {
+            
+            $filesToMerge = $settings['fieldSettings']['mergeFieldSettingsStylePropertiesFromFiles'];
+            
+            foreach ($filesToMerge as $jsonFile) {
+                $filePath = $this->templateDir . DS . $jsonFile;
+                $filePath = $this->normalizePath($filePath, false);
+
+                if (!file_exists($filePath)) {
+                    continue;
+                }
+
+                $settingsFromFile = @file_get_contents($filePath);
+                if ($settingsFromFile === false) {
+                    continue;
+                }
+
+                $settingsFromFile = @json_decode($settingsFromFile, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    continue;
+                }
+
+                // Look for style properties in the file's structure
+                if (isset($settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'])) {
+                    $propertiesToMerge = $settingsFromFile['settings'][0]['fieldSettings']['styleProperties'][0]['properties'];
+                    
+                    // Initialize styleProperties array if it doesn't exist
+                    if (!isset($settings['fieldSettings']['styleProperties'])) {
+                        $settings['fieldSettings']['styleProperties'] = [];
+                    }
+                    
+                    // Create a new style property entry with the merged properties
+                    $filename = basename($jsonFile, '.json');
+                    $label = ucwords(str_replace('-', ' ', $filename));
+                    
+                    $newStyleProperty = [
+                        'label' => $label,
+                        'properties' => $propertiesToMerge
+                    ];
+                    
+                    // Check if style property with same label already exists
+                    if (!$this->stylePropertyExists($settings['fieldSettings']['styleProperties'], $newStyleProperty)) {
+                        $settings['fieldSettings']['styleProperties'][] = $newStyleProperty;
+                    }
+                }
+            }
+        }
+
+        // Process existing styleProperties
         if (isset($settings['fieldSettings']['styleProperties']) && 
             is_array($settings['fieldSettings']['styleProperties'])) {
             
             foreach ($settings['fieldSettings']['styleProperties'] as &$styleProperty) {
                 $this->processMergeFieldSettingsStylePropertiesFromFiles($styleProperty);
+                $this->processMergeFieldSettingsStylePropertiesFromFolders($styleProperty);
             }
         }
 
+        // Process nested settings recursively
         if (isset($settings['settings']) && is_array($settings['settings'])) {
             foreach ($settings['settings'] as &$setting) {
                 $this->processStyleProperties($setting);
@@ -368,6 +544,9 @@ class TemplateStylesSettingsReader
             }
 
             foreach ($settingsFromFile['settings'] as $fileSetting) {
+                // Process style properties for the loaded setting first
+                $this->processStyleProperties($fileSetting);
+                
                 // If we find fieldSettings in the loaded file, merge them into the current setting
                 if (isset($fileSetting['fieldSettings'])) {
                     if (!isset($setting['fieldSettings'])) {
@@ -462,6 +641,9 @@ class TemplateStylesSettingsReader
                 }
 
                 foreach ($settingsToProcess as $fileSetting) {
+                    // Process style properties for the loaded setting first
+                    $this->processStyleProperties($fileSetting);
+                    
                     // If we find fieldSettings in the loaded file, merge them into the current setting
                     if (isset($fileSetting['fieldSettings'])) {
                         if (!isset($setting['fieldSettings'])) {

@@ -72,7 +72,7 @@ $layout_classes = $layout_classes ?? ''; $layout_classes .= ' ' . $classes['padd
             </div>
             <div class="col">
                 <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                    <div class="card-header py-3 text-white bg-primary border-primary">
+                    <div class="card-header py-3   border-primary">
                         <h4 class="my-0 fw-normal">Enterprise</h4>
                     </div>
                     <div class="card-body">

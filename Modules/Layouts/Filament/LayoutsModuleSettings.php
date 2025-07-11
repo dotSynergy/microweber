@@ -32,7 +32,7 @@ class LayoutsModuleSettings extends LiveEditModuleSettings
                                     'optionGroup' => $optionGroup
                                 ]),
                             ]),
-                        Tabs\Tab::make('Design')
+                        Tabs\Tab::make('Design and details')
                             ->schema([
                                     Section::make('Design settings')->schema(
                                         $this->getTemplatesFormSchema())

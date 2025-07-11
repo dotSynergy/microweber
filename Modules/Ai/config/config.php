@@ -35,13 +35,12 @@ return [
             'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
             'max_tokens' => env('OPENAI_MAX_TOKENS', null),
             'temperature' => env('OPENAI_TEMPERATURE', 0.7),
-            'use_cache' => true,
-            'cache_duration' => env('OPENAI_CACHE_DURATION', 600), // minutes
             'models' => [
                 'gpt-4o-mini' => 'GPT 4o Mini',
                 'gpt-4.1-nano' => 'GPT 4.1 Nano',
                 'gpt-4.1-mini' => 'GPT 4.1 Mini',
                 'gpt-4o' => 'GPT 4o',
+                'gpt-4-turbo' => 'GPT 4 Turbo',
             ],
         ],
 
@@ -57,8 +56,6 @@ return [
         'openrouter' => [
             'enabled' => env('OPENROUTER_ENABLED', false),
             'model' => env('OPENROUTER_MODEL', 'meta-llama/llama-3.3-70b-instruct'),
-            'use_cache' => env('OPENROUTER_USE_CACHE', false),
-            'cache_duration' => env('OPENROUTER_CACHE_DURATION', 600), // minutes
             'api_key' => env('OPENROUTER_API_KEY'),
             'api_endpoint' => env('OPENROUTER_API_ENDPOINT', 'https://openrouter.ai/api/v1/'),
             'api_timeout' => env('OPENROUTER_API_TIMEOUT', 200),
@@ -78,8 +75,6 @@ return [
             'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
             'max_tokens' => env('GEMINI_MAX_TOKENS', null),
             'temperature' => env('GEMINI_TEMPERATURE', 0.7),
-            'use_cache' => env('GEMINI_USE_CACHE', false),
-            'cache_duration' => env('GEMINI_CACHE_DURATION', 600), // minutes
             'api_endpoint' => env('GEMINI_API_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta'),
             'models' => [
                 'gemini-2.5-flash' => 'Gemini 2.5 Flash',
@@ -95,8 +90,6 @@ return [
             'model' => env('REPLICATE_MODEL', 'google/imagen-3-fast'),
             'max_tokens' => env('REPLICATE_MAX_TOKENS', null),
             'temperature' => env('REPLICATE_TEMPERATURE', 0.7),
-            'use_cache' => env('REPLICATE_USE_CACHE', false),
-            'cache_duration' => env('REPLICATE_CACHE_DURATION', 600), // minutes
             'api_endpoint' => env('REPLICATE_API_ENDPOINT', 'https://api.replicate.com'),
             'models' => [
                 'google/imagen-3-fast' => 'Imagen 3 Fast',
@@ -156,8 +149,6 @@ return [
             'api_key' => env('ANTHROPIC_API_KEY'),
             'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4'),
             'max_tokens' => env('ANTHROPIC_MAX_TOKENS', null),
-            'temperature' => env('ANTHROPIC_TEMPERATURE', 0.7),
-            'use_cache' => env('ANTHROPIC_USE_CACHE', false),
             'cache_duration' => env('ANTHROPIC_CACHE_DURATION', 600), // minutes
             'models' => [
                 'claude-sonnet-4-20250514' => 'Claude Sonnet 4',

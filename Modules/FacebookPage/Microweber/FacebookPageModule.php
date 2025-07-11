@@ -11,7 +11,7 @@ class FacebookPageModule extends BaseModule
     public static string $module = 'facebook_page';
     public static string $icon = 'modules.facebook_page-icon';
     public static string $categories = 'social';
-    public static int $position = 1;
+    public static int $position = 100;
     public static string $settingsComponent = FacebookPageModuleSettings::class;
     public static string $templatesNamespace = 'modules.facebook_page::templates';
 

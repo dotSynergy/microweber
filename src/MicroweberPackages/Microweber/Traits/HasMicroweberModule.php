@@ -87,4 +87,11 @@ trait HasMicroweberModule
         }
         return false;
     }
+    public static function shouldRegisterNavigtion(): bool
+    {
+        if (isset(static::$shouldRegisterNavigation)) {
+            return static::$shouldRegisterNavigation;
+        }
+        return false;
+    }
 }

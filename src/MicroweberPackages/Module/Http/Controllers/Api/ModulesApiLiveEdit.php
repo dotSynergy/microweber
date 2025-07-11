@@ -135,6 +135,16 @@ class ModulesApiLiveEdit extends Controller
                 foreach ($modulesFromRegistry as $modkey => $mod) {
 
 
+                    if(isset($mod['registers_in_navigation'])){
+                        if(!$mod['registers_in_navigation']){
+                            unset($modulesFromRegistry[$modkey]);
+                            continue;
+                        }
+                    }
+
+
+
+
                     if (isset($mod['icon']) and ($mod['icon'])) {
 
                         //if icone contains <svg> tag, then convert it to base64

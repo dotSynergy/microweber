@@ -11,7 +11,7 @@ class FacebookLikeModule extends BaseModule
     public static string $module = 'facebook_like';
     public static string $icon = 'modules.facebook_like-icon';
     public static string $categories = 'social';
-    public static int $position = 1;
+    public static int $position = 100;
     public static string $settingsComponent = FacebookLikeModuleSettings::class;
     public static string $templatesNamespace = 'modules.facebook_like::templates';
 

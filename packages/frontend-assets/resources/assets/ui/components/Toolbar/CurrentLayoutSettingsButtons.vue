@@ -91,24 +91,15 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
 }
 
 .module-settings-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
     transform: scale(1.05);
 }
 
-.module-settings-button.active {
-    background: #0086db;
-    border-color: #0086db;
-    color: white;
-}
 
 .module-settings-button:active {
     transform: scale(0.95);
@@ -293,10 +284,10 @@ export default {
                 let isDirectChild = false;
 
                 while (parent && parent !== layoutElement) {
-                    // If we encounter another module element on the way up, 
+                    // If we encounter another module element on the way up,
                     // this means our module is nested inside another module
-                    if (parent.classList.contains('module') && 
-                        parent.hasAttribute('data-type') && 
+                    if (parent.classList.contains('module') &&
+                        parent.hasAttribute('data-type') &&
                         parent.getAttribute('data-type') !== '' &&
                         !parent.classList.contains('module-layouts')) {
                         isDirectChild = false;

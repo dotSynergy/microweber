@@ -26,6 +26,7 @@
     "php": "^8.2",
     "ext-pdo": "*",
     "ext-zip": "*",
+    "ext-dom": "*",
     "composer-runtime-api": "^2.1",
     "laravel/framework": "^11",
     "filament/actions": "^3.3.10",

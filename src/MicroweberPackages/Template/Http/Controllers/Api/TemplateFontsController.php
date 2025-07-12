@@ -91,6 +91,11 @@ class TemplateFontsController
         $availableFonts = $this->getAvailableFonts();
         $fontExists = false;
 
+
+        // for now we will allow all fonts to be saved
+        $fontExists = true;
+
+
         foreach ($availableFonts as $font) {
             if ($font['family'] === $fontFamily) {
                 $fontExists = true;

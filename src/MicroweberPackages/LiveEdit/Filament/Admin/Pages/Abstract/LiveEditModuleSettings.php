@@ -332,11 +332,7 @@ abstract class LiveEditModuleSettings extends Page
         if (!$selectedSkin) {
             $selectedSkin = request()->get('template') ?? $this->params['template'] ?? null;
             // append .php if extension not set
-            if ($selectedSkin and $selectedSkin != 'default') {
-                $selectedSkin = str_replace('/', '.', $selectedSkin);
-                $selectedSkin = str_replace('\\', '.', $selectedSkin);
-                $selectedSkin = str_replace('.', '/', $selectedSkin);
-            }
+
 //            if ($selectedSkin and Str::endsWith($selectedSkin, '.php') == false) {
 //                $selectedSkin = $selectedSkin . '.php';
 //
@@ -347,6 +343,13 @@ abstract class LiveEditModuleSettings extends Page
 
         if(!$selectedSkin){
             $selectedSkin = 'default';
+        }
+
+        if ($selectedSkin and $selectedSkin != 'default') {
+            $selectedSkin = str_replace('/', '.', $selectedSkin);
+            $selectedSkin = str_replace('\\', '.', $selectedSkin);
+            $selectedSkin = str_replace('.', '/', $selectedSkin);
+
         }
 
         $selectedSkin = str_replace('/', '.', $selectedSkin);
@@ -372,9 +375,14 @@ abstract class LiveEditModuleSettings extends Page
 
             foreach ($moduleTemplates as $moduleTemplate) {
 
-                $moduleTemplatesForForm[$moduleTemplate['layout_file']] = $moduleTemplate['name'];
 
-                if ($selectedSkin == $moduleTemplate['layout_file']) {
+
+                $layoutFile = str_replace('/', '.', $moduleTemplate['layout_file']);
+                $layoutFile = str_replace('\\', '.', $layoutFile);
+
+                $moduleTemplatesForForm[$layoutFile] = $moduleTemplate['name'];
+
+                if ($selectedSkin == $layoutFile) {
                     if (isset($moduleTemplate['skin_settings_json_file'])
                         and $moduleTemplate['skin_settings_json_file']
                         and is_file($moduleTemplate['skin_settings_json_file'])

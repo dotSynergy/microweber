@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex">
     <?php get_favicon_tag(); ?>
 
-    <?php print mw_header_scripts() ?>
+    <?php print mw_admin_header_scripts() ?>
 
 
     <link type="text/css" rel="stylesheet" media="all"
@@ -357,7 +357,7 @@ if(request()->has('prompt')) {
     </style>
 </main>
 
-<?php print mw_footer_scripts() ?>
+<?php print mw_admin_footer_scripts() ?>
 
 </body>
 </html>

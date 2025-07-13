@@ -73,6 +73,7 @@ class FilamentAdminPanelProvider extends PanelProvider
         return [
             'web',
 
+
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             DisableBladeIconComponents::class,
@@ -199,6 +200,8 @@ class FilamentAdminPanelProvider extends PanelProvider
                 //  Admin::class,
             ])->bootUsing(function (Panel $panel) {
                 //  dd($panel);
+
+
             });
 
         $panel->renderHook(

@@ -22,7 +22,6 @@ class AuthenticateAdmin extends Middleware
 
         if (is_admin()) {
 
-
             return $next($request);
         }
 

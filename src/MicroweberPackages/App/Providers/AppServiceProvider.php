@@ -283,6 +283,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(MicroweberFilamentServiceProvider::class);
 
 
+
     }
 
 
@@ -645,6 +646,9 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Http\Middleware\CheckResponseForModifications::class
         ]);
 
+
+
+        event_trigger('mw.init');
 
         // <<< MW Kernel add
 

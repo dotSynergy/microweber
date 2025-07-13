@@ -71,7 +71,7 @@ if (!function_exists('mw_admin_footer_scripts')) {
 }
 
 /**
- * @deprecated
+ * @deprecated , pls use fimanent hooks
  */
 if (!function_exists('admin_head')) {
     function admin_head($script_src)
@@ -79,6 +79,7 @@ if (!function_exists('admin_head')) {
         return app()->template_manager->admin_head($script_src);
     }
 }
+
 
 if (!function_exists('template_head')) {
     function template_head($script_src)

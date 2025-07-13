@@ -1038,7 +1038,7 @@ console.log(3)
         const message = `Using the existing object IDS,
         By using this schema: \n ${JSON.stringify(this.schema())} \n
 
-        Write text to this object and populate the content and children file of the schema items,
+        Write text to this object and populate the content and children file of the schema items usindg the existing object IDS,
 
         You are a website content writer, and you must write the text in a way that is relevant to the object,
 
@@ -1047,7 +1047,7 @@ console.log(3)
 
         The website subject is: ${about}
 
-        You must write the text for the website and will the existing object IDs with the text,
+        You must write the text for the website and fill the existing object IDs with the text,
         Expand on the subject and try to fill and write relevant information in the existing text
 
 

@@ -648,7 +648,7 @@ class AppServiceProvider extends ServiceProvider
 
 
 
-        event_trigger('mw.init');
+
 
         // <<< MW Kernel add
 

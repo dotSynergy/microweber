@@ -1,0 +1,741 @@
+<template>
+    <div ref="iframeContainer" class="iframe-wrapper">
+        <!-- Loading animation -->
+        <div v-if="isLoading" class="style-pack-loading">
+            <div class="spinner-container">
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+                <div class="loading-text">Loading styles...</div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'StylePackIframeRenderer',
+    props: {
+        setting: {
+            type: Object,
+            required: true
+        },
+        selectorToApply: {
+            type: String,
+            default: ''
+        },
+        rootSelector: {
+            type: String,
+            default: ''
+        },
+        stylePacksExpanded: {
+            type: Boolean,
+            default: false
+        },
+        isStylePackOpenerMode: {
+            type: Boolean,
+            default: false
+        },
+        currentStylePack: {
+            type: Object,
+            default: null
+        },
+        previewElementsFormat: {
+            type: String,
+            default: 'block'
+        },
+        isDarkMode: {
+            type: Boolean,
+            default: false
+        },
+        isLayoutMode: {
+            type: Boolean,
+            default: false
+        },
+        activeLayoutId: {
+            type: String,
+            default: null
+        },
+        fontsToLoad: {
+            type: Array,
+            default: () => []
+        }
+    },
+    data() {
+        return {
+            iframe: null,
+            isLoading: true,
+            isMounted: false
+        }
+    },
+    computed: {
+        // Create a computed property that combines all props into a cache key
+        cacheKey() {
+            return `${this.setting.title}-${this.stylePacksExpanded}-${this.isStylePackOpenerMode}-${this.previewElementsFormat}-${this.isDarkMode}-${this.isLayoutMode}-${this.activeLayoutId}`;
+        }
+    },
+    watch: {
+        stylePacksExpanded() {
+            if (this.isMounted) {
+                this.updateIframeContent();
+            }
+        },
+        currentStylePack() {
+            if (this.isMounted) {
+                this.updateIframeContent();
+            }
+        },
+        isDarkMode() {
+            if (this.isMounted) {
+                this.recreateIframe();
+            }
+        },
+        isLayoutMode() {
+            if (this.isMounted) {
+                this.updateIframeContent();
+            }
+        },
+        activeLayoutId() {
+            if (this.isMounted) {
+                this.updateIframeContent();
+            }
+        },
+        fontsToLoad() {
+            if (this.isMounted) {
+                this.injectFontsIntoIframe();
+            }
+        }
+    },
+    mounted() {
+        this.initIframe();
+        this.isMounted = true;
+    },
+    beforeUnmount() {
+        if (this.iframe) {
+            this.iframe.remove();
+        }
+    },
+    methods: {
+        initIframe() {
+            this.isLoading = true;
+            
+            // Create iframe element
+            this.iframe = document.createElement('iframe');
+            this.iframe.allowTransparency = true;
+            this.iframe.className = 'preview-iframe';
+            this.iframe.style.width = '100%';
+            this.iframe.style.height = '400px';
+            this.iframe.style.border = 'none';
+            this.iframe.style.borderRadius = '7px';
+            this.iframe.style.colorScheme = 'normal';
+
+            // Append to container
+            this.$refs.iframeContainer.appendChild(this.iframe);
+
+            // Initialize iframe content after it's loaded
+            this.iframe.onload = () => {
+                this.isLoading = false;
+                this.injectCanvasStyles();
+                this.updateIframeContent();
+                this.injectFontsIntoIframe();
+                
+                // Auto height adjustment
+                if (mw.top().tools.iframeAutoHeight) {
+                    mw.top().tools.iframeAutoHeight(this.iframe);
+                }
+            };
+
+            this.setupIframeContent();
+        },
+
+        recreateIframe() {
+            if (this.iframe) {
+                this.iframe.remove();
+            }
+            this.initIframe();
+        },
+
+        setupIframeContent() {
+            // Define color variables based on theme
+            const lightThemeColors = {
+                borderColor: '#dee2e6',
+                backgroundColor: '#f2f2f2',
+                backgroundColorHover: '#d7d7d7',
+                itemBackgroundColor: '#f8f9fa',
+                textColor: '#495057',
+                accentColor: '#007bff',
+                shadowColor: 'rgba(0,0,0,0.1)'
+            };
+
+            const darkThemeColors = {
+                borderColor: 'rgb(242, 242, 242)',
+                backgroundColor: 'rgb(242, 242, 242)',
+                backgroundColorHover: 'rgb(215, 215, 215)',
+                itemBackgroundColor: '#1a202c',
+                textColor: '#e2e8f0',
+                accentColor: '#63b3ed',
+                shadowColor: 'rgba(255,255,255,0.1)'
+            };
+
+            const colors = this.isDarkMode ? darkThemeColors : lightThemeColors;
+
+            // Set initial content with CSS and container
+            this.iframe.srcdoc = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <style>
+                        :root {
+                            --border-color: ${colors.borderColor};
+                            --background-color: ${colors.backgroundColor};
+                            --background-color-hover: ${colors.backgroundColorHover};
+                            --item-background-color: ${colors.itemBackgroundColor};
+                            --text-color: ${colors.textColor};
+                            --accent-color: ${colors.accentColor};
+                            --shadow-color: ${colors.shadowColor};
+                        }
+
+                        body {
+                            margin: 0;
+                            padding: 0px;
+                            background-color: transparent !important;
+                            background: transparent !important;
+                            color: var(--text-color);
+                            overflow: hidden;
+                        }
+                        
+                        .style-pack-container {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 15px;
+                        }
+                        
+                        .style-pack-item {
+                            cursor: pointer;
+                            padding: 27px 22px 22px;
+                            border-radius: 8px;
+                            transition: all 0.2s;
+                            border: 1px solid var(--border-color);
+                            margin-bottom: 10px;
+                            background-color: var(--background-color);
+                            zoom: 87%;
+                        }
+
+                        .style-pack-item:hover {
+                            box-shadow: 0 2px 4px var(--shadow-color);
+                        }
+
+                        .style-pack-opener {
+                            cursor: pointer;
+                            padding: 27px 28px 22px;
+                            border-radius: 8px;
+                            transition: all 0.2s;
+                            border: 1px solid var(--border-color);
+                            margin-bottom: 10px;
+                            background-color: var(--background-color);
+                            position: relative;
+                            zoom: 90%;
+                        }
+
+                        .style-pack-opener:after {
+                            content: '>';
+                            position: absolute;
+                            right: 6px;
+                            bottom: -8px;
+                            transform: translateY(-50%);
+                            font-size: 16px;
+                            color: #000;
+                            opacity: 0.7;
+                            transition: all 0.3s ease;
+                            padding: 5px;
+                            width: 25px;
+                            height: 25px;
+                            background: white;
+                            border-radius: 999px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid var(--border-color);
+                        }
+
+                        .style-pack-opener:hover:after {
+                            transform: translateY(-50%) translateX(3px);
+                            color: #007bff;
+                            opacity: 1;
+                            text-shadow: 0 0 5px rgba(0,123,255,0.3);
+                            animation: arrow-pulse 1s infinite alternate;
+                        }
+
+                        @keyframes arrow-pulse {
+                            0% { transform: translateY(-50%) translateX(0px); }
+                            100% { transform: translateY(-50%) translateX(5px); }
+                        }
+
+                        .style-pack-container.expanded .style-pack-item {
+                            display: block;
+                            position: relative;
+                        }
+
+                        .style-pack-container:not(.expanded) .style-pack-item {
+                            display: none;
+                        }
+
+                        .style-preview-item {
+                            padding: 8px 15px;
+                            border-radius: 6px;
+                            background-color: var(--item-background-color);
+                            border: 1px solid var(--border-color);
+                            text-align: center;
+                            min-width: 80px;
+                            font-size: 12px;
+                        }
+
+                        .preview-display-block { display: block; }
+                        .preview-display-flex { display: flex; gap: 6px; }
+                        .preview-display-flexZoom { 
+                            display: flex; 
+                            gap: 0; 
+                            flex-wrap: wrap; 
+                            zoom: 0.5; 
+                        }
+                        
+                        .style-preview-element {
+                            flex: 1;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        
+                        .preview-display-block .style-preview-element {
+                            display: block;
+                        }
+
+                        .style-preview-element p, .preview-component {
+                            margin: 0;
+                        }
+
+                        .style-label {
+                            text-align: center;
+                            font-weight: 500;
+                            color: var(--text-color);
+                        }
+                        
+                        .d-flex { display: flex; }
+                        .flex-column { flex-direction: column; }
+                        .gap-2 { gap: 8px; }
+                        .cursor-pointer { cursor: pointer; }
+                        .mt-1 { margin-top: 0.25rem; }
+
+                        .live-edit-label {
+                            padding: 0 2px;
+                            text-rendering: optimizelegibility;
+                            -webkit-font-smoothing: antialiased;
+                            font-size: 9.75px;
+                            letter-spacing: 0.75px;
+                            text-overflow: ellipsis;
+                            text-transform: uppercase;
+                            padding-left: 0;
+                            overflow: hidden;
+                            box-sizing: border-box;
+                            display: block;
+                            font-weight: 300;
+                            color: #0a0a0a;
+                        }
+
+                        .predefined-styles-names {
+                            position: absolute;
+                            bottom: -9px;
+                            background: white;
+                            padding: 2px 10px;
+                            border: 1px solid #e5e5e5;
+                            border-radius: 11px;
+                        }
+
+                        .color-palette-item {
+                            border-radius: 7px;
+                            height: 60px;
+                            width: 100%;
+                            max-width: 47px;
+                            border: 1px solid var(--border-color);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="preview-content"></div>
+                </body>
+                </html>
+            `;
+        },
+
+        injectCanvasStyles() {
+            if (!this.iframe?.contentDocument) return;
+
+            try {
+                const canvasDocument = mw.top().app.canvas.getDocument();
+                const iframeDoc = this.iframe.contentDocument;
+                const iframeHead = iframeDoc.head;
+
+                // Get all stylesheets from canvas
+                const sheets = canvasDocument.querySelectorAll('[rel="stylesheet"],style,[type="text/css"]');
+
+                sheets.forEach(sheet => {
+                    try {
+                        if (sheet.tagName === 'LINK' && sheet.href) {
+                            const link = iframeDoc.createElement('link');
+                            link.rel = 'stylesheet';
+                            link.href = sheet.href;
+                            link.type = 'text/css';
+                            iframeHead.appendChild(link);
+                        } else if (sheet.tagName === 'STYLE') {
+                            const style = iframeDoc.createElement('style');
+                            style.type = 'text/css';
+                            style.textContent = sheet.textContent;
+                            iframeHead.appendChild(style);
+                        }
+                    } catch (error) {
+                        console.warn('Could not inject stylesheet:', error);
+                    }
+                });
+            } catch (error) {
+                console.error('Error injecting canvas styles:', error);
+            }
+        },
+
+        injectFontsIntoIframe() {
+            if (!this.iframe?.contentDocument || !this.fontsToLoad.length) return;
+
+            const fontManager = mw.top()?.app?.fontManager;
+            if (!fontManager) return;
+
+            const iframeDoc = this.iframe.contentDocument;
+            const iframeHead = iframeDoc.head;
+
+            this.fontsToLoad.forEach(family => {
+                const fontUrl = fontManager.getFontUrl(family);
+                if (!fontUrl) return;
+
+                const fontId = 'font-' + family.replace(/[^a-zA-Z0-9]/g, '');
+                if (iframeDoc.getElementById(fontId)) return;
+
+                const link = iframeDoc.createElement('link');
+                link.id = fontId;
+                link.rel = 'stylesheet';
+                link.href = fontUrl;
+                link.setAttribute("referrerpolicy", "no-referrer");
+                link.setAttribute("crossorigin", "anonymous");
+                link.setAttribute("data-noprefix", "1");
+
+                iframeHead.appendChild(link);
+            });
+        },
+
+        updateIframeContent() {
+            if (!this.iframe?.contentDocument) return;
+
+            const iframeDoc = this.iframe.contentDocument;
+            const previewContent = iframeDoc.getElementById('preview-content');
+
+            if (!previewContent) return;
+
+            // Clear existing content
+            previewContent.innerHTML = '';
+
+            // Create a wrapper div for layout mode
+            let contentWrapper = previewContent;
+            if (this.isLayoutMode && this.activeLayoutId && this.activeLayoutId !== 'None') {
+                const layoutWrapper = iframeDoc.createElement('div');
+                layoutWrapper.id = this.activeLayoutId;
+                layoutWrapper.className = 'layout-wrapper';
+                previewContent.appendChild(layoutWrapper);
+                contentWrapper = layoutWrapper;
+            }
+
+            // Handle stylePackOpener mode
+            if (this.isStylePackOpenerMode) {
+                const stylePackContainer = iframeDoc.createElement('div');
+                stylePackContainer.className = 'style-pack-container';
+
+                if (this.stylePacksExpanded) {
+                    stylePackContainer.classList.add('expanded');
+                }
+                contentWrapper.appendChild(stylePackContainer);
+
+                // Add the opener element if not expanded
+                if (!this.stylePacksExpanded) {
+                    const openerElement = this.createOpenerElement(iframeDoc);
+                    stylePackContainer.appendChild(openerElement);
+                }
+
+                // Render all style packs
+                if (this.setting.fieldSettings?.styleProperties) {
+                    this.setting.fieldSettings.styleProperties.forEach((stylePack, index) => {
+                        const stylePackElement = this.createStylePackElement(stylePack, index, iframeDoc);
+                        stylePackContainer.appendChild(stylePackElement);
+                    });
+                }
+            } else {
+                // Regular rendering of all style packs
+                if (this.setting.fieldSettings?.styleProperties) {
+                    this.setting.fieldSettings.styleProperties.forEach((stylePack, index) => {
+                        const stylePackElement = this.createStylePackElement(stylePack, index, iframeDoc);
+                        contentWrapper.appendChild(stylePackElement);
+                    });
+                }
+            }
+        },
+
+        createOpenerElement(iframeDoc) {
+            const openerDiv = iframeDoc.createElement('div');
+            openerDiv.className = 'style-pack-opener';
+            openerDiv.onclick = () => this.$emit('toggle-expansion');
+
+            const innerDiv = iframeDoc.createElement('div');
+            innerDiv.className = 'd-flex flex-column';
+
+            const previewDiv = iframeDoc.createElement('div');
+            previewDiv.className = `preview-display-${this.previewElementsFormat} cursor-pointer style-pack-preview main`;
+
+            if (this.setting.previewElements?.length > 0) {
+                this.setting.previewElements.forEach(preview => {
+                    const previewElement = iframeDoc.createElement('div');
+                    previewElement.className = 'style-preview-element';
+
+                    const component = iframeDoc.createElement(preview.tag || 'div');
+                    component.className = `preview-component main ${preview.class || ''}`;
+                    component.textContent = preview.label || '';
+
+                    const attrs = preview.attributes || {};
+                    Object.keys(attrs).forEach(attr => {
+                        component.setAttribute(attr, attrs[attr]);
+                    });
+
+                    // Apply current style pack properties if available
+                    if (this.setting.previewElementsStyleProperties?.[0]?.properties) {
+                        const styleProps = this.setting.previewElementsStyleProperties[0].properties;
+                        Object.keys(styleProps).forEach(property => {
+                            if (property.startsWith('--')) {
+                                component.style.setProperty(property, styleProps[property]);
+                            } else {
+                                const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                                component.style[cssProperty] = styleProps[property];
+                            }
+                        });
+
+                        // Apply specific font properties
+                        if (preview.tag?.match(/^h[1-6]$/)) {
+                            if (styleProps['--mw-body-font-family']) {
+                                component.style.fontFamily = styleProps['--mw-body-font-family'];
+                            }
+                            if (styleProps['--mw-heading-font-weight']) {
+                                component.style.fontWeight = styleProps['--mw-heading-font-weight'];
+                            }
+                            if (styleProps['--mw-heading-font-size']) {
+                                component.style.fontSize = styleProps['--mw-heading-font-size'];
+                            }
+                        } else if (['p', 'div', 'span'].includes(preview.tag)) {
+                            if (styleProps['--mw-body-font-family']) {
+                                component.style.fontFamily = styleProps['--mw-body-font-family'];
+                            }
+                            if (styleProps['--mw-paragraph-font-weight']) {
+                                component.style.fontWeight = styleProps['--mw-paragraph-font-weight'];
+                            }
+                            if (styleProps['--mw-paragraph-font-size']) {
+                                component.style.fontSize = styleProps['--mw-paragraph-font-size'];
+                            }
+                        }
+                    }
+
+                    previewElement.appendChild(component);
+                    previewDiv.appendChild(previewElement);
+                });
+            }
+
+            innerDiv.appendChild(previewDiv);
+
+            // Add label if available
+            if (this.setting.previewElementsStyleProperties?.[0]?.label) {
+                const labelDiv = iframeDoc.createElement('div');
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
+
+                const label = iframeDoc.createElement('label');
+                label.textContent = this.setting.previewElementsStyleProperties[0].label;
+                label.className = 'live-edit-label';
+
+                labelDiv.appendChild(label);
+                innerDiv.appendChild(labelDiv);
+            }
+
+            openerDiv.appendChild(innerDiv);
+            return openerDiv;
+        },
+
+        createStylePackElement(stylePack, index, iframeDoc) {
+            const stylePackDiv = iframeDoc.createElement('div');
+            stylePackDiv.className = 'style-pack-item';
+            stylePackDiv.onclick = () => this.$emit('apply-style-pack', stylePack, stylePackDiv);
+
+            const innerDiv = iframeDoc.createElement('div');
+            innerDiv.className = 'd-flex flex-column';
+
+            const previewDiv = iframeDoc.createElement('div');
+            previewDiv.className = `preview-display-${this.previewElementsFormat} cursor-pointer style-pack-preview`;
+
+            if (this.setting.previewElements?.length > 0) {
+                this.setting.previewElements.forEach(preview => {
+                    const previewElement = iframeDoc.createElement('div');
+                    previewElement.className = 'style-preview-element';
+
+                    const component = iframeDoc.createElement(preview.tag || 'div');
+                    component.className = `preview-component main ${preview.class || ''}`;
+                    component.textContent = preview.label || '';
+
+                    const attrs = preview.attributes || {};
+                    Object.keys(attrs).forEach(attr => {
+                        component.setAttribute(attr, attrs[attr]);
+                    });
+
+                    // Apply style pack properties
+                    if (stylePack.properties) {
+                        Object.keys(stylePack.properties).forEach(property => {
+                            if (property.startsWith('--')) {
+                                component.style.setProperty(property, stylePack.properties[property]);
+                                stylePackDiv.style.setProperty(property, stylePack.properties[property]);
+                            } else {
+                                const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                                component.style[cssProperty] = stylePack.properties[property];
+                                stylePackDiv.style[cssProperty] = stylePack.properties[property];
+                            }
+                        });
+
+                        // Apply specific font properties
+                        if (preview.tag?.match(/^h[1-6]$/)) {
+                            if (stylePack.properties['--mw-body-font-family']) {
+                                component.style.fontFamily = stylePack.properties['--mw-body-font-family'];
+                            }
+                            if (stylePack.properties['--mw-heading-font-weight']) {
+                                component.style.fontWeight = stylePack.properties['--mw-heading-font-weight'];
+                            }
+                            if (stylePack.properties['--mw-heading-font-size']) {
+                                component.style.fontSize = stylePack.properties['--mw-heading-font-size'];
+                            }
+                        } else if (['p', 'div', 'span'].includes(preview.tag)) {
+                            if (stylePack.properties['--mw-body-font-family']) {
+                                component.style.fontFamily = stylePack.properties['--mw-body-font-family'];
+                            }
+                            if (stylePack.properties['--mw-paragraph-font-weight']) {
+                                component.style.fontWeight = stylePack.properties['--mw-paragraph-font-weight'];
+                            }
+                            if (stylePack.properties['--mw-paragraph-font-size']) {
+                                component.style.fontSize = stylePack.properties['--mw-paragraph-font-size'];
+                            }
+                        }
+                    }
+
+                    previewElement.appendChild(component);
+                    previewDiv.appendChild(previewElement);
+                });
+            } else {
+                // Fallback to selector names
+                if (this.setting.selectors) {
+                    this.setting.selectors.forEach(selector => {
+                        const previewItem = iframeDoc.createElement('div');
+                        previewItem.className = 'style-preview-item';
+
+                        const label = iframeDoc.createElement('span');
+                        label.className = 'style-preview-label';
+                        label.textContent = this.getSelectorName(selector);
+
+                        previewItem.appendChild(label);
+                        previewDiv.appendChild(previewItem);
+                    });
+                }
+            }
+
+            innerDiv.appendChild(previewDiv);
+
+            // Add label if available
+            if (stylePack.label) {
+                const labelDiv = iframeDoc.createElement('div');
+                labelDiv.className = 'form-control-live-edit-label-wrapper predefined-styles-names';
+
+                const label = iframeDoc.createElement('label');
+                label.textContent = stylePack.label;
+                label.className = 'live-edit-label';
+
+                labelDiv.appendChild(label);
+                innerDiv.appendChild(labelDiv);
+            }
+
+            stylePackDiv.appendChild(innerDiv);
+            return stylePackDiv;
+        },
+
+        getSelectorName(selector) {
+            if (selector === ':root') return 'Root';
+            return selector.replace(/^[.#]/g, '');
+        }
+    }
+}
+</script>
+
+<style scoped>
+.style-pack-loading {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 7px;
+}
+
+.spinner-container {
+    text-align: center;
+}
+
+.loading-text {
+    margin-top: 15px;
+    color: #007bff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.spinner {
+    margin: 0 auto;
+    width: 70px;
+    text-align: center;
+}
+
+.spinner > div {
+    width: 12px;
+    height: 12px;
+    background-color: #007bff;
+    border-radius: 100%;
+    display: inline-block;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    margin: 0 3px;
+}
+
+.spinner .bounce1 {
+    animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+    animation-delay: -0.16s;
+}
+
+@keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+</style>

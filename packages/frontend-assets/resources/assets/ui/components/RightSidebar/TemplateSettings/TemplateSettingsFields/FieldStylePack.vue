@@ -533,7 +533,8 @@ export default {
                             zoom: 87%;
 
                             &:hover {
-                                background-color: var(--background-color-hover);
+
+                                box-shadow: 0 2px 4px var(--shadow-color);
                             }
                         }
 

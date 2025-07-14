@@ -37,6 +37,12 @@ class SetupWizardController extends AdminController
             'MobileApp2'];
 
 
+
+        //getFallbackTemplateDir
+        //$getFallbackTemplateDir = app()->template_manager->templateAdapter->getFallbackTemplateFolderName();
+
+        $getFallbackTemplateDir = 'bootstrap';
+
         foreach ($getTemplates as $template) {
             if (!isset($template['screenshot'])) {
                 continue;
@@ -46,6 +52,12 @@ class SetupWizardController extends AdminController
             $templateColors = [];
             $templateDescription  = '';
             $templateJson = templates_path() . $template['dir_name'] . '/composer.json';
+
+
+            if(strtolower($template['dir_name']) == strtolower($getFallbackTemplateDir)) {
+                continue;
+            }
+
 
             if (is_file($templateJson)) {
                 $templateJson = @file_get_contents($templateJson);

@@ -98,21 +98,28 @@ export default {
             uniqueId: 'style-pack-' + Math.random().toString(36).substr(2, 9), // Generate unique ID for this component
             selectedStylePackProperties: null, // Store selected style pack properties for opener
             loadingStylePackIndex: null, // Track which style pack is currently loading
+            lastContentHash: null, // Track content changes to avoid unnecessary DOM updates
         }
     },
     watch: {
         // Watch for changes in layout mode
-        isLayoutMode() {
-            this.$nextTick(() => {
-                this.updateIframeContent();
-            });
+        isLayoutMode(newVal, oldVal) {
+            // Only update if actually changed to avoid unnecessary reloads
+            if (newVal !== oldVal) {
+                this.$nextTick(() => {
+                    this.updateIframeContent();
+                });
+            }
         },
 
         // Watch for changes in active layout ID
-        activeLayoutId() {
-            this.$nextTick(() => {
-                this.updateIframeContent();
-            });
+        activeLayoutId(newVal, oldVal) {
+            // Only update if actually changed to avoid unnecessary reloads
+            if (newVal !== oldVal) {
+                this.$nextTick(() => {
+                    this.updateIframeContent();
+                });
+            }
         },        // Watch for changes in expanded state and emit event
         stylePacksExpanded(newVal) {
             this.$emit('style-pack-expanded-state', {
@@ -168,6 +175,12 @@ export default {
         scanAndLoadFonts() {
             if (!this.setting.fieldSettings || !this.setting.fieldSettings.styleProperties) {
                 console.log('No style properties to scan for fonts');
+                return;
+            }
+
+            // Skip if fonts are already loaded to avoid unnecessary reloads
+            if (this.fontsLoaded && this.fontsToLoad.length > 0) {
+                console.log('Fonts already loaded, skipping scan');
                 return;
             }
 
@@ -242,8 +255,8 @@ export default {
                 const fontId = 'font-' + family.replace(/[^a-zA-Z0-9]/g, '');
                 const preloadId = 'preload-' + fontId;
 
-                // Skip if already added
-                if (iframeDoc.getElementById(fontId)) return;
+                // Skip if already added (check both preload and final font link)
+                if (iframeDoc.getElementById(fontId) || iframeDoc.getElementById(preloadId)) return;
 
                 // Create preload link for faster loading
                 const preloadLink = iframeDoc.createElement('link');
@@ -1011,6 +1024,24 @@ export default {
 
             if (!previewContent) return;
 
+            // Avoid unnecessary DOM manipulation if content hasn't changed
+            const currentContentHash = JSON.stringify({
+                isStylePackOpenerMode: this.isStylePackOpenerMode,
+                stylePacksExpanded: this.stylePacksExpanded,
+                isLayoutMode: this.isLayoutMode,
+                activeLayoutId: this.activeLayoutId,
+                loadingStylePackIndex: this.loadingStylePackIndex,
+                currentStylePack: this.currentStylePack?.label || null,
+                settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0
+            });
+            
+            if (this.lastContentHash === currentContentHash) {
+                console.log('Skipping iframe update - content unchanged');
+                return;
+            }
+            
+            this.lastContentHash = currentContentHash;
+
             // Clear existing content
             previewContent.innerHTML = '';
 
@@ -1242,14 +1273,31 @@ export default {
         // New method to setup global reload listener for style packs
         setupStylePackGlobalReloadListener() {
             if (mw.top() && mw.top().app) {
-                mw.top().app.on('stylePackGlobalReload', () => {
-                    console.log('Global style pack reload triggered');
-                    // Re-scan and load fonts
-                    this.scanAndLoadFonts();
-
-                    // Re-inject fonts and update iframe content
-                    this.injectFontsIntoIframe();
-                    this.injectCanvasStyles();
+                mw.top().app.on('stylePackGlobalReload', (eventData) => {
+                    console.log('Global style pack reload triggered', eventData);
+                    
+                    // Skip reload if this is the source component that triggered the event
+                    if (eventData && eventData.sourceComponentId === this.uniqueId) {
+                        console.log('Skipping reload for source component', this.uniqueId);
+                        return;
+                    }
+                    
+                    // Skip reload for mode changes to improve performance
+                    if (eventData && eventData.reason === 'applyModeWatcherChanged') {
+                        console.log('Skipping reload for mode change to improve performance');
+                        return;
+                    }
+                    
+                    // Only reload if fonts or canvas styles actually need updating
+                    if (eventData && (eventData.reason === 'fontChange' || eventData.reason === 'cssReload')) {
+                        // Re-scan and load fonts
+                        this.scanAndLoadFonts();
+                        // Re-inject fonts and update iframe content
+                        this.injectFontsIntoIframe();
+                        this.injectCanvasStyles();
+                    }
+                    
+                    // Always update iframe content for other events
                     this.updateIframeContent();
                 });
             }

@@ -437,19 +437,11 @@ export default {
                 } else {
                     this.existingLayoutSelectors = [];
                     this.existingLayoutSelectorsInitialized = false;
-                }                // Trigger global reload events for style preview updates when mode changes via watcher
-                console.log('Apply mode watcher triggered, mode changed from', oldMode, 'to', newMode);
-
-                // Trigger style pack global reload for preview components
-                if (window.mw?.top()?.app) {
-                    window.mw.top().app.dispatch('stylePackGlobalReload', {
-                        reason: 'applyModeWatcherChanged',
-                        newMode: newMode,
-                        oldMode: oldMode,
-                        isLayoutMode: newMode === 'layout',
-                        isTemplateMode: newMode === 'template'
-                    });
                 }
+
+                // Note: Removed global style pack reload trigger to improve performance
+                // Style packs will update automatically through reactive data changes
+                console.log('Apply mode changed from', oldMode, 'to', newMode);
             }
         },activeLayoutId(newId, oldId) {
             if (newId !== oldId) {

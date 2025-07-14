@@ -240,21 +240,50 @@ export default {
 
                 // Create a unique ID for this font link
                 const fontId = 'font-' + family.replace(/[^a-zA-Z0-9]/g, '');
+                const preloadId = 'preload-' + fontId;
 
                 // Skip if already added
                 if (iframeDoc.getElementById(fontId)) return;
 
-                // Create and append link element
-                const link = iframeDoc.createElement('link');
-                link.id = fontId;
-                link.rel = 'stylesheet';
-                link.href = fontUrl;
-                link.setAttribute("referrerpolicy", "no-referrer");
-                link.setAttribute("crossorigin", "anonymous");
-                link.setAttribute("data-noprefix", "1");
+                // Create preload link for faster loading
+                const preloadLink = iframeDoc.createElement('link');
+                preloadLink.id = preloadId;
+                preloadLink.rel = 'preload';
+                preloadLink.href = fontUrl;
+                preloadLink.as = 'style';
+                preloadLink.setAttribute("referrerpolicy", "no-referrer");
+                preloadLink.setAttribute("crossorigin", "anonymous");
+                preloadLink.setAttribute("data-noprefix", "1");
+                
+                // Async stylesheet loading
+                preloadLink.onload = function() {
+                    // Convert preload to stylesheet once loaded
+                    const link = iframeDoc.createElement('link');
+                    link.id = fontId;
+                    link.rel = 'stylesheet';
+                    link.href = fontUrl;
+                    link.setAttribute("referrerpolicy", "no-referrer");
+                    link.setAttribute("crossorigin", "anonymous");
+                    link.setAttribute("data-noprefix", "1");
+                    iframeHead.appendChild(link);
+                    console.log('Async font loaded into iframe:', family, fontUrl);
+                };
 
-                iframeHead.appendChild(link);
-                console.log('Injected font into iframe:', family, fontUrl);
+                // Fallback for browsers that don't support preload
+                preloadLink.onerror = function() {
+                    const link = iframeDoc.createElement('link');
+                    link.id = fontId;
+                    link.rel = 'stylesheet';
+                    link.href = fontUrl;
+                    link.setAttribute("referrerpolicy", "no-referrer");
+                    link.setAttribute("crossorigin", "anonymous");
+                    link.setAttribute("data-noprefix", "1");
+                    iframeHead.appendChild(link);
+                    console.log('Fallback font loaded into iframe:', family, fontUrl);
+                };
+
+                iframeHead.appendChild(preloadLink);
+                console.log('Preloading font into iframe:', family, fontUrl);
             });
         },
 
@@ -779,18 +808,55 @@ export default {
                 // Get all stylesheets from canvas
                 const sheets = canvasDocument.querySelectorAll('[rel="stylesheet"],style,[type="text/css"]');
 
-                sheets.forEach(sheet => {
+                sheets.forEach((sheet, index) => {
                     try {
                         if (sheet.tagName === 'LINK' && sheet.href) {
-                            // Copy external stylesheets
-                            const link = iframeDoc.createElement('link');
-                            link.rel = 'stylesheet';
-                            link.href = sheet.href;
-                            link.type = 'text/css';
-                            iframeHead.appendChild(link);
+                            // Create unique ID for this stylesheet
+                            const styleId = 'canvas-style-' + index;
+                            const preloadId = 'preload-canvas-style-' + index;
+                            
+                            // Skip if already added
+                            if (iframeDoc.getElementById(styleId)) return;
+
+                            // Create preload link for faster loading
+                            const preloadLink = iframeDoc.createElement('link');
+                            preloadLink.id = preloadId;
+                            preloadLink.rel = 'preload';
+                            preloadLink.href = sheet.href;
+                            preloadLink.as = 'style';
+                            preloadLink.type = 'text/css';
+                            
+                            // Async stylesheet loading
+                            preloadLink.onload = function() {
+                                // Convert preload to stylesheet once loaded
+                                const link = iframeDoc.createElement('link');
+                                link.id = styleId;
+                                link.rel = 'stylesheet';
+                                link.href = sheet.href;
+                                link.type = 'text/css';
+                                iframeHead.appendChild(link);
+                            };
+
+                            // Fallback for browsers that don't support preload
+                            preloadLink.onerror = function() {
+                                const link = iframeDoc.createElement('link');
+                                link.id = styleId;
+                                link.rel = 'stylesheet';
+                                link.href = sheet.href;
+                                link.type = 'text/css';
+                                iframeHead.appendChild(link);
+                            };
+
+                            iframeHead.appendChild(preloadLink);
                         } else if (sheet.tagName === 'STYLE') {
-                            // Copy inline styles
+                            // Copy inline styles immediately (no async needed for inline styles)
+                            const styleId = 'canvas-inline-style-' + index;
+                            
+                            // Skip if already added
+                            if (iframeDoc.getElementById(styleId)) return;
+                            
                             const style = iframeDoc.createElement('style');
+                            style.id = styleId;
                             style.type = 'text/css';
                             style.textContent = sheet.textContent;
                             iframeHead.appendChild(style);

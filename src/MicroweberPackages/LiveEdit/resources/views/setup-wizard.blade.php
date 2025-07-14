@@ -19,100 +19,121 @@
 </head>
 
 <body class="bg-gray-50">
+
+
+
+
 <main class="w-full min-h-screen py-10 bg-[#ececec]">
-    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <link href="//fonts.googleapis.com/css?family=Inter:200,300,400,500,600,700,800,900" rel="stylesheet"/>
+    <div class="templates-wrapper max-w-[1650px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <!-- Loading Overlay -->
-        <div id="form-loading-overlay" class="hidden fixed inset-0   bg-opacity-50 flex items-center justify-center z-50" style="background-color: rgb(149 187 221);">
+        <div id="form-loading-overlay"
+             class="hidden fixed inset-0   bg-opacity-50 flex items-center justify-center z-50"
+             style="background-color: rgb(149 187 221);">
             <div class="bg-white rounded-lg p-8 flex items-center space-x-4 shadow-xl">
-                <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" ></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="fill: #ffffff;stroke-width: 0px;"></path>
+                <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                            fill="none"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          style="fill: #ffffff;stroke-width: 0px;"></path>
                 </svg>
-                <span class="text-lg font-medium text-gray-700" id="installing_template_text">Installing template...</span>
+                <span class="text-lg font-medium text-gray-700"
+                      id="installing_template_text">Installing template...</span>
             </div>
         </div>
 
-      <div class="text-center mb-6 p-10">
-          <h1 class="text-3xl font-thin text-gray-800 mb-3">Select template for your Website</h1>
-          <p>Choose template and customize it to fit your
-              style and ideas</p>
-      </div>
+        <div class="text-center mb-6 p-10">
+            <h1 class="text-3xl font-thin text-gray-800 mb-3">Select template for your Website</h1>
+            <p>Choose template and customize it to fit your
+                style and ideas</p>
+        </div>
 
-      <!-- Categories Pills - Centered -->
-      <div class="mb-8 flex justify-center">
-          <div class="bg-[#f4f4f4] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 inline-flex flex-wrap gap-2 justify-center">
-              <button onclick="filterTemplates('')"
-                  class="live-edit-label px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter active"
-                  data-category="">
-                  All categories
-              </button>
-              @foreach($categories as $category)
-                  <button onclick="filterTemplates('{{ $category }}')"
-                      class="live-edit-label px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter mt-0 mb-0"
-                      data-category="{{ $category }}">
-                      {{ $category }}
-                  </button>
-              @endforeach
-          </div>
-      </div>
+        <!-- Categories Pills - Centered -->
+        <div class="mb-8 flex justify-center">
+            <div
+                class="bg-[#f4f4f4] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 inline-flex flex-wrap gap-2 justify-center">
+                <button onclick="filterTemplates('')"
+                        class="live-edit-label px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter active"
+                        data-category="">
+                    All categories
+                </button>
+                @foreach($categories as $category)
+                    <button onclick="filterTemplates('{{ $category }}')"
+                            class="live-edit-label px-4 py-2 rounded-lg hover:bg-gray-100 hover:text-gray-900 hover:scale-[1.02] transition-all duration-200 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 category-filter mt-0 mb-0"
+                            data-category="{{ $category }}">
+                        {{ $category }}
+                    </button>
+                @endforeach
+            </div>
+        </div>
 
-      <!-- Templates Grid -->
-      <div class="templates-container grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-          @foreach($templates as $template)
-              <div class="template-item group bg-[#f4f4f4] rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 mb-4" data-categories="{{ json_encode($template['categories']) }}">
-                  <div class="template-preview"
-
-
-                       onclick="installTemplate('{{ $template['dir_name'] }}')"
-                       style="cursor:pointer; background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
-                  </div>
-                  <div class="template-info">
-
-                      @php
-                          $displayName = $template['name'] ?? 'Untitled Template';
-
-                          //remove numbers from the end
-                          $displayName = preg_replace('/\s*\d+$/', '', $displayName);
-
-                      @endphp
+        <!-- Templates Grid -->
+        <div class="templates-container grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            @foreach($templates as $template)
+                <div
+                    class="template-item group bg-[#f4f4f4] rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 mb-4"
+                    data-categories="{{ json_encode($template['categories']) }}">
+                    <div class="template-preview"
 
 
-                      <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $displayName }}</h3>
-                      {{--                                @if(isset($template['description']))--}}
-                      {{--                                    <div class="template-description mb-4">--}}
-                      {{--                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>--}}
-                      {{--                                    </div>--}}
-                      {{--                                @endif--}}
+                         onclick="installTemplate('{{ $template['dir_name'] }}')"
+                         style="cursor:pointer; background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
+                    </div>
+                    <div class="template-info">
 
-                      @if(!empty($template['categories']))
-                          <div class="template-categories mb-4">
-                              <div class="flex flex-wrap gap-1">
-                                  @php
-                                      $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
-                                      $filteredCategories = [];
-                                      foreach($template['categories'] as $category) {
-                                          if(!in_array(strtolower($category), $remove)) {
-                                              $filteredCategories[] = $category;
-                                          }
-                                      }
-                                  @endphp
-                                  @foreach($filteredCategories as $category)
-                                      <label class="live-edit-label !font-thin">{{ $category }}{{ !$loop->last ? ', ' : '' }}</label>
-                                  @endforeach
-                              </div>
-                          </div>
-                      @endif
+                        @php
+                            $displayName = $template['name'] ?? 'Untitled Template';
 
-                      <button class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center" onclick="installTemplate('{{ $template['dir_name'] }}')">
-                          <span>Use this template</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                      </button>
-                  </div>
-              </div>
-          @endforeach
-      </div>
+                            //remove numbers from the end
+                            $displayName = preg_replace('/\s*\d+$/', '', $displayName);
+
+                        @endphp
+
+
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $displayName }}</h3>
+                        {{--                                @if(isset($template['description']))--}}
+                        {{--                                    <div class="template-description mb-4">--}}
+                        {{--                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>--}}
+                        {{--                                    </div>--}}
+                        {{--                                @endif--}}
+
+                        @if(!empty($template['categories']))
+                            <div class="template-categories mb-4">
+                                <div class="flex flex-wrap gap-1">
+                                    @php
+                                        $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
+                                        $filteredCategories = [];
+                                        foreach($template['categories'] as $category) {
+                                            if(!in_array(strtolower($category), $remove)) {
+                                                $filteredCategories[] = $category;
+                                            }
+                                        }
+                                    @endphp
+                                    @foreach($filteredCategories as $category)
+                                        <label
+                                            class="live-edit-label !font-thin">{{ $category }}{{ !$loop->last ? ', ' : '' }}</label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <button
+                            class="use-template-btn btn btn-outline-dark w-full hover:bg-gray-800 text-black hover:text-white py-2.5 px-4 rounded-lg transition-colors duration-200 transform hover:scale-[1.02] shadow-sm flex items-center justify-center"
+                            onclick="installTemplate('{{ $template['dir_name'] }}')">
+                            <span>Use this template</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-5 w-5 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 
     <script>
@@ -175,7 +196,6 @@
             }, 5000); // Change message every 5 seconds
 
 
-
             // Disable all buttons
             const allButtons = document.querySelectorAll('.use-template-btn');
             allButtons.forEach(btn => {
@@ -208,23 +228,23 @@
                         mw.notification.success(data.success);
 
 
-                         const wrapperMakeHiddern = document.querySelector('.templates-wrapper');
+                        const wrapperMakeHiddern = document.querySelector('.templates-wrapper');
 
-                         if(wrapperMakeHiddern){
+                        if (wrapperMakeHiddern) {
                             wrapperMakeHiddern.classList.add('hidden');
-                         }
+                        }
 
-@php
-$promptParams='';
-if(request()->has('prompt')) {
-    $promptParams = '&prompt=' . urlencode(request()->get('prompt'));
-}
+                        @php
+                            $promptParams='';
+                            if(request()->has('prompt')) {
+                                $promptParams = '&prompt=' . urlencode(request()->get('prompt'));
+                            }
 
-@endphp
+                        @endphp
 
 
 
-                        window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}') + "&template=" + encodeURIComponent(template) + "{!! $promptParams !!}";
+                            window.location.href = "{{ admin_url('live-edit') }}?setup_wizard=true&url=" + encodeURIComponent('{{ site_url() }}') + "&template=" + encodeURIComponent(template) + "{!! $promptParams !!}";
                     }
                 })
                 .catch(error => {
@@ -242,9 +262,34 @@ if(request()->has('prompt')) {
         }
 
         // Initialize first category as active
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.category-filter').classList.add('bg-gray-100', 'text-gray-900');
         });
+
+
+        @if(isset($_GET['template']) && !empty($_GET['template']))
+
+        var existingTemplates = [];
+        @if(isset($templates) && is_array($templates))
+        @foreach($templates as $template)
+        existingTemplates.push('{{ $template['dir_name'] }}');
+        @endforeach
+        @endif
+
+
+        // install if in existingTemplates
+        document.addEventListener('DOMContentLoaded', function () {
+            const templateToInstall = '{{ $_GET['template'] }}';
+            if (existingTemplates.includes(templateToInstall)) {
+                installTemplate(templateToInstall);
+            }
+
+        });
+        @endif
+
+
+        //NotaryServices2
+
     </script>
 
     <style>
@@ -334,7 +379,9 @@ if(request()->has('prompt')) {
             label {
                 font-weight: 400 !important;
             }
-        }        .use-template-btn{
+        }
+
+        .use-template-btn {
             &:hover:not(:disabled) {
                 background-color: #1f2937 !important;
                 color: #ffffff !important;

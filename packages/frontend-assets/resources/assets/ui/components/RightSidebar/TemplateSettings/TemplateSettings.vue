@@ -430,6 +430,9 @@ export default {
                 this.initializeStyleValues();
 
                 if (newMode === 'layout') {
+                    // Update the active layout ID when switching to layout mode
+                    const activeLayout = window.mw?.top()?.app?.liveEdit?.getSelectedLayoutNode();
+                    this.updateActiveLayoutFromElement(activeLayout);
                     this.fetchExistingLayoutSelectors();
                 } else {
                     this.existingLayoutSelectors = [];

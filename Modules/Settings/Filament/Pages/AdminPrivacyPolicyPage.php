@@ -46,14 +46,14 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
                             ->label('Users must agree to the Terms and Conditions')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">Should your users agree to the terms of use of the website</small>');
+                                return new HtmlString('<small class="  d-block mb-2">Should your users agree to the terms of use of the website</small>');
                             }),
 
                         TextInput::make('options.users.terms_label')
                             ->label('Terms and conditions text')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">The text will appear to the user</small>');
+                                return new HtmlString('<small class="  d-block mb-2">The text will appear to the user</small>');
                             })
                             ->placeholder('I agree with the Terms and Conditions'),
 
@@ -61,7 +61,7 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
                             ->label('URL of terms and conditions')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">Уou need to create this page and type in the address field.</small>');
+                                return new HtmlString('<small class="  d-block mb-2">Уou need to create this page and type in the address field.</small>');
                             })
                             ->placeholder('https://demo.microweber.org/v2/terms'),
 
@@ -79,7 +79,7 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
                             ->label('Users must agree to the terms and conditions')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">If the user does not agree to the terms, he will not be able to use the contact form</small>');
+                                return new HtmlString('<small class="  d-block mb-2">If the user does not agree to the terms, he will not be able to use the contact form</small>');
                             }),
 
                         Placeholder::make('documentation')
@@ -108,7 +108,7 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
                                 ->label('Terms and conditions text')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">The text will appear to the user</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">The text will appear to the user</small>');
                                 })
                                 ->placeholder('I agree with the Terms and Conditions'),
 
@@ -116,7 +116,7 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
                                 ->label('URL of terms and conditions')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">Уou need to create this page and type in the address field.</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">Уou need to create this page and type in the address field.</small>');
                                 })
                                 ->placeholder('https://demo.microweber.org/v2/terms'),
 

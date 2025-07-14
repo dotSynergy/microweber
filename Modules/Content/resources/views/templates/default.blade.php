@@ -125,7 +125,7 @@
                             @endif
 
                             @if (!isset($show_fields) || $show_fields == false || in_array('created_at', $show_fields))
-                                <small class="text-muted" itemprop="dateCreated">{{ __("Posted on") }}: {{ date_system_format($item['created_at']) }}</small>
+                                <small class=" " itemprop="dateCreated">{{ __("Posted on") }}: {{ date_system_format($item['created_at']) }}</small>
                             @endif
 
                                 @if (!isset($show_fields) || $show_fields == false || in_array('description', $show_fields))

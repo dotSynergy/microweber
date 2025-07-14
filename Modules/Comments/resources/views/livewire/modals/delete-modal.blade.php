@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" @click="$dispatch('closeModal')" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-4">
+                <p class="  mb-4">
                     {{ _e('Are you sure you want to delete this comment?') }}
                     {{ _e('This action cannot be undone.') }}
                 </p>

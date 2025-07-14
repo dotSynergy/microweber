@@ -26,7 +26,7 @@
                 <img src="{{$package['extra']['_meta']['screenshot']}}"/>
             @else
                 <div class="card-img-top text-center">
-                    <i class="mdi mdi-view-grid-plus text-muted"
+                    <i class="mdi mdi-view-grid-plus  "
                        style="opacity:0.5;font-size:126px;margin-left: 15px;"></i>
                 </div>
             @endif

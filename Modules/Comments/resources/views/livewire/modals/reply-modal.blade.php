@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 @if($comment)
-                    <div class="text-muted mb-3">
+                    <div class="  mb-3">
                         {{ _e('Replying to: ') }} {{ $comment->comment_body }}
                     </div>
                 @endif

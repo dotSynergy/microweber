@@ -13,7 +13,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div>
                         <h6 class="fw-bold mb-0">{{ $comment->comment_name }}</h6>
-                        <small class="text-muted">
+                        <small class=" ">
                             {{$comment->created_at  ? $comment->created_at->diffForHumans() : ''}}
                         </small>
                     </div>

@@ -67,7 +67,17 @@
                        style="cursor:pointer; background-image: url('{{ $template['screenshot'] ?? '' }}'); background-color: {{ empty($template['screenshot']) ? '#e5e7eb' : 'transparent' }};">
                   </div>
                   <div class="template-info">
-                      <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $template['name'] }}</h3>
+
+                      @php
+                          $displayName = $template['name'] ?? 'Untitled Template';
+
+                          //remove numbers from the end
+                          $displayName = preg_replace('/\s*\d+$/', '', $displayName);
+
+                      @endphp
+
+
+                      <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ $displayName }}</h3>
                       {{--                                @if(isset($template['description']))--}}
                       {{--                                    <div class="template-description mb-4">--}}
                       {{--                                        <p class="text-sm text-gray-600 line-clamp-2">{{ $template['description'] }}</p>--}}

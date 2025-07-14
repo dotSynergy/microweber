@@ -9,10 +9,10 @@
             </label>
         @endif
 
-        <input type="hidden" 
-            class="form-control" 
-            data-custom-field-id="{{ $data['id'] }}" 
-            name="{{ $data['name_key'] }}" 
+        <input type="hidden"
+            class="form-control"
+            data-custom-field-id="{{ $data['id'] }}"
+            name="{{ $data['name_key'] }}"
             value="{{ $data['value'] }}"/>
 
         <div class="controls">
@@ -20,7 +20,7 @@
         </div>
 
         @if($data['help'])
-            <small class="form-text text-muted">{{ $data['help'] }}</small>
+            <small class="form-text  ">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

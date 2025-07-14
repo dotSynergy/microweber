@@ -13,7 +13,7 @@
             </label>
         @endif
 
-        <input type="date" 
+        <input type="date"
             class="form-control js-bootstrap5-datepicker"
             @if($settings['required']) required @endif
             data-date-format="{{ $settings['date_format'] }}"
@@ -28,7 +28,7 @@
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text text-muted">{{ $data['help'] }}</small>
+            <small class="form-text  ">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

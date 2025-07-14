@@ -11,14 +11,14 @@
 
         @foreach($data['values'] as $key => $value)
             <div class="custom-control custom-radio my-2">
-                <input type="radio" 
-                    id="custom-radio-{{ $data['id'] }}-{{ $key }}" 
-                    class="form-check-input" 
+                <input type="radio"
+                    id="custom-radio-{{ $data['id'] }}-{{ $key }}"
+                    class="form-check-input"
                     @if($settings['required'] && $loop->first) required @endif
-                    data-custom-field-id="{{ $data['id'] }}" 
+                    data-custom-field-id="{{ $data['id'] }}"
                     value="{{ $value }}"
                     name="{{ $data['name_key'] }}">
-                <label class="custom-control-label ms-2" 
+                <label class="custom-control-label ms-2"
                     for="custom-radio-{{ $data['id'] }}-{{ $key }}">
                     {{ $value }}
                     @if(isset($data['values_price_modifiers']) && !empty($data['values_price_modifiers']) && isset($data['values_price_modifiers'][$key]) && $data['values_price_modifiers'][$key])
@@ -29,7 +29,7 @@
         @endforeach
 
         @if($data['help'])
-            <small class="form-text text-muted">{{ $data['help'] }}</small>
+            <small class="form-text  ">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

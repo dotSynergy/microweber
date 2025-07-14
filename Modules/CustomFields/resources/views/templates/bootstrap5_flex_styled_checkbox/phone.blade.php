@@ -15,7 +15,7 @@
         <div class="invalid-feedback"><?php _e('Error! The value is not valid.'); ?></div>
 
         <?php if ($data['help']): ?>
-            <small class="form-text text-muted"><?php echo $data['help']; ?></small>
+            <small class="form-text  "><?php echo $data['help']; ?></small>
         <?php endif; ?>
     </div>
 </div>

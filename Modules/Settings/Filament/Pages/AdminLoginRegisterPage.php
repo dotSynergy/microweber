@@ -38,14 +38,14 @@ class AdminLoginRegisterPage extends AdminSettingsPage
                             ->label('Enable user registration')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2"> Do you allow users to register on your website? If you choose "yes", they will do that with their email.</small>');
+                                return new HtmlString('<small class="  d-block mb-2"> Do you allow users to register on your website? If you choose "yes", they will do that with their email.</small>');
                             }),
 
                         Toggle::make('options.users.registration_approval_required')
                             ->label('Registration email verification')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">Ask users for email verification confirmation after their registration. </small>');
+                                return new HtmlString('<small class="  d-block mb-2">Ask users for email verification confirmation after their registration. </small>');
                             }),
 
                     ]),

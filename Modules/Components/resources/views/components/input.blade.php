@@ -2,7 +2,7 @@
     @if($label)
         <label for="{{ $name }}" class="form-label">{{ $label }}</label>
     @endif
-    <input 
+    <input
         type="{{ $type }}"
         name="{{ $name }}"
         id="{{ $name }}"
@@ -16,7 +16,7 @@
     >
 
     @if($help)
-        <small class="form-text text-muted">{{ $help }}</small>
+        <small class="form-text  ">{{ $help }}</small>
     @endif
 
     @if($errors && $errors->has($name))

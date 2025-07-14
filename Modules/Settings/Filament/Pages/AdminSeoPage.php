@@ -52,7 +52,7 @@ class AdminSeoPage extends AdminSettingsPage
                             ->label('Google site verification code')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="mb-2 text-muted">If you have a Google Tag Manager account, you can verify ownership of a site using your Google Tag Manager container snippet code. To verify ownership using Google Tag Manager: Choose Google Tag Manager in the verification details page for your site, and follow the instructions shown. <a href="https://support.google.com/webmasters/answer/9008080?hl=en#choose_method&amp;zippy=%2Chtml-tag" class="text-blue-500" target="_blank">Read the article here.</a></small>');
+                                return new HtmlString('<small class="mb-2  ">If you have a Google Tag Manager account, you can verify ownership of a site using your Google Tag Manager container snippet code. To verify ownership using Google Tag Manager: Choose Google Tag Manager in the verification details page for your site, and follow the instructions shown. <a href="https://support.google.com/webmasters/answer/9008080?hl=en#choose_method&amp;zippy=%2Chtml-tag" class="text-blue-500" target="_blank">Read the article here.</a></small>');
                             })
                             ->placeholder('Enter your website name'),
 
@@ -60,7 +60,7 @@ class AdminSeoPage extends AdminSettingsPage
                             ->label('Google Analytics ID')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">Google Analytics property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
+                                return new HtmlString('<small class="  d-block mb-2">Google Analytics property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
                             })
                             ->placeholder('UA- 12345678-9'),
 
@@ -85,14 +85,14 @@ class AdminSeoPage extends AdminSettingsPage
                                 ->label('Bing')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
                                 }),
 
                             TextInput::make('options.website.alexa-site-verification-code')
                                 ->label('Alexa')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
                                 }),
 
 
@@ -100,14 +100,14 @@ class AdminSeoPage extends AdminSettingsPage
                                 ->label('Pinterest')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
                                 }),
 
                             TextInput::make('options.website.yandex-site-verification-code')
                                 ->label('Site verification code for Yandex')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="text-muted d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
+                                    return new HtmlString('<small class="  d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
                                 }),
 
                         ])->hidden(function (Get $get) {
@@ -123,7 +123,7 @@ class AdminSeoPage extends AdminSettingsPage
                             ->label('Facebook pixel ID')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="text-muted d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
+                                return new HtmlString('<small class="  d-block mb-2">You can find a tutorials in internet where and how to find the code.</small>');
                             })
                             ->placeholder('Enter your Facebook pixel ID'),
 

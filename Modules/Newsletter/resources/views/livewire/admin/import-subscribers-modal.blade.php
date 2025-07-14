@@ -96,7 +96,7 @@
                         </div>
 
                         <div class="mb-3 mt-2">
-                            <small class="text-muted d-block mb-3"><?php _e("Upload your subscribers list file (allowed file format is xls, xlsx or csv)"); ?></small>
+                            <small class="  d-block mb-3"><?php _e("Upload your subscribers list file (allowed file format is xls, xlsx or csv)"); ?></small>
                             <span id="mw_uploader" class="btn btn-primary btn-rounded"><i class="mdi mdi-cloud-upload-outline"></i>&nbsp; <?php _e("Upload file"); ?></span>
 
                             <div id="mw_uploader_loading" class="progress mb-3" style="display:none;">
@@ -193,7 +193,7 @@
                     </style>
                     <div class="d-flex align-items-center justify-content-between mt-5">
                         <div style="width:100%">
-                            <span class="text-muted">Supported formats</span>
+                            <span class=" ">Supported formats</span>
                         </div>
                         <div style="width:100%" class="d-flex justify-content-end gap-3 js-supported-file-formats">
 

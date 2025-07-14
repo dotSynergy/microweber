@@ -97,6 +97,7 @@ export default {
             stylePacksExpanded: isPredefinedStyles || autoExpand, // Auto-expand in single setting mode
             uniqueId: 'style-pack-' + Math.random().toString(36).substr(2, 9), // Generate unique ID for this component
             selectedStylePackProperties: null, // Store selected style pack properties for opener
+            loadingStylePackIndex: null, // Track which style pack is currently loading
         }
     },
     watch: {
@@ -257,106 +258,116 @@ export default {
             });
         },
 
-        applyStylePack(stylePack, previewDiv) {
-            // Unset properties from the previous style pack before applying the new one
-            if (this.previousStylePack && this.previousStylePack.properties) {
-                const selector = this.selectorToApply || this.rootSelector;
-                const propertiesToUnset = {};
+        applyStylePack(stylePack, previewDiv, stylePackIndex = null) {
+            // Set loading state for this style pack
+            this.loadingStylePackIndex = stylePackIndex;
 
-                // Create an object with empty values for all previous properties
-                Object.keys(this.previousStylePack.properties).forEach(property => {
-                    propertiesToUnset[property] = '';
-                });
-
-                // Unset all properties from the previous style pack
-                if (Object.keys(propertiesToUnset).length > 0) {
-                    window.mw.top().app.cssEditor.setPropertyForSelectorBulk(
-                        selector,
-                        propertiesToUnset,
-                        false, // record = true to track the changes
-                        false // skipMedia = false
-                    );
-                }
-            }
-
-            // Store the current style pack as previous before applying the new one
-            this.previousStylePack = this.currentStylePack;
-
-            if (stylePack.properties) {
-                const updates = [];
-                Object.keys(stylePack.properties).forEach(property => {
-                    updates.push({
-                        selector: this.selectorToApply || this.rootSelector,
-                        property: property,
-                        value: stylePack.properties[property]
-                    });
-                });
-
-                if (
-                    typeof (previewDiv) != "undefined"
-                    && previewDiv
-                ) {
-                    //pply css variables to the preview div
-                    Object.keys(stylePack.properties).forEach(property => {
-                        if (property.startsWith('--')) {
-                            previewDiv.style.setProperty(property, stylePack.properties[property]);
-                        } else {
-                            const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-                            previewDiv.style[cssProperty] = stylePack.properties[property];
-                        }
-                    });
-                }
-
-                if (updates.length > 0) {
-                    this.$emit('batch-update', updates);
-                }
-            }
-
-            // Store the selected style pack properties for the opener display
-            this.selectedStylePackProperties = {...stylePack.properties};
-
-            // Update previewElementsStyleProperties for the opener preview
-            if (
-                this.isStylePackOpenerMode &&
-                this.setting.previewElementsStyleProperties &&
-                this.setting.previewElementsStyleProperties.length > 0
-            ) {
-                // Update the opener preview with selected style properties
-                this.setting.previewElementsStyleProperties[0].properties = {...stylePack.properties};
-
-                // Also update the label if available
-                if (stylePack.label && this.setting.previewElementsStyleProperties[0]) {
-                    this.setting.previewElementsStyleProperties[0].label = stylePack.label;
-                }
-
-            }            // Update the current style pack and refresh the iframe
-            this.currentStylePack = stylePack;
+            // Update iframe to show loading state
             this.updateIframeContent();
 
-            // After updating the opener, collapse the style packs ONLY if NOT in single setting mode
-            if (this.isStylePackOpenerMode && this.stylePacksExpanded && !this.isSingleSettingMode) {
-
-                this.collapseStylePacks();
-            }
-
-            // Emit global event to reload all other style pack preview components
-            console.log('Emitting global style pack reload event');
-            if (mw.top() && mw.top().app) {
-
-
-                if (!this.isSingleSettingMode) {
-                    mw.top().app.dispatch('stylePackGlobalReload', {
-                        sourceComponentId: this.uniqueId,
-                        appliedStylePack: stylePack,
-                        selector: this.selectorToApply || this.rootSelector
-                    });
+            // Use setTimeout to ensure the loading state is visible before processing
+            setTimeout(() => {
+                // After updating the opener, collapse the style packs ONLY if NOT in single setting mode
+                if (this.isStylePackOpenerMode && this.stylePacksExpanded && !this.isSingleSettingMode) {
+                    this.collapseStylePacks();
                 }
-            }
 
-            this.$emit('style-pack-applied', {
-                selector: this.selectorToApply,
-                stylePack: stylePack
-            });
+                // Unset properties from the previous style pack before applying the new one
+                if (this.previousStylePack && this.previousStylePack.properties) {
+                    const selector = this.selectorToApply || this.rootSelector;
+                    const propertiesToUnset = {};
+
+                    // Create an object with empty values for all previous properties
+                    Object.keys(this.previousStylePack.properties).forEach(property => {
+                        propertiesToUnset[property] = '';
+                    });
+
+                    // Unset all properties from the previous style pack
+                    if (Object.keys(propertiesToUnset).length > 0) {
+                        window.mw.top().app.cssEditor.setPropertyForSelectorBulk(
+                            selector,
+                            propertiesToUnset,
+                            false, // record = true to track the changes
+                            false // skipMedia = false
+                        );
+                    }
+                }
+
+                // Store the current style pack as previous before applying the new one
+                this.previousStylePack = this.currentStylePack;
+
+                if (stylePack.properties) {
+                    const updates = [];
+                    Object.keys(stylePack.properties).forEach(property => {
+                        updates.push({
+                            selector: this.selectorToApply || this.rootSelector,
+                            property: property,
+                            value: stylePack.properties[property]
+                        });
+                    });
+
+                    if (
+                        typeof (previewDiv) != "undefined"
+                        && previewDiv
+                    ) {
+                        //pply css variables to the preview div
+                        Object.keys(stylePack.properties).forEach(property => {
+                            if (property.startsWith('--')) {
+                                previewDiv.style.setProperty(property, stylePack.properties[property]);
+                            } else {
+                                const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                                previewDiv.style[cssProperty] = stylePack.properties[property];
+                            }
+                        });
+                    }
+
+                    if (updates.length > 0) {
+                        this.$emit('batch-update', updates);
+                    }
+                }
+
+                // Store the selected style pack properties for the opener display
+                this.selectedStylePackProperties = {...stylePack.properties};
+
+                // Update previewElementsStyleProperties for the opener preview
+                if (
+                    this.isStylePackOpenerMode &&
+                    this.setting.previewElementsStyleProperties &&
+                    this.setting.previewElementsStyleProperties.length > 0
+                ) {
+                    // Update the opener preview with selected style properties
+                    this.setting.previewElementsStyleProperties[0].properties = {...stylePack.properties};
+
+                    // Also update the label if available
+                    if (stylePack.label && this.setting.previewElementsStyleProperties[0]) {
+                        this.setting.previewElementsStyleProperties[0].label = stylePack.label;
+                    }
+                }
+
+                // Update the current style pack and refresh the iframe
+                this.currentStylePack = stylePack;
+
+                // Clear loading state after processing
+                this.loadingStylePackIndex = null;
+                this.updateIframeContent();
+
+                // Emit global event to reload all other style pack preview components
+                console.log('Emitting global style pack reload event');
+                if (mw.top() && mw.top().app) {
+                    if (!this.isSingleSettingMode) {
+                        mw.top().app.dispatch('stylePackGlobalReload', {
+                            sourceComponentId: this.uniqueId,
+                            appliedStylePack: stylePack,
+                            selector: this.selectorToApply || this.rootSelector
+                        });
+                    }
+                }
+
+                this.$emit('style-pack-applied', {
+                    selector: this.selectorToApply,
+                    stylePack: stylePack
+                });
+            }, 50); // Small delay to show loading state
         },
 
         getSelectorName(selector) {
@@ -440,6 +451,7 @@ export default {
             this.iframe = document.createElement('iframe');
 
             this.iframe.allowTransparency = true;
+            this.iframe.loading = 'lazy';
             this.iframe.className = 'preview-iframe';
             this.iframe.style.width = '100%';
             this.iframe.style.height = '400px';
@@ -707,6 +719,45 @@ export default {
                             color: #000;
                         }
 
+                        /* Loading indicator styles */
+                        .style-pack-loading-item {
+                            position: relative;
+                            pointer-events: none;
+                            opacity: 0.7;
+                        }
+
+                        .style-pack-loading-item::before {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 20px;
+                            height: 20px;
+                            border: 2px solid #f3f3f3;
+                            border-top: 2px solid #007bff;
+                            border-radius: 50%;
+                            animation: spin 1s linear infinite;
+                            z-index: 10;
+                        }
+
+                        .style-pack-loading-item::after {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-color: rgba(255, 255, 255, 0.8);
+                            border-radius: 8px;
+                            z-index: 9;
+                        }
+
+                        @keyframes spin {
+                            0% { transform: translate(-50%, -50%) rotate(0deg); }
+                            100% { transform: translate(-50%, -50%) rotate(360deg); }
+                        }
+
                     </style>
                 </head>
                 <body>
@@ -967,8 +1018,12 @@ export default {
             const stylePackDiv = iframeDoc.createElement('div');
             stylePackDiv.className = 'style-pack-item';
 
+            // Add loading class if this is the currently loading style pack
+            if (this.loadingStylePackIndex === index) {
+                stylePackDiv.classList.add('style-pack-loading-item');
+            }
 
-            stylePackDiv.onclick = () => this.applyStylePack(stylePack);
+            stylePackDiv.onclick = () => this.applyStylePack(stylePack, null, index);
 
             const innerDiv = iframeDoc.createElement('div');
             innerDiv.className = 'd-flex flex-column';

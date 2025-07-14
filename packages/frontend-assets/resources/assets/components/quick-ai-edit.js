@@ -1035,31 +1035,25 @@ console.log(3)
         this.#aiPending = true;
         this.dispatch('aiRequestStart');
 
-        const message = `Using the existing object IDS,
-        By using this schema: \n ${JSON.stringify(this.schema())} \n
+        const message = `
+        You are a website content writer, and you must write the text in a way that is relevant to the user's request,
 
-        Write text to this object and populate the content and children file of the schema items usindg the existing object IDS,
+         By using this schema: \n ${JSON.stringify(this.schema())} \n
+
 
         You are a website content writer, and you must write the text in a way that is relevant to the object,
 
 
         You must rewrite the text of the website to the new subject,
 
-        The website subject is: ${about}
+
+        The website subject and user request is about: ${about}
+
+
 
         You must write the text for the website and fill the existing object IDs with the text,
         Expand on the subject and try to fill and write relevant information in the existing text
 
-
-        critical: do not change element IDS,
-        critical: do not change the structure of the schema,
-        critical: use only the existing object IDS,
-        critical: do not assign any new object IDS,
-        critical: return only valid json object,
-        critical: do not change the schema structure,
-        critical: do not change the existing object IDS,
-        critical: keep the existing object IDS,
-        critical: write text in the existing object IDS's content text node
 
 
 
@@ -1075,6 +1069,19 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
    { Use the content, populate the content and children of the items  with text ... write the text in the content and children with the existing object IDs and the text in the 'text' node for each object with the existing object IDS }
 
 """
+
+        Write text to this object and populate the content and children file of the schema items usindg the existing object IDS,
+
+
+        critical: do not change element IDS,
+        critical: do not change the structure of the schema,
+        critical: use only the existing object IDS,
+        critical: do not assign any new object IDS,
+        critical: return only valid json object,
+        critical: do not change the schema structure,
+        critical: do not change the existing object IDS,
+        critical: keep the existing object IDS,
+        critical: write text in the existing object IDS's content text node
 
 
         `;

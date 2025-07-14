@@ -633,7 +633,7 @@ export default {
                             display: flex;
                             gap: 0; /* Remove gap between flex items */
                             flex-wrap: wrap;
-                            zoom: 0.5;
+                            zoom: 0.4;
                         }
                         .style-preview-element {
                             flex: 1;

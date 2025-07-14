@@ -77,6 +77,7 @@ OLD iframe is commented out, use the new TemplateSettings component instead
     left: 250px;
 }
 
+body:has(#mw-setup-wizard-dialog.active) #live-edit-frame-holder,
 .live-edit-gui-editor-opened #live-edit-frame-holder {
     right: calc(var(--sidebar-end-size) + 50px);
 }

@@ -97,6 +97,11 @@ export const previewMode = function () {
         movable.draggable = false;
     });
 
+    const codeEditor = mw.controlBox.getInstances().find(obj => obj.id === 'live_edit_side_holder');
+    if(codeEditor) {
+        codeEditor.remove()
+    }
+
 }
 
 export const liveEditMode = function () {

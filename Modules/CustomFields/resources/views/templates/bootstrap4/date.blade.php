@@ -13,7 +13,7 @@
             </label>
         @endif
 
-        <input type="text"
+        <input type="text" 
             @if($settings['required']) required @endif
             data-date-format="{{ $settings['date_format'] }}"
             data-custom-field-id="{{ $data['id'] }}"
@@ -28,7 +28,7 @@
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>
@@ -40,8 +40,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         if($('#date_{{ $rand }}') && $('#date_{{ $rand }}').datepicker){
-            $('#date_{{ $rand }}').datepicker({
-                dateFormat: '{{ $settings['date_format'] }}',
+            $('#date_{{ $rand }}').datepicker({ 
+                dateFormat: '{{ $settings['date_format'] }}', 
                 language: "{{ current_lang_abbr() }}"
             });
         }

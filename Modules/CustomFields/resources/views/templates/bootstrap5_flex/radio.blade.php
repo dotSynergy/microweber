@@ -31,7 +31,7 @@
         @endforeach
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
 
     </div>

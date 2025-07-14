@@ -180,7 +180,7 @@ class AdminShopAutoRespondEmailPage extends AdminSettingsPage
                     ->schema([
                         Toggle::make('options.orders.order_email_enabled')
                             ->label('Send email to the customer when new order is received')
-                            ->helperText(new HtmlString('Enable or disable email notifications for new orders<br><small class=" ">You must have a working email setup in order to send emails</small>'))
+                            ->helperText(new HtmlString('Enable or disable email notifications for new orders<br><small class="text-muted">You must have a working email setup in order to send emails</small>'))
                             ->live(),
 
                         Grid::make(1)

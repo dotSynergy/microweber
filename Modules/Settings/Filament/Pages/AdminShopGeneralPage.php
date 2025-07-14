@@ -62,7 +62,7 @@ class AdminShopGeneralPage extends AdminSettingsPage
 
                             ])
                             ->helperText(function () {
-                                return new HtmlString('<small class="mb-2  ">Default currency with which you will accept payments.</small>');
+                                return new HtmlString('<small class="mb-2 text-muted">Default currency with which you will accept payments.</small>');
                             }),
 
                         Select::make('options.payments.currency_symbol_position')
@@ -74,7 +74,7 @@ class AdminShopGeneralPage extends AdminSettingsPage
                                 'after' => 'After amount',
                             ])
                             ->helperText(function () {
-                                return new HtmlString('<small class="mb-2  ">Where to display the currency symbol before, after or by default relative to the amount.</small>');
+                                return new HtmlString('<small class="mb-2 text-muted">Where to display the currency symbol before, after or by default relative to the amount.</small>');
                             }),
 
                         Select::make('options.payments.currency_symbol_decimal')

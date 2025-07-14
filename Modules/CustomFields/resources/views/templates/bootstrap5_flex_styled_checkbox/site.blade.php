@@ -27,7 +27,7 @@ $rand = uniqid();
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

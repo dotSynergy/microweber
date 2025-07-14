@@ -24,7 +24,7 @@
         @csrf
         <div class="shop-cart mt-5">
             <label class="font-weight-bold control-label mb-0"><?php _e("Personal information"); ?></label>
-            <small class="  d-block mb-2"> <?php _e("Your information"); ?></small>
+            <small class="text-muted d-block mb-2"> <?php _e("Your information"); ?></small>
 
             @include('modules.checkout::contact_information_card')
 

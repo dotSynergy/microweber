@@ -41,7 +41,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                             ->label('Google site verification code')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="mb-2  ">If you have a Google Tag Manager account, you can verify ownership of a site using your Google Tag Manager container snippet code. To verify ownership using Google Tag Manager: Choose Google Tag Manager in the verification details page for your site, and follow the instructions shown. <a href="https://support.google.com/webmasters/answer/9008080?hl=en#choose_method&amp;zippy=%2Chtml-tag" class="text-blue-500" target="_blank">Read the article here.</a></small>');
+                                return new HtmlString('<small class="mb-2 text-muted">If you have a Google Tag Manager account, you can verify ownership of a site using your Google Tag Manager container snippet code. To verify ownership using Google Tag Manager: Choose Google Tag Manager in the verification details page for your site, and follow the instructions shown. <a href="https://support.google.com/webmasters/answer/9008080?hl=en#choose_method&amp;zippy=%2Chtml-tag" class="text-blue-500" target="_blank">Read the article here.</a></small>');
                             })
                             ->placeholder('Enter your website name'),
 
@@ -49,7 +49,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                             ->label('Google Analytics ID')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="  d-block mb-2">Google Analytics property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
+                                return new HtmlString('<small class="text-muted d-block mb-2">Google Analytics property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
                             })
                             ->placeholder('UA- 12345678-9'),
 
@@ -58,7 +58,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                             ->label('Google Analytics Server Side Tracking')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="mb-2  ">Enable Google Analytics Server Side Tracking</small>');
+                                return new HtmlString('<small class="mb-2 text-muted">Enable Google Analytics Server Side Tracking</small>');
                             }),
 
                         Section::make([
@@ -66,7 +66,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                                 ->label('Google Measurement Api Secret')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="  d-block mb-2">Google measurement api secret.<a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a>
+                                    return new HtmlString('<small class="text-muted d-block mb-2">Google measurement api secret.<a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a>
                                                             <a class="text-blue-500" href="https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference/" target="_blank">Protocol reference</a>
                                                             To create a new secret, navigate in the Google Analytics UI to:                <i>Admin &gt; Data Streams &gt; choose your stream &gt; Measurement Protocol &gt; Create</i>
                                                        </small>');
@@ -77,7 +77,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                                 ->label('Google Measurement ID')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="  d-block mb-2">Google measurement property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
+                                    return new HtmlString('<small class="text-muted d-block mb-2">Google measurement property ID is the identifier associated with your account and used by Google Analytics to collect the data. <a class="text-blue-500" href="https://support.google.com/analytics/answer/9539598?hl=en" target="_blank">How to find it read here.</a></small>');
                                 })
                                 ->placeholder('G-12345678'),
 
@@ -85,7 +85,7 @@ class AdminGoogleAnalyticsSettingsPage extends AdminSettingsPage
                                 ->label('Google Measurement Enhanced Conversion')
                                 ->live()
                                 ->helperText(function () {
-                                    return new HtmlString('<small class="mb-2  ">Enable Google Measurement Enhanced Conversion</small>');
+                                    return new HtmlString('<small class="mb-2 text-muted">Enable Google Measurement Enhanced Conversion</small>');
                                 }),
                             Section::make([
                                 TextInput::make('options.website.google-enhanced-conversion-id')

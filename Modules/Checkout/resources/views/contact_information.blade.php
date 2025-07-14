@@ -13,7 +13,7 @@
         @csrf
         <div class="mt-5 edit nodrop" field="checkout_personal_information_title">
             <h4 class="mb-0"><?php _e("Personal Information"); ?></h4>
-            <small class="  d-block mb-2"> <?php _e("Please fill the fields bellow"); ?></small>
+            <small class="text-muted d-block mb-2"> <?php _e("Please fill the fields bellow"); ?></small>
         </div>
 
         <div class="form-group @if(isset($errors['first_name'])) has-danger @endif">

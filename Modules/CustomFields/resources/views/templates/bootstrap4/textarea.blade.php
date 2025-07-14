@@ -9,10 +9,10 @@
             </label>
         @endif
 
-        <textarea type="text"
-            rows="{{ $settings['rows'] }}"
-            cols="{{ $settings['cols'] }}"
-            class="form-control"
+        <textarea type="text" 
+            rows="{{ $settings['rows'] }}" 
+            cols="{{ $settings['cols'] }}" 
+            class="form-control" 
             @if($settings['required']) required @endif
             data-custom-field-id="{{ $data['id'] }}"
             data-custom-field-error-text="{{ $data['error_text'] }}"
@@ -23,7 +23,7 @@
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

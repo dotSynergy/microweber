@@ -28,7 +28,7 @@
 
             <div class="col-6 col-sm">
                 {{ date('M d, Y', strtotime($created_at))  }}
-                <small class=" ">{{ date('h:s', strtotime($created_at)) }}h</small>
+                <small class="text-muted">{{ date('h:s', strtotime($created_at)) }}h</small>
             </div>
 
             <div class="col-6 col-sm">{{$ago}}</div>
@@ -52,14 +52,14 @@
 
                                     @if(!is_array($val))
                                         <div>
-                                            <small class=" ">{{ str_replace('_', ' ', $key) }}:</small>
+                                            <small class="text-muted">{{ str_replace('_', ' ', $key) }}:</small>
                                             <p>{{ $val }}</p>
                                         </div>
                                     @else
                                         @if($key == 'uploads')
                                         @include('modules.form::admin.notifications.uploads_listing_partial', $val)
                                         @else
-                                            <small class=" ">{{ str_replace('_', ' ', $key) }}:</small>
+                                            <small class="text-muted">{{ str_replace('_', ' ', $key) }}:</small>
                                             @foreach ($val as $valInner)
                                                 <p>{{ $valInner }} <br /> </p>
                                             @endforeach

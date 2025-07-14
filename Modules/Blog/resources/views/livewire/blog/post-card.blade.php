@@ -32,9 +32,9 @@
     </a>
     <div class="card-footer bg-transparent">
         <div class="d-flex justify-content-between align-items-center">
-            <small class=" ">{{$post->created_at->format('M j, Y')}}</small>
+            <small class="text-muted">{{$post->created_at->format('M j, Y')}}</small>
             @if($post->author)
-                <small class=" ">{{ _e('By') }} {{ $post->author->name }}</small>
+                <small class="text-muted">{{ _e('By') }} {{ $post->author->name }}</small>
             @endif
         </div>
     </div>

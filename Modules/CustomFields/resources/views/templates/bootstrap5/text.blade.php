@@ -10,23 +10,23 @@
         @endif
 
         @if($settings['as_text_area'])
-            <textarea type="text"
-                class="form-control"
-                rows="{{ $settings['rows'] }}"
-                cols="{{ $settings['cols'] }}"
+            <textarea type="text" 
+                class="form-control" 
+                rows="{{ $settings['rows'] }}" 
+                cols="{{ $settings['cols'] }}" 
                 @if($settings['required']) required @endif
-                data-custom-field-id="{{ $data['id'] }}"
-                data-custom-field-error-text="{{ $data['error_text'] }}"
-                name="{{ $data['name_key'] }}"
+                data-custom-field-id="{{ $data['id'] }}" 
+                data-custom-field-error-text="{{ $data['error_text'] }}" 
+                name="{{ $data['name_key'] }}" 
                 placeholder="{{ $data['placeholder'] }}">{{ $data['value'] }}</textarea>
         @else
-            <input type="text"
-                class="form-control"
+            <input type="text" 
+                class="form-control" 
                 @if($settings['required']) required @endif
-                data-custom-field-id="{{ $data['id'] }}"
-                data-custom-field-error-text="{{ $data['error_text'] }}"
-                name="{{ $data['name_key'] }}"
-                value="{{ $data['value'] }}"
+                data-custom-field-id="{{ $data['id'] }}" 
+                data-custom-field-error-text="{{ $data['error_text'] }}" 
+                name="{{ $data['name_key'] }}" 
+                value="{{ $data['value'] }}" 
                 placeholder="{{ $data['placeholder'] }}"/>
         @endif
 
@@ -34,7 +34,7 @@
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

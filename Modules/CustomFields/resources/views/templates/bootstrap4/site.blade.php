@@ -13,8 +13,8 @@
             </label>
         @endif
 
-        <input type="url"
-            class="form-control"
+        <input type="url" 
+            class="form-control" 
             id="custom_field_help_text{{ $rand }}"
             @if($settings['required']) required @endif
             data-custom-field-id="{{ $data['id'] }}"
@@ -27,7 +27,7 @@
         <div class="invalid-feedback">{{ __('Error! The value is not valid.') }}</div>
 
         @if($data['help'])
-            <small class="form-text  ">{{ $data['help'] }}</small>
+            <small class="form-text text-muted">{{ $data['help'] }}</small>
         @endif
     </div>
 </div>

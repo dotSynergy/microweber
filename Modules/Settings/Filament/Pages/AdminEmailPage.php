@@ -43,7 +43,7 @@ class AdminEmailPage extends AdminSettingsPage
                             ->label('From e-mail address')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="  d-block mb-2">The website will send emails on behalf of this address</small>');
+                                return new HtmlString('<small class="text-muted d-block mb-2">The website will send emails on behalf of this address</small>');
                             })
                             ->placeholder('e.g. noreply@yourwebsite.com'),
 
@@ -51,7 +51,7 @@ class AdminEmailPage extends AdminSettingsPage
                             ->label('From name')
                             ->live()
                             ->helperText(function () {
-                                return new HtmlString('<small class="  d-block mb-2">The website will use this name for the emails</small>');
+                                return new HtmlString('<small class="text-muted d-block mb-2">The website will use this name for the emails</small>');
                             })
                             ->placeholder('e.g. Your Website Name'),
 

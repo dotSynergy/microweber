@@ -51,7 +51,7 @@
                 </div>
             @endforeach
         @else
-            <p class=" ">{{ __('Click to insert skills') }}</p>
+            <p class="text-muted">{{ __('Click to insert skills') }}</p>
         @endif
     </div>
 </div>

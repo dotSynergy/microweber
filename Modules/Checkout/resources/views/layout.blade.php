@@ -232,7 +232,7 @@
                     <div class="col-lg-10 col-12 checkout-v2-right-column float-lg-left p-xl-5 p-md-3 p-3">
                         <div class="text-start text-left">
                             <h6 class="m-t-100"><?php _e("Your order"); ?></h6>
-                            <small class="  d-block mb-2"> <?php _e("List with products"); ?></small>
+                            <small class="text-muted d-block mb-2"> <?php _e("List with products"); ?></small>
                         </div>
 
                         <div class="mt-3">
@@ -262,7 +262,7 @@
             <div class="col-lg-10 col-12 checkout-v2-right-column float-lg-left p-xl-5 p-md-3 p-3">
                 <div class="text-start text-left">
                     <h6 class="checkout-v2-right-column-title font-weight-bold"><?php _e("Your order"); ?></h6>
-                    <small class="  d-block mb-2"> <?php _e("List with products"); ?></small>
+                    <small class="text-muted d-block mb-2"> <?php _e("List with products"); ?></small>
                 </div>
 
                 <div class="mt-3">

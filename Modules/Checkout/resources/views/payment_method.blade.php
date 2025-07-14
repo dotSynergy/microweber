@@ -30,7 +30,7 @@
 
         <div class="shop-cart mt-5">
             <label class="font-weight-bold control-label mb-0"><?php _e("Personal information"); ?></label>
-            <small class="  d-block mb-2"> <?php _e("Your information"); ?></small>
+            <small class="text-muted d-block mb-2"> <?php _e("Your information"); ?></small>
 
             @include('modules.checkout::contact_information_card')
 
@@ -40,7 +40,7 @@
             ?>
 
             <label class="font-weight-bold control-label mb-0 pt-2"><?php _e("Shipping method"); ?></label>
-            <small class="  d-block mb-2"> <?php _e("Your choice"); ?></small>
+            <small class="text-muted d-block mb-2"> <?php _e("Your choice"); ?></small>
 
             <div class="card mb-7">
                 <div class="card-body d-flex p-3">

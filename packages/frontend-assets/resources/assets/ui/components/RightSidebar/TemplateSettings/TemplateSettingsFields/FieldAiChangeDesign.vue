@@ -620,7 +620,7 @@ html.dark .text-danger {
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
     display: block;
     opacity: 1;
-    transform: translateX(-9px);
+    transform: translateX(-6px);
     pointer-events: auto;
     animation: sendTextSlideIn 0.4s cubic-bezier(0.4,0,0.2,1);
 }

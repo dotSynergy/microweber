@@ -9,8 +9,8 @@
         <!-- Back button that appears only when style pack opener is expanded -->
         <FieldBackButton
             v-if="isStylePackOpenerMode && stylePacksExpanded && !isSingleSettingMode"
-            :current-path="'/'"
             :button-text="'Back to styles'"
+            :current-path="'/'"
             :show-button="true"
             @go-back="collapseStylePacks"
         />
@@ -112,6 +112,15 @@ export default {
                     this.updateIframeContent();
                     // Re-inject canvas styles for the new mode
                     this.injectCanvasStyles();
+
+
+                    window.mw.top().app.dispatch('stylePackGlobalReload', {
+                        reason: 'layoutModeChanged',
+                        sourceComponentId: this.uniqueId,
+                        activeLayoutId: this.activeLayoutId
+                    });
+
+
                 });
             }
         },
@@ -128,6 +137,12 @@ export default {
                     this.updateIframeContent();
                     // Re-inject canvas styles for the new layout
                     this.injectCanvasStyles();
+
+                    window.mw.top().app.dispatch('stylePackGlobalReload', {
+                        reason: 'layoutModeChanged',
+                        sourceComponentId: this.uniqueId,
+                        activeLayoutId: this.activeLayoutId
+                    });
                 });
             }
         },
@@ -421,16 +436,17 @@ export default {
                         return;
                     }
 
-                    // Skip reload for mode changes to improve performance
-                    if (eventData && eventData.reason === 'applyModeWatcherChanged') {
-                        console.log('Skipping reload for mode change to improve performance');
-                        return;
-                    }
+
+
+                    // Clear content hash to force refresh when style pack is applied globally
+                    // This ensures the iframe updates with new CSS variables from the applied style pack
+                    this.lastContentHash = null;
 
                     // Only reload if fonts or canvas styles actually need updating
                     if (eventData && (
                         eventData.reason === 'fontChange'
                         || eventData.reason === 'applyStylePack'
+                        || eventData.reason === 'layoutModeChanged'
                         || eventData.reason === 'cssReload'
                     )) {
                         // Re-scan and load fonts
@@ -439,6 +455,8 @@ export default {
                         this.injectFontsIntoIframe();
                         this.injectCanvasStyles();
                     }
+
+
 
                     // Always update iframe content for other events
                     this.updateIframeContent();
@@ -517,7 +535,7 @@ export default {
                 preloadLink.setAttribute("data-noprefix", "1");
 
                 // Async stylesheet loading
-                preloadLink.onload = function() {
+                preloadLink.onload = function () {
                     const link = iframeDoc.createElement('link');
                     link.id = fontId;
                     link.rel = 'stylesheet';
@@ -530,7 +548,7 @@ export default {
                 };
 
                 // Fallback for browsers that don't support preload
-                preloadLink.onerror = function() {
+                preloadLink.onerror = function () {
                     const link = iframeDoc.createElement('link');
                     link.id = fontId;
                     link.rel = 'stylesheet';
@@ -580,7 +598,7 @@ export default {
                             preloadLink.type = 'text/css';
 
                             // Async stylesheet loading
-                            preloadLink.onload = function() {
+                            preloadLink.onload = function () {
                                 // Convert preload to stylesheet once loaded
                                 const link = iframeDoc.createElement('link');
                                 link.id = styleId;
@@ -591,7 +609,7 @@ export default {
                             };
 
                             // Fallback for browsers that don't support preload
-                            preloadLink.onerror = function() {
+                            preloadLink.onerror = function () {
                                 const link = iframeDoc.createElement('link');
                                 link.id = styleId;
                                 link.rel = 'stylesheet';
@@ -673,7 +691,7 @@ export default {
                         const styleProps = this.setting.previewElementsStyleProperties[0].properties;
 
                         // Use the special opener method to apply current variables (for the opener only)
-                         this.applyCurrentVariablesToOpener(openerDiv, {properties: styleProps});
+                        this.applyCurrentVariablesToOpener(openerDiv, {properties: styleProps});
 
                         // Apply font properties based on element type
                         this.applyFontProperties(component, styleProps, preview.tag);
@@ -749,12 +767,13 @@ export default {
                 activeLayoutId: this.activeLayoutId,
                 loadingStylePackIndex: this.loadingStylePackIndex,
                 currentStylePack: this.currentStylePack?.label || null,
+                selectedStylePackProperties: this.selectedStylePackProperties,
                 settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0,
-                // Only include variables hash for opener mode, not for individual previews
+                // Include variables hash for opener mode
                 openerVariablesHash: this.isStylePackOpenerMode && this.setting.previewElementsStyleProperties?.[0]?.properties ?
                     Object.keys(this.getCurrentCssVariables()).filter(prop =>
                         this.setting.previewElementsStyleProperties[0].properties[prop]
-                    ).sort().join(',') : ''
+                    ).sort().join(',') : '' + Object.keys(this.setting.selectedStylePackProperties).join(',')
             });
 
             if (this.lastContentHash === currentContentHash) {
@@ -987,7 +1006,7 @@ export default {
             // Create iframe element
             this.iframe = document.createElement('iframe');
             this.iframe.allowTransparency = true;
-           // this.iframe.loading = 'lazy';
+            // this.iframe.loading = 'lazy';
             this.iframe.className = 'preview-iframe';
             this.iframe.style.width = '100%';
             this.iframe.style.height = '400px';

@@ -592,4 +592,47 @@ html.dark .text-danger {
     background: #374151;
     border: 1px solid #4b5563;
 }
+
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .mw-ai-chat-box-action-send,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .mw-ai-chat-box-action-send,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .mw-ai-chat-box-action-send {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 6px 20px rgba(59, 130, 246, 0.4);
+    border: 2px solid #1d4ed8;
+    transform: scale(1.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.mw-ai-chat-box .send-text {
+    display: none;
+    opacity: 0;
+    transform: translateX(24px);
+    pointer-events: none;
+    transition:
+        opacity 0.4s cubic-bezier(0.4,0,0.2,1),
+        transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .send-text,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .send-text,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
+    display: block;
+    opacity: 1;
+    transform: translateX(-6px);
+    pointer-events: auto;
+    animation: sendTextSlideIn 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes sendTextSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-12px);
+    }
+}
 </style>

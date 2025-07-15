@@ -596,10 +596,10 @@ html.dark .text-danger {
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .mw-ai-chat-box-action-send,
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .mw-ai-chat-box-action-send,
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .mw-ai-chat-box-action-send {
-    background: linear-gradient(135deg, #f59e42 0%, #fbbf24 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: #fff;
-    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.3), 0 6px 20px rgba(251, 191, 36, 0.4);
-    border: 2px solid #fbbf24;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 6px 20px rgba(59, 130, 246, 0.4);
+    border: 2px solid #1d4ed8;
     transform: scale(1.05);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

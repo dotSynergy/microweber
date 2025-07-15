@@ -609,12 +609,10 @@ html.dark .text-danger {
     display: none;
     opacity: 0;
     transform: translateY(8px) translateX(0);
-    margin-right: 8px;
     pointer-events: none;
     transition:
-        opacity 0.25s cubic-bezier(0.4,0,0.2,1),
-        transform 0.25s cubic-bezier(0.4,0,0.2,1),
-        margin-right 0.25s cubic-bezier(0.4,0,0.2,1);
+        opacity 0.4s cubic-bezier(0.4,0,0.2,1),
+        transform 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .send-text,
@@ -622,10 +620,9 @@ html.dark .text-danger {
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
     display: block;
     opacity: 1;
-    transform: translateY(0) translateX(-8px) scale(1.08);
-    margin-right: 16px;
+    transform: translateY(0) translateX(-12px) scale(1.08);
     pointer-events: auto;
-    animation: sendTextPopIn 0.25s cubic-bezier(0.4,0,0.2,1);
+    animation: sendTextPopIn 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
 @keyframes sendTextPopIn {
@@ -635,7 +632,7 @@ html.dark .text-danger {
     }
     100% {
         opacity: 1;
-        transform: translateY(0) translateX(-8px) scale(1.08);
+        transform: translateY(0) translateX(-12px) scale(1.08);
     }
 }
 </style>

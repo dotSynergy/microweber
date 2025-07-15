@@ -146,7 +146,7 @@ export default {
     },
     mounted() {
         console.log('FieldStylePack mounted with setting:', this.setting);
-        
+
         // First scan and load fonts
         this.scanAndLoadFonts();
 
@@ -1241,6 +1241,6 @@ export default {
 <style scoped>
 .iframe-wrapper {
     width: 100%;
-    min-height: 200px;
+    min-height: 100px;
 }
 </style>

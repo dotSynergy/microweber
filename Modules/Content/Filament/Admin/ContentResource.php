@@ -753,6 +753,7 @@ class ContentResource extends Resource
 
         return [
             ImageUrlColumn::make('media_url')
+                ->label('Image')
                 ->height(83)
                 ->imageUrl(function (Model $record) {
                     return $record->mediaUrl();
@@ -784,9 +785,10 @@ class ContentResource extends Resource
 
             Tables\Columns\Layout\Split::make([
 
+
                 Tables\Columns\ViewColumn::make('content')
                     ->columnSpanFull()
-                    ->searchable()
+                    ->searchable(app(Content::class)->getSearchableByKeyword())
                     ->view('modules.content::filament.admin.content-view-column'),
 
                 DropdownColumn::make('is_active')
@@ -874,6 +876,7 @@ class ContentResource extends Resource
             ->paginated([10, 25, 50, 100, 250, 'all'])
             ->defaultPaginationPageOption(250)
             ->deferLoading()
+            ->searchable(true)
             ->reorderable('position')
             ->defaultSort('position', 'asc')
             ->columns(

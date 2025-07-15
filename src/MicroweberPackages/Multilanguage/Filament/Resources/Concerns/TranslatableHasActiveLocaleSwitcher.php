@@ -9,4 +9,10 @@ use Filament\Support\Contracts\TranslatableContentDriver;
 trait TranslatableHasActiveLocaleSwitcher
 {
      use HasActiveLocaleSwitcher;
+
+
+    public function getFilamentTranslatableContentDriver(): ?string
+    {
+        return MwSpatieLaravelTranslatableContentDriver::class;
+    }
 }

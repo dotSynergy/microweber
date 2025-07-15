@@ -163,15 +163,19 @@ class BtnModuleSettings extends LiveEditModuleSettings
 
 
             //backgroundColor
-            ColorPicker::make('options.color')
-                ->label('Color')
-                ->live()
-                ->default(''),
 
             ColorPicker::make('options.backgroundColor')
                 ->label('Background Color')
                 ->live()
                 ->default(''),
+
+
+
+            ColorPicker::make('options.color')
+                ->label('Text Color')
+                ->live()
+                ->default(''),
+
 
 
             ColorPicker::make('options.borderColor')

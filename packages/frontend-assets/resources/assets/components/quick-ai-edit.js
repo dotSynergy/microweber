@@ -615,12 +615,12 @@ export class QuickEditComponent extends MicroweberBaseClass {
         }
         clearTimeout(this.#syncTimer);
         this.#syncTimer = setTimeout(() => {
-            console.log(1)
+
             if (this.isGlobal || edit === this.settings.root) {
-                console.log(2)
+
                 let shoultSync = !mw.top().app.canvas.getDocument().documentElement.classList.contains('le-dragiing') && !this.pausedSync()
                 if (shoultSync) {
-console.log(3)
+
                         try {
                             if(this._editorNode && this._editorNode.parentElement){
                             const editorParent = this._editorNode.parentElement;

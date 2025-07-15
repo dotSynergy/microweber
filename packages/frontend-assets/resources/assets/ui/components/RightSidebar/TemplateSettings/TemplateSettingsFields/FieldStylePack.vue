@@ -188,7 +188,7 @@ export default {
             window.mw.top().app.off('layoutElementSelected');
             window.mw.top().app.off('layoutChanged');
         }
-        
+
         if (window.mw?.top()?.app?.canvas) {
             window.mw.top().app.canvas.off('liveEditCanvasLoaded');
             window.mw.top().app.canvas.off('reloadCustomCssDone');
@@ -333,6 +333,7 @@ export default {
                 if (window.mw?.top()?.app) {
                     if (!this.isSingleSettingMode) {
                         window.mw.top().app.dispatch('stylePackGlobalReload', {
+                            reason: 'applyStylePack',
                             sourceComponentId: this.uniqueId,
                             appliedStylePack: stylePack,
                             selector: this.selectorToApply || this.rootSelector
@@ -427,7 +428,11 @@ export default {
                     }
 
                     // Only reload if fonts or canvas styles actually need updating
-                    if (eventData && (eventData.reason === 'fontChange' || eventData.reason === 'cssReload')) {
+                    if (eventData && (
+                        eventData.reason === 'fontChange'
+                        || eventData.reason === 'applyStylePack'
+                        || eventData.reason === 'cssReload'
+                    )) {
                         // Re-scan and load fonts
                         this.scanAndLoadFonts();
                         // Re-inject fonts and update iframe content
@@ -668,8 +673,7 @@ export default {
                         const styleProps = this.setting.previewElementsStyleProperties[0].properties;
 
                         // Use the special opener method to apply current variables (for the opener only)
-                        this.applyCurrentVariablesToOpener(component, {properties: styleProps});
-                        this.applyCurrentVariablesToOpener(openerDiv, {properties: styleProps});
+                         this.applyCurrentVariablesToOpener(openerDiv, {properties: styleProps});
 
                         // Apply font properties based on element type
                         this.applyFontProperties(component, styleProps, preview.tag);
@@ -747,8 +751,8 @@ export default {
                 currentStylePack: this.currentStylePack?.label || null,
                 settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0,
                 // Only include variables hash for opener mode, not for individual previews
-                openerVariablesHash: this.isStylePackOpenerMode && this.setting.previewElementsStyleProperties?.[0]?.properties ? 
-                    Object.keys(this.getCurrentCssVariables()).filter(prop => 
+                openerVariablesHash: this.isStylePackOpenerMode && this.setting.previewElementsStyleProperties?.[0]?.properties ?
+                    Object.keys(this.getCurrentCssVariables()).filter(prop =>
                         this.setting.previewElementsStyleProperties[0].properties[prop]
                     ).sort().join(',') : ''
             });
@@ -849,7 +853,7 @@ export default {
                         // This ensures each preview shows its unique style, not the current state
                         Object.keys(stylePack.properties).forEach(property => {
                             const value = stylePack.properties[property];
-                            
+
                             // Apply the property to the element
                             if (property.startsWith('--')) {
                                 component.style.setProperty(property, value);
@@ -1306,7 +1310,7 @@ export default {
         // Method to get current CSS variables based on mode and layout
         getCurrentCssVariables() {
             const variables = {};
-            
+
             try {
                 // Get the canvas document to read CSS variables
                 const canvasDocument = window.mw?.top()?.app?.canvas?.getDocument();
@@ -1330,7 +1334,7 @@ export default {
 
                 // Get computed styles from the target element
                 const computedStyles = canvasDocument.defaultView.getComputedStyle(targetElement);
-                
+
                 // Extract CSS custom properties (variables)
                 for (let i = 0; i < computedStyles.length; i++) {
                     const property = computedStyles[i];
@@ -1345,10 +1349,10 @@ export default {
                 // Also check for CSS variables in the canvas CSS editor if available
                 if (window.mw?.top()?.app?.cssEditor) {
                     const cssEditor = window.mw.top().app.cssEditor;
-                    const rootSelector = this.isLayoutMode && this.activeLayoutId && this.activeLayoutId !== 'None' 
-                        ? `#${this.activeLayoutId}` 
+                    const rootSelector = this.isLayoutMode && this.activeLayoutId && this.activeLayoutId !== 'None'
+                        ? `#${this.activeLayoutId}`
                         : ':root';
-                    
+
                     // Try to get values from the CSS editor
                     const cssVars = cssEditor.getVariablesForSelector && cssEditor.getVariablesForSelector(rootSelector);
                     if (cssVars) {
@@ -1356,7 +1360,7 @@ export default {
                     }
                 }
 
-                console.log('Current CSS variables for mode:', this.isLayoutMode ? 'layout' : 'template', 
+                console.log('Current CSS variables for mode:', this.isLayoutMode ? 'layout' : 'template',
                     'activeLayoutId:', this.activeLayoutId, 'variables:', variables);
                 return variables;
             } catch (error) {
@@ -1365,50 +1369,22 @@ export default {
             }
         },
 
-        // Method to apply current CSS variables to preview elements
-        applyCurrentVariablesToPreview(element, stylePack) {
-            if (!element || !stylePack?.properties) return;
-
-            const currentVariables = this.getCurrentCssVariables();
-            
-            // Only apply the style pack properties, using current values if available
-            Object.keys(stylePack.properties).forEach(property => {
-                let value = stylePack.properties[property];
-                
-                // If the property is a CSS variable and we have a current value, use it
-                if (property.startsWith('--') && currentVariables[property]) {
-                    value = currentVariables[property];
-                }
-                
-                // Apply the property to the element
-                if (property.startsWith('--')) {
-                    element.style.setProperty(property, value);
-                } else {
-                    const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-                    element.style[cssProperty] = value;
-                }
-            });
-
-            // Don't apply all current variables - this was making all previews look the same
-            // Only apply the ones that are specifically defined in the style pack
-        },
-
         // Method to apply current CSS variables to the opener element only
         applyCurrentVariablesToOpener(element, stylePack) {
             if (!element || !stylePack?.properties) return;
 
             const currentVariables = this.getCurrentCssVariables();
-            
+
             // For the opener, we want to show the current state of the selected style pack
             // So we apply current variables for all properties in the style pack
             Object.keys(stylePack.properties).forEach(property => {
                 let value = stylePack.properties[property];
-                
+
                 // If the property is a CSS variable and we have a current value, use it
                 if (property.startsWith('--') && currentVariables[property]) {
                     value = currentVariables[property];
                 }
-                
+
                 // Apply the property to the element
                 if (property.startsWith('--')) {
                     element.style.setProperty(property, value);

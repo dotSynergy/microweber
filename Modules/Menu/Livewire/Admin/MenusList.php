@@ -99,7 +99,7 @@ class MenusList extends Component implements HasForms, HasActions
     protected $listeners = [
         'newMenuAdded' => '$refresh',
         'menuOrderUpdated' => 'onMenuOrderUpdated',
-     ];
+    ];
     public function onMenuOrderUpdated($menuId)
     {
         if ($this->option_group != '' and $this->option_key != '') {
@@ -112,51 +112,172 @@ class MenusList extends Component implements HasForms, HasActions
     }
     public function createAction(): Action
     {
-        $menuTemplates = [];
-        $scanTemplates = new \MicroweberPackages\Microweber\Support\ScanForBladeTemplates();
-        $templatesForModule = $scanTemplates->scan('modules.menu::mega_menu_templates.menu_item');
-        if ($templatesForModule) {
-            foreach ($templatesForModule as $template) {
-                $menuTemplates[$template['layout_file']] = $template['name'];
-            }
-        }
-
         return CreateAction::make('create')
             ->label('Add menu')
             ->createAnother(false)
-            ->form(array_merge(
-                static::menuItemEditFormArray(),
-                [
-                    Checkbox::make('enable_mega_menu')
-                        ->label('Enable Mega Menu')
-                        ->live()
-                        ->default(false),
-                    Select::make('menu_item_template')
-                        ->hidden(function (Get $get) {
-                            return $get('enable_mega_menu') === false;
-                        })
-                        ->label('Mega Menu Template')
-                        ->options($menuTemplates)
-                        ->default('default'),
-                ]
-            ))
+            ->form([
+                TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+            ])
             ->action(function (array $data, Component $livewire) {
-                $data['item_type'] = 'menu';
 
-                if (isset($data['use_custom_title']) && $data['use_custom_title'] == false) {
-                    $data['title'] = '';
-                }
+                $data['item_type'] = 'menu';
 
                 $record = Menu::newModelInstance();
                 $record->fill($data);
                 $record->save();
 
                 $livewire->menu_id = $record->id;
+                // $this->menu_id = $record->id;
+                // $this->dispatch('newMenuAdded');
+
             });
+    }
+
+    public static function menuItemEditFormArray(): array
+    {
+        return [
+
+
+            Hidden::make('content_id'),
+            Hidden::make('categories_id'),
+            Hidden::make('url'),
+            Hidden::make('url_target'),
+
+            MwLinkPicker::make('mw_link_picker')
+                ->label('Link')
+                ->live()
+                ->selectedData(function (Menu|null $record, Get $get) {
+                    $dataId = '';
+                    $dataType = '';
+                    $dataUrl = '';
+                    $dataTarget = '';
+                    if ($record) {
+                        $dataUrl = $record->url;
+                        $dataTarget = $record->url_target;
+                        if ($record->content_id) {
+                            $getContent = get_content_by_id($record->content_id);
+                            $dataId = $record->content_id;
+                            $dataType = $getContent['content_type'] ?? 'content';
+                            $dataUrl = content_link($record->content_id);
+                        } else if ($record->categories_id) {
+                            $dataId = $record->categories_id;
+                            $dataType = 'category';
+                        }
+                    }
+                    $data = [
+                        'url' => $dataUrl,
+                        'target' => $dataTarget,
+                        'data' => [
+                            'id' => $dataId,
+                            'type' => $dataType
+                        ]
+                    ];
+                    return $data;
+                })
+                ->afterStateUpdated(function (Set $set, Get $get, array $state) {
+
+
+                    $url = '';
+                    $urlTarget = '';
+                    $categoriesId = '';
+                    $contentId = '';
+                    $title = $get('title');
+                    $displayTitle = $get('display_title');
+
+                    if (isset($state['data']['id']) && $state['data']['id'] > 0) {
+                        if ($state['data']['type'] == 'category') {
+                            $categoriesId = $state['data']['id'];
+                        } else {
+                            $contentId = $state['data']['id'];
+                        }
+                        if (isset($state['text'])) {
+                            $displayTitle = $state['text'];
+                            $set('use_custom_title', false);
+                        }
+                    } else if (isset($state['url'])) {
+                        $url = $state['url'];
+                        if (isset($state['target']) && $state['target']) {
+                            $urlTarget = $state['target'];
+                        }
+                        if (isset($state['text'])) {
+                            $title = $state['text'];
+                            $set('use_custom_title', true);
+                        }
+                    }
+
+                    $set('display_title', $displayTitle);
+                    $set('title', $title);
+                    $set('url', $url);
+                    $set('url_target', $urlTarget);
+                    $set('categories_id', $categoriesId);
+                    $set('content_id', $contentId);
+                }),
+
+
+            TextInput::make('display_title')
+                ->disabled()
+                ->hidden(function (Get $get) {
+                    return $get('use_custom_title') === true;
+                }),
+
+            TextInput::make('title')
+                ->hidden(function (Get $get) {
+                    return $get('use_custom_title') === false;
+                })
+                ->helperText('Title will be auto-filled from the selected content')
+                ->maxLength(255),
+
+            Checkbox::make('use_custom_title')
+                ->label('Use custom title')
+                ->live()
+                ->afterStateUpdated(function (Menu|null $record, Set $set, $state) {
+                    if ($state) {
+                        if ($record) {
+                            $set('title', $record->displayTitle);
+                        }
+                    }
+                })
+                ->default(false),
+
+
+            Checkbox::make('advanced')
+                ->label('Advanced')
+                ->live(),
+
+            Select::make('url_target')
+                ->label('Target attribute')
+                ->helperText('Open the link in New window, Current window, Parent window or Top window')
+                ->options([
+                    '_self' => 'Current window',
+                    '_blank' => 'New window',
+                    '_parent' => 'Parent window',
+                    '_top' => 'Top window',
+                ])
+                ->hidden(function (Get $get) {
+                    return $get('advanced') === false;
+                }),
+
+            Group::make([
+                MwFileUpload::make('default_image')
+                    ->label('Default image')
+                    ->hidden(function (Get $get) {
+                        return $get('advanced') === false;
+                    }),
+
+                MwFileUpload::make('rollover_image')
+                    ->label('Rollover image')
+                    ->hidden(function (Get $get) {
+                        return $get('advanced') === false;
+                    }),
+            ])->columns(2)
+        ];
     }
 
     public function editAction(): Action
     {
+
         $menuTemplates = [];
         $scanTemplates = new \MicroweberPackages\Microweber\Support\ScanForBladeTemplates();
         $templatesForModule = $scanTemplates->scan('modules.menu::mega_menu_templates.menu_item');
@@ -184,24 +305,26 @@ class MenusList extends Component implements HasForms, HasActions
                 $form->fill($recordArray);
             })
             ->modalAutofocus(false)
-            ->form(array_merge(
-                static::menuItemEditFormArray(),
-                [
-                    Checkbox::make('enable_mega_menu')
-                        ->label('Enable Mega Menu')
-                        ->live()
-                        ->default(false),
-                    Select::make('menu_item_template')
-                        ->hidden(function (Get $get) {
-                            return $get('enable_mega_menu') === false;
-                        })
-                        ->label('Mega Menu Template')
-                        ->options($menuTemplates)
-                        ->default('default'),
-                ]
-            ))
+            ->form([
+                TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+                Checkbox::make('enable_mega_menu')
+                    ->label('Enable Mega Menu')
+                    ->live()
+                    ->default(false),
+                Select::make('menu_item_template')
+                    ->hidden(function (Get $get) {
+                        return $get('enable_mega_menu') === false;
+                    })
+                    ->label('Mega Menu Template')
+                    ->options($menuTemplates)
+                    ->default('default'),
+
+            ])
             ->record(function (array $arguments) {
-                return Menu::find($arguments['id']);
+                $record = Menu::find($arguments['id']);
+                return $record;
             })
             ->action(function (Menu $record, array $data) {
                 if (isset($data['use_custom_title']) && $data['use_custom_title'] == false) {
@@ -209,6 +332,7 @@ class MenusList extends Component implements HasForms, HasActions
                 }
                 $record->fill($data);
                 $record->save();
+
 
                 if ($this->option_group != '' and $this->option_key != '') {
                     $this->dispatch('mw-option-saved',
@@ -242,7 +366,7 @@ class MenusList extends Component implements HasForms, HasActions
             if ($menu) {
                 $title = $menu['title'];
             }
-           // $this->menu_id = $menu['id'] ?? 0;
+            // $this->menu_id = $menu['id'] ?? 0;
             //save_option($this->option_key, $title, $this->option_group);
             $module = 'menu';
             $optionKey = $this->option_key;
@@ -278,45 +402,5 @@ class MenusList extends Component implements HasForms, HasActions
         return view('modules.menu::livewire.admin.menus-list', [
             'menu' => $firstMenu
         ]);
-    }
-
-    public static function menuItemEditFormArray(): array
-    {
-        return [
-            Hidden::make('display_title'),
-
-            Group::make([
-                Checkbox::make('use_custom_title')
-                    ->label('Use custom title')
-                    ->default(false)
-                    ->live(),
-
-                TextInput::make('title')
-                    ->label('Title')
-                    ->hidden(function (Get $get) {
-                        return !$get('use_custom_title');
-                    })
-                    ->live(),
-
-                MwLinkPicker::make('url')
-                    ->label('URL')
-                    ->required(),
-
-                Checkbox::make('advanced')
-                    ->label('Show advanced settings')
-                    ->live()
-                    ->default(false),
-
-                Group::make([
-                    MwFileUpload::make('default_image')
-                        ->label('Default image'),
-
-                    MwFileUpload::make('rollover_image')
-                        ->label('Rollover image'),
-                ])->hidden(function (Get $get) {
-                    return !$get('advanced');
-                }),
-            ]),
-        ];
     }
 }

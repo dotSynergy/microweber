@@ -16,6 +16,7 @@ use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
+use Modules\Menu\Models\Menu;
 
 class BtnModuleSettings extends LiveEditModuleSettings
 {
@@ -39,10 +40,15 @@ class BtnModuleSettings extends LiveEditModuleSettings
 
 
                                 MwLinkPicker::make('options.url')
+
                                     ->label('Link')
                                     ->helperText('Select or enter the URL the button should link to.')
                                     ->live()
-                                    ->setSimpleMode(true)
+                                    ->default( function (Get $get) {
+                                        return $get('options.url') ?: '';
+                                    })
+
+                                  //  ->setSimpleMode(true)
                                     ->columnSpanFull(),
 
 
@@ -170,12 +176,10 @@ class BtnModuleSettings extends LiveEditModuleSettings
                 ->default(''),
 
 
-
             ColorPicker::make('options.color')
                 ->label('Text Color')
                 ->live()
                 ->default(''),
-
 
 
             ColorPicker::make('options.borderColor')

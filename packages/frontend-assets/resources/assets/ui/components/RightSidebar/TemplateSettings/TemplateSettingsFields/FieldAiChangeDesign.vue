@@ -592,4 +592,41 @@ html.dark .text-danger {
     background: #374151;
     border: 1px solid #4b5563;
 }
+
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .mw-ai-chat-box-action-send,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .mw-ai-chat-box-action-send,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .mw-ai-chat-box-action-send {
+    background: linear-gradient(135deg, #f59e42 0%, #fbbf24 100%);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.3), 0 6px 20px rgba(251, 191, 36, 0.4);
+    border: 2px solid #fbbf24;
+    transform: scale(1.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mw-ai-chat-box .d-flex.align-items-center.gap-3 {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Remove gap so you control spacing manually */
+}
+
+.mw-ai-chat-box .send-text {
+    display: none;
+    transform: translateY(8px) translateX(0);
+    margin-right: 8px;
+    transition:
+        opacity 0.25s cubic-bezier(0.4,0,0.2,1),
+        transform 0.25s cubic-bezier(0.4,0,0.2,1),
+        margin-right 0.25s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
+}
+
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .send-text,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .send-text,
+.mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
+    display: block;
+    transform: translateY(0) translateX(-8px);
+    margin-right: 16px;
+    pointer-events: auto;
+}
 </style>

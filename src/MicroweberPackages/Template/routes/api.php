@@ -119,26 +119,22 @@ Route::any('api/template/print_custom_css_fonts', function (Request $request) {
 
 
 Route::any('api/template/print_custom_css', function (Request $request) {
-
     $data = $request->all();
     $contents = app()->template_manager->get_custom_css($data);
 
+    // Generate ETag from content
+    $etag = md5($contents);
+
+    // Check if ETag matches
+    if ($request->header('If-None-Match') === $etag) {
+        return response()->make('', 304);
+    }
+
     $response = Response::make($contents);
     $response->header('Content-Type', 'text/css');
+    $response->header('ETag', $etag);
+    $response->header('Cache-Control', 'public, max-age=31536000');
 
     return $response;
 })->name('print_custom_css');
-
-
-
-
-
-
-
-
-
-
-
-
-
 

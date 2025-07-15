@@ -267,7 +267,7 @@ export default {
                 preloadLink.setAttribute("referrerpolicy", "no-referrer");
                 preloadLink.setAttribute("crossorigin", "anonymous");
                 preloadLink.setAttribute("data-noprefix", "1");
-                
+
                 // Async stylesheet loading
                 preloadLink.onload = function() {
                     // Convert preload to stylesheet once loaded
@@ -300,7 +300,7 @@ export default {
             });
         },
 
-        applyStylePack(stylePack, previewDiv, stylePackIndex = null) {
+        applyStylePack(stylePack, stylePackIndex = null) {
             // Set loading state for this style pack
             this.loadingStylePackIndex = stylePackIndex;
 
@@ -347,6 +347,7 @@ export default {
                             value: stylePack.properties[property]
                         });
                     });
+/*
 
                     if (
                         typeof (previewDiv) != "undefined"
@@ -362,6 +363,7 @@ export default {
                             }
                         });
                     }
+*/
 
                     if (updates.length > 0) {
                         this.$emit('batch-update', updates);
@@ -827,7 +829,7 @@ export default {
                             // Create unique ID for this stylesheet
                             const styleId = 'canvas-style-' + index;
                             const preloadId = 'preload-canvas-style-' + index;
-                            
+
                             // Skip if already added
                             if (iframeDoc.getElementById(styleId)) return;
 
@@ -838,7 +840,7 @@ export default {
                             preloadLink.href = sheet.href;
                             preloadLink.as = 'style';
                             preloadLink.type = 'text/css';
-                            
+
                             // Async stylesheet loading
                             preloadLink.onload = function() {
                                 // Convert preload to stylesheet once loaded
@@ -864,10 +866,10 @@ export default {
                         } else if (sheet.tagName === 'STYLE') {
                             // Copy inline styles immediately (no async needed for inline styles)
                             const styleId = 'canvas-inline-style-' + index;
-                            
+
                             // Skip if already added
                             if (iframeDoc.getElementById(styleId)) return;
-                            
+
                             const style = iframeDoc.createElement('style');
                             style.id = styleId;
                             style.type = 'text/css';
@@ -1034,12 +1036,12 @@ export default {
                 currentStylePack: this.currentStylePack?.label || null,
                 settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0
             });
-            
+
             if (this.lastContentHash === currentContentHash) {
                 console.log('Skipping iframe update - content unchanged');
                 return;
             }
-            
+
             this.lastContentHash = currentContentHash;
 
             // Clear existing content
@@ -1120,7 +1122,7 @@ export default {
                 stylePackDiv.classList.add('style-pack-loading-item');
             }
 
-            stylePackDiv.onclick = () => this.applyStylePack(stylePack, null, index);
+            stylePackDiv.onclick = () => this.applyStylePack(stylePack, index);
 
             const innerDiv = iframeDoc.createElement('div');
             innerDiv.className = 'd-flex flex-column';
@@ -1275,28 +1277,28 @@ export default {
             if (mw.top() && mw.top().app) {
                 mw.top().app.on('stylePackGlobalReload', (eventData) => {
                     console.log('Global style pack reload triggered', eventData);
-                    
+
                     // Skip reload if this is the source component that triggered the event
-                    if (eventData && eventData.sourceComponentId === this.uniqueId) {
-                        console.log('Skipping reload for source component', this.uniqueId);
-                        return;
-                    }
-                    
-                    // Skip reload for mode changes to improve performance
-                    if (eventData && eventData.reason === 'applyModeWatcherChanged') {
-                        console.log('Skipping reload for mode change to improve performance');
-                        return;
-                    }
-                    
+                    // if (eventData && eventData.sourceComponentId === this.uniqueId) {
+                    //     console.log('Skipping reload for source component', this.uniqueId);
+                    //     return;
+                    // }
+
+                    // // Skip reload for mode changes to improve performance
+                    // if (eventData && eventData.reason === 'applyModeWatcherChanged') {
+                    //     console.log('Skipping reload for mode change to improve performance');
+                    //     return;
+                    // }
+
                     // Only reload if fonts or canvas styles actually need updating
-                    if (eventData && (eventData.reason === 'fontChange' || eventData.reason === 'cssReload')) {
+                   // if (eventData && (eventData.reason === 'fontChange' || eventData.reason === 'cssReload')) {
                         // Re-scan and load fonts
                         this.scanAndLoadFonts();
                         // Re-inject fonts and update iframe content
                         this.injectFontsIntoIframe();
                         this.injectCanvasStyles();
-                    }
-                    
+                 //   }
+
                     // Always update iframe content for other events
                     this.updateIframeContent();
                 });

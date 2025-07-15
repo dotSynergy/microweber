@@ -604,29 +604,38 @@ html.dark .text-danger {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.mw-ai-chat-box .d-flex.align-items-center.gap-3 {
-    display: flex;
-    align-items: center;
-    gap: 0; /* Remove gap so you control spacing manually */
-}
 
 .mw-ai-chat-box .send-text {
     display: none;
+    opacity: 0;
     transform: translateY(8px) translateX(0);
     margin-right: 8px;
+    pointer-events: none;
     transition:
         opacity 0.25s cubic-bezier(0.4,0,0.2,1),
         transform 0.25s cubic-bezier(0.4,0,0.2,1),
         margin-right 0.25s cubic-bezier(0.4,0,0.2,1);
-    pointer-events: none;
 }
 
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:hover) .send-text,
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:focus) .send-text,
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
     display: block;
-    transform: translateY(0) translateX(-8px);
+    opacity: 1;
+    transform: translateY(0) translateX(-8px) scale(1.08);
     margin-right: 16px;
     pointer-events: auto;
+    animation: sendTextPopIn 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes sendTextPopIn {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) translateX(0) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) translateX(-8px) scale(1.08);
+    }
 }
 </style>

@@ -591,7 +591,7 @@ mw.requireAsync = (url, key) => {
 
   mw.reload_module = function(module, callback) {
 
-console.log(2, module)
+
     if(Array.isArray(module)){
         var l = module.length, i=0, w = 1;
         for( ; i<l; i++){

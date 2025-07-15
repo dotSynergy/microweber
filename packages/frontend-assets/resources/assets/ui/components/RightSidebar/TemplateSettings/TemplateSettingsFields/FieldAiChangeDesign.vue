@@ -608,7 +608,7 @@ html.dark .text-danger {
 .mw-ai-chat-box .send-text {
     display: none;
     opacity: 0;
-    transform: translateY(8px) translateX(0);
+    transform: translateX(24px);
     pointer-events: none;
     transition:
         opacity 0.4s cubic-bezier(0.4,0,0.2,1),
@@ -620,19 +620,19 @@ html.dark .text-danger {
 .mw-ai-chat-box:has(.mw-ai-chat-box-area-field:active) .send-text {
     display: block;
     opacity: 1;
-    transform: translateY(0) translateX(-12px) scale(1.08);
+    transform: translateX(-9px);
     pointer-events: auto;
-    animation: sendTextPopIn 0.4s cubic-bezier(0.4,0,0.2,1);
+    animation: sendTextSlideIn 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
-@keyframes sendTextPopIn {
+@keyframes sendTextSlideIn {
     0% {
         opacity: 0;
-        transform: translateY(16px) translateX(0) scale(0.95);
+        transform: translateX(24px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0) translateX(-12px) scale(1.08);
+        transform: translateX(-12px);
     }
 }
 </style>

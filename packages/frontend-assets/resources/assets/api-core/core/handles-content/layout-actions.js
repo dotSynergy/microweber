@@ -69,11 +69,46 @@ export class LayoutActions extends MicroweberBaseClass {
 
         ElementManager(target).after(el.innerHTML);
         var newEl = target.nextElementSibling;
+        var newElHTML = target.nextElementSibling.innerHTML;
+            const frag = document.createElement("div");
+            frag.innerHTML = newElHTML;
 
         mw.reload_module(newEl, function () {
-            mw.top().app.registerChangedState(mw.tools.firstParentWithClass(target, 'edit'), true)
-            newEl.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-            mw.app.dispatch('layoutCloned', newEl);
+
+
+
+
+                const node = target.nextElementSibling;
+                let edit;
+                if(node){
+                    edit = node.querySelector('.edit');
+                }
+
+            if(edit) {
+                edit.innerHTML = frag.querySelector('.edit').innerHTML;
+                edit.classList.add('changed')
+
+                edit.querySelectorAll('[id]').forEach(node => {
+                    node.id = mw.id()
+                });
+
+                edit.querySelectorAll('[field]').forEach(el => {
+                    el.setAttribute('field', mw.id())
+                });
+                edit.querySelectorAll('.edit').forEach(el => {
+                    el.classList.add('changed')
+                });
+            }
+
+
+
+
+              mw.reload_modules(Array.from(edit.querySelectorAll('.module')), function () {
+
+                mw.top().app.registerChangedState(mw.tools.firstParentWithClass(target, 'edit'), true)
+                node.scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
+                mw.app.dispatch('layoutCloned', node);
+            })
         });
     }
 

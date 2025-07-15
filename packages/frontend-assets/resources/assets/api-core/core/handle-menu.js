@@ -274,7 +274,10 @@ export const HandleMenu = function(options) {
             });
             btn.append(submenu);
             scope.buildButtons(conf.menu, submenu, submenu);
-            btn.on(actionEvents, function(){
+            btn.on(actionEvents, function(e){
+                if(e.type !== "touchstart" && e.which !== 1) {
+                    return;
+                }
                 Array.from(this.ownerDocument.querySelectorAll('.sub-menu-active'))
                 .filter(node => node !== this)
                 .forEach(node => node.classList.remove('sub-menu-active'));
@@ -282,7 +285,10 @@ export const HandleMenu = function(options) {
                 this.classList.toggle('sub-menu-active');
             });
         } else if(typeof conf.action === 'function') {
-            btn.on(actionEvents, function(){
+            btn.on(actionEvents, function(e){
+                if(e.type !== "touchstart" && e.which !== 1) {
+                    return;
+                }
                 Array.from(this.ownerDocument.querySelectorAll('.sub-menu-active'))
                 .filter(node => node !== this)
                 .forEach(node => node.classList.remove('sub-menu-active'));

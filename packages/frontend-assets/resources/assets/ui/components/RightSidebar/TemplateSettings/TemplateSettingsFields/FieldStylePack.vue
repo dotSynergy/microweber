@@ -104,8 +104,14 @@ export default {
         isLayoutMode(newVal, oldVal) {
             // Only update if actually changed to avoid unnecessary reloads
             if (newVal !== oldVal) {
+                console.log('Layout mode changed from', oldVal, 'to', newVal, '- refreshing style pack previews');
                 this.$nextTick(() => {
+                    // Clear the content hash to force a refresh
+                    this.lastContentHash = null;
+                    // Refresh the iframe content to update previews with new mode variables
                     this.updateIframeContent();
+                    // Re-inject canvas styles for the new mode
+                    this.injectCanvasStyles();
                 });
             }
         },
@@ -114,8 +120,14 @@ export default {
         activeLayoutId(newVal, oldVal) {
             // Only update if actually changed to avoid unnecessary reloads
             if (newVal !== oldVal) {
+                console.log('Active layout ID changed from', oldVal, 'to', newVal, '- refreshing style pack previews');
                 this.$nextTick(() => {
+                    // Clear the content hash to force a refresh
+                    this.lastContentHash = null;
+                    // Refresh the iframe content to update previews with new layout variables
                     this.updateIframeContent();
+                    // Re-inject canvas styles for the new layout
+                    this.injectCanvasStyles();
                 });
             }
         },
@@ -164,14 +176,22 @@ export default {
             this.setupFontChangeListener();
             this.setupCssReloadListener();
             this.setupStylePackGlobalReloadListener();
+            this.setupLayoutElementSelectionListener();
         }, 100);
     },
     beforeUnmount() {
         // Clean up event listeners
         if (window.mw?.top()?.app) {
             window.mw.top().app.off('fontsManagerSelectedFont');
-            window.mw.top().app.canvas.off('reloadCustomCssDone');
+            window.mw.top().app.off('setPropertyForSelector');
             window.mw.top().app.off('stylePackGlobalReload');
+            window.mw.top().app.off('layoutElementSelected');
+            window.mw.top().app.off('layoutChanged');
+        }
+        
+        if (window.mw?.top()?.app?.canvas) {
+            window.mw.top().app.canvas.off('liveEditCanvasLoaded');
+            window.mw.top().app.canvas.off('reloadCustomCssDone');
         }
     },
     methods: {
@@ -355,6 +375,8 @@ export default {
                     // Re-inject fonts when canvas is loaded
                     this.injectFontsIntoIframe();
                     this.injectCanvasStyles();
+                    // Clear content hash to force refresh with new variables
+                    this.lastContentHash = null;
                     this.updateIframeContent();
                     console.log('Page changed, refreshing style pack preview');
                 });
@@ -363,8 +385,25 @@ export default {
                     // Re-inject fonts when CSS is reloaded
                     this.injectFontsIntoIframe();
                     this.injectCanvasStyles();
+                    // Clear content hash to force refresh with new variables
+                    this.lastContentHash = null;
                     this.updateIframeContent();
                     console.log('CSS reloaded, refreshing style pack preview');
+                });
+            }
+
+            // Listen for CSS property changes to refresh style pack previews
+            if (window.mw?.top()?.app) {
+                window.mw.top().app.on('setPropertyForSelector', (data) => {
+                    // Only refresh if the property change affects CSS variables
+                    if (data.property && data.property.startsWith('--')) {
+                        console.log('CSS variable changed:', data.property, 'refreshing style pack preview');
+                        // Clear content hash to force refresh with new variables
+                        this.lastContentHash = null;
+                        this.$nextTick(() => {
+                            this.updateIframeContent();
+                        });
+                    }
                 });
             }
         },
@@ -398,6 +437,33 @@ export default {
 
                     // Always update iframe content for other events
                     this.updateIframeContent();
+                });
+            }
+        },
+
+        // Setup layout element selection listener
+        setupLayoutElementSelectionListener() {
+            if (window.mw?.top()?.app) {
+                // Listen for layout element selection changes
+                window.mw.top().app.on('layoutElementSelected', (data) => {
+                    if (data && data.layoutId && data.layoutId !== this.activeLayoutId) {
+                        console.log('Layout element selected:', data.layoutId, 'refreshing style pack preview');
+                        // Clear content hash to force refresh with new layout variables
+                        this.lastContentHash = null;
+                        this.$nextTick(() => {
+                            this.updateIframeContent();
+                        });
+                    }
+                });
+
+                // Listen for layout changes or additions
+                window.mw.top().app.on('layoutChanged', (data) => {
+                    console.log('Layout changed event received, refreshing style pack preview');
+                    // Clear content hash to force refresh
+                    this.lastContentHash = null;
+                    this.$nextTick(() => {
+                        this.updateIframeContent();
+                    });
                 });
             }
         },
@@ -601,15 +667,9 @@ export default {
 
                         const styleProps = this.setting.previewElementsStyleProperties[0].properties;
 
-                        // Apply CSS variables and direct styles
-                        Object.keys(styleProps).forEach(property => {
-                            if (property.startsWith('--')) {
-                                component.style.setProperty(property, styleProps[property]);
-                            } else {
-                                const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-                                component.style[cssProperty] = styleProps[property];
-                            }
-                        });
+                        // Use the special opener method to apply current variables (for the opener only)
+                        this.applyCurrentVariablesToOpener(component, {properties: styleProps});
+                        this.applyCurrentVariablesToOpener(openerDiv, {properties: styleProps});
 
                         // Apply font properties based on element type
                         this.applyFontProperties(component, styleProps, preview.tag);
@@ -685,7 +745,12 @@ export default {
                 activeLayoutId: this.activeLayoutId,
                 loadingStylePackIndex: this.loadingStylePackIndex,
                 currentStylePack: this.currentStylePack?.label || null,
-                settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0
+                settingsCount: this.setting.fieldSettings?.styleProperties?.length || 0,
+                // Only include variables hash for opener mode, not for individual previews
+                openerVariablesHash: this.isStylePackOpenerMode && this.setting.previewElementsStyleProperties?.[0]?.properties ? 
+                    Object.keys(this.getCurrentCssVariables()).filter(prop => 
+                        this.setting.previewElementsStyleProperties[0].properties[prop]
+                    ).sort().join(',') : ''
             });
 
             if (this.lastContentHash === currentContentHash) {
@@ -778,18 +843,21 @@ export default {
                         component.setAttribute(attr, attrs[attr]);
                     });
 
-                    // Apply style pack properties to the preview element using CSS variables
+                    // Apply style pack properties to the preview element using static values
                     if (stylePack.properties) {
+                        // For individual style pack previews, use the original static values
+                        // This ensures each preview shows its unique style, not the current state
                         Object.keys(stylePack.properties).forEach(property => {
-                            // For CSS variables starting with --, use setProperty
+                            const value = stylePack.properties[property];
+                            
+                            // Apply the property to the element
                             if (property.startsWith('--')) {
-                                component.style.setProperty(property, stylePack.properties[property]);
-                                stylePackDiv.style.setProperty(property, stylePack.properties[property]);
+                                component.style.setProperty(property, value);
+                                stylePackDiv.style.setProperty(property, value);
                             } else {
-                                // For direct properties, apply to style object
                                 const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-                                component.style[cssProperty] = stylePack.properties[property];
-                                stylePackDiv.style[cssProperty] = stylePack.properties[property];
+                                component.style[cssProperty] = value;
+                                stylePackDiv.style[cssProperty] = value;
                             }
                         });
 
@@ -1233,7 +1301,125 @@ export default {
                     100% { transform: translate(-50%, -50%) rotate(360deg); }
                 }
             `;
-        }
+        },
+
+        // Method to get current CSS variables based on mode and layout
+        getCurrentCssVariables() {
+            const variables = {};
+            
+            try {
+                // Get the canvas document to read CSS variables
+                const canvasDocument = window.mw?.top()?.app?.canvas?.getDocument();
+                if (!canvasDocument) {
+                    console.warn('Canvas document not available, using fallback');
+                    return variables;
+                }
+
+                let targetElement = canvasDocument.documentElement; // Default to :root
+
+                // If in layout mode, get variables from the specific layout element
+                if (this.isLayoutMode && this.activeLayoutId && this.activeLayoutId !== 'None') {
+                    const layoutElement = canvasDocument.getElementById(this.activeLayoutId);
+                    if (layoutElement) {
+                        targetElement = layoutElement;
+                        console.log('Getting CSS variables from layout element:', this.activeLayoutId);
+                    } else {
+                        console.warn('Layout element not found:', this.activeLayoutId);
+                    }
+                }
+
+                // Get computed styles from the target element
+                const computedStyles = canvasDocument.defaultView.getComputedStyle(targetElement);
+                
+                // Extract CSS custom properties (variables)
+                for (let i = 0; i < computedStyles.length; i++) {
+                    const property = computedStyles[i];
+                    if (property.startsWith('--')) {
+                        const value = computedStyles.getPropertyValue(property).trim();
+                        if (value) { // Only include non-empty values
+                            variables[property] = value;
+                        }
+                    }
+                }
+
+                // Also check for CSS variables in the canvas CSS editor if available
+                if (window.mw?.top()?.app?.cssEditor) {
+                    const cssEditor = window.mw.top().app.cssEditor;
+                    const rootSelector = this.isLayoutMode && this.activeLayoutId && this.activeLayoutId !== 'None' 
+                        ? `#${this.activeLayoutId}` 
+                        : ':root';
+                    
+                    // Try to get values from the CSS editor
+                    const cssVars = cssEditor.getVariablesForSelector && cssEditor.getVariablesForSelector(rootSelector);
+                    if (cssVars) {
+                        Object.assign(variables, cssVars);
+                    }
+                }
+
+                console.log('Current CSS variables for mode:', this.isLayoutMode ? 'layout' : 'template', 
+                    'activeLayoutId:', this.activeLayoutId, 'variables:', variables);
+                return variables;
+            } catch (error) {
+                console.error('Error getting current CSS variables:', error);
+                return variables;
+            }
+        },
+
+        // Method to apply current CSS variables to preview elements
+        applyCurrentVariablesToPreview(element, stylePack) {
+            if (!element || !stylePack?.properties) return;
+
+            const currentVariables = this.getCurrentCssVariables();
+            
+            // Only apply the style pack properties, using current values if available
+            Object.keys(stylePack.properties).forEach(property => {
+                let value = stylePack.properties[property];
+                
+                // If the property is a CSS variable and we have a current value, use it
+                if (property.startsWith('--') && currentVariables[property]) {
+                    value = currentVariables[property];
+                }
+                
+                // Apply the property to the element
+                if (property.startsWith('--')) {
+                    element.style.setProperty(property, value);
+                } else {
+                    const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                    element.style[cssProperty] = value;
+                }
+            });
+
+            // Don't apply all current variables - this was making all previews look the same
+            // Only apply the ones that are specifically defined in the style pack
+        },
+
+        // Method to apply current CSS variables to the opener element only
+        applyCurrentVariablesToOpener(element, stylePack) {
+            if (!element || !stylePack?.properties) return;
+
+            const currentVariables = this.getCurrentCssVariables();
+            
+            // For the opener, we want to show the current state of the selected style pack
+            // So we apply current variables for all properties in the style pack
+            Object.keys(stylePack.properties).forEach(property => {
+                let value = stylePack.properties[property];
+                
+                // If the property is a CSS variable and we have a current value, use it
+                if (property.startsWith('--') && currentVariables[property]) {
+                    value = currentVariables[property];
+                }
+                
+                // Apply the property to the element
+                if (property.startsWith('--')) {
+                    element.style.setProperty(property, value);
+                } else {
+                    const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+                    element.style[cssProperty] = value;
+                }
+            });
+
+            console.log('Applied current variables to opener element');
+        },
     }
 };
 </script>

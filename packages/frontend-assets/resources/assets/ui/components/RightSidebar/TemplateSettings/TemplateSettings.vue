@@ -220,9 +220,9 @@
 
 .template-settings-where-to-edit-wrapper {
     position: sticky !important;
-    top: 0;
+    top: 29px;
     background: white;
-    z-index: 10;
+    z-index: 100;
     border-radius: 8px;
     transition: all 0.3s ease;
     padding: 16px;

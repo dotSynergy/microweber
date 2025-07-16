@@ -95,7 +95,7 @@ function saveBtnAlign(el, align) {
         module: moduleType,
     };
 
-    console.log(data);
+
 
     mw.options.saveOption(data, function () {
 

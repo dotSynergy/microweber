@@ -218,6 +218,7 @@ class ScanForBladeTemplates
                         }
                     }
                     if ($foundModules) {
+                        $foundModules = array_unique($foundModules);
                         $to_return_temp['found_modules'] = $foundModules;
                     }
                 }

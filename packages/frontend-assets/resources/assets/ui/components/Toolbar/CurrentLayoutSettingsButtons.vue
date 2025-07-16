@@ -380,46 +380,13 @@ export default {
         },
 
         getModuleIcon(module) {
-            // Try to get module icon from Microweber's module system first
+            // Use the new getModuleIcon service function directly
             if (window.mw?.top()?.app?.modules) {
-                const info = window.mw.top().app.modules.getModuleInfo(module.type);
-                if (info && info.icon) {
-                    // Check if it's a base64 data URI (like the content module)
-                    if (info.icon.startsWith('data:image/svg+xml;base64,')) {
-                        // Convert base64 to img tag for better rendering
-                        return `<img src="${info.icon}" alt="${info.name || module.type}" style="width: 24px; height: 24px;" />`;
-                    }
-                    // Check if it's already an SVG string
-                    else if (info.icon.includes('<svg')) {
-                        return info.icon;
-                    }
-                    // If it's just a URL or other format, wrap in img tag
-                    else if (info.icon.startsWith('http') || info.icon.startsWith('/')) {
-                        return `<img src="${info.icon}" alt="${info.name || module.type}" style="width: 16px; height: 16px;" />`;
-                    }
-                    // For any other format, return as is
-                    else {
-                        return info.icon;
-                    }
-                }
+                return window.mw.top().app.modules.getModuleIcon(module.type);
             }
 
-            // Try to get module icon from icon service
-            if (window.mw?.top()?.app?.iconService?.icon) {
-                const icon = window.mw.top().app.iconService.icon(module.type) ||
-                    window.mw.top().app.iconService.icon(`module-${module.type}`) ||
-                    window.mw.top().app.iconService.icon('module');
-
-                if (icon) {
-                    return icon;
-                }
-            }
-
-            // Fallback to common module icons based on module type
-            const iconMap = {};
-
-            return iconMap[module.type.toLowerCase()] ||
-                '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+            // Fallback to default icon
+            return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
         }, openModuleSettings(module) {
             try {
                 // Use Microweber's module settings system

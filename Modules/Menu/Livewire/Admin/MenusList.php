@@ -277,7 +277,6 @@ class MenusList extends Component implements HasForms, HasActions
 
     public function editAction(): Action
     {
-
         $menuTemplates = [];
         $scanTemplates = new \MicroweberPackages\Microweber\Support\ScanForBladeTemplates();
         $templatesForModule = $scanTemplates->scan('modules.menu::mega_menu_templates.menu_item');
@@ -305,23 +304,22 @@ class MenusList extends Component implements HasForms, HasActions
                 $form->fill($recordArray);
             })
             ->modalAutofocus(false)
-            ->form([
-                TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Checkbox::make('enable_mega_menu')
-                    ->label('Enable Mega Menu')
-                    ->live()
-                    ->default(false),
-                Select::make('menu_item_template')
-                    ->hidden(function (Get $get) {
-                        return $get('enable_mega_menu') === false;
-                    })
-                    ->label('Mega Menu Template')
-                    ->options($menuTemplates)
-                    ->default('default'),
-
-            ])
+            ->form(array_merge(
+                self::menuItemEditFormArray(),
+                [
+                    Checkbox::make('enable_mega_menu')
+                        ->label('Enable Mega Menu')
+                        ->live()
+                        ->default(false),
+                    Select::make('menu_item_template')
+                        ->hidden(function (Get $get) {
+                            return $get('enable_mega_menu') === false;
+                        })
+                        ->label('Mega Menu Template')
+                        ->options($menuTemplates)
+                        ->default('default'),
+                ]
+            ))
             ->record(function (array $arguments) {
                 $record = Menu::find($arguments['id']);
                 return $record;
@@ -332,7 +330,6 @@ class MenusList extends Component implements HasForms, HasActions
                 }
                 $record->fill($data);
                 $record->save();
-
 
                 if ($this->option_group != '' and $this->option_key != '') {
                     $this->dispatch('mw-option-saved',

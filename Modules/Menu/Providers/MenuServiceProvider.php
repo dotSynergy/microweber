@@ -5,6 +5,7 @@ namespace Modules\Menu\Providers;
 use Livewire\Livewire;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use MicroweberPackages\LiveEdit\Facades\LiveEditManager;
 use MicroweberPackages\Microweber\Facades\Microweber;
 use MicroweberPackages\Multilanguage\TranslateManager;
 use Modules\Menu\Filament\Admin\MenuFilamentPlugin;
@@ -67,6 +68,7 @@ class MenuServiceProvider extends BaseModuleServiceProvider
         // Register Microweber module
         Microweber::module(\Modules\Menu\Microweber\MenuModule::class);
 
+        LiveEditManager::addScript('menu-module-quick-settings', asset('modules/menu/js/menu-quick-settings.js'));
 
     }
 

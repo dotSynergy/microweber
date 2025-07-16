@@ -43,9 +43,9 @@
                             <span class="live-edit-label mb-0">Template</span>
 
                         </div>
-<!--                        <div class="edit-mode-text">-->
-<!--                            <div class="edit-mode-subtitle mb-0">Edit global template styles</div>-->
-<!--                        </div>-->
+                        <div class="edit-mode-text">
+                            <div class="edit-mode-subtitle mb-0">Edit global template styles</div>
+                        </div>
                     </div>
 
                     <div
@@ -58,9 +58,9 @@
                             <span class="live-edit-label mb-0">Layout</span>
 
                         </div>
-<!--                        <div class="edit-mode-text">-->
-<!--                            <div class="edit-mode-subtitle mb-0">Edit specific layout styles</div>-->
-<!--                        </div>-->
+                        <div class="edit-mode-text">
+                            <div class="edit-mode-subtitle mb-0">Edit specific layout styles</div>
+                        </div>
                     </div>
                 </div>
 

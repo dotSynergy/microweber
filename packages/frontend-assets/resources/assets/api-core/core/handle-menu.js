@@ -195,10 +195,11 @@ export const HandleMenu = function(options) {
                         }
                     });
                     btnHolder.append(holder);
+                    holder.id = mw.id()
                 }
 
                 if(itm.name.indexOf('$teleport') !== -1) {
-                    mw.top().app.dispatch(itm.name, holder)
+                    mw.top().app.dispatch(itm.name, {holder, selector: `#${holder.id}`})
                 }
 
                 itm.nodes.forEach(function (btn){

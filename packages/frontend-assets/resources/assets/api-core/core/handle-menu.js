@@ -233,7 +233,7 @@ export const HandleMenu = function(options) {
             var icon = ElementManager({
                 props: {
                     className: 'mw-le-handle-menu-button-icon',
-                    innerHTML: conf.icon
+                    innerHTML: typeof conf.icon === 'function' ? conf.icon(_target) : conf.icon
                 }
             });
 

@@ -1,7 +1,7 @@
 <template>
 
 
-    <div>
+    <div class="template-settings-wrapper">
         <div v-if="isLoading" class="text-center">
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -28,7 +28,7 @@
 
             </div>
             <!-- Choose where to edit toggle -->
-            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper"
+            <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper template-settings-where-to-edit-wrapper" :class="{ 'is-sticky': isEditModeToggleSticky }"
                  v-show="!isSingleSettingMode">
                 <label class="live-edit-label mb-3">Choose where to edit</label>
 
@@ -39,11 +39,10 @@
                         @click="handleApplyModeChange('template')"
                     >
                         <div class="edit-mode-icon d-flex align-items-center gap-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M120-120q-33 0-56.5-23.5T40-200v-80q0-33 23.5-56.5T120-360h240q33 0 56.5 23.5T440-280v80q0 33-23.5 56.5T360-120H120Zm480 0q-33 0-56.5-23.5T520-200v-560q0-33 23.5-56.5T600-840h240q33 0 56.5 23.5T920-760v560q0 33-23.5 56.5T840-120H600Zm-480-80h240v-80H120v80Zm480 0h240v-560H600v560Zm120-40q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240ZM120-440q-33 0-56.5-23.5T40-520v-240q0-33 23.5-56.5T120-840h240q33 0 56.5 23.5T440-760v240q0 33-23.5 56.5T360-440H120Zm160-200q17 0 28.5-11.5T320-680q0-17-11.5-28.5T280-720q-17 0-28.5 11.5T240-680q0 17 11.5 28.5T280-640ZM120-533l80-107 90 120h70v-240H120v227Zm120 293Zm480-240ZM240-640Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="currentColor"><path d="M120-120q-33 0-56.5-23.5T40-200v-80q0-33 23.5-56.5T120-360h240q33 0 56.5 23.5T440-280v80q0 33-23.5 56.5T360-120H120Zm480 0q-33 0-56.5-23.5T520-200v-560q0-33 23.5-56.5T600-840h240q33 0 56.5 23.5T920-760v560q0 33-23.5 56.5T840-120H600Zm-480-80h240v-80H120v80Zm480 0h240v-560H600v560Zm120-40q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240ZM120-440q-33 0-56.5-23.5T40-520v-240q0-33 23.5-56.5T120-840h240q33 0 56.5 23.5T440-760v240q0 33-23.5 56.5T360-440H120Zm160-200q17 0 28.5-11.5T320-680q0-17-11.5-28.5T280-720q-17 0-28.5 11.5T240-680q0 17 11.5 28.5T280-640ZM120-533l80-107 90 120h70v-240H120v227Zm120 293Zm480-240ZM240-640Z"/></svg>
                             <span class="live-edit-label mb-0">Template</span>
-
                         </div>
-                        <div class="edit-mode-text">
+                        <div class="edit-mode-text" v-show="!isEditModeToggleSticky">
                             <div class="edit-mode-subtitle mb-0">Edit global template styles</div>
                         </div>
                     </div>
@@ -54,11 +53,10 @@
                         @click="handleApplyModeChange('layout')"
                     >
                         <div class="edit-mode-icon d-flex align-items-center gap-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-280h280v-80H240v80Zm400 0h80v-400h-80v400ZM240-440h280v-80H240v80Zm0-160h280v-80H240v80Zm-80 480q-33 0-56.5-23.5T80-200v-560q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v560q0 33-23.5 56.5T800-120H160Zm0-80h640v-560H160v560Zm0 0v-560 560Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="currentColor"><path d="M240-280h280v-80H240v80Zm400 0h80v-400h-80v400ZM240-440h280v-80H240v80Zm0-160h280v-80H240v80Zm-80 480q-33 0-56.5-23.5T80-200v-560q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v560q0 33-23.5 56.5T800-120H160Zm0-80h640v-560H160v560Zm0 0v-560 560Z"/></svg>
                             <span class="live-edit-label mb-0">Layout</span>
-
                         </div>
-                        <div class="edit-mode-text">
+                        <div class="edit-mode-text" v-show="!isEditModeToggleSticky">
                             <div class="edit-mode-subtitle mb-0">Edit specific layout styles</div>
                         </div>
                     </div>
@@ -69,7 +67,7 @@
 
                     <div class="mb-2">
                         <small class="text-muted fw-medium d-flex align-items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M240-120q-45 0-89-22t-71-58q26 0 53-20.5t27-59.5q0-50 35-85t85-35q50 0 85 35t35 85q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 23-5.5 42T220-202q5 2 10 2h10Zm230-160L360-470l358-358q11-11 27.5-11.5T774-828l54 54q12 12 12 28t-12 28L470-360Zm-190 80Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="http://www.w3.org/2000/svg" width="14px" fill="currentColor"><path d="M240-120q-45 0-89-22t-71-58q26 0 53-20.5t27-59.5q0-50 35-85t85-35q50 0 85 35t35 85q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T320-280q0-17-11.5-28.5T280-320q-17 0-28.5 11.5T240-280q0 23-5.5 42T220-202q5 2 10 2h10Zm230-160L360-470l358-358q11-11 27.5-11.5T774-828l54 54q12 12 12 28t-12 28L470-360Zm-190 80Z"/></svg>
                             <label for="" class="live-edit-label mb-0"> Currently editing layout:</label>
                         </small>
                     </div>
@@ -77,7 +75,7 @@
                     <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
                         <span id="active-layout-id" @click="scrollToSelectedLayout" class="cursor-pointer text-primary">{{ activeLayoutId }}</span>
                         <span id="active-layout-id-open-settings" @click="openSelectedLayoutSettings" class="cursor-pointer text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>                        </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="http://www.w3.org/2000/svg" width="16px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>                        </span>
                     </div>
                 </div>
             </div>
@@ -190,7 +188,7 @@
                     <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Reset stylesheet settings" class="reset-template-settings-and-stylesheet-button"
                             @click="resetAllDesignSelectorsValuesSettings">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="http://www.w3.org/2000/svg" width="20px" fill="currentColor"><path d="M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z"/></svg>
                           </button>
                 </span>
 
@@ -217,7 +215,48 @@
     cursor: pointer;
 }
 
+.template-settings-wrapper {
+    position: relative;
+}
 
+.template-settings-where-to-edit-wrapper {
+    position: sticky !important;
+    top: 0;
+    background: white;
+    z-index: 10;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding: 16px;
+    margin: -16px;
+}
+
+.template-settings-where-to-edit-wrapper.is-sticky {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.template-settings-where-to-edit-wrapper.is-sticky .live-edit-label {
+    display: none;
+}
+
+.edit-mode-text {
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    overflow: hidden;
+}
+
+.template-settings-where-to-edit-wrapper.is-sticky .edit-mode-text {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+}
+
+.edit-mode-option {
+    transition: all 0.3s ease;
+}
+
+.template-settings-where-to-edit-wrapper.is-sticky .edit-mode-option {
+    margin-bottom: 0;
+}
 </style>
 
 
@@ -279,7 +318,8 @@ export default {
             activeStylePackOpener: null,
             hasActiveStylePackOpener: false,
             nestedItems: [], // Array to store references to nested settings items
-
+            isEditModeToggleSticky: false,
+            stickyObserver: null,
         };
     },computed: {
         displayedStyleSettingVars() {
@@ -423,6 +463,9 @@ export default {
             if (window.mw.top().app.__vueTemplateSettingsInstance === this) {
                 window.mw.top().app.__vueTemplateSettingsInstance = null; // Clear instance reference
             }
+        }
+        if (this.stickyObserver) {
+            this.stickyObserver.disconnect();
         }
     }, watch: {        applyMode(newMode, oldMode) {
             if (newMode !== oldMode) {
@@ -1529,6 +1572,42 @@ export default {
             }
 
             console.log('Apply mode changed to:', this.applyMode);
+        },
+        setupStickyObserver() {
+            this.$nextTick(() => {
+                const whereToEditWrapper = document.querySelector('.template-settings-where-to-edit-wrapper');
+                const templateSettingsWrapper = document.querySelector('.template-settings-wrapper');
+
+                if (whereToEditWrapper && templateSettingsWrapper) {
+                    // Create a sentinel element to detect when container becomes sticky
+                    const sentinel = document.createElement('div');
+                    sentinel.style.position = 'absolute';
+                    sentinel.style.top = '0';
+                    sentinel.style.height = '1px';
+                    sentinel.style.width = '1px';
+                    sentinel.style.pointerEvents = 'none';
+
+                    // Insert sentinel before the sticky container
+                    whereToEditWrapper.parentNode.insertBefore(sentinel, whereToEditWrapper);
+
+                    // Create intersection observer with the template-settings-wrapper as root
+                    this.stickyObserver = new IntersectionObserver(
+                        (entries) => {
+                            entries.forEach((entry) => {
+                                // When sentinel is not intersecting, container is sticky
+                                this.isEditModeToggleSticky = !entry.isIntersecting;
+                            });
+                        },
+                        {
+                            root: templateSettingsWrapper,
+                            rootMargin: '0px',
+                            threshold: 0
+                        }
+                    );
+
+                    this.stickyObserver.observe(sentinel);
+                }
+            });
         },
     }
 };

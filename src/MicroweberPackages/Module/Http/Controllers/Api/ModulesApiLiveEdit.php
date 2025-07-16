@@ -103,6 +103,7 @@ class ModulesApiLiveEdit extends Controller
 
             $module_layouts_skins = app()->microweber->getTemplates('layouts', $active_site_template);
 
+
             //    $dynamic_layouts = mw()->layouts_manager->get_all('no_cache=1&get_dynamic_layouts=1');
             //$module_layouts_skins = mw()->module_manager->templates('layouts', false, false, $template_dir);
             $dynamic_layouts = false;
@@ -518,12 +519,19 @@ class ModulesApiLiveEdit extends Controller
                                 continue;
                             }
                         }
-                        if (!isset($dynamic_layout['screenshot'])) {
-                            if (isset($dynamic_layout['screenshot_file']) and ($dynamic_layout['screenshot_file']) and is_file($dynamic_layout['screenshot_file'])) {
+
+                       // if (!isset($dynamic_layout['screenshot'])) {
+                            if (isset($dynamic_layout['screenshot_public_url']) and ($dynamic_layout['screenshot_public_url'])) {
+
+
+//
 //                                $dynamic_layout['screenshot'] = thumbnail($dynamic_layout['screenshot_file'], 1024);
                                 $dynamic_layout['screenshot'] = $dynamic_layout['screenshot_public_url'];
+
+
+
                             }
-                        }
+                      //  }
                         $moduleListJson['layouts'][] = [
                             // 'group' => 'layouts',
                             'template' => $dynamic_layout['layout_file'],

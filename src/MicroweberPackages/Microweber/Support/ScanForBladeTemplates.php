@@ -205,23 +205,6 @@ class ScanForBladeTemplates
                 }
 
 
-                // scan for modules <module type='example'> tags  and get the type
-
-                $foundModules = [];
-                if (preg_match_all('/<module\s+type=[\'"]([^\'"]+)[\'"][^>]*>/i', $fin, $matches)) {
-                    if (isset($matches[1]) && is_array($matches[1]) && !empty($matches[1])) {
-                        foreach ($matches[1] as $moduleType) {
-                            $moduleType = trim($moduleType);
-                            if (!empty($moduleType)) {
-                                $foundModules[] = $moduleType;
-                            }
-                        }
-                    }
-                    if ($foundModules) {
-                        $foundModules = array_unique($foundModules);
-                        $to_return_temp['found_modules'] = $foundModules;
-                    }
-                }
 
 
                 $layout_file = $filename;
@@ -359,6 +342,37 @@ class ScanForBladeTemplates
 //                        if (isset($to_return_temp['screenshot_file'])) {
 //                            $to_return_temp['screenshot'] = $this->app->url_manager->link_to_file($to_return_temp['screenshot_file']);
 //                        }
+
+
+
+
+
+
+
+
+              // scan for modules <module type='example'> tags  and get the type
+
+                $foundModulesInSkin = [];
+                if (preg_match_all('/<module\s+type=[\'"]([^\'"]+)[\'"][^>]*>/i', $fin, $matchesfoundModulesInSkin)) {
+                    if (isset($matchesfoundModulesInSkin[1]) && is_array($matchesfoundModulesInSkin[1]) && !empty($matchesfoundModulesInSkin[1])) {
+                        foreach ($matchesfoundModulesInSkin[1] as $moduleTypeInSkin) {
+                            $moduleTypeInSkin = trim($moduleTypeInSkin);
+                            if (!empty($moduleTypeInSkin)) {
+                                $foundModulesInSkin[] = $moduleTypeInSkin;
+                            }
+                        }
+                    }
+                    if ($foundModulesInSkin) {
+                        $foundModulesInSkin = array_unique($foundModulesInSkin);
+                        $to_return_temp['found_modules'] = $foundModulesInSkin;
+                    }
+                }
+
+
+
+
+
+
 
                 $configs[] = $to_return_temp;
             }

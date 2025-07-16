@@ -334,6 +334,11 @@ export class LayoutHandleContent {
                     nodes: []
                 },
                 {
+                    name: 'layouts$teleportmenu',
+                    nodes: [],
+                    holder: true
+                },
+                {
                     name: 'tail',
                     nodes: tail
                 }

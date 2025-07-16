@@ -148,6 +148,8 @@ export const HandleMenu = function(options) {
 
     }
     this.setMenu = function(name, nodes) {
+
+
         let found = false;
         for (let i = 0; i < this.options.menus.length; i++) {
             if(this.options.menus[i].name === name){
@@ -181,6 +183,7 @@ export const HandleMenu = function(options) {
             return;
         }
 
+
         menu.filter(itm => !!itm).forEach(function (itm){
             if(itm.nodes && itm.nodes.forEach) {
                 var holder = btnHolder;
@@ -192,6 +195,10 @@ export const HandleMenu = function(options) {
                         }
                     });
                     btnHolder.append(holder);
+                }
+
+                if(itm.name.indexOf('$teleport') !== -1) {
+                    mw.top().app.dispatch(itm.name, holder)
                 }
 
                 itm.nodes.forEach(function (btn){

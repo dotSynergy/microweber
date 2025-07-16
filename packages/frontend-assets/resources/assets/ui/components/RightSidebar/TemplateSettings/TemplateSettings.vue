@@ -230,12 +230,12 @@
     margin: -16px;
 }
 
-.template-settings-where-to-edit-wrapper.is-sticky {
+.template-settings-where-to-edit-wrappe::stuck {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid #e0e0e0;
 }
 
-.template-settings-where-to-edit-wrapper.is-sticky .live-edit-label {
+.template-settings-where-to-edit-wrappe::stuck .live-edit-label {
     display: none;
 }
 
@@ -244,7 +244,7 @@
     overflow: hidden;
 }
 
-.template-settings-where-to-edit-wrapper.is-sticky .edit-mode-text {
+.template-settings-where-to-edit-wrappe::stuck .edit-mode-text {
     opacity: 0;
     max-height: 0;
     margin-bottom: 0;
@@ -254,7 +254,7 @@
     transition: all 0.3s ease;
 }
 
-.template-settings-where-to-edit-wrapper.is-sticky .edit-mode-option {
+.template-settings-where-to-edit-wrappe::stuck .edit-mode-option {
     margin-bottom: 0;
 }
 </style>

@@ -127,7 +127,7 @@
                                             <!-- Module icons overlay for masonry view -->
                                             <div
                                                 v-if="item.found_modules && item.found_modules.length > 0 && hasModulesToShow(item)"
-                                                class="layout-modules-overlay">
+                                                class="layout-modules-overlay d-none">
                                                 <div v-show="" class="modules-icons-container">
                                                 <span
                                                     v-for="moduleName in item.found_modules"
@@ -174,7 +174,7 @@
                                         <!-- Module icons overlay for list view -->
                                         <div
                                             v-if="item.found_modules && item.found_modules.length > 0 && hasModulesToShow(item)"
-                                            class="layout-modules-overlay">
+                                            class="layout-modules-overlay d-none">
                                             <div class="modules-icons-container">
                                             <span
                                                 v-for="moduleName in item.found_modules"

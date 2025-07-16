@@ -43,8 +43,19 @@ $limit = 40;
             counter++;
         });
 
-        // Manually trigger the afterChange event for the first slide
-        slider.trigger('afterChange', [slider, 0]);
+
+
+        try {
+
+            // Manually trigger the afterChange event for the first slide
+            slider.trigger('afterChange', [slider, 0]);
+        } catch (e) {
+
+        }
+
+
+
+
     });
 </script>
 

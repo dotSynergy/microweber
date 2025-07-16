@@ -97,6 +97,7 @@ export default {
             selectedStylePackProperties: null,
             loadingStylePackIndex: null,
             lastContentHash: null,
+            activeStylePackIndex: null, // Add this to track active style pack
         }
     },
     watch: {
@@ -268,6 +269,9 @@ export default {
         applyStylePack(stylePack, stylePackIndex = null) {
             // Set loading state for this style pack
             this.loadingStylePackIndex = stylePackIndex;
+
+            // Set active style pack index
+            this.activeStylePackIndex = stylePackIndex;
 
             // Update iframe to show loading state
             this.updateIframeContent();
@@ -838,6 +842,11 @@ export default {
             // Add loading class if this is the currently loading style pack
             if (this.loadingStylePackIndex === index) {
                 stylePackDiv.classList.add('style-pack-loading-item');
+            }
+
+            // Add active class if this is the currently active style pack
+            if (this.activeStylePackIndex === index) {
+                stylePackDiv.classList.add('active');
             }
 
             stylePackDiv.onclick = () => this.applyStylePack(stylePack, index);

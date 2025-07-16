@@ -30,7 +30,6 @@
             <!-- Choose where to edit toggle -->
             <div v-if="hasStyleSettings" class="form-control-live-edit-label-wrapper template-settings-where-to-edit-wrapper" :class="{ 'is-sticky': isEditModeToggleSticky }"
                  v-show="!isSingleSettingMode">
-                <label class="live-edit-label mb-3">Choose where to edit</label>
 
                 <div class="edit-mode-toggle-container">
                     <div

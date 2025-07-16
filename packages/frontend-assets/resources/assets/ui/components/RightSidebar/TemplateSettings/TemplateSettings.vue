@@ -39,7 +39,7 @@
                         @click="handleApplyModeChange('template')"
                     >
                         <div class="edit-mode-icon d-flex align-items-center gap-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="currentColor"><path d="M120-120q-33 0-56.5-23.5T40-200v-80q0-33 23.5-56.5T120-360h240q33 0 56.5 23.5T440-280v80q0 33-23.5 56.5T360-120H120Zm480 0q-33 0-56.5-23.5T520-200v-560q0-33 23.5-56.5T600-840h240q33 0 56.5 23.5T920-760v560q0 33-23.5 56.5T840-120H600Zm-480-80h240v-80H120v80Zm480 0h240v-560H600v560Zm120-40q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240ZM120-440q-33 0-56.5-23.5T40-520v-240q0-33 23.5-56.5T120-840h240q33 0 56.5 23.5T440-760v240q0 33-23.5 56.5T360-440H120Zm160-200q17 0 28.5-11.5T320-680q0-17-11.5-28.5T280-720q-17 0-28.5 11.5T240-680q0 17 11.5 28.5T280-640ZM120-533l80-107 90 120h70v-240H120v227Zm120 293Zm480-240ZM240-640Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M120-120q-33 0-56.5-23.5T40-200v-80q0-33 23.5-56.5T120-360h240q33 0 56.5 23.5T440-280v80q0 33-23.5 56.5T360-120H120Zm480 0q-33 0-56.5-23.5T520-200v-560q0-33 23.5-56.5T600-840h240q33 0 56.5 23.5T920-760v560q0 33-23.5 56.5T840-120H600Zm-480-80h240v-80H120v80Zm480 0h240v-560H600v560Zm120-40q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240ZM120-440q-33 0-56.5-23.5T40-520v-240q0-33 23.5-56.5T120-840h240q33 0 56.5 23.5T440-760v240q0 33-23.5 56.5T360-440H120Zm160-200q17 0 28.5-11.5T320-680q0-17-11.5-28.5T280-720q-17 0-28.5 11.5T240-680q0 17 11.5 28.5T280-640ZM120-533l80-107 90 120h70v-240H120v227Zm120 293Zm480-240ZM240-640Z"/></svg>
                             <span class="live-edit-label mb-0">Template</span>
                         </div>
                         <div class="edit-mode-text" v-show="!isEditModeToggleSticky">
@@ -53,7 +53,7 @@
                         @click="handleApplyModeChange('layout')"
                     >
                         <div class="edit-mode-icon d-flex align-items-center gap-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" width="24px" fill="currentColor"><path d="M240-280h280v-80H240v80Zm400 0h80v-400h-80v400ZM240-440h280v-80H240v80Zm0-160h280v-80H240v80Zm-80 480q-33 0-56.5-23.5T80-200v-560q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v560q0 33-23.5 56.5T800-120H160Zm0-80h640v-560H160v560Zm0 0v-560 560Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-280h280v-80H240v80Zm400 0h80v-400h-80v400ZM240-440h280v-80H240v80Zm0-160h280v-80H240v80Zm-80 480q-33 0-56.5-23.5T80-200v-560q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v560q0 33-23.5 56.5T800-120H160Zm0-80h640v-560H160v560Zm0 0v-560 560Z"/></svg>
                             <span class="live-edit-label mb-0">Layout</span>
                         </div>
                         <div class="edit-mode-text" v-show="!isEditModeToggleSticky">
@@ -319,7 +319,8 @@ export default {
             hasActiveStylePackOpener: false,
             nestedItems: [], // Array to store references to nested settings items
             isEditModeToggleSticky: false,
-            stickyObserver: null,
+            scrollListener: null,
+            originalOffsetTop: null,
         };
     },computed: {
         displayedStyleSettingVars() {
@@ -464,8 +465,11 @@ export default {
                 window.mw.top().app.__vueTemplateSettingsInstance = null; // Clear instance reference
             }
         }
-        if (this.stickyObserver) {
-            this.stickyObserver.disconnect();
+        if (this.scrollListener) {
+            const templateSettingsWrapper = document.querySelector('.template-settings-wrapper');
+            if (templateSettingsWrapper) {
+                templateSettingsWrapper.removeEventListener('scroll', this.scrollListener);
+            }
         }
     }, watch: {        applyMode(newMode, oldMode) {
             if (newMode !== oldMode) {
@@ -1200,7 +1204,7 @@ export default {
         openSelectedLayoutSettings() {
             if (!this.activeLayoutId || this.activeLayoutId === 'None') return;
 
-            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getDocument().getElementById(this.activeLayoutId);
+            const firstLayoutElement = window.mw?.top()?.app?.canvas?.getElementById(this.activeLayoutId);
             if (firstLayoutElement) {
                 window.mw.top().app.editor.dispatch('onLayoutSettingsRequest', firstLayoutElement);
             }
@@ -1573,39 +1577,30 @@ export default {
 
             console.log('Apply mode changed to:', this.applyMode);
         },
-        setupStickyObserver() {
+        setupStickyDetection() {
             this.$nextTick(() => {
                 const whereToEditWrapper = document.querySelector('.template-settings-where-to-edit-wrapper');
                 const templateSettingsWrapper = document.querySelector('.template-settings-wrapper');
 
                 if (whereToEditWrapper && templateSettingsWrapper) {
-                    // Create a sentinel element to detect when container becomes sticky
-                    const sentinel = document.createElement('div');
-                    sentinel.style.position = 'absolute';
-                    sentinel.style.top = '0';
-                    sentinel.style.height = '1px';
-                    sentinel.style.width = '1px';
-                    sentinel.style.pointerEvents = 'none';
+                    // Store the original offset top position
+                    this.originalOffsetTop = whereToEditWrapper.offsetTop;
 
-                    // Insert sentinel before the sticky container
-                    whereToEditWrapper.parentNode.insertBefore(sentinel, whereToEditWrapper);
+                    // Create scroll listener
+                    this.scrollListener = () => {
+                        const scrollTop = templateSettingsWrapper.scrollTop;
+                        const isSticky = scrollTop >= this.originalOffsetTop;
 
-                    // Create intersection observer with the template-settings-wrapper as root
-                    this.stickyObserver = new IntersectionObserver(
-                        (entries) => {
-                            entries.forEach((entry) => {
-                                // When sentinel is not intersecting, container is sticky
-                                this.isEditModeToggleSticky = !entry.isIntersecting;
-                            });
-                        },
-                        {
-                            root: templateSettingsWrapper,
-                            rootMargin: '0px',
-                            threshold: 0
+                        if (this.isEditModeToggleSticky !== isSticky) {
+                            this.isEditModeToggleSticky = isSticky;
                         }
-                    );
+                    };
 
-                    this.stickyObserver.observe(sentinel);
+                    // Add scroll listener to the template settings wrapper
+                    templateSettingsWrapper.addEventListener('scroll', this.scrollListener);
+
+                    // Initial check
+                    this.scrollListener();
                 }
             });
         },

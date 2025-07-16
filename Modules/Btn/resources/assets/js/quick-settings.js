@@ -31,7 +31,7 @@ let moduleButtonSettings = [
                 name: 'leftAlign',
                 nodes: [
                     {
-                        title: 'leftAlign',
+                        title: 'Align left',
                         text: '',
                         icon: alignBtnLeftIcon,
                         action: function (el) {
@@ -44,7 +44,7 @@ let moduleButtonSettings = [
                 name: 'centerAlign',
                 nodes: [
                     {
-                        title: 'centerAlign',
+                        title: 'Align center',
                         text: '',
                         icon: alignBtnCenterIcon,
                         action: function (el) {
@@ -57,7 +57,7 @@ let moduleButtonSettings = [
                 name: 'rightAlign',
                 nodes: [
                     {
-                        title: 'rightAlign',
+                        title: 'Align right',
                         text: '',
                         icon: alignBtnRightIcon,
                         action: function (el) {

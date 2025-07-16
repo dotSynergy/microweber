@@ -261,12 +261,10 @@
 /* Module icons overlay - positioned in top left corner */
 .layout-modules-overlay {
     position: absolute;
-    bottom: 8px;
-    left: 8px;
+    top: 4px;
+    left: 4px;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.8);
     border-radius: 6px;
-    padding: 4px 6px;
     backdrop-filter: blur(4px);
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -286,7 +284,7 @@
 .modules-icons-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 2px;
     align-items: center;
 }
 
@@ -308,8 +306,8 @@
 }
 
 .module-icon {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;

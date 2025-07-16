@@ -6,7 +6,7 @@ class ScanForBladeTemplates
 {
 
 
-    public function scan($templatesNamespace,$moduleType=false,$activeSiteTemplate=false, $activeSiteTemplateLowerName=false)
+    public function scan($templatesNamespace, $moduleType = false, $activeSiteTemplate = false, $activeSiteTemplateLowerName = false)
     {
 
         $viewsHints = app('view')->getFinder()->getHints();
@@ -30,13 +30,11 @@ class ScanForBladeTemplates
                         $folder = $hint . '/' . $templatesNamespaceSubfolder;
                     }
 
-                    $scanTemplatesResult = $this->scanFolder($folder, $templatesNamespace,$moduleType, $activeSiteTemplateLowerName);
+                    $scanTemplatesResult = $this->scanFolder($folder, $templatesNamespace, $moduleType, $activeSiteTemplateLowerName);
 
                     if ($scanTemplatesResult) {
                         $templatesForModule = array_merge($templatesForModule, $scanTemplatesResult);
                     }
-
-
 
 
                 }
@@ -45,7 +43,7 @@ class ScanForBladeTemplates
         return $templatesForModule;
     }
 
-    public function scanFolder($folder, $templatesNamespace,$moduleType=false, $activeSiteTemplateLowerName=false)
+    public function scanFolder($folder, $templatesNamespace, $moduleType = false, $activeSiteTemplateLowerName = false)
     {
 
         //legacy code from the old function, must be refactored
@@ -53,7 +51,7 @@ class ScanForBladeTemplates
         $folder = normalize_path($folder, false);
         $files = glob($folder . '/' . $glob_patern);
 
-        if(!is_dir($folder)){
+        if (!is_dir($folder)) {
             return [];
         }
 
@@ -69,7 +67,7 @@ class ScanForBladeTemplates
             }
         }
 
-        if(!$files){
+        if (!$files) {
             return [];
         }
 
@@ -205,6 +203,26 @@ class ScanForBladeTemplates
                     $result = str_ireplace('tag:', '', $result);
                     $to_return_temp['tag'] = trim($result);
                 }
+
+
+                // scan for modules <module type='example'> tags  and get the type
+
+                $foundModules = [];
+                if (preg_match_all('/<module\s+type=[\'"]([^\'"]+)[\'"][^>]*>/i', $fin, $matches)) {
+                    if (isset($matches[1]) && is_array($matches[1]) && !empty($matches[1])) {
+                        foreach ($matches[1] as $moduleType) {
+                            $moduleType = trim($moduleType);
+                            if (!empty($moduleType)) {
+                                $foundModules[] = $moduleType;
+                            }
+                        }
+                    }
+                    if ($foundModules) {
+                        $to_return_temp['found_modules'] = $foundModules;
+                    }
+                }
+
+
                 $layout_file = $filename;
 
                 if (isset($template_dirs) and !empty($template_dirs)) {
@@ -273,32 +291,31 @@ class ScanForBladeTemplates
 
                 $screenshotType = 'modules';
                 if (isset($to_return_temp['type']) && $to_return_temp['type'] == 'layout') {
-                   $screenshotType = 'layouts';
+                    $screenshotType = 'layouts';
                 }
 
-                if($moduleType){
+                if ($moduleType) {
                     $screenshotType = $moduleType;
                 }
 
 
-
-                $img_name = $to_return_temp['layout_file'].'.png';
+                $img_name = $to_return_temp['layout_file'] . '.png';
                 $img_name = str_replace('/', '.', $img_name);
                 $img_name = str_replace('\\', '.', $img_name);
-                $img_path_modules =  $img_path = 'modules/'. $screenshotType.'/templates/'.$img_name;
+                $img_path_modules = $img_path = 'modules/' . $screenshotType . '/templates/' . $img_name;
 
-                if($activeSiteTemplateLowerName){
-                    $img_path = 'templates/'.$activeSiteTemplateLowerName.'/img/screenshots/modules/'. $screenshotType.'/templates/'. $img_name;
+                if ($activeSiteTemplateLowerName) {
+                    $img_path = 'templates/' . $activeSiteTemplateLowerName . '/img/screenshots/modules/' . $screenshotType . '/templates/' . $img_name;
                 }
 
 
-                $img_path_for_update_screenshot =$to_return_temp['directory'] . $img_name;
-                if($activeSiteTemplateLowerName){
+                $img_path_for_update_screenshot = $to_return_temp['directory'] . $img_name;
+                if ($activeSiteTemplateLowerName) {
                     $checkIfActiveSiteTemplate = app()->templates->find($activeSiteTemplateLowerName);
 
                     $checkIfActiveSiteTemplatePath = $checkIfActiveSiteTemplate->get('path');
 
-                    $img_path_for_update_screenshot =$checkIfActiveSiteTemplatePath. '/resources/assets/img/screenshots/' . $img_path_modules;
+                    $img_path_for_update_screenshot = $checkIfActiveSiteTemplatePath . '/resources/assets/img/screenshots/' . $img_path_modules;
 
                     //  app()->laravel_templates->setActiveTemplate($activeSiteTemplateLowerName);
                 }
@@ -307,14 +324,14 @@ class ScanForBladeTemplates
                 $img_path_for_update_screenshot = str_replace('//', '/', $img_path_for_update_screenshot);
                 $img_path_for_update_screenshot = str_replace('resources/views/', 'resources/assets/img/screenshots/', $img_path_for_update_screenshot);
 
-                $path =$img_path;
-                 $screenshotPublic = asset($path);
-                 $screen2 = public_path($path);
+                $path = $img_path;
+                $screenshotPublic = asset($path);
+                $screen2 = public_path($path);
 
                 $to_return_temp['screenshot_public_url'] = $screenshotPublic;
                 $to_return_temp['screenshot_path_lookup'] = $screen2;
                 $to_return_temp['screenshot_path_lookup_public'] = $screen2;
-                $to_return_temp['screenshot_path_for_update_screenshot'] =  $img_path_for_update_screenshot;
+                $to_return_temp['screenshot_path_for_update_screenshot'] = $img_path_for_update_screenshot;
 
 
                 if (is_file($skin_settings_json)) {
@@ -326,15 +343,15 @@ class ScanForBladeTemplates
                     $to_return_temp['screenshot_file'] = $screen2;
                 }
 
-              /*  elseif (is_file($screen_jpg2)) {
-                    $to_return_temp['screenshot_file'] = $screen_jpg2;
-                } elseif (is_file($screen_jpg)) {
-                    $to_return_temp['screenshot_file'] = $screen_jpg;
-                } elseif (is_file($screen)) {
-                    $to_return_temp['screenshot_file'] = $screen;
-                }*/
+                /*  elseif (is_file($screen_jpg2)) {
+                      $to_return_temp['screenshot_file'] = $screen_jpg2;
+                  } elseif (is_file($screen_jpg)) {
+                      $to_return_temp['screenshot_file'] = $screen_jpg;
+                  } elseif (is_file($screen)) {
+                      $to_return_temp['screenshot_file'] = $screen;
+                  }*/
 
-                if(isset($to_return_temp['screenshot_file'])){
+                if (isset($to_return_temp['screenshot_file'])) {
                     $to_return_temp['screenshot_file'] = normalize_path($to_return_temp['screenshot_file'], false);
                 }
 

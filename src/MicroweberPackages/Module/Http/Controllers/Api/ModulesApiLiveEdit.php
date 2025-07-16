@@ -532,6 +532,7 @@ class ModulesApiLiveEdit extends Controller
                             'icon' => $dynamic_layout['icon'],
                             'categories' => isset($dynamic_layout['categories']) ? $dynamic_layout['categories'] : '',
                             'screenshot' => isset($dynamic_layout['screenshot']) ? $dynamic_layout['screenshot'] : '',
+                            'found_modules' => $dynamic_layout['found_modules'] ?? false,
                             'description_raw' => $dynamic_layout['description'],
                             'description' => addslashes($dynamic_layout['description']),
                             'title' => titlelize($dynamic_layout['name']),
@@ -629,6 +630,7 @@ class ModulesApiLiveEdit extends Controller
                             'description' => $module_item['description'],
                             'settings' => $module_item['settings'],
                             'as_element' => $module_item['as_element'] ?? false,
+                            'found_modules' => $module_item['found_modules'] ?? false,
                             'keywords' => $module_item['keywords'] ?? $module_item['name'],
                         ];
 

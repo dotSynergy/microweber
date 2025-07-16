@@ -264,9 +264,7 @@
     top: 8px;
     left: 8px;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.8);
     border-radius: 6px;
-    padding: 4px 6px;
     backdrop-filter: blur(4px);
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -286,7 +284,7 @@
 .modules-icons-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 2px;
     align-items: center;
 }
 
@@ -308,8 +306,8 @@
 }
 
 .module-icon {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -322,69 +320,11 @@
     fill: currentColor;
 }
 
-/* Masonry specific positioning */
-.modules-list-block-item-masonry .layout-modules-overlay {
-    top: 6px;
-    left: 6px;
-    background: rgba(0, 0, 0, 0.7);
-}
 
-.modules-list-block-item-masonry .module-icon-wrapper {
-    width: 18px;
-    height: 18px;
-    background: rgba(255, 255, 255, 0.95);
-}
 
-.modules-list-block-item-masonry .module-icon {
-    width: 12px;
-    height: 12px;
-}
-
-/* List view specific positioning */
-.modules-list-block-item-picture {
-    position: relative;
-}
-
-.modules-list-block-item-picture .layout-modules-overlay {
-    top: 6px;
-    left: 6px;
-    background: rgba(0, 0, 0, 0.75);
-}
-
-/* Dark theme adjustments */
-.dark .layout-modules-overlay {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.dark .module-icon-wrapper {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.dark .module-icon-wrapper:hover {
-    background: rgba(0, 0, 0, 0.9);
-}
 
 .dark .module-icon {
     color: #fff;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .layout-modules-overlay {
-        top: 4px;
-        left: 4px;
-        padding: 2px 4px;
-    }
-
-    .module-icon-wrapper {
-        width: 16px;
-        height: 16px;
-    }
-
-    .module-icon {
-        width: 10px;
-        height: 10px;
-    }
 }
 
 /* Ensure icons don't interfere with click events */
@@ -608,7 +548,7 @@ export default {
                     }
                 }
             }
-            
+
             return false;
         },
 

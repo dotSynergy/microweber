@@ -261,8 +261,8 @@
 /* Module icons overlay - positioned in top left corner */
 .layout-modules-overlay {
     position: absolute;
-    top: 4px;
-    left: 4px;
+    top: 8px;
+    left: 8px;
     z-index: 10;
     border-radius: 6px;
     backdrop-filter: blur(4px);

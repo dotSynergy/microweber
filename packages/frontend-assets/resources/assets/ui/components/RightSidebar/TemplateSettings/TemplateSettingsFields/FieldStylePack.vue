@@ -1111,10 +1111,16 @@ export default {
                     padding: 27px 22px 22px;
                     border-radius: 8px;
                     transition: all 0.2s;
-                    border: 1px solid var(--border-color);
+                    border: 4px solid transparent;
                     margin-bottom: 10px;
                     background-color: var(--background-color);
                     zoom: 87%;
+
+                    &:hover, &:focus, &:active, &.active {
+                        transform: scale(1.0);
+                        border: 4px solid gold;
+                        box-shadow: 0 2px 4px var(--shadow-color) !important;
+                    }
                 }
 
                 .style-pack-item:hover {

@@ -97,6 +97,7 @@ export default {
             selectedStylePackProperties: null,
             loadingStylePackIndex: null,
             lastContentHash: null,
+            activeStylePackIndex: null, // Add this to track active style pack
         }
     },
     watch: {
@@ -268,6 +269,9 @@ export default {
         applyStylePack(stylePack, stylePackIndex = null) {
             // Set loading state for this style pack
             this.loadingStylePackIndex = stylePackIndex;
+
+            // Set active style pack index
+            this.activeStylePackIndex = stylePackIndex;
 
             // Update iframe to show loading state
             this.updateIframeContent();
@@ -840,6 +844,11 @@ export default {
                 stylePackDiv.classList.add('style-pack-loading-item');
             }
 
+            // Add active class if this is the currently active style pack
+            if (this.activeStylePackIndex === index) {
+                stylePackDiv.classList.add('active');
+            }
+
             stylePackDiv.onclick = () => this.applyStylePack(stylePack, index);
 
             const innerDiv = iframeDoc.createElement('div');
@@ -1111,10 +1120,16 @@ export default {
                     padding: 27px 22px 22px;
                     border-radius: 8px;
                     transition: all 0.2s;
-                    border: 1px solid var(--border-color);
+                    border: 4px solid transparent;
                     margin-bottom: 10px;
                     background-color: var(--background-color);
                     zoom: 87%;
+
+                    &:hover, &:focus, &:active, &.active {
+                        transform: scale(1.0);
+                        border: 4px solid gold;
+                        box-shadow: 0 2px 4px var(--shadow-color) !important;
+                    }
                 }
 
                 .style-pack-item:hover {

@@ -138,6 +138,18 @@
 
     <script>
         function filterTemplates(category) {
+            // Track category filter usage
+            if (typeof posthog !== "undefined") {
+                posthog.capture('template_category_filtered', {
+                    category: category || 'all',
+                    page: 'setup_wizard'
+                });
+            }
+
+            if (typeof clarity !== "undefined") {
+                clarity('set', 'template_category_filtered', category || 'all');
+            }
+
             // Update active category in sidebar
             document.querySelectorAll('.category-filter').forEach(button => {
                 if (button.dataset.category === category) {
@@ -172,6 +184,18 @@
         }
 
         function installTemplate(template) {
+            // Track template selection
+            if (typeof posthog !== "undefined") {
+                posthog.capture('template_selected', {
+                    template: template,
+                    page: 'setup_wizard'
+                });
+            }
+
+            if (typeof clarity !== "undefined") {
+                clarity('set', 'template_selected', template);
+            }
+
             // Show loading overlay
             const loadingOverlay = document.getElementById('form-loading-overlay');
             const loadingText = document.getElementById('installing_template_text');
@@ -217,6 +241,15 @@
                     loadingOverlay.classList.add('hidden');
 
                     if (data.error) {
+                        // Track template installation error
+                        if (typeof posthog !== "undefined") {
+                            posthog.capture('template_installation_error', {
+                                template: template,
+                                error: data.error,
+                                page: 'setup_wizard'
+                            });
+                        }
+
                         // Re-enable buttons on error
                         allButtons.forEach(btn => {
                             btn.disabled = false;
@@ -225,6 +258,18 @@
 
                         mw.notification.error(data.error);
                     } else if (data.success) {
+                        // Track successful template installation
+                        if (typeof posthog !== "undefined") {
+                            posthog.capture('template_installed', {
+                                template: template,
+                                page: 'setup_wizard'
+                            });
+                        }
+
+                        if (typeof clarity !== "undefined") {
+                            clarity('set', 'template_installed', template);
+                        }
+
                         mw.notification.success(data.success);
 
 
@@ -250,6 +295,15 @@
                 .catch(error => {
                     clearInterval(messageInterval); // Stop rotating messages
                     loadingOverlay.classList.add('hidden');
+
+                    // Track template installation error
+                    if (typeof posthog !== "undefined") {
+                        posthog.capture('template_installation_error', {
+                            template: template,
+                            error: error.toString(),
+                            page: 'setup_wizard'
+                        });
+                    }
 
                     // Re-enable buttons on error
                     allButtons.forEach(btn => {

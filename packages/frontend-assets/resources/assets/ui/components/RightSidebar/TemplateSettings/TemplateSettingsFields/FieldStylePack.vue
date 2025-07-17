@@ -1214,7 +1214,7 @@ export default {
                     display: flex;
                     gap: 0;
                     flex-wrap: wrap;
-                    zoom: 0.4;
+                    zoom: 0.6;
                 }
 
                 .style-preview-element {

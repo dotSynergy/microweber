@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: center;
     margin: 0 auto !important;
-    padding: 0 !important;
+    gap: 4px;
     user-select: none;
 
     svg {

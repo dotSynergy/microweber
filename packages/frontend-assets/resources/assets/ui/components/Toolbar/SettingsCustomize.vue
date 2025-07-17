@@ -357,10 +357,10 @@ export default {
                 // Check if click is outside the popup specifically, not the entire component
                 const popupElement = this.$el.querySelector('.advanced-popup');
                 const advancedButton = this.$el.querySelector('.live-edit-toolbar-button-advanced');
-                
+
                 // Close if click is outside popup and not on the advanced button
-                if (popupElement && 
-                    !popupElement.contains(event.target) && 
+                if (popupElement &&
+                    !popupElement.contains(event.target) &&
                     !advancedButton.contains(event.target)) {
                     this.advanced = false;
                     this.$refs.moreSettingsDropdown?.classList.remove('show');
@@ -424,7 +424,16 @@ export default {
         document.removeEventListener('click', this.handleClickOutside);
     },
     mounted() {
+        this.emitter.on("live-edit-ui-show", () => {
+            this.hideMoreSettingsDropdown();
+        });
+        this.emitter.on("show-content-reset", () => {
+            this.hideMoreSettingsDropdown();
+        });
 
+        this.emitter.on("show-code-editor", () => {
+            this.hideMoreSettingsDropdown();
+        });
 
         window.mw.app.canvas.on('liveEditCanvasLoaded', () => {
             this.hideMoreSettingsDropdown();
@@ -451,6 +460,10 @@ export default {
 
         mw.top().app.on('mw.open-report-issue-modal', () => {
             this.openReportIssueModal();
+        });
+
+        mw.top().app.on('showSetupWizard', () => {
+            this.hideMoreSettingsDropdown();
         });
 
         mw.app.canvas.on('canvasDocumentClick', event => {

@@ -181,6 +181,10 @@ export default {
             document.dispatchEvent(event);
         },
         openContentResetContent: function () {
+
+
+            this.emitter.emit('show-content-reset');
+
             var moduleType = 'editor/reset_content';
             var attrsForSettings = {};
 

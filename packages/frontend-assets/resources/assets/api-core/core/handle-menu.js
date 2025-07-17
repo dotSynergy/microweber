@@ -241,11 +241,14 @@ export const HandleMenu = function(options) {
         }
 
         if(conf.title) {
-            Tooltip(btnContent, conf.title);
+            const buildTitle = () => {
+                return (typeof conf.title === 'function' ? conf.title(conf, this.getTarget()) : conf.title) || '';
+            }
+            Tooltip(btnContent, buildTitle());
             var btnTitleConf = {
                 props: {
                     className: 'mw-le-handle-menu-button-content-title',
-                    innerHTML: (typeof conf.title === 'function' ? conf.title(conf, this.getTarget()) : conf.title) || '',
+                    innerHTML: buildTitle(),
                 },
 
             };

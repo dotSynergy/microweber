@@ -15,7 +15,7 @@ let moduleMenuQickSettings = [
     //
     //         // mw.app.liveEdit.handle.moduleSettings.openModule({
     //         //     id: moduleId,
-    //         //     active_tab: 'Layout settings'
+    //         //     active_tab: 'Layout Settings'
     //         // });
     //     }
     // },

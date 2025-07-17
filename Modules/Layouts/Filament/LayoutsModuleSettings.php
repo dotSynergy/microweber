@@ -24,7 +24,7 @@ class LayoutsModuleSettings extends LiveEditModuleSettings
         $optionGroup = $this->getOptionGroup();
         return $form
             ->schema([
-                Tabs::make('Layout settings')
+                Tabs::make('Layout Settings')
                     ->tabs([
                         Tabs\Tab::make('Layout Settings')
                             ->schema([

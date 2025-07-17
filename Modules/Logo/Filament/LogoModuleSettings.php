@@ -8,6 +8,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
+use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
 
@@ -38,7 +39,7 @@ class LogoModuleSettings extends LiveEditModuleSettings
                                     ->label('Logo Text')
                                     ->helperText('This logo text will appear when image not applied')
                                     ->live(),
-                                ColorPicker::make('options.text_color')
+                                MwColorPicker::make('options.text_color')
                                     ->label('Text Color')
                                     ->live()
                                     ->rgba(),

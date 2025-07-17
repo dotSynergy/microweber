@@ -138,7 +138,7 @@
                     :disabled="isAIProcessing"
                 >
                     <span v-if="isAIProcessing">AI Processing...</span>
-                    <span v-else>Next</span>
+                    <span v-else>{{ getNextButtonText() }}</span>
                 </button>
                 <button
                     v-else
@@ -578,6 +578,24 @@ export default {
     },
 
     methods: {
+        getNextButtonText() {
+            if (this.currentStep < this.steps.length - 1) {
+                const nextStep = this.steps[this.currentStep + 1];
+                switch (nextStep.key) {
+                    case 'styles':
+                        return 'Select Styles';
+                    case 'colors':
+                        return 'Select Colors';
+                    case 'buttons':
+                        return 'Select Buttons';
+                    case 'fonts':
+                        return 'Select Fonts';
+                    default:
+                        return 'Next';
+                }
+            }
+            return 'Next';
+        },
 
 
         getQuickEdit(quickEditInstance) {

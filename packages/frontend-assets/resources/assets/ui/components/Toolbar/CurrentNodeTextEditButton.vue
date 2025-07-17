@@ -235,9 +235,7 @@ export default {
         getTextEditIcon() {
             // Try to get text edit icon from Microweber's icon service
             if (window.mw?.top()?.app?.iconService?.icon) {
-                const icon = window.mw.top().app.iconService.icon('text-edit') ||
-                    window.mw.top().app.iconService.icon('edit') ||
-                    window.mw.top().app.iconService.icon('pencil');
+                const icon =   window.mw.top().app.iconService.icon('edit');
 
                 if (icon) {
                     return icon;

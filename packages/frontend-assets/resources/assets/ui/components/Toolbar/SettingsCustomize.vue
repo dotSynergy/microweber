@@ -372,9 +372,10 @@
 
 
         <div>
-            <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
+<!--            <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
             <CurrentNodeModuleEditButton></CurrentNodeModuleEditButton>
-            <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>
+            <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>-->
+            <CurrentContextMenu></CurrentContextMenu>
         </div>
 
 
@@ -412,9 +413,10 @@
 
 import ToolsButtons from "../RightSidebar/ToolsButtons.vue";
 import ToolbarMulilanguageSelector from "./ToolbarMulilanguageSelector.vue";
-import CurrentLayoutSettingsButtons from "./CurrentLayoutSettingsButtons.vue";
-import CurrentNodeTextEditButton from "./CurrentNodeTextEditButton.vue";
-import CurrentNodeModuleEditButton from "./CurrentNodeModuleEditButton.vue";
+import CurrentLayoutSettingsButtons from "../ContextMenu/CurrentLayoutSettingsButtons.vue";
+import CurrentContextMenu from "../ContextMenu/CurrentContextMenu.vue";
+import CurrentNodeTextEditButton from "../ContextMenu/CurrentNodeTextEditButton.vue";
+import CurrentNodeModuleEditButton from "../ContextMenu/CurrentNodeModuleEditButton.vue";
 import CSSGUIService from "../../../api-core/services/services/css-gui.service.js";
 
 
@@ -422,6 +424,7 @@ export default {
     components: {
         ToolsButtons,
         ToolbarMulilanguageSelector,
+        CurrentContextMenu,
         CurrentNodeTextEditButton,
         CurrentNodeModuleEditButton,
         CurrentLayoutSettingsButtons,

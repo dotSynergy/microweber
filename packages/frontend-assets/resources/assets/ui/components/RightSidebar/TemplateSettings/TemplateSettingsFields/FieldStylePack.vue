@@ -1016,6 +1016,7 @@ export default {
             this.iframe = document.createElement('iframe');
             this.iframe.allowTransparency = true;
             // this.iframe.loading = 'lazy';
+            this.iframe.loading = 'eager';
             this.iframe.className = 'preview-iframe';
             this.iframe.style.width = '100%';
             this.iframe.style.height = '400px';

@@ -192,16 +192,6 @@
     color: #ffffff;
 }
 
-.tools-panel {
-    margin-top: 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding-top: 16px;
-}
-
-.dark .tools-panel {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .tools-panel ul {
     display: flex !important;
     flex-direction: column !important;
@@ -220,7 +210,7 @@
     align-items: center !important;
     justify-content: flex-start !important;
     width: 100% !important;
-    padding: 12px 16px !important;
+    padding: 14px 16px !important;
     border-radius: 10px !important;
     background: rgba(0, 0, 0, 0.03) !important;
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
@@ -232,6 +222,7 @@
     cursor: pointer !important;
     position: relative !important;
     overflow: hidden !important;
+    min-height: 48px !important;
 }
 
 .dark .tools-panel .mw-live-edit-advanced-settings-popup {
@@ -697,3 +688,4 @@ export default {
     }
 }
 </script>
+

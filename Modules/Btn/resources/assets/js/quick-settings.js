@@ -25,7 +25,7 @@ function getInitialAlignIcon(moduleId) {
 
 let moduleButtonSettings = [
 
-    {
+/*    {
         title: 'Button',
         titleVisible: true,
 
@@ -36,7 +36,7 @@ let moduleButtonSettings = [
         }, action: function (el) {
             window.mw.top().app.editor.dispatch('onModuleSettingsRequest', el);
         }
-    },
+    },*/
 
     {
 

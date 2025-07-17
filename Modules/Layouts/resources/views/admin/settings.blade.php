@@ -66,6 +66,27 @@
                         line-height: 12px;
                         text-align: center;
                     }
+
+                    .module-icon svg {
+                        width: 16px;
+                        height: 16px;
+                        fill: currentColor;
+                    }
+
+                    .module-icon img {
+                        width: 16px;
+                        height: 16px;
+                        object-fit: contain;
+                    }
+
+                    .current-template-modules-list .btn {
+                        transition: all 0.2s ease;
+                    }
+
+                    .current-template-modules-list .btn:hover {
+                        transform: translateY(-1px);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    }
                 </style>
 
                 <div>
@@ -157,8 +178,9 @@
                     <label class="current-template-modules-list-label live-edit-label mb-2">This layout contains these modules</label>
                     <div class="current-template-modules-list d-flex flex-wrap gap-2 ms-2">
                         <template x-for="module in modulesList" :key="module.moduleId">
-                            <a href="javascript:;" class="btn btn-outline-dark btn-sm"
+                            <a href="javascript:;" class="btn btn-outline-dark btn-sm d-flex align-items-center gap-1"
                                x-on:click="openModuleSettings(module.moduleId)">
+                                <span x-html="module.moduleIcon" class="module-icon" style="width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center;"></span>
                                 <span x-text="module.moduleTitle"></span>
                             </a>
                         </template>

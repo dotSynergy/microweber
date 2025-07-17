@@ -21,7 +21,7 @@ let moduleMenuQickSettings = [
     // },
     {
         title: 'Menu Settings',
-        titleVisible:true,
+   //     titleVisible:true,
 
         icon: function(module) {
             if (window.mw?.top()?.app?.modules) {

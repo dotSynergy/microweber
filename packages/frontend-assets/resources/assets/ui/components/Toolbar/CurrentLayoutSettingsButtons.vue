@@ -248,6 +248,13 @@ export default {
                 const moduleTitle = this.getModuleTitle(moduleElement, moduleType);
 
                 if (moduleType && this.isEditableModule(moduleType)) {
+                    // Special handling for background modules - only show if they have actual content
+                    if (moduleType.toLowerCase() === 'background') {
+                        if (!this.hasBackgroundContent(moduleElement)) {
+                            return; // Skip background modules without content
+                        }
+                    }
+
                     moduleData.push({
                         id: moduleId,
                         type: moduleType,
@@ -354,7 +361,53 @@ export default {
                 'divider'
             ];
 
+            // Allow background modules to be processed (they will be filtered later by hasBackgroundContent)
             return moduleType && !excludedTypes.includes(moduleType.toLowerCase());
+        },
+
+        hasBackgroundContent(moduleElement) {
+            // Check if background module has actual content (image, video, or color)
+            if (!moduleElement) return false;
+            
+            try {
+                // Get the layout element that contains the background
+                const layoutElement = this.getCurrentLayoutElement();
+                if (!layoutElement) return false;
+
+                // Find background elements within the layout
+                const bg = layoutElement.querySelector('.mw-layout-background-block');
+                if (!bg) return false;
+
+                const bgNode = bg.querySelector('.mw-layout-background-node');
+                const bgOverlay = bg.querySelector('.mw-layout-background-overlay');
+
+                // Check for background image
+                if (bgNode && window.mw?.top()?.app?.layoutBackground) {
+                    const bgImage = window.mw.top().app.layoutBackground.getBackgroundImage(bgNode);
+                    if (bgImage && bgImage !== 'none' && bgImage.trim() !== '') {
+                        return true;
+                    }
+
+                    // Check for background video
+                    const bgVideo = window.mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
+                    if (bgVideo && bgVideo !== 'none' && bgVideo.trim() !== '') {
+                        return true;
+                    }
+                }
+
+                // Check for background color
+                if (bgOverlay && window.mw?.top()?.app?.layoutBackground) {
+                    const bgColor = window.mw.top().app.layoutBackground.getBackgroundColor(bgOverlay);
+                    if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent' && bgColor.trim() !== '') {
+                        return true;
+                    }
+                }
+
+                return false;
+            } catch (error) {
+                console.warn('Error checking background content:', error);
+                return false;
+            }
         },
 
         isModuleInaccessible(moduleElement) {

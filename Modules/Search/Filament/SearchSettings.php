@@ -82,7 +82,7 @@ class SearchSettings extends LiveEditModuleSettings
                         Tabs\Tab::make('Design')
                             ->schema([
                                 // Add template settings
-                                Section::make('Design settings')->schema(
+                                Section::make('Design Settings')->schema(
                                     $this->getTemplatesFormSchema()
                                 ),
                             ])

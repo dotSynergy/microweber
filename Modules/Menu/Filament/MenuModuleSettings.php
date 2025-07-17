@@ -49,7 +49,7 @@ class MenuModuleSettings extends LiveEditModuleSettings
                             ]),
                         Tabs\Tab::make('Design')
                             ->schema([
-                                    Section::make('Design settings')->schema(
+                                    Section::make('Design Settings')->schema(
                                         $this->getTemplatesFormSchema())
                                 ]
                             ),

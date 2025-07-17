@@ -58,7 +58,7 @@ class SharerModuleSettings extends LiveEditModuleSettings
 
                         Tabs\Tab::make('Design')
                             ->schema([
-                                Section::make('Design settings')
+                                Section::make('Design Settings')
                                     ->schema($this->getTemplatesFormSchema()),
                             ]),
                     ]),

@@ -26,15 +26,15 @@ class LayoutsModuleSettings extends LiveEditModuleSettings
             ->schema([
                 Tabs::make('Layout settings')
                     ->tabs([
-                        Tabs\Tab::make('Layout settings')
+                        Tabs\Tab::make('Layout Settings')
                             ->schema([
                                 View::make('modules.layouts::admin.settings')->viewData([
                                     'optionGroup' => $optionGroup
                                 ]),
                             ]),
-                        Tabs\Tab::make('Design and details')
+                        Tabs\Tab::make('Design and Details')
                             ->schema([
-                                    Section::make('Design settings')->schema(
+                                    Section::make('Design Settings')->schema(
                                         $this->getTemplatesFormSchema())
                                 ]
                             ),

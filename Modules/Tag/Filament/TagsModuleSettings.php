@@ -71,7 +71,7 @@ class TagsModuleSettings extends LiveEditModuleSettings
                                     ]),
 
                                 // Add template settings
-                                Section::make('Design settings')->schema(
+                                Section::make('Design Settings')->schema(
                                     $this->getTemplatesFormSchema()
                                 ),
                             ]),

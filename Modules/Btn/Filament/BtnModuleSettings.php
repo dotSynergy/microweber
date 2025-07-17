@@ -126,7 +126,7 @@ class BtnModuleSettings extends LiveEditModuleSettings
 //                                        'small' => 'Small',
 //                                        'mini' => 'Mini',
 //                                    ]),
-                                Section::make('Design settings')->schema(
+                                Section::make('Design Settings')->schema(
                                     $this->getTemplatesFormSchema()),
 
 

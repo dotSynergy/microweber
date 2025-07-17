@@ -244,13 +244,19 @@ export const HandleMenu = function(options) {
             Tooltip(btnContent, conf.title);
             var btnTitleConf = {
                 props: {
-                    className: 'mw-le-handle-menu-button-content-title'
-                     + (conf.titleVisible ? ' mw-le-handle-menu-button-title-visible' : ''),
-                    innerHTML: conf.title
+                    className: 'mw-le-handle-menu-button-content-title',
+                    innerHTML: (typeof conf.title === 'function' ? conf.title(conf, this.getTarget()) : conf.title) || '',
                 },
 
             };
             var btnTitle = ElementManager(btnTitleConf);
+
+            if(conf.titleVisible){
+                btnTitle.addClass('mw-le-handle-menu-button-content-title-visible');
+                btn.css({
+                    width: 'auto'
+                })
+            }
             btnContent.append(btnTitle);
         }
 

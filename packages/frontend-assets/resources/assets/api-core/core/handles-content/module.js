@@ -17,6 +17,10 @@ export const moduleSettingsDispatch = function (target) {
     }
 }
 
+const moduleNamesMap = {
+    btn: 'Button'
+}
+
 
 export class ModuleHandleContent {
     constructor(rootScope) {
@@ -63,8 +67,19 @@ export class ModuleHandleContent {
 
             },
             {
-                "title": "Settings",
-                "icon": handleIcons.icon('settings'),
+                "title": (conf, target) => {
+                    if(!target) {
+                        return mw.lang('Edit')
+                    }
+                    let moduleName = target.dataset.type.trim();
+                    if(moduleNamesMap[moduleName]) {
+                        moduleName = moduleNamesMap[moduleName];
+                    }
+                    moduleName = mw.lang(moduleName.replace(/\_/g, ' '))
+                    return mw.lang('Edit') + ' ' + moduleName;
+                },
+                titleVisible: true,
+                "icon": handleIcons.icon('edit'),
                 action: () => {
                     const target = mw.app.liveEdit.handles.get('module').getTarget();
                     moduleSettingsDispatch(target);

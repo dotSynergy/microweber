@@ -24,12 +24,14 @@ export class LivewireHooksReloadModule {
                 for (let i = 0; i < this.modulesForReload.length; i++) {
                     let moduleId = this.modulesForReload[i];
                     //mw.reload_module_everywhere('#' + moduleId);
-                    mw.reload_module_everywhere(moduleId);
+                    mw.app.canvas.getWindow().mw.reload_module('#' + moduleId);
+
+                        // mw.reload_module_everywhere(moduleId);
                     //unset
                     this.modulesForReload.splice(i, 1);
                 }
             }
-        }, 300);
+        }, 500);
     }
 
     init() {

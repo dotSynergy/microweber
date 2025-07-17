@@ -13,6 +13,7 @@ use Filament\Pages\Page;
 use Filament\Support\Commands\Concerns\CanReadModelSchemas;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
@@ -232,7 +233,8 @@ abstract class LiveEditModuleSettings extends Page
                     ->placeholder($schema['placeholder'] ?? '');
             }
             if ($schema['type'] == 'color') {
-                $formFields[] = ColorPicker::make($name)
+
+                $formFields[] = MwColorPicker::make($name)
                     ->label($schema['label'])
                     ->visible($showField)
                     ->hex()

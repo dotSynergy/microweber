@@ -3,47 +3,105 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()"  >
-                <v-tooltip activator="parent" location="start"><Lang>Setup wizard</Lang></v-tooltip>
-                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m176-120-56-56 301-302-181-45 198-123-17-234 179 151 216-88-87 217 151 178-234-16-124 198-45-181-301 301Zm24-520-80-80 80-80 80 80-80 80Zm355 197 48-79 93 7-60-71 35-86-86 35-71-59 7 92-79 49 90 22 23 90Zm165 323-80-80 80-80 80 80-80 80ZM569-570Z"/></svg>
-                <Lang>Setup wizard</Lang>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()">
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Setup wizard</Lang>
+                </v-tooltip>
+                <svg fill="currentColor" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="m176-120-56-56 301-302-181-45 198-123-17-234 179 151 216-88-87 217 151 178-234-16-124 198-45-181-301 301Zm24-520-80-80 80-80 80 80-80 80Zm355 197 48-79 93 7-60-71 35-86-86 35-71-59 7 92-79 49 90 22 23 90Zm165 323-80-80 80-80 80 80-80 80ZM569-570Z"/>
+                </svg>
+                <Lang v-if="template === 'menu'">Setup wizard</Lang>
             </a>
         </li>
 
 
-
-
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="showCodeEditor()" >
-                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="showCodeEditor()">
+                <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
+                     width="24px" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M0-360v-240h60v80h80v-80h60v240h-60v-100H60v100H0Zm310 0v-180h-70v-60h200v60h-70v180h-60Zm170 0v-200q0-17 11.5-28.5T520-600h180q17 0 28.5 11.5T740-560v200h-60v-180h-40v140h-60v-140h-40v180h-60Zm320 0v-240h60v180h100v60H800Z"/>
                 </svg>
-                <v-tooltip activator="parent" location="start"><Lang>Code Editor</Lang></v-tooltip>
-                <Lang>Code Editor</Lang>
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Code Editor</Lang>
+                </v-tooltip>
+                <Lang v-if="template === 'menu'">Code Editor</Lang>
             </a>
         </li>
 
 
-
-
-
         <li>
-                    <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openContentResetContent()" title="Reset Content">
-                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/></svg>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" title="Reset Content"
+               v-on:click="openContentResetContent()">
+                <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
+                     width="24px" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126.5T260-672l57 57q-38 34-57.5 79T240-440q0 88 56 155.5T440-202v80Zm80 0v-80q87-16 143.5-83T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 121-79.5 211.5T520-122Z"/>
+                </svg>
 
-                <v-tooltip activator="parent" location="start"><Lang>Reset Content</Lang></v-tooltip>
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Reset Content</Lang>
+                </v-tooltip>
+                <Lang v-if="template === 'menu'">Reset Content</Lang>
             </a>
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="clearCache()" title="Clear Cache">
-                <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+            <a :class="{'live-edit-right-sidebar-active': !!layers }" class="mw-admin-action-links mw-adm-liveedit-tabs"
+               v-on:click="handleLayers()">
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Layers</Lang>
+                </v-tooltip>
+                <svg fill="currentColor" height="24px" viewBox="0 -960 960 960" width="24px"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
+                </svg>
+                <Lang v-if="template === 'menu'">Layers</Lang>
+            </a>
+        </li>
+
+        <li>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleCurrentLayoutSettings()">
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Layout Settings</Lang>
+                </v-tooltip>
+                <svg fill="currentColor" height="24px" viewBox="0 -960 960 960" width="24px"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M440-120v-240h80v80h320v80H520v80h-80Zm-320-80v-80h240v80H120Zm160-160v-80H120v-80h160v-80h80v240h-80Zm160-80v-80h400v80H440Zm160-160v-240h80v80h160v80H680v80h-80Zm-480-80v-80h400v80H120Z"/>
+                </svg>
+                <Lang v-if="template === 'menu'">Layout Settings</Lang>
+            </a>
+        </li>
+
+        <li>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleMoreSettings()">
+                <v-tooltip activator="parent" location="start">
+                    <Lang>More Settings</Lang>
+                </v-tooltip>
+                <svg fill="currentColor" height="24px" viewBox="0 -960 960 960" width="24px"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
+                </svg>
+                <Lang v-if="template === 'menu'">More Settings</Lang>
+            </a>
+        </li>
+
+        <li>
+            <a class="mw-admin-action-links mw-adm-liveedit-tabs" title="Clear Cache" v-on:click="clearCache()">
+                <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
+                     width="24px" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M280-720v520-520Zm170 600H280q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v172q-17-5-39.5-8.5T680-560v-160H280v520h132q6 21 16 41.5t22 38.5Zm-90-160h40q0-63 20-103.5l20-40.5v-216h-80v360Zm160-230q17-11 38.5-22t41.5-16v-92h-80v130ZM680-80q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80Zm66-106 28-28-74-74v-112h-40v128l86 86Z"/>
                 </svg>
 
-                <v-tooltip activator="parent" location="start"><Lang>Clear Cache</Lang></v-tooltip>
+                <v-tooltip activator="parent" location="start">
+                    <Lang>Clear Cache</Lang>
+                </v-tooltip>
+                <Lang v-if="template === 'menu'">Clear Cache</Lang>
             </a>
         </li>
 
@@ -53,6 +111,12 @@
 <script>
 export default {
     components: {},
+    props: {
+        template: {
+            type: String,
+            default: 'default',
+        },
+    },
     methods: {
         show: function (name) {
             this.emitter.emit('live-edit-ui-show', name);
@@ -89,7 +153,32 @@ export default {
         handleLayers: function () {
             this.layers = !this.layers;
             mw.app.liveEditWidgets.toggleLayers();
+        },
 
+        getCurrentLayoutElement() {
+            // Try to get the currently selected layout
+            let layoutElement = window.mw.top().app.liveEdit.getSelectedLayoutNode();
+
+            return layoutElement;
+        },
+
+        handleCurrentLayoutSettings: function () {
+
+
+            let layout = this.getCurrentLayoutElement();
+
+            if (layout) {
+
+                window.mw.top().app.editor.dispatch('onModuleSettingsRequest', layout);
+            }
+
+
+        },
+
+        handleMoreSettings: function () {
+            // Show additional settings
+            const event = new CustomEvent('moreSettingsRequested');
+            document.dispatchEvent(event);
         },
         openContentResetContent: function () {
             var moduleType = 'editor/reset_content';
@@ -103,10 +192,9 @@ export default {
             attrsForSettings.from_url = mw.app.canvas.getWindow().location.href;
 
 
-          //  var src = route('live_edit.module_settings') + "?" + json2url(attrsForSettings);
+            //  var src = route('live_edit.module_settings') + "?" + json2url(attrsForSettings);
 
             var src = mw.app.adminModules.getModuleSettingsUrl(moduleType, attrsForSettings);
-
 
 
             if (typeof (root_element_id) != 'undefined') {
@@ -173,7 +261,6 @@ export default {
             attrsForSettings.content_id = cont_id;
 
             var src = route('live_edit.module_settings') + "?" + json2url(attrsForSettings);
-
 
 
             var dlg = mw.top().dialogIframe({
@@ -255,14 +342,21 @@ export default {
             });
         });
 
-    },
-    data() {
+        // Handle layers change
+        if (mw.top().app.liveEditWidgets) {
+            const handleLayersChange = () => {
+                this.layers = mw.top().app.liveEditWidgets.status.layersOpened;
+            };
+            mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
+            mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
+        }
+
+    }, data() {
         return {
             contentRevisionsDialogInstance: null,
             contentResetContentInstance: null,
             layers: false,
         }
-
     }
 }
 </script>

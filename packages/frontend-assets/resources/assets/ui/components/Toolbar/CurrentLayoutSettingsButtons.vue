@@ -219,7 +219,9 @@ export default {
             let layoutElement = window.mw.top().app.liveEdit.getSelectedLayoutNode();
 
             return layoutElement;
-        },        extractLayoutModules(layoutElement) {
+        },
+
+        extractLayoutModules(layoutElement) {
             this.currentLayoutModules = [];
             this.currentLayoutTitle = '';
 
@@ -397,17 +399,7 @@ export default {
 
                     // Dispatch the module settings request
                     window.mw.top().app.editor.dispatch('onModuleSettingsRequest', module.element);
-                } else if (window.mw?.top()?.openModuleSettings && module.id) {
-                    // Alternative method using global openModuleSettings
-                    this.activeModuleId = module.id;
-                    this.updateActiveModule();
-                    window.mw.top().openModuleSettings(module.id);
-                } else if (window.mw?.app?.moduleSettings?.openSettings) {
-                    // Fallback method
-                    this.activeModuleId = module.id;
-                    this.updateActiveModule();
-                    window.mw.app.moduleSettings.openSettings(module.element);
-                } else {
+                }  else {
                     console.warn('Module settings method not available');
                 }
             } catch (error) {

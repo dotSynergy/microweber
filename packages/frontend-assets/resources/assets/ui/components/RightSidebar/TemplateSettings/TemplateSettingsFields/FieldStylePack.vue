@@ -1009,7 +1009,13 @@ export default {
                     }
                 }
             `;
-            document.head.appendChild(styleEl);
+
+            // if(!document.head){
+            //     console.warn('Document head not found, cannot append styles');
+            //     return;
+            // }
+            //
+            // document.head.appendChild(styleEl);
             this.$refs.iframeContainer.appendChild(loadingEl);
 
             // Create iframe element

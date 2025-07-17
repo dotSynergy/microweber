@@ -32,9 +32,11 @@
 }
 
 
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links:after,
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links svg + span {
-    display: none !important;
+
+
+/* Allow titles to show in the tools panel popup - higher specificity */
+.advanced-popup .tools-panel .mw-admin-action-links svg + span {
+    display: inline !important;
 }
 
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar ul {
@@ -79,7 +81,111 @@
 .advanced-enter-from,
 .advanced-leave-to {
     opacity: 0;
-    transform: translateY(100%);
+    transform: scale(0.8);
+}
+
+.advanced-popup {
+    position: fixed;
+    bottom: 70px;
+    right: 60px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    min-width: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.advanced-popup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.advanced-popup-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    min-height: 80px;
+}
+
+.advanced-popup-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.advanced-popup-item svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+    fill: currentColor;
+}
+
+.advanced-popup-item span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.tools-panel {
+    margin-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+}
+
+.tools-panel ul {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+.tools-panel li {
+    width: 100% !important;
+}
+
+.tools-panel .mw-admin-action-links {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.tools-panel .mw-admin-action-links:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+
+.tools-panel .mw-admin-action-links svg {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 12px !important;
+    fill: currentColor !important;
+    flex-shrink: 0 !important;
 }
 
 </style>
@@ -142,28 +248,17 @@
 
         <div>
             <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
-
             <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>
         </div>
 
 
         <div style="margin-top:auto;">
             <Transition name="advanced">
-                <div v-if=" advanced" style="width: 100%;margin-bottom: 20px">
-                    <div class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleLayers()"
-                         :class="{'live-edit-right-sidebar-active': !!layers }">
-                        <v-tooltip activator="parent" location="start">
-                            <Lang>Layers</Lang>
-                        </v-tooltip>
-
-                        <svg fill="currentColor" class="mb-1 me-2" xmlns="http://www.w3.org/2000/svg" height="24px"
-                             viewBox="0 -960 960 960" width="24px">
-                            <path
-                                d="M480-400 40-640l440-240 440 240-440 240Zm0 160L63-467l84-46 333 182 333-182 84 46-417 227Zm0 160L63-307l84-46 333 182 333-182 84 46L480-80Zm0-411 273-149-273-149-273 149 273 149Zm0-149Z"/>
-                        </svg>
-                        <Lang>Layers</Lang>
+                <div v-if="advanced" class="advanced-popup">
+                    <!-- Tools Panel - Shows by default when advanced popup opens -->
+                    <div class="tools-panel">
+                        <ToolsButtons template="menu"></ToolsButtons>
                     </div>
-                    <ToolsButtons></ToolsButtons>
                 </div>
             </Transition>
 
@@ -194,10 +289,6 @@ import ToolbarMulilanguageSelector from "./ToolbarMulilanguageSelector.vue";
 import CurrentLayoutSettingsButtons from "./CurrentLayoutSettingsButtons.vue";
 import CurrentNodeTextEditButton from "./CurrentNodeTextEditButton.vue";
 import CSSGUIService from "../../../api-core/services/services/css-gui.service.js";
-
-let handleLayersChange = function () {
-    this.layers = mw.top().app.liveEditWidgets.status.layersOpened;
-};
 
 
 export default {
@@ -261,18 +352,33 @@ export default {
         handleAdvanced() {
             this.advanced = !this.advanced;
         },
-        handleLayers() {
-
-            mw.app.liveEditWidgets.toggleLayers();
+        handleClickOutside(event) {
+            if (this.advanced) {
+                // Check if click is outside the popup specifically, not the entire component
+                const popupElement = this.$el.querySelector('.advanced-popup');
+                const advancedButton = this.$el.querySelector('.live-edit-toolbar-button-advanced');
+                
+                // Close if click is outside popup and not on the advanced button
+                if (popupElement && 
+                    !popupElement.contains(event.target) && 
+                    !advancedButton.contains(event.target)) {
+                    this.advanced = false;
+                    this.$refs.moreSettingsDropdown?.classList.remove('show');
+                }
+            }
         },
         show: function (name) {
 
             this.emitter.emit('live-edit-ui-show', name);
             this.$refs.moreSettingsDropdown?.classList.remove('show');
+            // Hide advanced popup when showing other UI elements
+            this.advanced = false;
         },
         toggle: function (name) {
 
             this.$refs.moreSettingsDropdown?.classList.remove('show');
+            // Hide advanced popup when toggling other UI elements
+            this.advanced = false;
 
             if (name !== 'style-editor') {
                 CSSGUIService.hide()
@@ -291,6 +397,8 @@ export default {
 
         hideMoreSettingsDropdown() {
             this.$refs.moreSettingsDropdown?.classList.remove('show');
+            // Also hide the advanced popup
+            this.advanced = false;
         },
 
         openReportIssueModal() {
@@ -312,15 +420,23 @@ export default {
     },
 
     unmounted() {
-
-        mw.top().app.liveEditWidgets.off('layersOpen', handleLayersChange);
-        mw.top().app.liveEditWidgets.off('layersClose', handleLayersChange);
-
+        // Remove click-outside handler
+        document.removeEventListener('click', this.handleClickOutside);
     },
     mounted() {
 
 
-        handleLayersChange = handleLayersChange.bind(this);
+        window.mw.app.canvas.on('liveEditCanvasLoaded', () => {
+            this.hideMoreSettingsDropdown();
+        });
+
+
+        mw.top().app.on('moduleInserted', () => {
+            this.hideMoreSettingsDropdown();
+        })
+        mw.top().app.on('layoutCloned', () => {
+            this.hideMoreSettingsDropdown();
+        })
 
         mw.top().app.on('mw.open-template-settings', () => {
             // close the hamburger
@@ -364,8 +480,7 @@ export default {
 
 
             if (mw.top().app.liveEditWidgets) {
-                mw.top().app.liveEditWidgets.on('layersOpen', handleLayersChange);
-                mw.top().app.liveEditWidgets.on('layersClose', handleLayersChange);
+                // Layers are now handled in ToolsButtons component
             }
 
 
@@ -418,6 +533,9 @@ export default {
                 this.buttonIsActiveQuickEdit = false
             })
         });
+
+        // Add click-outside handler for advanced popup
+        document.addEventListener('click', this.handleClickOutside);
     },
     data() {
         return {
@@ -426,7 +544,6 @@ export default {
             buttonIsActiveQuickEdit: false,
             advanced: false,
             insertLayoutVisible: false,
-            layers: false,
             iconInsertlayout: mw.top().app?.iconService?.icon('add-layout'),
 
         }

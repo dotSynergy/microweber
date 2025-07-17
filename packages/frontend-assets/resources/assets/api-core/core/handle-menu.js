@@ -245,11 +245,18 @@ export const HandleMenu = function(options) {
             var btnTitleConf = {
                 props: {
                     className: 'mw-le-handle-menu-button-content-title',
-                    innerHTML: conf.title
+                    innerHTML: (typeof conf.title === 'function' ? conf.title(conf, this.getTarget()) : conf.title) || '',
                 },
 
             };
             var btnTitle = ElementManager(btnTitleConf);
+
+            if(conf.titleVisible){
+                btnTitle.addClass('mw-le-handle-menu-button-content-title-visible');
+                btn.css({
+                    width: 'auto'
+                })
+            }
             btnContent.append(btnTitle);
         }
 

@@ -396,6 +396,11 @@ html[dir="rtl"] {
 .mw-le-handle-menu-button-content-title{
     font-size: 0;
 }
+.mw-le-handle-menu-button-content-title-visible{
+    font-size: initial;
+    padding-inline-end: 10px;
+    text-transform: capitalize;
+}
 .mw-handle-item .mw-le-handle-menu-button-sub-menu {
     flex-direction: column;
     justify-content: start;

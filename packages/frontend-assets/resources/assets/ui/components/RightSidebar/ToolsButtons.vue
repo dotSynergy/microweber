@@ -3,7 +3,7 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="openSetupWizard()">
+            <a class="mw-live-edit-advanced-settings-popup" v-on:click="openSetupWizard()">
                 <v-tooltip activator="parent" location="start">
                     <Lang>Setup wizard</Lang>
                 </v-tooltip>
@@ -17,7 +17,7 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="showCodeEditor()">
+            <a class="mw-live-edit-advanced-settings-popup" v-on:click="showCodeEditor()">
                 <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
                      width="24px" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -32,7 +32,7 @@
 
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" title="Reset Content"
+            <a class="mw-live-edit-advanced-settings-popup" title="Reset Content"
                v-on:click="openContentResetContent()">
                 <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
                      width="24px" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +48,7 @@
         </li>
 
         <li>
-            <a :class="{'live-edit-right-sidebar-active': !!layers }" class="mw-admin-action-links mw-adm-liveedit-tabs"
+            <a :class="{'live-edit-right-sidebar-active': !!layers }" class="mw-live-edit-advanced-settings-popup"
                v-on:click="handleLayers()">
                 <v-tooltip activator="parent" location="start">
                     <Lang>Layers</Lang>
@@ -63,7 +63,7 @@
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleCurrentLayoutSettings()">
+            <a class="mw-live-edit-advanced-settings-popup" v-on:click="handleCurrentLayoutSettings()">
                 <v-tooltip activator="parent" location="start">
                     <Lang>Layout Settings</Lang>
                 </v-tooltip>
@@ -77,7 +77,7 @@
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" v-on:click="handleMoreSettings()">
+            <a class="mw-live-edit-advanced-settings-popup" v-on:click="handleMoreSettings()">
                 <v-tooltip activator="parent" location="start">
                     <Lang>More Settings</Lang>
                 </v-tooltip>
@@ -91,7 +91,7 @@
         </li>
 
         <li>
-            <a class="mw-admin-action-links mw-adm-liveedit-tabs" title="Clear Cache" v-on:click="clearCache()">
+            <a class="mw-live-edit-advanced-settings-popup" title="Clear Cache" v-on:click="clearCache()">
                 <svg class="mb-1 me-2" fill="currentColor" height="24px" viewBox="0 -960 960 960"
                      width="24px" xmlns="http://www.w3.org/2000/svg">
                     <path

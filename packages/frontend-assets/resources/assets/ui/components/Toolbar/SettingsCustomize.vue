@@ -1,7 +1,7 @@
 <style>
 
 
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links svg {
+.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-live-edit-advanced-settings-popup svg {
 
 
     fill: currentColor !important;
@@ -15,7 +15,7 @@
 }
 
 
-.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-admin-action-links,
+.mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .mw-live-edit-advanced-settings-popup,
 .mw-live-edit-right-sidebar-wrapper.mw-live-edit-right-sidebar-template-sidebar .btn-icon.live-edit-toolbar-buttons {
     height: 39px;
     width: 39px;
@@ -35,7 +35,7 @@
 
 
 /* Allow titles to show in the tools panel popup - higher specificity */
-.advanced-popup .tools-panel .mw-admin-action-links svg + span {
+.advanced-popup .tools-panel .mw-live-edit-advanced-settings-popup svg + span {
     display: inline !important;
 }
 
@@ -75,27 +75,40 @@
 
 .advanced-enter-active,
 .advanced-leave-active {
-    transition: 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .advanced-enter-from,
 .advanced-leave-to {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.9) translateY(10px);
 }
 
 .advanced-popup {
     position: fixed;
     bottom: 70px;
     right: 60px;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
     z-index: 1000;
-    min-width: 200px;
+    min-width: 240px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transform-origin: bottom right;
+}
+
+.dark .advanced-popup {
+    background: rgba(30, 30, 30, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .advanced-popup-grid {
@@ -109,39 +122,84 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: center;
     min-height: 80px;
+    position: relative;
+    overflow: hidden;
 }
 
 .advanced-popup-item:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dark .advanced-popup-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .advanced-popup-item:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .advanced-popup-item svg {
     width: 24px;
     height: 24px;
     margin-bottom: 8px;
-    fill: currentColor;
+    fill: #374151;
+    transition: all 0.2s ease;
+}
+
+.dark .advanced-popup-item svg {
+    fill: #e5e7eb;
+}
+
+.advanced-popup-item:hover svg {
+    fill: #1f2937;
+    transform: scale(1.1);
+}
+
+.dark .advanced-popup-item:hover svg {
+    fill: #ffffff;
 }
 
 .advanced-popup-item span {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #374151;
     font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.dark .advanced-popup-item span {
+    color: #e5e7eb;
+}
+
+.advanced-popup-item:hover span {
+    color: #1f2937;
+}
+
+.dark .advanced-popup-item:hover span {
+    color: #ffffff;
 }
 
 .tools-panel {
     margin-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding-top: 16px;
+}
+
+.dark .tools-panel {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tools-panel ul {
@@ -157,35 +215,111 @@
     width: 100% !important;
 }
 
-.tools-panel .mw-admin-action-links {
+.tools-panel .mw-live-edit-advanced-settings-popup {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     width: 100% !important;
     padding: 12px 16px !important;
-    border-radius: 8px !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 10px !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    color: #374151 !important;
     text-decoration: none !important;
     font-size: 14px !important;
     font-weight: 500 !important;
-    transition: all 0.2s ease !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
 }
 
-.tools-panel .mw-admin-action-links:hover {
+.dark .tools-panel .mw-live-edit-advanced-settings-popup {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #e5e7eb !important;
+}
+
+.tools-panel .mw-live-edit-advanced-settings-popup:hover {
+    background: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-1px) scale(1.01) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    color: #1f2937 !important;
+}
+
+.dark .tools-panel .mw-live-edit-advanced-settings-popup:hover {
     background: rgba(255, 255, 255, 0.1) !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
-    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
 }
 
-.tools-panel .mw-admin-action-links svg {
+.tools-panel .mw-live-edit-advanced-settings-popup svg {
     width: 20px !important;
     height: 20px !important;
     margin-right: 12px !important;
-    fill: currentColor !important;
+    fill: #6b7280 !important;
     flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+.dark .tools-panel .mw-live-edit-advanced-settings-popup svg {
+    fill: #9ca3af !important;
+}
+
+.tools-panel .mw-live-edit-advanced-settings-popup:hover svg {
+    fill: #374151 !important;
+    transform: scale(1.05) !important;
+}
+
+.dark .tools-panel .mw-live-edit-advanced-settings-popup:hover svg {
+    fill: #e5e7eb !important;
+}
+
+/* Add a subtle ripple effect */
+.tools-panel .mw-live-edit-advanced-settings-popup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.dark .tools-panel .mw-live-edit-advanced-settings-popup::before {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+
+.tools-panel .mw-live-edit-advanced-settings-popup:active::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.advanced-popup-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.dark .advanced-popup-item::before {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+
+.advanced-popup-item:active::before {
+    opacity: 1;
+    transform: scale(1);
 }
 
 </style>
@@ -212,7 +346,7 @@
               class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle">
             <v-tooltip activator="parent" location="start"><Lang>Template settings</Lang></v-tooltip>
 
-            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 96 960 960" width="22"><path
+            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="96 96 960 960" width="22"><path
                 d="M480 976q-82 0-155-31.5t-127.5-86Q143 804 111.5 731T80 576q0-83 32.5-156t88-127Q256 239 330 207.5T488 176q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880 538q0 115-70 176.5T640 776h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480 976Zm0-400Zm-220 40q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120-160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm200 0q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120 160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17ZM480 896q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800 538q0-121-92.5-201.5T488 256q-136 0-232 93t-96 227q0 133 93.5 226.5T480 896Z"/></svg>
         </span>
 

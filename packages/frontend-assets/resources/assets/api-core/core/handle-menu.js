@@ -244,7 +244,8 @@ export const HandleMenu = function(options) {
             Tooltip(btnContent, conf.title);
             var btnTitleConf = {
                 props: {
-                    className: 'mw-le-handle-menu-button-content-title',
+                    className: 'mw-le-handle-menu-button-content-title'
+                     + (conf.titleVisible ? ' mw-le-handle-menu-button-title-visible' : ''),
                     innerHTML: conf.title
                 },
 

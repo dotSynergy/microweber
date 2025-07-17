@@ -11,7 +11,7 @@ class PdfModule extends BaseModule
     public static string $module = 'pdf';
     public static string $icon = 'heroicon-o-document';
     public static string $categories = 'documents, pdf';
-    public static int $position = 3;
+    public static int $position = 300;
     public static string $settingsComponent = PdfModuleSettings::class;
     public static string $templatesNamespace = 'modules.pdf::templates';
 

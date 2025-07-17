@@ -16,7 +16,7 @@ class PicturesModule extends BaseModule
     public static string $module = 'pictures';
     public static string $icon = 'modules.pictures-icon';
     public static string $categories = 'media';
-    public static int $position = 30;
+    public static int $position = 3;
     public static string $settingsComponent = PicturesModuleSettings::class;
     public static string $templatesNamespace = 'modules.pictures::templates';
 

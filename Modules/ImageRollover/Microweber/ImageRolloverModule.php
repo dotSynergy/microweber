@@ -13,7 +13,7 @@ class ImageRolloverModule extends BaseModule
     public static string $module = 'image_rollover';
     public static string $icon = 'modules.image_rollover-icon';
     public static string $categories = 'media';
-    public static int $position = 3;
+    public static int $position = 300;
     public static string $settingsComponent = ImageRolloverModuleSettings::class;
 
     public static string $templatesNamespace = 'modules.image_rollover::templates';

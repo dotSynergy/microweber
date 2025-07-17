@@ -13,7 +13,7 @@ class CommentsModule extends BaseModule
     public static string $module = 'comments';
     public static string $icon = 'modules.comments-icon';
     public static string $categories = 'comments';
-    public static int $position = 100;
+    public static int $position = 900;
     public static string $settingsComponent = CommentsModuleSettings::class;
     public static string $templatesNamespace = 'modules.comments::templates';
 

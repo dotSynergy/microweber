@@ -11,7 +11,7 @@ class TagsModule extends BaseModule
     public static string $module = 'tags';
     public static string $icon = 'modules.tag-icon';
     public static string $categories = 'content';
-    public static int $position = 30;
+    public static int $position = 900;
     public static string $settingsComponent = TagsModuleSettings::class;
     public static string $templatesNamespace = 'modules.tag::templates';
 

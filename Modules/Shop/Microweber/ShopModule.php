@@ -11,7 +11,7 @@ class ShopModule extends BaseModule
     public static string $module = 'shop';
     public static string $icon = 'modules.shop-icon';
     public static string $categories = 'commerce';
-    public static int $position = 10;
+    public static int $position = 900;
     public static string $settingsComponent = ShopModuleSettings::class;
     public static string $templatesNamespace = 'modules.shop::templates';
 

@@ -13,7 +13,7 @@ class RatingModule extends BaseModule
     public static string $module = 'rating';
     public static string $icon = 'modules.rating-icon';
     public static string $categories = 'content';
-    public static int $position = 100;
+    public static int $position = 900;
     public static string $settingsComponent = RatingModuleSettings::class;
     public static string $templatesNamespace = 'modules.rating::templates';
 

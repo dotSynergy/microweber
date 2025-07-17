@@ -605,6 +605,8 @@ html.dark .text-danger {
 }
 
 
+/* todo: consider removing the animation */
+
 .mw-ai-chat-box .send-text {
     display: none;
     opacity: 0;

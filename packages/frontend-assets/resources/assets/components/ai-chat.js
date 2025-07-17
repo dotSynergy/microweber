@@ -2,14 +2,25 @@ import MicroweberBaseClass from "../containers/base-class.js";
 
 const AIChatFormCSS= `
      .mw-ai-chat-box-footer{
-        position: absolute;
+
         width: 100%;
         bottom: 15px;
-        padding: 0 10px;
+        padding: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        border-bottom:1px solid  #45454524;
+        border-top: 1px solid #45454524;
+
      }
+        html.dark .mw-ai-chat-box-footer{
+
+
+
+            border-bottom: 1px solid #eeeeee24;
+            border-top: 1px solid #eeeeee21;
+        }
      .mw-ai-chat-box-footer svg{
         width: 22px;
         margin: 0 5px;
@@ -48,7 +59,7 @@ const AIChatFormCSS= `
         background: rgb(205 205 205);
         border: none;
         border-radius: 20px;
-        padding-bottom: 50px;
+        padding-bottom: 1px;
      }
 
     html.dark .mw-ai-chat-box-area textareat::placeholder {
@@ -82,6 +93,27 @@ const AIChatFormCSS= `
         font-size:12px;
 
 
+      }
+
+      .mw-ai-chat-box-action-send{
+            display: flex;
+            width: 92%;
+            height: 40px;
+            overflow: hidden;
+            background: #003da4;
+            margin: 14px 4%;
+
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            svg{
+                width: 24px;
+            }
       }
 
 `;
@@ -118,13 +150,11 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
                 <div class="mw-ai-chat-box-actions d-flex align-items-center gap-1">
                     <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>
 
-                       <div class="d-flex align-items-center">
-                            <label class="live-edit-label mb-0 send-text">Send</label>
-                            <button type="button" class="mw-ai-chat-box-action-send"> ${mw.top().app.iconService.icon('send')}</button>
 
-                        </div>
                     </div>
             </div>
+
+            <button type="button" class="mw-ai-chat-box-action-send "> ${mw.lang('Submit')} ${mw.top().app.iconService.icon('send')} </button>
         </div>
      </div>
 

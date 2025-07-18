@@ -42,13 +42,14 @@ class BtnModuleSettings extends LiveEditModuleSettings
                                 MwLinkPicker::make('options.url')
 
                                     ->label('Link')
+                                    ->setSimpleMode(true)
                                     ->helperText('Select or enter the URL the button should link to.')
                                     ->live()
                                     ->default( function (Get $get) {
                                         return $get('options.url') ?: '';
                                     })
 
-                                  //  ->setSimpleMode(true)
+                                  //
                                     ->columnSpanFull(),
 
 

@@ -535,6 +535,16 @@ export class LiveEdit {
         }
     }
 
+    getHoveredLayoutNode() {
+        var node = mw.top().app.liveEdit.handles.get('layout').getTarget() ;
+
+        if (node ) {
+            return node;
+        }
+
+
+    }
+
     selectNode(target, event) {
 
 

@@ -225,10 +225,12 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
             ->paginated(false)
             ->heading('Custom Fields')
             ->reorderable('position')
+
             ->headerActions([
                 CreateAction::make('custom-field-create-action')
                     // ->teleport('body')
                     ->label('Add custom field')
+                    ->slideOver()
                     ->form([
                         Wizard::make([
                                 Wizard\Step::make('Type')
@@ -308,6 +310,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                 EditAction::make('custom-field-edit')
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')
+                    ->slideOver()
                     ->form($editForm),
 
                 DeleteAction::make('custom-field-delete')

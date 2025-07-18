@@ -38,6 +38,11 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             }
 
 
+            var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+            if (hasClonableParent) {
+                return true;
+            }
+
 
         }
         return isVisible;
@@ -62,6 +67,11 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         if (hasCloneable) {
             return true;
         }
+        var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+        if (hasClonableParent) {
+            return true;
+        }
+
 
         return false;
     }
@@ -79,6 +89,11 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         if (hasCloneable) {
             return true;
         }
+        var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+        if (hasClonableParent) {
+            return true;
+        }
+
 
         return false;
     }

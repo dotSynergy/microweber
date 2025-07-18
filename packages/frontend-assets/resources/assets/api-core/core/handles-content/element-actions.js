@@ -165,6 +165,12 @@ export class ElementActions extends MicroweberBaseClass {
     cloneElement(el) {
         mw.top().app.liveEdit.stopTyping();
 
+        var elementForUndo = DomService.firstParentOrCurrentWithClass(el, 'edit');
+
+        if (elementForUndo) {
+            mw.app.registerUndoState(elementForUndo,true)
+         }
+
         //check if is IMG and cloneable if its in A tag, then delete A tag
         if (el.nodeName === 'IMG' && el.parentNode && el.parentNode.nodeName === 'A') {
             el = el.parentNode;

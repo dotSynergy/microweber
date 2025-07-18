@@ -105,6 +105,10 @@ export const liveEditComponent = () => {
 
             // mw.app.liveEdit.handles.reposition();
         }
+
+        document.querySelectorAll('.no-select:not(:has(.allow-select))').forEach(function(node){
+            node.classList.remove("no-select");
+        });
     };
     mw.app.registerAskUserToStay = function (toStay = true) {
         var liveEditIframe = (mw.app.canvas.getWindow());

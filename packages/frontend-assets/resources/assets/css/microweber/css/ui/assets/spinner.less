@@ -4,6 +4,26 @@
         position: absolute;
     }
 }
+.mw-spinner-progress{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    gap: 5px;
+    .mw-spinner, .mw-ui-progress{
+        position: static;
+        margin-inline: 0;
+    }
+}
 .mw-spinner{
     position: relative;
     display: inline-block;

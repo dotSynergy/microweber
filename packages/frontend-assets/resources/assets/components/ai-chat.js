@@ -95,6 +95,10 @@ const AIChatFormCSS= `
 
       }
 
+      .mw-ai-chat-box-action-send[disabled]{
+        opacity: .5;
+        pointer-events: none
+      }
       .mw-ai-chat-box-action-send{
             display: flex;
             width: 92%;
@@ -127,13 +131,10 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
 
     if(Array.isArray(options)) {
         optionsTpl = `
-            <select class="mw-native-select" name="chatOptions">
-                <button>
-                    <selectedcontent></selectedcontent>
-                </button>
-                <option value="" selected disabled>${mw.lang('Choose action')}</option>
-                ${options.map(o => `<option value="${o.id}" ${o.selected ? 'selected' : ''}>${o.content}</option>`).join('')}
-            </select>
+            <div class="mw-ai-chat-box-options" name="chatOptions">
+
+                ${options.map(o => `<button value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected ' : ''}">${o.content}</button>`).join('')}
+            </div>
         `;
     }
 

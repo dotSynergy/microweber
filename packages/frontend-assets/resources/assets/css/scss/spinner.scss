@@ -4,6 +4,43 @@
         position: absolute;
     }
 }
+.mw-spinner-progress{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    gap: 5px;
+    width: 240px;
+    height: 100px;
+        .mw-ui-progress{
+            width: 100%;
+        }
+        .mw-spinner {
+                margin: -15px 0 6px;
+        }
+        .mw-spinner, .mw-ui-progress{
+        position: relative;
+        margin-inline: 0 !important;
+        color: #111;
+        svg{
+            width: 24px;
+            position: static !important;
+        }
+        .mw-ui-progress-info{
+            color: #111;
+            text-shadow: none;
+        }
+    }
+}
 .mw-spinner{
     position: relative;
     display: inline-block;

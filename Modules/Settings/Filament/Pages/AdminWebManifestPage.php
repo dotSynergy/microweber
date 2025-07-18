@@ -15,7 +15,8 @@ class AdminWebManifestPage extends AdminSettingsPage
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
     protected static ?string $title = 'Web Manifest';
     protected static string $description = 'Configure your web app manifest settings';
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'System Settings';
+    protected static ?int $navigationSort = 500;
 
     public function form(Form $form): Form
     {

@@ -13,9 +13,10 @@ class AdminMaintenanceModePage extends AdminSettingsPage
 {
     protected static ?string $navigationIcon = 'mw-settings';
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
-    protected static ?string $title = 'Maintenance Mode';
+    protected static ?string $title = 'System Settings';
     protected static string $description = 'Configure website maintenance mode settings';
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'System Settings';
+    protected static ?int $navigationSort = 500;
 
     public function form(Form $form): Form
     {

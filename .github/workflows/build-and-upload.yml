@@ -52,13 +52,13 @@ jobs:
       
       - name: Upload Laravel error logs on failure
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: laravel-error-logs-${{ github.run_id }}
           path: |
             storage/logs/laravel.log
             storage/logs/laravel-*.log
-          retention-days: 1
+          retention-days: 7
           if-no-files-found: ignore
 
 
@@ -118,7 +118,7 @@ jobs:
       
       - name: Upload Laravel error logs on failure
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: laravel-error-logs-build-${{ github.run_id }}
           path: |
@@ -197,7 +197,7 @@ jobs:
       
       - name: Upload Laravel error logs on failure
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: laravel-error-logs-update-${{ github.run_id }}
           path: |

@@ -49,6 +49,17 @@ jobs:
           sed -i 's/APP_ENV=production/APP_ENV=testing/g' .env
       - name: Test before build
         run: composer test
+      
+      - name: Upload Laravel error logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: laravel-error-logs-${{ github.run_id }}
+          path: |
+            storage/logs/laravel.log
+            storage/logs/laravel-*.log
+          retention-days: 1
+          if-no-files-found: ignore
 
 
 
@@ -104,6 +115,17 @@ jobs:
           curl -T microweber-${{ env.GITHUB_REF_SLUG }}.composer.json ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_HOST }}
           curl -T composer.json ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_HOST }}/builds/${{ env.GITHUB_REF_SLUG }}/ --ftp-create-dirs --no-epsv
           curl -T composer.lock ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_HOST }}/builds/${{ env.GITHUB_REF_SLUG }}/ --ftp-create-dirs --no-epsv
+      
+      - name: Upload Laravel error logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: laravel-error-logs-build-${{ github.run_id }}
+          path: |
+            storage/logs/laravel.log
+            storage/logs/laravel-*.log
+          retention-days: 7
+          if-no-files-found: ignore
       - name: Upload version.txt
         run: |
           cp -r version.txt microweber-${{ env.GITHUB_REF_SLUG }}.version.txt
@@ -172,3 +194,14 @@ jobs:
           echo insecure >> ~/.curlrc
           cp microweber-update-${{ env.GITHUB_REF_SLUG }}.zip microweber-update.zip
           curl -T microweber-update.zip ftp://${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}@${{ secrets.FTP_HOST }}/builds/${{ env.GITHUB_REF_SLUG }}/ --ftp-create-dirs --no-epsv
+      
+      - name: Upload Laravel error logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: laravel-error-logs-update-${{ github.run_id }}
+          path: |
+            storage/logs/laravel.log
+            storage/logs/laravel-*.log
+          retention-days: 7
+          if-no-files-found: ignore

@@ -1171,7 +1171,7 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
         }
 
 
-         mw.top().spinnerProgress({}).set(100, mw.lang('Done') + '...')
+         mw.top().spinnerProgress({}).set(100, mw.lang('Done'))
 
         this.#aiPending = false;
         this.dispatch('aiRequestEnd');

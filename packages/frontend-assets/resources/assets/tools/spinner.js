@@ -84,38 +84,45 @@ mw.spinner = function(options){
 
 let _mwSpinnerProgress = false;
 
-mw.spinnerProgress = function({spinnerOptions, progressOptions}){
-    const spinnerConfig = Object.assign({element: document.body, decorate: true}, spinnerOptions)
-    const progressConfig = Object.assign({element: document.body, progress: 0}, progressOptions)
+mw.spinnerProgress = function(){
 
-    if(progressConfig.element && progressConfig.element.$$spinnerProgress) {
-        return progressConfig.element.$$spinnerProgress
+    const target = document.body;
+    const has = Array.from(target.children).find(node => node.classList.contains('mw-spinner-progress'));
+    console.log(has)
+
+    if(has) {
+        console.log(has.$$spinnerProgress)
+        return has.$$spinnerProgress
     }
+
+    const container = mw.element('<div class="mw-spinner-progress"/>');
+    const spinnerConfig = Object.assign({element: container.get(0), decorate: false, size: 24})
+    const progressConfig = Object.assign({element: container.get(0), progress: 0})
+    target.appendChild(container.get(0));
+
 
     const spinner = mw.spinner(spinnerConfig);
     const progress = mw.progress(progressConfig);
-    progress.progress.setAttribute('style', `
-        position: absolute;
-        z-index: 10;
-        top: calc(50% + 20px);
-        width: 200px;
-        left: calc(50% - 100px);
-    `);
 
-    progressConfig.element.$$spinnerProgress = {
+
+    container.get(0).$$spinnerProgress = {
         show(){
-            spinner.show()
-            progress.show()
+            container.show()
+
         },
         hide(){
-            spinner.hide();
-            progress.hide()
+            container.hide();
+
         },
         set(val = 0, action) {
             progress.set(val, action);
+            container.show()
+        },
+        remove(){
+            container.remove();
         }
     }
 
-    return progressConfig.element.$$spinnerProgress
+    return container.get(0).$$spinnerProgress
 
 }

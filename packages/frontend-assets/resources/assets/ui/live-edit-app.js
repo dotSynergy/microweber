@@ -53,7 +53,9 @@ mw.app.register('broadcast', MWBroadcast);
 
 
 mw.app.canvas.on('liveEditCanvasLoaded', (data) => {
-
+    document.querySelectorAll('.no-select:not(:has(.allow-select))').forEach(function(node){
+        node.classList.remove("no-select");
+    });
 
     mw.top().app.broadcast.message('canvasURL', {url: data.frameWindow.location.href})
 

@@ -661,5 +661,6 @@ if (self === top) {
                 node.classList.add('allow-select')
             }
         });
+
     });
 }

@@ -31,24 +31,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
-}
-
-.module-edit-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-.module-edit-button.active {
-    background: rgba(33, 37, 41, 0.16);
-    border-color: rgb(56, 54, 54);
-    color: #383636;
-    box-shadow: 0 0 4px rgb(70, 73, 84);
 }
 
 .module-edit-button:active {

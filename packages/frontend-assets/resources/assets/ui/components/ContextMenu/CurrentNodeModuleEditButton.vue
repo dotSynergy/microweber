@@ -1,15 +1,15 @@
 <template>
-    <div v-show="isModuleElement">
-        <div v-if="isModuleElement" class="current-node-module-edit">
+    <div v-show="isModuleElement || isLayoutElement">
+        <div v-if="isModuleElement || isLayoutElement" class="current-node-module-edit">
             <div
                 :class="{ 'active': isEditingModule }"
+                :title="isLayoutElement ? 'Layout Settings' : 'Module Settings'"
                 class="btn-icon module-edit-button"
-                title="Module Settings"
                 @click="editCurrentModule"
                 @mouseenter="onModuleHover"
             >
                 <v-tooltip activator="parent" location="start">
-                    Module Settings
+                    {{ isLayoutElement ? 'Layout Settings' : 'Module Settings' }}
                 </v-tooltip>
                 <span v-html="getModuleEditIcon()"></span>
             </div>
@@ -60,6 +60,7 @@ export default {
         return {
             currentElement: null,
             isModuleElement: false,
+            isLayoutElement: false,
             isEditingModule: false,
             updateInterval: null,
             // Store event handler references for cleanup
@@ -156,8 +157,8 @@ export default {
         updateCurrentNode() {
             try {
                 const activeElement = mw.top().app.liveEdit.elementHandle.getTarget()
-                      || window.mw.top().app.liveEdit.getSelectedNode()
-                      || window.mw.top().app.liveEdit.getSelectedElementNode();
+                    || window.mw.top().app.liveEdit.getSelectedNode()
+                    || window.mw.top().app.liveEdit.getSelectedElementNode();
 
                 if (activeElement !== this.currentElement) {
                     this.currentElement = activeElement;
@@ -167,20 +168,25 @@ export default {
                 console.warn('Error updating current node:', error);
                 this.currentElement = null;
                 this.isModuleElement = false;
+                this.isLayoutElement = false;
             }
         },
 
         checkIfModuleElement() {
             if (!this.currentElement) {
                 this.isModuleElement = false;
+                this.isLayoutElement = false;
                 return;
             }
 
             // Check if the current element is a module
             this.isModuleElement = this.isEditableModule(this.currentElement);
 
+            // Check if the current element is a layout
+            this.isLayoutElement = this.isEditableLayout(this.currentElement);
+
             // Check if module settings are currently open
-            if (this.isModuleElement) {
+            if (this.isModuleElement || this.isLayoutElement) {
                 this.checkModuleEditingState();
             }
         },
@@ -190,8 +196,8 @@ export default {
 
             // Check if element is a module
             const isModule = element.classList.contains('module') ||
-                            element.hasAttribute('data-type') ||
-                            element.hasAttribute('data-module');
+                element.hasAttribute('data-type') ||
+                element.hasAttribute('data-module');
 
             if (!isModule) return false;
 
@@ -202,8 +208,8 @@ export default {
 
             // Get module type
             const moduleType = element.getAttribute('data-type') ||
-                              element.getAttribute('type') ||
-                              element.getAttribute('data-module');
+                element.getAttribute('type') ||
+                element.getAttribute('data-module');
 
             // Filter out non-editable or system modules
             const excludedTypes = [
@@ -217,6 +223,34 @@ export default {
             return moduleType && !excludedTypes.includes(moduleType.toLowerCase());
         },
 
+        isEditableLayout(element) {
+            if (!element) return false;
+
+            // Check if element is a layout
+            const isLayout = element.classList.contains('layout') ||
+                element.hasAttribute('data-layout') ||
+                element.hasAttribute('data-layout-name') ||
+                element.classList.contains('module-layouts') ||
+                element.classList.contains('edit');
+
+            if (!isLayout) return false;
+
+            // Check if layout is inaccessible
+            if (this.isLayoutInaccessible(element)) {
+                return false;
+            }
+
+
+
+            return true;
+        },
+
+        isLayoutInaccessible(layoutElement) {
+            // Check for inaccessible layout markers
+            return layoutElement.classList.contains('no-settings') ||
+                layoutElement.classList.contains('inaccessibleLayout');
+        },
+
         isModuleInaccessible(moduleElement) {
             // Use Microweber's built-in inaccessible module check
             if (window.mw?.top()?.app?.liveEdit?.liveEditHelpers?.targetIsInacesibleModule) {
@@ -225,8 +259,8 @@ export default {
 
             // Fallback check for inaccessible modules
             return moduleElement.classList.contains('no-settings') ||
-                   moduleElement.classList.contains('inaccessibleModule') ||
-                   moduleElement.classList.contains('inaccessibleModuleIfFirstParentIsLayout');
+                moduleElement.classList.contains('inaccessibleModule') ||
+                moduleElement.classList.contains('inaccessibleModuleIfFirstParentIsLayout');
         },
 
         checkModuleEditingState() {
@@ -243,22 +277,33 @@ export default {
         editCurrentModule() {
             try {
                 if (!this.currentElement) {
-                    console.warn('No current module element to edit');
+                    console.warn('No current element to edit');
                     return;
                 }
 
-                if (!this.isEditableModule(this.currentElement)) {
-                    console.warn('Current element is not an editable module');
+                if (!this.isEditableModule(this.currentElement) && !this.isEditableLayout(this.currentElement)) {
+                    console.warn('Current element is not an editable module or layout');
                     return;
                 }
 
                 // Set the editing state
                 this.isEditingModule = true;
 
-                // Trigger module settings request
-                window.mw.app.editor.dispatch('onModuleSettingsRequest', this.currentElement);
+                // Trigger appropriate settings request
+                if (this.isLayoutElement) {
+                    // Trigger layout settings request
+                    if (window.mw?.app?.editor?.dispatch) {
+                        window.mw.app.editor.dispatch('onLayoutSettingsRequest', this.currentElement);
+                    } else {
+                        // Fallback to module settings for layouts
+                        window.mw.app.editor.dispatch('onModuleSettingsRequest', this.currentElement);
+                    }
+                } else {
+                    // Trigger module settings request
+                    window.mw.app.editor.dispatch('onModuleSettingsRequest', this.currentElement);
+                }
             } catch (error) {
-                console.error('Error editing current module:', error);
+                console.error('Error editing current element:', error);
                 this.isEditingModule = false;
             }
         },
@@ -266,26 +311,33 @@ export default {
         onModuleHover() {
             // Optional: Add hover effects or preview functionality
             try {
-                if (this.currentElement && this.isModuleElement) {
-                    // Could add module highlighting or preview here
+                if (this.currentElement && (this.isModuleElement || this.isLayoutElement)) {
+                    // Could add module or layout highlighting or preview here
                 }
             } catch (error) {
-                console.warn('Error on module hover:', error);
+                console.warn('Error on element hover:', error);
             }
         },
 
         getModuleEditIcon() {
-            // Try to get module settings icon from Microweber's icon service
+            // Try to get appropriate icon from Microweber's icon service
             if (window.mw?.top()?.app?.iconService?.icon) {
-                const icon = window.mw.top().app.iconService.icon('module-settings')  ;
+                const iconName = this.isLayoutElement ? 'layout-settings' : 'module-settings';
+                const icon = window.mw.top().app.iconService.icon(iconName);
 
                 if (icon) {
                     return icon;
                 }
             }
 
-            // Fallback to a basic settings/cog icon
-            return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1c0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"/></svg>';
+            // Fallback icons
+            if (this.isLayoutElement) {
+                // Layout settings icon - grid/layout icon
+                return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v8h8V3H3zm10 0v8h8V3h-8zM3 13v8h8v-8H3zm10 0v8h8v-8h-8z"/></svg>';
+            } else {
+                // Module settings icon - cog icon
+                return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1c0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"/></svg>';
+            }
         }
     }
 };

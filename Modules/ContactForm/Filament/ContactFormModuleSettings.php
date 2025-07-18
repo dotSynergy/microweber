@@ -67,35 +67,41 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                 TextInput::make('options.email_autorespond_subject')
                                                     ->label('Auto respond subject')
                                                     ->helperText('E.x. "Thank you for your request"')
-                                                    ->live(),
+                                                    ->live()
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable')),
 
                                                 Textarea::make('options.email_autorespond')
                                                     ->label('Auto respond message')
                                                     ->helperText('Auto respond e-mail sent back to the user')
                                                     ->live()
-                                                    ->rows(4),
+                                                    ->rows(4)
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable')),
 
                                                 Toggle::make('options.email_autorespond_custom_sender')
                                                     ->label('Auto respond custom sender')
                                                     ->helperText('Use custom sender settings for the current contact form.')
-                                                    ->reactive(),
+                                                    ->reactive()
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable')),
 
                                                 TextInput::make('options.email_autorespond_from')
                                                     ->label('Auto respond from e-mail address')
                                                     ->helperText('The e-mail address which will send the message')
                                                     ->live()
-                                                    ->email(),
+                                                    ->email()
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable') && $get('options.email_autorespond_custom_sender')),
 
                                                 TextInput::make('options.email_autorespond_from_name')
                                                     ->label('Auto respond from name')
                                                     ->helperText('e.x. your name, company or brand name')
-                                                    ->live(),
+                                                    ->live()
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable') && $get('options.email_autorespond_custom_sender')),
 
                                                 TextInput::make('options.email_autorespond_reply_to')
                                                     ->label('Auto respond reply to e-mail')
                                                     ->helperText('When the user receive the auto respond message they can response back to reply to email.')
                                                     ->live()
                                                     ->email()
+                                                    ->visible(fn (callable $get) => $get('options.email_autorespond_enable') && $get('options.email_autorespond_custom_sender'))
 
                                             ]),
                                         \LaraZeus\Accordion\Forms\Accordion::make('receivers')
@@ -111,6 +117,7 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                     ->label('To e-mail addresses')
                                                     ->live()
                                                     ->helperText('E-mail address of the receivers separated with comma.')
+                                                    ->visible(fn (callable $get) => $get('options.email_custom_receivers'))
                                             ]),
                                         \LaraZeus\Accordion\Forms\Accordion::make('advanced')
                                             ->columnSpanFull()

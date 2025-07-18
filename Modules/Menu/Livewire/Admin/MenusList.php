@@ -271,7 +271,8 @@ class MenusList extends Component implements HasForms, HasActions
                     ->hidden(function (Get $get) {
                         return $get('advanced') === false;
                     }),
-            ])->columns(2)
+            ])->hidden(true)
+                ->columns(2)
         ];
     }
 

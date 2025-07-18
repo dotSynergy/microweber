@@ -498,11 +498,25 @@ export default {
         // Method to expand style packs
         expandStylePacks() {
             this.stylePacksExpanded = true;
+            this.updateIframeContent();
+
+            // Emit event when expanded state changes
+            this.$emit('style-pack-expanded-state', {
+                id: this.uniqueId,
+                isExpanded: this.stylePacksExpanded
+            });
         },
 
         // Method to collapse style packs
         collapseStylePacks() {
             this.stylePacksExpanded = false;
+            this.updateIframeContent();
+
+            // Emit event when expanded state changes
+            this.$emit('style-pack-expanded-state', {
+                id: this.uniqueId,
+                isExpanded: this.stylePacksExpanded
+            });
         },
 
         // New method to inject fonts into iframe

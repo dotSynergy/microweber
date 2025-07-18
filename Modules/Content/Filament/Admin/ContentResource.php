@@ -917,17 +917,20 @@ class ContentResource extends Resource
             ->filtersFormWidth(MaxWidth::Medium)
             ->actions([
                 Tables\Actions\ActionGroup::make([
-
-                    Tables\Actions\EditAction::make('edit')
-                        ->icon('heroicon-o-pencil'),
-
                     Tables\Actions\Action::make('live_edit')
+                        ->label('Edit')
                         ->url(function (Content $record) {
 
 
                             return $record->link() . '?editmode=y';
                         })
                         ->icon('heroicon-o-eye'),
+
+                    Tables\Actions\EditAction::make('edit')
+                        ->label('Settings')
+                        ->icon('heroicon-o-pencil'),
+
+
 
                     Tables\Actions\DeleteAction::make('delete')
                         ->icon('heroicon-o-trash'),

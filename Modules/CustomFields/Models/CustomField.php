@@ -162,12 +162,12 @@ class CustomField extends Model
 
                 unset($this->value);
             }
-            if (isset($this->value)) {
 
-                unset($this->value);
-            }
         }
+        if (isset($this->value)) {
 
+            unset($this->value);
+        }
         if (isset($this->values) and !empty($this->values)) {
 
             if (is_collection($this->values)) {

@@ -87,6 +87,24 @@ const AIChatFormCSS= `
       .mw-ai-chat-box-options select selectedcontent{
         white-space: nowrap;
       }
+      .mw-ai-chat-box-options button.active{
+        background: white;
+        color: #111;
+      }
+      .mw-ai-chat-box-options button{
+
+    width: 35px;
+    height: 35px;
+    text-align: center;
+   align-items:center;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-inline-end: 10px;
+        svg{
+            width: 25px;
+        }
+      }
+
       .mw-ai-chat-box-options select{
         width: 140px;
         height:31px;
@@ -133,7 +151,7 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
         optionsTpl = `
             <div class="mw-ai-chat-box-options" name="chatOptions">
 
-                ${options.map(o => `<button value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected ' : ''}">${o.content}</button>`).join('')}
+                ${options.map(o => `<button title="${o.content}" value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected ' : ''}">${o.icon}</button>`).join('')}
             </div>
         `;
     }
@@ -252,12 +270,30 @@ export class AIChatForm extends MicroweberBaseClass {
         frag.className = 'mw-ai-chat-form';
 
         this.form = frag;
-        this.chatOptionsSelect = this.form.querySelector('[name="chatOptions"]');
-        if(this.chatOptionsSelect) {
-            this.chatOptionsSelect.addEventListener('input', e => {
-                this.dispatch('chatOptionChange', this.chatOptionsSelect.value);
+        const btnOptions =  this.form.querySelectorAll('[name="chatOptions"] button');
+
+
+         btnOptions.forEach(node => {
+            node.addEventListener('click',  (e) => {
+                node.classList.toggle('active')
+                let value = 'text';
+                const active = frag.querySelectorAll('[name="chatOptions"] button.active');
+                if(btnOptions.length === active.length) {
+                    value = 'all'
+                } else if(active.length === 0) {
+                    frag.querySelectorAll('[name="chatOptions"] [value="text"]')?.classList.add("active")
+                } else {
+                    value = active[0].value;
+                }
+
+
+
+
+
+                this.dispatch('chatOptionChange',  value);
             })
-        }
+         })
+
         this.area = frag.querySelector('.mw-ai-chat-box-area-field');
         this.micButton = frag.querySelector('.mw-ai-chat-box-action-voice');
         this.sendButton = frag.querySelector('.mw-ai-chat-box-action-send');
@@ -318,9 +354,7 @@ export class AIChatForm extends MicroweberBaseClass {
         this.area.disabled = true;
         this.micButton.disabled = true;
         this.sendButton.disabled = true;
-        if(this.chatOptionsSelect ) {
-            this.chatOptionsSelect.disabled = true;
-        }
+
     }
 
     enable() {
@@ -329,9 +363,7 @@ export class AIChatForm extends MicroweberBaseClass {
         this.area.disabled = false;
         this.micButton.disabled = false;
         this.sendButton.disabled = false;
-        if(this.chatOptionsSelect ) {
-            this.chatOptionsSelect.disabled = false;
-        }
+
     }
 
     init() {

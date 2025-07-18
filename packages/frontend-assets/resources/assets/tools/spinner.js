@@ -88,7 +88,7 @@ mw.spinnerProgress = function(){
 
     const target = document.body;
     const has = Array.from(target.children).find(node => node.classList.contains('mw-spinner-progress'));
-    console.log(has)
+
 
     if(has) {
         console.log(has.$$spinnerProgress)

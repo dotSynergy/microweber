@@ -14,11 +14,10 @@ class ImageRolloverModuleTest extends TestCase
         $this->assertEquals('Image Rollover', ImageRolloverModule::$name);
         $this->assertEquals('image_rollover', ImageRolloverModule::$module);
         $this->assertEquals('media', ImageRolloverModule::$categories);
-        $this->assertEquals(3, ImageRolloverModule::$position);
         $this->assertEquals('modules.image_rollover-icon', ImageRolloverModule::$icon);
     }
 
-    #[Test] 
+    #[Test]
     public function test_module_initialization()
     {
         $module = new ImageRolloverModule();

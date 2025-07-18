@@ -146,7 +146,7 @@ class CustomField extends Model
 
 
         if (!isset($this->values)) {
-            // signel value 
+            // signel value
             if (isset($this->value)) {
 
                 //cleaup the old value

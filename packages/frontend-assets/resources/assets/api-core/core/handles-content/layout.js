@@ -400,8 +400,8 @@ export class LayoutHandleContent {
     }
 
     addButtons() {
-        const plusLabel = mw.lang('Add Layout');
-
+        var plusLabel = mw.lang('Add Layout');
+        plusLabel = '+ ' + plusLabel;
         const handlePlus = which => {
             this.dispatch('insertLayoutRequest');
             this.dispatch('insertLayoutRequestOn' + which.charAt(0).toUpperCase() + which.slice(1));

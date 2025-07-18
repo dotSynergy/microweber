@@ -34,6 +34,26 @@
                     {{ module.title || module.type }}
                 </v-tooltip>
                 <span v-html="getModuleIcon(module)"></span>
+                
+                <!-- Background indicators for background modules -->
+                <div v-if="module.type === 'background'" class="background-indicators">
+                    <div 
+                        v-if="module.backgroundImage"
+                        class="background-indicator background-image-indicator"
+                        :style="{ backgroundImage: `url('${module.backgroundImage}')` }"
+                    ></div>
+                    <div 
+                        v-else-if="module.backgroundVideo"
+                        class="background-indicator background-video-indicator"
+                    >
+                        <span class="video-icon">▶</span>
+                    </div>
+                    <div 
+                        v-else-if="module.backgroundColor"
+                        class="background-indicator background-color-indicator"
+                        :style="{ backgroundColor: module.backgroundColor }"
+                    ></div>
+                </div>
             </div>
         </div>
 
@@ -94,12 +114,13 @@
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
+    position: relative;
+    overflow: visible;
 }
 
 .module-settings-button:hover {
     transform: scale(1.05);
 }
-
 
 .module-settings-button:active {
     transform: scale(0.95);
@@ -115,6 +136,49 @@
     width: 16px;
     height: 16px;
     object-fit: contain;
+}
+
+/* Background indicators */
+.background-indicators {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    pointer-events: none;
+}
+
+.background-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: white;
+    overflow: hidden;
+}
+
+.background-image-indicator {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.background-video-indicator {
+    background-color: #000;
+}
+
+.background-color-indicator {
+    /* Background color will be set inline via style attribute */
+    min-width: 16px;
+    min-height: 16px;
+}
+
+.video-icon {
+    font-size: 8px;
+    line-height: 1;
 }
 </style>
 
@@ -181,6 +245,50 @@ export default {
                 window.mw.app.editor.on('onModuleSettingsRequest', (module) => {
                     this.activeModuleId = module?.id || null;
                 });
+                
+                // Listen for layout background changes
+                window.mw.app.editor.on('onLayoutBackgroundChanged', () => {
+                    this.updateCurrentLayout();
+                });
+            }
+
+            // Listen for layout background changes from the layout background API
+            if (window.mw?.top()?.app?.layoutBackground) {
+                // Listen for background image changes
+                const originalSetBackgroundImage = window.mw.top().app.layoutBackground.setBackgroundImage;
+                if (originalSetBackgroundImage) {
+                    window.mw.top().app.layoutBackground.setBackgroundImage = (...args) => {
+                        originalSetBackgroundImage.apply(window.mw.top().app.layoutBackground, args);
+                        setTimeout(() => {
+                            this.updateCurrentLayout();
+                            this.updateBackgroundIndicators();
+                        }, 100);
+                    };
+                }
+
+                // Listen for background color changes
+                const originalSetBackgroundColor = window.mw.top().app.layoutBackground.setBackgroundColor;
+                if (originalSetBackgroundColor) {
+                    window.mw.top().app.layoutBackground.setBackgroundColor = (...args) => {
+                        originalSetBackgroundColor.apply(window.mw.top().app.layoutBackground, args);
+                        setTimeout(() => {
+                            this.updateCurrentLayout();
+                            this.updateBackgroundIndicators();
+                        }, 100);
+                    };
+                }
+
+                // Listen for background video changes
+                const originalSetBackgroundVideo = window.mw.top().app.layoutBackground.setBackgroundVideo;
+                if (originalSetBackgroundVideo) {
+                    window.mw.top().app.layoutBackground.setBackgroundVideo = (...args) => {
+                        originalSetBackgroundVideo.apply(window.mw.top().app.layoutBackground, args);
+                        setTimeout(() => {
+                            this.updateCurrentLayout();
+                            this.updateBackgroundIndicators();
+                        }, 100);
+                    };
+                }
             }
 
 
@@ -255,12 +363,16 @@ export default {
                         }
                     }
 
+                    // Get background information for background modules
+                    const backgroundInfo = this.getBackgroundInfo(moduleElement, moduleType);
+
                     moduleData.push({
                         id: moduleId,
                         type: moduleType,
                         title: moduleTitle,
                         element: moduleElement,
-                        isActive: moduleId === this.activeModuleId
+                        isActive: moduleId === this.activeModuleId,
+                        ...backgroundInfo
                     });
                 }
             });
@@ -351,6 +463,55 @@ export default {
                 .replace(/[_-]/g, ' ')
                 .replace(/\b\w/g, l => l.toUpperCase())
                 .trim();
+        },
+
+        getBackgroundInfo(moduleElement, moduleType) {
+            // Only process background modules
+            if (moduleType.toLowerCase() !== 'background') {
+                return {};
+            }
+
+            try {
+                // Get the layout element that contains the background
+                const layoutElement = this.getCurrentLayoutElement();
+                if (!layoutElement) return {};
+
+                // Find background elements within the layout
+                const bg = layoutElement.querySelector('.mw-layout-background-block');
+                if (!bg) return {};
+
+                const bgNode = bg.querySelector('.mw-layout-background-node');
+                const bgOverlay = bg.querySelector('.mw-layout-background-overlay');
+
+                let backgroundInfo = {};
+
+                // Check for background image
+                if (bgNode && window.mw?.top()?.app?.layoutBackground) {
+                    const bgImage = window.mw.top().app.layoutBackground.getBackgroundImage(bgNode);
+                    if (bgImage && bgImage !== 'none' && bgImage.trim() !== '') {
+                        backgroundInfo.backgroundImage = bgImage;
+                    }
+
+                    // Check for background video
+                    const bgVideo = window.mw.top().app.layoutBackground.getBackgroundVideo(bgNode);
+                    if (bgVideo && bgVideo !== 'none' && bgVideo.trim() !== '') {
+                        backgroundInfo.backgroundVideo = bgVideo;
+                    }
+                }
+
+                // Check for background color
+                if (bgOverlay && window.mw?.top()?.app?.layoutBackground) {
+                    const bgColor = window.mw.top().app.layoutBackground.getBackgroundColor(bgOverlay);
+                    if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent' && bgColor.trim() !== '') {
+                        backgroundInfo.backgroundColor = bgColor;
+                    }
+                }
+
+                return backgroundInfo;
+            } catch (error) {
+                console.warn('Error getting background info:', error);
+                return {};
+            }
         }, isEditableModule(moduleType) {
             // Filter out non-editable or system modules
             const excludedTypes = [
@@ -497,7 +658,17 @@ export default {
             } catch (error) {
                 console.error('Error inserting module into layout:', error);
             }
-        }
+        },
+
+        updateBackgroundIndicators() {
+            // Update background information for existing background modules
+            this.currentLayoutModules.forEach(module => {
+                if (module.type === 'background' && module.element) {
+                    const backgroundInfo = this.getBackgroundInfo(module.element, module.type);
+                    Object.assign(module, backgroundInfo);
+                }
+            });
+        },
     }
 };
 </script>

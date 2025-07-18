@@ -281,7 +281,11 @@ export class AIChatForm extends MicroweberBaseClass {
                 if(btnOptions.length === active.length) {
                     value = 'all'
                 } else if(active.length === 0) {
-                    frag.querySelectorAll('[name="chatOptions"] [value="text"]')?.classList.add("active")
+
+                    var el = frag.querySelector('[name="chatOptions"] [value="text"]');
+                    if(el) {
+                        el.classList.add("active")
+                    }
                 } else {
                     value = active[0].value;
                 }

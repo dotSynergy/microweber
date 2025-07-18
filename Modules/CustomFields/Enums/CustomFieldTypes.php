@@ -10,7 +10,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
 {
     // Most commonly used fields
     case TEXT = 'text';
-    case EMAIL = 'email';
+
 
 
     // Form interaction fields
@@ -45,7 +45,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
     case HIDDEN = 'hidden';
     case PROPERTY = 'property';
     case BREAKLINE = 'breakline';
-
+    case EMAIL = 'email';
 //    case BUTTON = 'button';
 
 
@@ -54,7 +54,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
         return match ($this) {
             // Most commonly used fields
             self::TEXT => 'Text Field',
-            self::EMAIL => 'E-mail',
+
             self::PHONE => 'Phone',
             self::NUMBER => 'Number',
 
@@ -83,6 +83,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
             self::HIDDEN => 'Hidden Field',
             self::PROPERTY => 'Property',
             self::BREAKLINE => 'Break Line',
+            self::EMAIL => 'E-mail',
        //     self::BUTTON => 'Button',
         };
     }
@@ -92,7 +93,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
         return match ($this) {
             // Most commonly used fields
             self::TEXT => 'Text field',
-            self::EMAIL => 'E-mail field',
+
             self::PHONE => 'Phone field',
             self::NUMBER => 'Number field',
 
@@ -121,6 +122,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
             self::HIDDEN => 'Hidden field',
             self::PROPERTY => 'Property field',
             self::BREAKLINE => 'Break Line field',
+            self::EMAIL => 'E-mail field',
 //            self::BUTTON => 'Button field',
         };
     }
@@ -130,7 +132,7 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
         return match ($this) {
             // Most commonly used fields
             self::TEXT => 'mw-text',
-            self::EMAIL => 'heroicon-o-at-symbol',
+
             self::PHONE => 'heroicon-o-phone',
             self::NUMBER => 'mw-numbers',
 
@@ -159,6 +161,8 @@ enum CustomFieldTypes: string implements HasLabel, HasDescriptions, HasIcons
             self::HIDDEN => 'mw-hidden',
             self::PROPERTY => 'mw-info',
             self::BREAKLINE => 'heroicon-o-pencil',
+
+            self::EMAIL => 'heroicon-o-at-symbol',
 //            self::BUTTON => 'heroicon-o-pencil',
 
         };

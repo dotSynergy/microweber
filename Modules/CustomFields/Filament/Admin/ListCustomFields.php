@@ -21,6 +21,8 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -276,14 +278,20 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ])->createAnother(false),
             ])
             ->query($modelQuery)
+
             ->columns([
+
+
+
+                    IconColumn::make('type')
+                        ->icon(function (CustomField $customField) {
+                            $icon = CustomFieldTypes::from($customField->type);
+                            return $icon->getIcons();
+                        }),
+                Split::make([
                 TextColumn::make('name')
                     ->label('Name'),
-                IconColumn::make('type')
-                    ->icon(function (CustomField $customField) {
-                        $icon = CustomFieldTypes::from($customField->type);
-                        return $icon->getIcons();
-                    }),
+
                 TextColumn::make('value')
                     ->state(function (CustomField $customField) {
 
@@ -304,6 +312,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                             return $customField->fieldValueSingle->value;
                         }
                     })->label('Value')
+                ])
             ])
             ->filters([
                 // ...

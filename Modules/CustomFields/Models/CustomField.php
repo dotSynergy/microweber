@@ -144,25 +144,28 @@ class CustomField extends Model
         $setBackValueAttrbuteAfterSave = null;
         $setBackMultileValuesAttrbuteAfterSave = null;
 
-        if (isset($this->value)) {
+    
 
-            //cleaup the old value
-            CustomFieldValue::where('custom_field_id', $this->id)->delete();
+//        if (isset($this->value)) {
+//
+//            //cleaup the old value
+//            CustomFieldValue::where('custom_field_id', $this->id)->delete();
+//
+//            $setBackValueAttrbuteAfterSave = $this->value;
+//            if (is_collection($this->value)) {
+//                $customFieldValueToSave = $this->value->toArray();
+//            } else {
+//                $customFieldValueToSave = $this->value;
+//            }
+//
+//
+//            unset($this->value);
+//        }
+//        if (isset($this->value)) {
+//
+//            unset($this->value);
+//        }
 
-            $setBackValueAttrbuteAfterSave = $this->value;
-            if (is_collection($this->value)) {
-                $customFieldValueToSave = $this->value->toArray();
-            } else {
-                $customFieldValueToSave = $this->value;
-            }
-
-
-            unset($this->value);
-        }
-        if (isset($this->value)){
-
-            unset($this->value);
-        }
         if (isset($this->values) and !empty($this->values)) {
 
             if (is_collection($this->values)) {

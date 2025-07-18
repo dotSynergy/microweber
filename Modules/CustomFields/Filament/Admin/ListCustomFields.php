@@ -286,6 +286,8 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     }),
                 TextColumn::make('value')
                     ->state(function (CustomField $customField) {
+
+
                         if ($customField->type == 'radio'
                             || $customField->type == 'dropdown'
                             || $customField->type == 'checkbox') {

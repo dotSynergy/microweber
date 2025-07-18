@@ -105,8 +105,9 @@ class Settings extends Page
 
             }
         }
-
+        $positionFallback = 0;
         foreach ($settingsPages as $settingsPage) {
+
             $instance = new $settingsPage;
             $defaultGroup = 'Website Settings';
 
@@ -147,6 +148,13 @@ class Settings extends Page
                 $url = $settingsPage::getNavigationUrl();
             }
 
+            $position = $positionFallback;
+            if (method_exists($instance, 'getNavigationSort')) {
+
+                $position = $settingsPage::getNavigationSort() ?? $positionFallback;
+            }
+
+
             $settingsGroups[$group][] = [
                 'title' => $title,
                 'description' => $description,
@@ -154,7 +162,34 @@ class Settings extends Page
                 'slug' => $slug,
                 'icon' => $icon,
                 'url' => $url,
+                'position' => $position,
             ];
+
+
+            $positionFallback++;
+
+        }
+
+
+        //sort $settingsGroups items postion iside the groups
+
+        foreach ($settingsGroups as $group => $items) {
+            usort($items, function ($a, $b) {
+                if (isset($a['position']) && isset($b['position']) && $a['position'] === $b['position']) {
+                    return 0;
+
+                } else if (!isset($a['position']) && !isset($b['position'])) {
+                    return 0;
+                } elseif (!isset($a['position'])) {
+                    return 1;
+                } elseif (!isset($b['position'])) {
+                    return -1;
+                }
+
+
+                return $a['position'] <=> $b['position'];
+            });
+            $settingsGroups[$group] = $items;
         }
 
 

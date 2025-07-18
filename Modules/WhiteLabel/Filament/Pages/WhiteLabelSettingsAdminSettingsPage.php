@@ -27,6 +27,7 @@ class WhiteLabelSettingsAdminSettingsPage extends AdminSettingsPage
     protected static ?string $title = 'White Label';
 
     protected static string $description = 'Configure your White Label settings';
+    protected static ?int $navigationSort = 500;
 
     //   protected static ?string $slug = 'settings/white-label';
     public array $options;

@@ -105,9 +105,8 @@ class OrderResource extends Resource
 
                     Forms\Components\Section::make()
                         ->schema([
-                            Forms\Components\ToggleButtons::make('order_status')
+                            Forms\Components\Select::make('order_status')
                                 ->columnSpanFull()
-                                ->inline()
                                 ->default(OrderStatus::New)
                                 ->options(OrderStatus::class)
                                 ->required(),

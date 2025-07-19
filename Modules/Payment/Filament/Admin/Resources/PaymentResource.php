@@ -42,7 +42,7 @@ class PaymentResource extends Resource
                     ->prefix(fn($record) => $record?->currency ?? ''),
                 TextInput::make('currency')
                     ->required(),
-                Select::make('status')
+                \Filament\Forms\Components\Select::make('status')
                     ->options(PaymentStatus::class)
                     ->required(),
                 Select::make('payment_provider')

@@ -33,9 +33,8 @@ class PaymentsRelationManager extends RelationManager
                     ->options(collect(Currency::getCurrencies())->mapWithKeys(fn ($item, $key) => [$key => data_get($item, 'name')]))
                     ->searchable()
                     ->required(),
-                Forms\Components\ToggleButtons::make('status')
+                Forms\Components\Select::make('status')
                     ->columnSpanFull()
-                    ->inline()
                     ->default(PaymentStatus::Pending)
                     ->options(PaymentStatus::class)
                     ->required(),

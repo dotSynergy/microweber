@@ -62,23 +62,13 @@ export default {
     },
 
     data() {
-        var predefinedClasses = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedClasses();
-        var canShowPredefinedStylesClasses = false;
-        var predefinedClassesVariables = false;
-      //  var predefinedClassesScreenshots = false;
-        if (predefinedClasses && predefinedClasses.length > 0) {
-            canShowPredefinedStylesClasses = true;
-            predefinedClassesVariables = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedClassesVaribles(predefinedClasses);
-        }
-
         return {
-            canShowPredefinedStylesClasses: canShowPredefinedStylesClasses,
+            canShowPredefinedStylesClasses: false,
             showPredefinedStylesClasses: false,
             showRadioButtons: false,
-            predefinedClassesVariables: predefinedClassesVariables,
-        //    predefinedClassesScreenshots: predefinedClassesScreenshots,
+            predefinedClassesVariables: false,
             selectedClass: '',
-            predefinedClasses: predefinedClasses,
+            predefinedClasses: [],
         };
     },
     methods: {
@@ -188,31 +178,44 @@ this.showRadioButtons = false;
 
             //    this.predefinedClassesVariables = newVariables;
             // handle the change here
-        }
-    },
-    mounted() {
-        if(this.canShowPredefinedStylesClasses){
-            // var predefinedClassesScreenshotsData = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedStylesScreenshotUrls();
-            // predefinedClassesScreenshotsData.then((data) => {
-            //     this.predefinedClassesScreenshots = data;
-            // });
-
-            var predefinedClassesStylesheets = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedElementStylsheetsFromDocument();
-            //append to curent document if stylsheed is not already added
-
-            if(predefinedClassesStylesheets && predefinedClassesStylesheets.length > 0){
-                predefinedClassesStylesheets.forEach((stylesheet) => {
-
-                    if(!document.querySelector('link[href="'+stylesheet+'"]')){
-                        var link = document.createElement('link');
-                        link.href = stylesheet.href;
-                        link.rel = 'stylesheet';
-                        document.head.appendChild(link);
-                    }
-                });
+        },
+        initializePredefinedStyles() {
+            var predefinedClasses = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedClasses();
+            var canShowPredefinedStylesClasses = false;
+            var predefinedClassesVariables = false;
+            
+            if (predefinedClasses && predefinedClasses.length > 0) {
+                canShowPredefinedStylesClasses = true;
+                predefinedClassesVariables = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedClassesVaribles(predefinedClasses);
             }
 
-        }
+            this.canShowPredefinedStylesClasses = canShowPredefinedStylesClasses;
+            this.predefinedClasses = predefinedClasses;
+            this.predefinedClassesVariables = predefinedClassesVariables;
+        },
+    },
+    mounted() {
+        mw.app.canvas.on('liveEditCanvasLoaded', () => {
+            // Initialize predefined styles when canvas is ready
+            this.initializePredefinedStyles();
+            
+            if(this.canShowPredefinedStylesClasses){
+                var predefinedClassesStylesheets = mw.top().app.templateSettings.predefinedElementStylesManager.getPredefinedElementStylsheetsFromDocument();
+                //append to curent document if stylsheed is not already added
+
+                if(predefinedClassesStylesheets && predefinedClassesStylesheets.length > 0){
+                    predefinedClassesStylesheets.forEach((stylesheet) => {
+
+                        if(!document.querySelector('link[href="'+stylesheet+'"]')){
+                            var link = document.createElement('link');
+                            link.href = stylesheet.href;
+                            link.rel = 'stylesheet';
+                            document.head.appendChild(link);
+                        }
+                    });
+                }
+            }
+        });
 
 
 

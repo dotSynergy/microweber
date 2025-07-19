@@ -1030,6 +1030,14 @@ export default {
             // }
             //
             // document.head.appendChild(styleEl);
+
+            if(!this.$refs.iframeContainer){
+                // container not found, cannot append loading element
+                // use has switched to a different tab or the component is not mounted
+                return;
+            }
+
+
             this.$refs.iframeContainer.appendChild(loadingEl);
 
             // Create iframe element

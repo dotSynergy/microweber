@@ -58,12 +58,12 @@ class Settings extends Page
         $settingsPages[] = new AdminShopShippingPage();
         $settingsPages[] = new AdminShopCouponsPage();
         $settingsPages[] = new AdminShopOffersPage();
-        $settingsPages[] = new AdminShopPaymentsPage();
+      //  $settingsPages[] = new AdminShopPaymentsPage();
         $settingsPages[] = new AdminShopTaxesPage();
         $settingsPages[] = new AdminShopInvoicesPage();
         $settingsPages[] = new AdminShopAutoRespondEmailPage();
         $settingsPages[] = new AdminShopOtherPage();
-        $settingsPages[] = new AdminShopOtherPage();
+   //     $settingsPages[] = new AdminShopOtherPage();
 
         $registeredSettingsPages = FilamentRegistry::getPages(self::class, Filament::getCurrentPanel()->getId());
         $registeredSettingsResources = FilamentRegistry::getResources(self::class, Filament::getCurrentPanel()->getId());

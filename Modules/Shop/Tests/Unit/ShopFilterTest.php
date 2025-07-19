@@ -5,6 +5,8 @@ namespace Modules\Shop\Tests\Unit;
 use Illuminate\Support\Facades\App;
 use MicroweberPackages\Core\tests\TestCase;
 use Modules\Blog\Livewire\BlogComponent;
+use Modules\CustomFields\Models\CustomField;
+use Modules\CustomFields\Models\CustomFieldValue;
 use Modules\Page\Models\Page;
 use Modules\Product\Models\Product;
 use Modules\Shop\Livewire\ShopComponent;
@@ -13,6 +15,12 @@ class ShopFilterTest extends TestCase
 {
     public function testGetProductsInShop()
     {
+        Page::truncate();
+        Product::truncate();
+        CustomField::truncate();
+        CustomFieldValue::truncate();
+
+
         $newShopPage = new Page();
         $newShopPage->title = uniqid();
         $newShopPage->is_shop = 1;

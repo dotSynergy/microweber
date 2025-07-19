@@ -278,47 +278,6 @@ class ContentResource extends Resource
                             ])->columnSpanFull()->visible(function (Forms\Get $get) {
                                 return $get('content_type') == 'product';
                             }),
-
-
-                        Forms\Components\Section::make('Inventory')
-                            ->schema([
-
-
-                                Forms\Components\TextInput::make('content_data.sku')
-                                    ->helperText('Stock Keeping Unit'),
-
-                                Forms\Components\TextInput::make('content_data.barcode')
-                                    ->helperText('ISBN, UPC, GTIN, etc.'),
-
-                                Forms\Components\Toggle::make('content_data.track_quantity')
-                                    ->label('Track Quantity')
-                                    ->live()
-                                    ->default(false),
-
-
-                                Forms\Components\Group::make([
-                                    Forms\Components\TextInput::make('content_data.quantity')
-                                        ->numeric()
-                                        ->rules(['regex:/^\d{1,6}$/'])
-                                        ->default(0),
-
-                                    Forms\Components\Checkbox::make('content_data.sell_oos')
-                                        ->label('Continue selling when out of stock')
-                                        ->default(false),
-
-                                    Forms\Components\TextInput::make('content_data.max_qty_per_order')
-                                        ->numeric()
-                                        ->rules(['regex:/^\d{1,6}$/'])
-                                        ->label('Max quantity per order')
-                                        ->default(0),
-                                ])->hidden(function (Forms\Get $get) {
-                                    return !$get('content_data.track_quantity');
-                                }),
-
-
-                            ])->columnSpanFull()->visible(function (Forms\Get $get) {
-                                return $get('content_type') == 'product';
-                            }),
                         Forms\Components\Section::make('Select Template')
                             ->schema(
                                 [
@@ -330,84 +289,6 @@ class ContentResource extends Resource
                             ->columnSpanFull()
                             ->visible(function (Forms\Get $get) {
                                 return $get('content_type') == 'page';
-                            }),
-
-
-                        Forms\Components\Section::make('Shipping')
-                            ->schema([
-
-                                // This is a physical product
-                                Forms\Components\Toggle::make('content_data.physical_product')
-                                    ->label('This is a physical product')
-                                    ->default(true)
-                                    ->live(),
-
-                                Forms\Components\Group::make([
-                                    Forms\Components\TextInput::make('content_data.shipping_fixed_cost')
-                                        ->numeric()
-                                        ->helperText('Used to set your shipping price at checkout and label prices during fulfillment.')
-                                        ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                        ->suffix(currency_symbol())
-                                        ->label('Fixed cost')
-                                        ->columnSpanFull()
-                                        ->default(0),
-
-
-                                    Forms\Components\Toggle::make('content_data.free_shipping')
-                                        ->columnSpanFull(),
-
-                                    Forms\Components\Toggle::make('content_data.shipping_advanced_settings')
-                                        ->label('Show advanced weight settings')
-                                        ->live()
-                                        ->columnSpanFull(),
-
-                                ])->columns(2)->hidden(function (Forms\Get $get) {
-                                    return !$get('content_data.physical_product');
-                                }),
-
-
-                                Forms\Components\Section::make('Shipping Advanced')
-                                    ->heading('Advanced')
-                                    ->description('Advanced product shipping settings.')
-                                    ->schema([
-                                        Forms\Components\TextInput::make('content_data.weight')
-                                            ->numeric()
-                                            ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                            ->label('Weight (kg)')
-                                            ->default(0),
-
-
-                                        Forms\Components\TextInput::make('content_data.width')
-                                            ->numeric()
-                                            ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                            ->label('Width (cm)')
-                                            ->default(0),
-
-                                        Forms\Components\TextInput::make('content_data.length')
-                                            ->numeric()
-                                            ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                            ->label('Length (cm)')
-                                            ->default(0),
-
-                                        Forms\Components\TextInput::make('content_data.depth')
-                                            ->numeric()
-                                            ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
-                                            ->label('Depth (cm)')
-                                            ->default(0),
-
-                                        Forms\Components\Checkbox::make('content_data.params_in_checkout')
-                                            ->label('Show parameters in checkout page')
-                                            ->columnSpanFull()
-                                            ->default(false),
-
-                                    ])
-                                    ->columns(4)
-                                    ->visible(function (Forms\Get $get) {
-                                        return $get('content_data.shipping_advanced_settings');
-                                    }),
-
-                            ])->columnSpanFull()->visible(function (Forms\Get $get) {
-                                return $get('content_type') == 'product';
                             }),
 
                     ])->columnSpan(['lg' => 2]),
@@ -505,10 +386,17 @@ class ContentResource extends Resource
         return [
             Tabs::make('ContentTabs')
                 ->tabs([
-                    Tabs\Tab::make('Details')
+                    Tabs\Tab::make('Content')
                         ->schema(
                             $mainForm
                         ),
+                    Tabs\Tab::make('Product Details')
+                        ->schema(
+                            self::productDetailsFormArray()
+                        )
+                        ->visible(function (Forms\Get $get) {
+                            return $get('content_type') == 'product';
+                        }),
                     Tabs\Tab::make('Custom Fields')
                         ->schema(function (Content|null $record) {
 
@@ -557,6 +445,154 @@ class ContentResource extends Resource
         }
 
         return $form->schema(static::formArray($params));
+    }
+
+    public static function productDetailsFormArray()
+    {
+        return [
+            Forms\Components\Section::make('Pricing')
+                ->schema([
+
+                    Forms\Components\TextInput::make('price')
+                        ->numeric()
+                        ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                        ->columnSpan(['lg' => 2, 'sm' => 2])
+                        ->required(),
+
+
+                    Forms\Components\TextInput::make('special_price')
+                        ->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set, ?array $state) {
+
+                            if ($record) {
+                                $getSpecialPrice = $record->getSpecialPriceAttribute();
+
+                                $set('special_price', $getSpecialPrice);
+                            } else {
+                                $set('special_price', '');
+                            }
+                        })
+                        ->numeric()
+                        ->columnSpan(['lg' => 2, 'sm' => 2])
+                        ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                        ->visible(function_exists('offers_get_price'))
+                    ,
+
+
+                ])->columnSpanFull(),
+
+            Forms\Components\Section::make('Inventory')
+                ->schema([
+
+
+                    Forms\Components\TextInput::make('content_data.sku')
+                        ->helperText('Stock Keeping Unit'),
+
+                    Forms\Components\TextInput::make('content_data.barcode')
+                        ->helperText('ISBN, UPC, GTIN, etc.'),
+
+                    Forms\Components\Toggle::make('content_data.track_quantity')
+                        ->label('Track Quantity')
+                        ->live()
+                        ->default(false),
+
+
+                    Forms\Components\Group::make([
+                        Forms\Components\TextInput::make('content_data.quantity')
+                            ->numeric()
+                            ->rules(['regex:/^\d{1,6}$/'])
+                            ->default(0),
+
+                        Forms\Components\Checkbox::make('content_data.sell_oos')
+                            ->label('Continue selling when out of stock')
+                            ->default(false),
+
+                        Forms\Components\TextInput::make('content_data.max_qty_per_order')
+                            ->numeric()
+                            ->rules(['regex:/^\d{1,6}$/'])
+                            ->label('Max quantity per order')
+                            ->default(0),
+                    ])->hidden(function (Forms\Get $get) {
+                        return !$get('content_data.track_quantity');
+                    }),
+
+
+                ])->columnSpanFull(),
+
+            Forms\Components\Section::make('Shipping')
+                ->schema([
+
+                    // This is a physical product
+                    Forms\Components\Toggle::make('content_data.physical_product')
+                        ->label('This is a physical product')
+                        ->default(true)
+                        ->live(),
+
+                    Forms\Components\Group::make([
+                        Forms\Components\TextInput::make('content_data.shipping_fixed_cost')
+                            ->numeric()
+                            ->helperText('Used to set your shipping price at checkout and label prices during fulfillment.')
+                            ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                            ->suffix(currency_symbol())
+                            ->label('Fixed cost')
+                            ->columnSpanFull()
+                            ->default(0),
+
+
+                        Forms\Components\Toggle::make('content_data.free_shipping')
+                            ->columnSpanFull(),
+
+                        Forms\Components\Toggle::make('content_data.shipping_advanced_settings')
+                            ->label('Show advanced weight settings')
+                            ->live()
+                            ->columnSpanFull(),
+
+                    ])->columns(2)->hidden(function (Forms\Get $get) {
+                        return !$get('content_data.physical_product');
+                    }),
+
+
+                    Forms\Components\Section::make('Shipping Advanced')
+                        ->heading('Advanced')
+                        ->description('Advanced product shipping settings.')
+                        ->schema([
+                            Forms\Components\TextInput::make('content_data.weight')
+                                ->numeric()
+                                ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                ->label('Weight (kg)')
+                                ->default(0),
+
+
+                            Forms\Components\TextInput::make('content_data.width')
+                                ->numeric()
+                                ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                ->label('Width (cm)')
+                                ->default(0),
+
+                            Forms\Components\TextInput::make('content_data.length')
+                                ->numeric()
+                                ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                ->label('Length (cm)')
+                                ->default(0),
+
+                            Forms\Components\TextInput::make('content_data.depth')
+                                ->numeric()
+                                ->rules(['regex:/^\d{1,6}(\.\d{0,2})?$/'])
+                                ->label('Depth (cm)')
+                                ->default(0),
+
+                            Forms\Components\Checkbox::make('content_data.params_in_checkout')
+                                ->label('Show parameters in checkout page')
+                                ->columnSpanFull()
+                                ->default(false),
+
+                        ])
+                        ->columns(4)
+                        ->visible(function (Forms\Get $get) {
+                            return $get('content_data.shipping_advanced_settings');
+                        }),
+
+                ])->columnSpanFull(),
+        ];
     }
 
     public static function seoFormArray()

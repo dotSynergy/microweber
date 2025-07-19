@@ -16,12 +16,12 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -230,9 +230,10 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
 
             ->headerActions([
                 CreateAction::make('custom-field-create-action')
-                    // ->teleport('body')
+                  //  ->teleport('body')
                     ->label('Add custom field')
                     ->slideOver()
+                    ->modalWidth(MaxWidth::ExtraLarge)
                     ->form([
                         Wizard::make([
                                 Wizard\Step::make('Type')
@@ -288,7 +289,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                             $icon = CustomFieldTypes::from($customField->type);
                             return $icon->getIcons();
                         }),
-                Split::make([
+
                 TextColumn::make('name')
                     ->label('Name'),
 
@@ -312,7 +313,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                             return $customField->fieldValueSingle->value;
                         }
                     })->label('Value')
-                ])
+
             ])
             ->filters([
                 // ...
@@ -322,6 +323,8 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ->label('Edit')
                     ->icon('heroicon-o-pencil')
                     ->slideOver()
+                    ->modalWidth(MaxWidth::ExtraLarge)
+
                     ->form($editForm),
 
                 DeleteAction::make('custom-field-delete')

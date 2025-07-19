@@ -145,9 +145,29 @@ class CustomField extends Model
         $setBackMultileValuesAttrbuteAfterSave = null;
 
 
-        if (!isset($this->values)) {
+
+
+        $customFieldValueToSaveMultiple = $this->values ?? null;
+
+        if($customFieldValueToSaveMultiple){
+            $customFieldValueToSaveMultiple = array_filter($customFieldValueToSaveMultiple, function ($value) {
+                return $value !== null && $value !== '' && $value != 0;
+            });
+        }
+
+//
+//        if(isset($this->values) and is_array($this->values)) {
+//            $this->values = array_filter($this->values, function ($value) {
+//                return $value !== null && $value !== '' && $value != 0;
+//            });
+//
+//        }
+
+     if ( empty($customFieldValueToSaveMultiple)) {
             // signel value
+
             if (isset($this->value)) {
+
 
                 //cleaup the old value
                 CustomFieldValue::where('custom_field_id', $this->id)->delete();
@@ -158,12 +178,14 @@ class CustomField extends Model
                 } else {
                     $customFieldValueToSave = $this->value;
                 }
-
+                if( is_array($customFieldValueToSave) and isset($customFieldValueToSave[0]) ) {
+                    $customFieldValueToSave = array_pop($customFieldValueToSave);
+                }
 
                 unset($this->value);
             }
 
-        }
+      }
         if (isset($this->value)) {
 
             unset($this->value);

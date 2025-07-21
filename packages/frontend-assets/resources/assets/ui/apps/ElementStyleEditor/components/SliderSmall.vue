@@ -90,29 +90,31 @@ export default {
   width: 60px !important;
   height: 28px !important;
   padding: 4px 8px !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 6px !important;
+  border: none !important;
+  border-bottom: 2px solid #e2e8f0 !important;
+  border-radius: 0 !important;
   font-size: 12px !important;
   font-weight: 500 !important;
   color: #2d3748 !important;
-  background: #ffffff !important;
-  transition: all 0.2s ease !important;
+  background: transparent !important;
+  transition: all 0.3s ease !important;
   text-align: center !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: none !important;
 }
 
 .form-control-input-range-slider:focus {
   outline: none !important;
-  border-color: #4299e1 !important;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-  background: #f7fafc !important;
+  border-bottom: 2px solid #4299e1 !important;
+  background: rgba(66, 153, 225, 0.02) !important;
   transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(66, 153, 225, 0.15) !important;
 }
 
 .form-control-input-range-slider:hover {
-  border-color: #cbd5e0 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  border-bottom: 2px solid #cbd5e0 !important;
+  background: rgba(0, 0, 0, 0.01) !important;
   transform: translateY(-0.5px) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
 }
 
 .form-control-input-range-slider::placeholder {

@@ -265,8 +265,9 @@ abstract class LiveEditModuleSettings extends Page
                     ->live()
                     ->label($schema['label'] ?? '')
                     ->visible($showField)
+                    ->enableTooltips()
                     ->sliders([
-                        MwInputSlider::make('min')
+                        MwInputSlider::make($name)
                     ])->range([
                         "min" => $min,
                         "max" => $max

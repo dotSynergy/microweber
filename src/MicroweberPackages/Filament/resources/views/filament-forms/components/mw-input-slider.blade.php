@@ -12,7 +12,7 @@
     :hint-icon="$getHintIcon()"
     :required="$isRequired()"
     :state-path="$getStatePath()"
-    style="margin-bottom:50px"
+
 
 >
     <div
@@ -22,7 +22,7 @@
     </div>
 
     <div
-        class="mb-[200px]"
+        class="mb-1"
         ax-load
         id="{{$sliderId}}"
         x-data="{

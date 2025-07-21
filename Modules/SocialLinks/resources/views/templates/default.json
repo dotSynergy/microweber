@@ -19,7 +19,7 @@
             }
         },
         {
-            "type": "number",
+            "type": "slider",
             "label": "Icon font size",
             "name": "iconSize",
             "placeholder": "Select icon size",
@@ -31,7 +31,7 @@
             }
         },
         {
-            "type": "number",
+            "type": "slider",
             "label": "Icon spacing",
             "name": "iconSpacing",
             "placeholder": "Select icon spacing",
@@ -39,7 +39,7 @@
             "options": {
                 "min": 0,
                 "max": 200,
-                "step": 0.5
+                "step": 1
             }
         },
         {

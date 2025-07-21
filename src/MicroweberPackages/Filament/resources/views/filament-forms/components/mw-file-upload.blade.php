@@ -101,7 +101,7 @@
 
 
             <div class="w-full" x-show="state && typeFile == 'video'">
-                <div class="w-full relative flex flex-col items-center justify-center bg-black/80 rounded-md">
+                <div class="w-full relative flex flex-col items-center justify-center bg-black/80 rounded-md overflow-hidden">
                     <div
                         class="absolute w-full top-0 text-white p-2 rounded-t-md bg-gradient-to-b from-black/40 to-black/5 z-10">
                         <div class="flex gap-2 items-center">

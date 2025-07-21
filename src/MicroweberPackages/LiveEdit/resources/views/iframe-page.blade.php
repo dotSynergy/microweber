@@ -100,7 +100,6 @@
         </style>
 
 
-
         <div id="mw-element-style-editor-app-container">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="fs-2 font-weight-bold">Element Style Editor</h3>
@@ -142,9 +141,6 @@
         <?php event_trigger('mw.live_edit.footer'); ?>
 
 
-
-
-
     </div>
 
 
@@ -154,26 +150,45 @@
             defer></script>
 
 
+    <script>
 
 
+        window.addEventListener('load', function () {
 
 
+            setInterval(function () {
+                if(mw.top().app && mw.top().app.canvas) {
+                    var targetWindow = mw.top().app.canvas.getWindow();
+                    if (targetWindow && targetWindow.mw) {
+                        targetWindow.mw.session.check()
+                    }
+                }
+
+                if (mw.top().win && mw.top().win.mw && mw.top().win.mw.uploadGlobalSettings && mw.top().win.mw.uploadGlobalSettings.on) {
+                    //refresh the csrf token
+                    mw.top().win.mw.uploadGlobalSettings.on.beforeFileUpload()
+                }
+            }, 300000); // check session every 5 minutes
 
 
+        });
+
+
+    </script>
 
 
     @if(request()->get('setup_wizard'))
 
         @php
-        $propmtParams = [];
-        $propmtParamsJson = json_encode([]);
-        if(request()->get('prompt')){
-            $propmtParams['prompt'] = request()->get('prompt');
-        }
+            $propmtParams = [];
+            $propmtParamsJson = json_encode([]);
+            if(request()->get('prompt')){
+                $propmtParams['prompt'] = request()->get('prompt');
+            }
 
-        if (isset($propmtParams) && is_array($propmtParams) and !empty($propmtParams)) {
-            $propmtParamsJson = json_encode($propmtParams);
-        }
+            if (isset($propmtParams) && is_array($propmtParams) and !empty($propmtParams)) {
+                $propmtParamsJson = json_encode($propmtParams);
+            }
 
 
         @endphp
@@ -181,24 +196,22 @@
         <script>
 
 
-          window.addEventListener('load', function () {
+            window.addEventListener('load', function () {
 
 
+                setTimeout(function () {
 
-             setTimeout(function () {
+                    mw.app.dispatch('showSetupWizard', {!! $propmtParamsJson !!});
 
-                 mw.app.dispatch('showSetupWizard',{!! $propmtParamsJson !!});
+                    const topSearch = new URLSearchParams(mw.top().win.location.search);
 
-                 const topSearch = new URLSearchParams(mw.top().win.location.search);
-
-                 topSearch.delete('prompt');
-                 topSearch.delete('setup_wizard');
-                 window.top.history.pushState(null, null, `?${topSearch.toString()}`);
+                    topSearch.delete('prompt');
+                    topSearch.delete('setup_wizard');
+                    window.top.history.pushState(null, null, `?${topSearch.toString()}`);
 
 
                 }, 2000);
-          });
-
+            });
 
 
         </script>

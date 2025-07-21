@@ -263,6 +263,11 @@ if(window.self !== window.top) {
             mw.trigger('beforeSaveStart', data);
             // todo:
 
+            if (mw.top().win && mw.top().win.mw && mw.top().win.mw.uploadGlobalSettings && mw.top().win.mw.uploadGlobalSettings.on) {
+
+                //refresh the csrf token before save with this method
+                mw.top().win.mw.uploadGlobalSettings.on.beforeFileUpload()
+            }
             if (mw.top().app) {
                 if (mw.top().app && mw.top().app.cssEditor) {
 

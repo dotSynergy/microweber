@@ -3,6 +3,7 @@
 namespace Modules\Content\Filament\Admin\ContentResource\Pages;
 
 use Filament\Actions;
+use Filament\Forms;
 use Filament\Resources\Pages\ListRecords;
 use Hydrat\TableLayoutToggle\Concerns\HasToggleableTable;
 use MicroweberPackages\Multilanguage\Filament\Pages\ListRecords\Concerns\TranslatableRecordsList;
@@ -37,7 +38,6 @@ class ListContents extends ListRecords
                 ->size('xl')
                 ->icon('heroicon-o-plus')
                 ->color('mw-secondary');
-
 
         $multilanguageIsEnabled = true; // TODO
         if ($multilanguageIsEnabled) {

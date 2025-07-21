@@ -4,6 +4,16 @@
         <a href="{{$content->editLink()}}">
         {{$content->title}}
         </a>
+
+        @if($content->is_home)
+
+        <span class="mx-1">
+           {{ svg('heroicon-o-home', 'inline-block w-4 h-4 text-gray-500') }}
+        </span>
+
+        @endif
+
+
     </div>
 
     @php
@@ -16,7 +26,11 @@
                 <a class="">
                     {{content_title($parentPageId)}}
                 </a>
-                @if(!$loop->last)
+
+
+
+
+            @if(!$loop->last)
                     <span class="mx-1">/</span>
                 @endif
             @endforeach

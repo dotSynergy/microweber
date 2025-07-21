@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
 use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
+use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
+use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
 
 class LogoModuleSettings extends LiveEditModuleSettings
@@ -31,7 +33,26 @@ class LogoModuleSettings extends LiveEditModuleSettings
                                     ->label('Logo Size')
                                     ->numeric()
                                     ->live()
-                                    ->default(200), // Default size
+                                  ,
+
+
+
+                                MwInputSliderGroup::make()
+                                    ->live()
+                                    ->sliders([
+                                        MwInputSlider::make('options.size')
+                                            ->label('Logo Size')
+
+                                        ,
+                                    ])
+                                    ->enableTooltips()
+
+
+                                    ->range([
+                                        "min" => 0,
+                                        "max" => 600
+                                    ])
+                                    ->label('Set Size'),
                             ]),
                         Tabs\Tab::make('Text')
                             ->schema([

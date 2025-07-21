@@ -13,8 +13,11 @@ class MwInputSlider extends TextInput
     {
         $static = parent::make($name);
 
-        $static->default(0);
-
         return $static;
+    }
+
+    public function getCurrentState()
+    {
+        return $this->getState() ?? $this->getDefaultState() ?? 0;
     }
 }

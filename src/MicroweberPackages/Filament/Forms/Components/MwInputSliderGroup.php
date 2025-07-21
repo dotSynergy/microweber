@@ -192,7 +192,7 @@ class MwInputSliderGroup extends Component
         $start = [];
 
         $start = collect($this->getSliders())->map(function (MwInputSlider $slider) {
-            return $slider->getDefaultState();
+            return $slider->getCurrentState();
         })
             ->toArray();
 

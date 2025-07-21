@@ -76,14 +76,13 @@ export default {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+  border: none;
   transition: all 0.3s ease;
 }
 
 .mw-live-edit-slider-small:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .form-control-input-range-slider {

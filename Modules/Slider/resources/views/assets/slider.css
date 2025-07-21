@@ -69,11 +69,6 @@
 }
 
 /* Responsive Text */
-@media screen and (max-width: 991px) {
-    .module-slider-header-section-title {
-        font-size: 3rem;
-    }
-}
 
 @media screen and (max-width: 600px) {
     .module-slider-header-section-title {

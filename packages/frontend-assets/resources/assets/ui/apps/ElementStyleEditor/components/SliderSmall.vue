@@ -1,9 +1,9 @@
 <template>
   <div class="form-control-live-edit-label-wrapper">
     <label  v-if="showLabel" class="live-edit-label">{{ label }}
-        <input 
-          type="number" 
-          class="form-control-input-range-slider" 
+        <input
+          type="number"
+          class="form-control-input-range-slider"
           v-model.number="selectedValue"
           :min="min"
           :max="max"
@@ -69,3 +69,118 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form-control-live-edit-label-wrapper {
+  position: relative;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.form-control-live-edit-label-wrapper:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.live-edit-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 6px;
+}
+
+.form-control-input-range-slider {
+  width: 60px !important;
+  height: 28px !important;
+  padding: 4px 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #2d3748 !important;
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
+  text-align: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.form-control-input-range-slider:focus {
+  outline: none !important;
+  border-color: #4299e1 !important;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+  background: #f7fafc !important;
+  transform: translateY(-1px) !important;
+}
+
+.form-control-input-range-slider:hover {
+  border-color: #cbd5e0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-0.5px) !important;
+}
+
+.form-control-input-range-slider::placeholder {
+  color: #a0aec0 !important;
+  font-size: 11px !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.form-control-input-range-slider::-webkit-outer-spin-button,
+.form-control-input-range-slider::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.form-control-input-range-slider[type=number] {
+  -moz-appearance: textfield;
+}
+
+.live-edit-label span {
+  font-size: 11px;
+  color: #718096;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+[data-size="medium"] {
+  position: relative;
+  padding: 4px 0;
+}
+
+.reset-field {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #a0aec0;
+}
+
+.reset-field:hover {
+  color: #4a5568;
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.reset-field svg {
+  transition: transform 0.2s ease;
+}
+
+.reset-field:hover svg {
+  transform: rotate(180deg);
+}
+</style>

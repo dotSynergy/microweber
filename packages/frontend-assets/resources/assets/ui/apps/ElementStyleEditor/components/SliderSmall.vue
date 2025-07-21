@@ -1,7 +1,15 @@
 <template>
   <div class="form-control-live-edit-label-wrapper">
     <label  v-if="showLabel" class="live-edit-label">{{ label }}
-        <span class="form-control-input-range-slider">{{ selectedValue }} </span>
+        <input 
+          type="number" 
+          class="form-control-input-range-slider" 
+          v-model.number="selectedValue"
+          :min="min"
+          :max="max"
+          :step="step"
+          @blur="validateValue"
+        />
         <span>{{ unit }} </span>
     </label>
     <div data-size="medium" :class="{ 'col-12': !showLabel , 'col-12': showLabel }">
@@ -35,6 +43,16 @@ export default {
   methods: {
     resetValue() {
       this.selectedValue = null;
+    },
+    validateValue() {
+      if (this.selectedValue !== null && this.selectedValue !== undefined) {
+        if (this.min !== undefined && this.selectedValue < this.min) {
+          this.selectedValue = this.min;
+        }
+        if (this.max !== undefined && this.selectedValue > this.max) {
+          this.selectedValue = this.max;
+        }
+      }
     },
   },
   watch: {

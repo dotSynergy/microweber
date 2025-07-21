@@ -1,6 +1,6 @@
 <template>
-  <div class="form-control-live-edit-label-wrapper">
-    <label  v-if="showLabel" class="live-edit-label">{{ label }}
+  <div class="mw-live-edit-slider-small form-control-live-edit-label-wrapper">
+    <label  v-if="showLabel" class="live-edit-label mb-0 pt-1">{{ label }}
         <input
           type="number"
           class="form-control-input-range-slider"
@@ -71,7 +71,7 @@ export default {
 </script>
 
 <style scoped>
-.form-control-live-edit-label-wrapper {
+.mw-live-edit-slider-small {
   position: relative;
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.95);
@@ -81,19 +81,9 @@ export default {
   transition: all 0.3s ease;
 }
 
-.form-control-live-edit-label-wrapper:hover {
+.mw-live-edit-slider-small:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-color: rgba(0, 0, 0, 0.12);
-}
-
-.live-edit-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #4a5568;
-  margin-bottom: 6px;
 }
 
 .form-control-input-range-slider {
@@ -140,13 +130,6 @@ export default {
 /* Firefox */
 .form-control-input-range-slider[type=number] {
   -moz-appearance: textfield;
-}
-
-.live-edit-label span {
-  font-size: 11px;
-  color: #718096;
-  font-weight: 400;
-  white-space: nowrap;
 }
 
 [data-size="medium"] {

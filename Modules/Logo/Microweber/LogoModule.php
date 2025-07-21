@@ -27,7 +27,7 @@ class LogoModule extends BaseModule
         'text_color' => '#000',
         'font_family' => 'inherit',
         'font_size' => '30',
-        'size' => '200'
+        'size' => '100'
     ];
 
     /**

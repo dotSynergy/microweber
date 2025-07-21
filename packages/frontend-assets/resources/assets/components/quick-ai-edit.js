@@ -545,7 +545,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         mw.top().app.on('onModuleReloaded', this.editChangeSyncHandle);
 
 
-        mw.top().app.canvas.on('liveEditCanvasLoaded', this.editChangeSyncHandle);
+        //mw.top().app.canvas.on('liveEditCanvasLoaded', this.editChangeSyncHandle);
 
 
 
@@ -625,9 +625,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
                             if(this._editorNode && this._editorNode.parentElement){
                             const editorParent = this._editorNode.parentElement;
                             editorParent.appendChild(this.editor());
-                            console.log(4)
-                            console.log(editorParent)
-                            console.log(this.editor())
+
                             }
                         } catch ( e) {
                             console.error('Error appending editor:', e);

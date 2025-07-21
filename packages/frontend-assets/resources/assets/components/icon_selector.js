@@ -488,7 +488,7 @@
                         <div class="mw-icon-selector-flex my-2">
                             <label class="mw-icon-selector-control-label live-edit-label px-0">${mw.lang('Size')}</label>
                         </div>
-                        <div class="mwiconlist-settings-section-block-item input-group input-group-flat" style="width: 230px;">
+                        <div class="mwiconlist-settings-section-block-item input-group input-group-flat" >
                             <input class="mw-icon-selector-form-control-range" value="${currentSize}" type="range" min="8" max="200">
                             <input class="form-control" value="${currentSize}" type="number" min="8" max="200">
                             <span class="input-group-text">
@@ -514,22 +514,42 @@
 
                 }
                 if(scope.settings.iconOptions.color) {
-                    var cel = mw.element('<div class="mwiconlist-settings-section-block-item"><label class="mw-icon-selector-control-label live-edit-label px-0 mb-2 ps-2">Choose color</label></div>');
-                    var cinput = mw.element('<input class="mw-icon-selector-form-control mw-icon-selector-2-column" type="color">');
+                    var cel = mw.element(`
+                        <div class="mwiconlist-settings-section-block-item">
+                            <label class="mw-icon-selector-control-label live-edit-label px-0 mb-2 ps-2">Choose color</label>
+                            <button class="mw-icon-selector-form-control mw-icon-selector-2-column" type="button" style="
+
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 30px;
+                                background: transparent;
+                                font-size: 0px;
+                                cursor: pointer;
+                                border: 1px solid rgb(202, 202, 202);
+                                outline: none;
+
+                            "></button>
+                        </div>
+                    `);
+                    var cinput = mw.element('button', cel);
                     actionNodes.color = cinput;
-                    cinput.on('input', function () {
-                        scope.dispatch('colorChange', cinput.get(0).value);
 
 
-                    });
-                    var cpHolder = mw.element()
-                    // cel.append(cinput);
-                    setTimeout(function (){
+                     cel.append(cinput);
+
+                     cinput.on('click', (e) => {
+                        const dlg = mw.dialog({
+                            width: 260,
+                            overlay: 'rgba(0,0,0,.2)',
+                            overlayClose: true
+                        })
                         var cpOptions = {
-                            element: cpHolder.get(0),
+
+                            element: dlg.dialogContainer,
                             position: 'bottom-center',
                             onchange: function (color) {
                                 scope.dispatch('colorChange', color);
+                                cinput.css({backgroundColor: color})
                             },
 
                         };
@@ -537,36 +557,39 @@
                             cpOptions.value = getComputedStyle(scope.settings.target).color
                         }
                         mw.colorPicker(cpOptions);
-                    }, 100)
-                    cel.append(cpHolder);
+                     })
+
+                     cinput.css({backgroundColor: getComputedStyle(scope.settings.target).color})
+
+
                     holder.append(cel);
                 }
                 if(scope.settings.iconOptions.imageReplace) {
                     var rel = mw.element(`
-                    <div class="my-3">
+                    <div class="mwiconlist-settings-section-block-item">
                         <label class="mw-icon-selector-control-label live-edit-label px-0 mb-2 ps-2">${mw.lang('Replace with image')}</label>
+                        ${mw.top().app.iconService.icon('upload', {width: '25px'})}
                     </div>`);
-                    var rinput = mw.element(`
-                        <button type="button" style="min-width: 150px" class="btn btn-light border-0 go-live-edit-href-set admin-toolbar-buttons">
-                        ${mw.lang('Choose')}
-                        </button>
-                    `);
-                    rinput.on('click', function () {
-                        mw.filePickerDialog( (url) => {
-                            scope.dispatch('iconReplaced', {
-                                type: 'image',
-                                url: url,
-                            });
-                        });
 
+                    rel.on('click', function () {
+                        mw.filePickerDialog( (url) => {
+
+                            if(url) {
+                                scope.dispatch('iconReplaced', {
+                                    type: 'image',
+                                    url: url,
+                                });
+                            }
+
+                        });
                     });
-                    rel.append(rinput);
+
                     holder.append(rel);
                 }
                 if(scope.settings.iconOptions.reset) {
                     var rel = mw.element(`
-                    <div class="my-3">
-                        <label class="mw-icon-selector-control-label live-edit-label px-0 mb-2 ps-2">${mw.lang('Reset icon options')}</label>
+                    <div class="mwiconlist-settings-section-block-item">
+                        <label class="mw-icon-selector-control-label live-edit-label px-0 ps-2">${mw.lang('Reset icon options')}</label>
                     </div>`);
                     var rinput = mw.element(`
                         <button type="button" style="min-width: 150px" class="btn btn-outline-secondary ">
@@ -812,7 +835,7 @@
                 return;
             }
             if(!this._dialog) {
-                this._dialog = mw.top().dialog({content: this.get(), title: 'Select icon', closeButtonAction: 'hide', width: 450,overlayClose: true});
+                this._dialog = mw.top().dialog({content: this.get(), title: 'Select icon', closeButtonAction: 'hide', width: 350,overlayClose: true});
 
                 this._dialog.dialogContainer.style.padding = '0px';
                 this._dialog.overlay.style.backgroundColor = 'transparent';

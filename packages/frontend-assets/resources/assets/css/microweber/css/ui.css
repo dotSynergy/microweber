@@ -2840,9 +2840,7 @@ html.mw-loading:after {
     -webkit-appearance: slider-horizontal !important;
     appearance: slider-horizontal !important;
 }
-.mwiconlist-settings-section-block-item {
-    display: block;
-}
+
 .mwiconlist-settings-section-block-item
     + .mwiconlist-settings-section-block-item {
     padding-top: 16px;

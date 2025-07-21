@@ -78,7 +78,7 @@
                     Select media file or <b class="text-yellow-500 font-bold">Upload</b>
                 </span>
             </button>
-            <div class="w-[300px] h-[300px]" x-show="state && typeFile == 'image'">
+            <div class="w-full h-[300px]" x-show="state && typeFile == 'image'">
                 <div class="w-full relative flex flex-col items-center justify-center bg-black/80 rounded-md">
                     <div
                         class="absolute w-full h-full top-0 text-white p-2 rounded-t-md bg-gradient-to-b from-black/40 to-black/5 min-h-[300px]">

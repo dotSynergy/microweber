@@ -95,7 +95,7 @@
                         </div>
                     </div>
 
-                    <img :src="state" class="min-h-[300px]" style="max-height: 300px;object-fit: contain" />
+                    <img :src="state" class="min-h-[300px]" style="max-height: 300px;object-fit: cover" />
                 </div>
             </div>
 

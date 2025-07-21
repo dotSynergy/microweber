@@ -644,6 +644,10 @@ html:not(.mw-le--page-preview) [data-mw-live-edithover="true"] > * {
     display: none !important;
 }
 
+.mw-le-handle-menu-button-holder:empty{
+    display: none   ;
+}
+
 [data-header-footer="true"] {
     #mw-handle-item-layout-root{
         .mw-handle-layout-delete-button,.mw-le-handle-menu-button-holder{

@@ -38,10 +38,16 @@ export class LiveEditWidgetsService extends BaseComponent{
         }
         this.quickEditComponent = new QuickEditComponent(options);
 
-        mw.top().app.liveEdit.elementHandle.on('targetChange', handleTargetChange)
 
-        //dir(mw.app.liveEditWidgets.quickEditComponent.editorNodes[0])
+        mw.top().app.liveEdit.elementHandle.on('targetChange', handleTargetChange);
 
+        if(mw.top().app.liveEditWidgets) {
+            if(mw.top().app.liveEditWidgets.status.quickEditComponent) {
+                setTimeout(() => {
+                    mw.top().app.liveEditWidgets.openQuickEditComponent();
+                }, 110)
+            }
+        }
 
     }
 

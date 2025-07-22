@@ -40,6 +40,21 @@
         if (isset($singleSelect) && $singleSelect) {
             $options['singleSelect'] = true;
         }
+        if (isset($selectedPage) && $selectedPage) {
+            $options['selectedData'][] = [
+                'id' => $selectedPage,
+                'type' => 'page',
+            ];
+        }
+
+        if (isset($selectedCategories) && is_array($selectedCategories) && !empty($selectedCategories)) {
+            foreach ($selectedCategories as $categoryId) {
+                $options['selectedData'][] = [
+                    'id' => $categoryId,
+                    'type' => 'category',
+                ];
+            }
+        }
 
         // Prepare params array
         $params = [];
@@ -56,9 +71,8 @@
 
 
 
-
     <div
-
+        wire:ignore
         ax-load="visible"
 
         ax-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/mw-tree-component.js') }}"
@@ -70,7 +84,7 @@
         })"
 
     >
-        <div wire:ignore id="mw-tree-edit-content-{{$suffix}}"></div>
+        <div id="mw-tree-edit-content-{{$suffix}}"></div>
     </div>
 </div>
 

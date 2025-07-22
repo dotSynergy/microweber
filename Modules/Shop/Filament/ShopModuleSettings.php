@@ -2,13 +2,17 @@
 
 namespace Modules\Shop\Filament;
 
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
 use Modules\Page\Models\Page;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
+use Modules\Product\Filament\Admin\Resources\ProductResource;
 
 class ShopModuleSettings extends LiveEditModuleSettings
 {
@@ -23,6 +27,17 @@ class ShopModuleSettings extends LiveEditModuleSettings
                         Tabs\Tab::make('Items list')
                             ->schema(
                                 [
+
+                                    Actions::make([
+
+                                        Action::make('Edit products')
+                                            ->openUrlInNewTab()
+                                            ->label('Edit products')
+                                            ->icon('heroicon-o-pencil-square')
+                                            ->url(ProductResource::getUrl(), shouldOpenInNewTab: true),
+
+                                    ]),
+
                                     Select::make('options.content_from_id')
                                         ->label('Content From')
                                         ->options(Page::query()

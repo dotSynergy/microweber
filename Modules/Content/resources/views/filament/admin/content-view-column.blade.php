@@ -15,7 +15,7 @@
 
 {{-- opacity-0 group-hover:opacity-100 --}}
 
-    <div class="flex flex-row sm:flex-row items-center mt-2 sm:mt-0 w-full sm:w-auto justify-end sm:justify-end">
+    <div class="flex flex-row sm:flex-row items-center mt-2 sm:mt-0 w-full sm:w-auto justify-start sm:justify-end">
         <a class="" href="{{content_link($content->id)}}" target="_blank" data-bs-toggle="tooltip" x-data="{}" x-tooltip="{
             content: 'View',
             theme: $store.theme,
@@ -43,5 +43,4 @@
     </div>
 
 </div>
-
 

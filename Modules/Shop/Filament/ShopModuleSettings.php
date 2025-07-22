@@ -67,7 +67,7 @@ class ShopModuleSettings extends LiveEditModuleSettings
                                         ->default(10)
                                         ->live(),
 
-                                    Toggle::make('options.filtering_by_tags')
+                                 /*   Toggle::make('options.filtering_by_tags')
                                         ->label('Enable Tag Filtering')
                                         ->live()
                                         ->default(true),
@@ -80,7 +80,7 @@ class ShopModuleSettings extends LiveEditModuleSettings
                                     Toggle::make('options.filtering_by_custom_fields')
                                         ->label('Enable Custom Field Filtering')
                                         ->live()
-                                        ->default(true),
+                                        ->default(true),*/
                                 ]
                             ),
 

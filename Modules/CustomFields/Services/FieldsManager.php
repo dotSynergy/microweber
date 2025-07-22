@@ -470,7 +470,24 @@ class FieldsManager
             $customField->options = $fieldData['options'];
         }
 
+        // Handle placeholder based on show_placeholder setting
         if (!empty($fieldData['placeholder'])) {
+            // Check if show_placeholder is enabled in options
+            $showPlaceholder = false;
+            if (!empty($fieldData['options']) && is_array($fieldData['options'])) {
+                $placeholderSetting = $fieldData['options']['show_placeholder'] ?? false;
+                if ($placeholderSetting === true || $placeholderSetting === 1 || $placeholderSetting === '1' || $placeholderSetting === 'true') {
+                    $showPlaceholder = true;
+                }
+            }
+            
+            if ($showPlaceholder) {
+                $customField->placeholder = $fieldData['placeholder'];
+            } else {
+                $customField->placeholder = null; // Clear placeholder when show_placeholder is false
+            }
+        } elseif (isset($fieldData['placeholder'])) {
+            // If placeholder is explicitly set to empty string or null
             $customField->placeholder = $fieldData['placeholder'];
         }
 

@@ -134,13 +134,20 @@ class DefaultField
             }
         }
 
-        if (!isset($renderSettings['show_placeholder']) || $renderSettings['show_placeholder'] == false      )
-        {
+        // Handle show_placeholder setting properly for both boolean and string values
+        $showPlaceholder = false;
+        if (isset($renderSettings['show_placeholder'])) {
+            $placeholderSetting = $renderSettings['show_placeholder'];
+            if ($placeholderSetting === true || $placeholderSetting === 1 || $placeholderSetting === '1' || $placeholderSetting === 'true') {
+                $showPlaceholder = true;
+            }
+        }
+        
+        if (!$showPlaceholder) {
             $renderData['placeholder'] = '';
         } else {
             $renderData['placeholder'] = $renderSettings['placeholder'] ?? $renderData['placeholder'] ?? '';
-
-         }
+        }
 
         $this->renderData = $renderData;
     }

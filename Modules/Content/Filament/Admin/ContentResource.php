@@ -949,6 +949,27 @@ class ContentResource extends Resource
                         Tables\Filters\QueryBuilder\Constraints\TextConstraint::make('barcode')
                             ->relationship('metaData', 'barcode'),
                     ]),
+
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->label('Category')
+                    ->searchable()
+                    ->options(function () {
+                        return \Modules\Category\Models\Category::query()
+                            ->orderBy('title')
+                            ->pluck('title', 'id')
+                            ->toArray();
+                    })
+                    ->query(function ($query, array $data) {
+
+
+
+                        if (! empty($data['value'])) {
+
+
+                            return $query->whereCategoryIds([$data['value']]);
+                        }
+                        return $query;
+                    }),
             ])
             ->filtersFormWidth(MaxWidth::Medium)
             ->actions([

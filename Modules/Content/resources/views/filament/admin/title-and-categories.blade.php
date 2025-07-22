@@ -2,12 +2,12 @@
 
     <div class="font-medium w-full">
         <a href="{{$content->editLink()}}">
-        {{$content->title}}
+            {{$content->title}}
         </a>
 
         @if($content->is_home)
 
-        <span class="mx-1">
+            <span class="mx-1">
            {{ svg('heroicon-o-home', 'inline-block w-4 h-4 text-gray-500') }}
         </span>
 
@@ -30,7 +30,7 @@
 
 
 
-            @if(!$loop->last)
+                @if(!$loop->last)
                     <span class="mx-1">/</span>
                 @endif
             @endforeach
@@ -48,9 +48,14 @@
                 @foreach($content->categories as $category)
                     @if($category->parent)
 
-                        <div class="text-blue-500 text-[0.8rem]">
-                        {{$category->parent->title}}
-                     </div>
+                        <button 
+                            type="button"
+                            class="text-blue-500 text-[0.8rem] hover:text-blue-700 hover:underline cursor-pointer transition-colors duration-200"
+                            x-on:click="$wire.set('tableFilters.category_id.value', {{ $category->parent->id }}); $wire.$refresh()"
+                            title="Filter by category: {{ $category->parent->title }}"
+                        >
+                            {{$category->parent->title}}
+                        </button>
 
                         @php
                             $iCategory++;

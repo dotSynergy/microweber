@@ -4,7 +4,7 @@
 
 <div class="group flex flex-col sm:flex-row gap-4 sm:gap-8 py-4 items-start sm:items-center justify-between w-full">
 
-    <div class="w-full flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+    <div class="w-full flex flex-col sm:flex-row gap-3 items-start sm:items-center">
         <div>
             @include('modules.content::filament.admin.picture', ['content'=>$content])
         </div>
@@ -15,7 +15,7 @@
 
 {{-- opacity-0 group-hover:opacity-100 --}}
 
-    <div class="flex flex-row sm:flex-row items-center mt-2 sm:mt-0 w-full sm:w-auto justify-start sm:justify-end">
+    <div class="flex flex-row sm:flex-row items-center mt-2 sm:mt-0 w-full sm:w-auto justify-end sm:justify-end">
         <a class="" href="{{content_link($content->id)}}" target="_blank" data-bs-toggle="tooltip" x-data="{}" x-tooltip="{
             content: 'View',
             theme: $store.theme,
@@ -43,4 +43,5 @@
     </div>
 
 </div>
+
 

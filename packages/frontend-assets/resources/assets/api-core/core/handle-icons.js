@@ -144,14 +144,28 @@ export const HandleIcons = function () {
         },
         {
             name: 'text',
-            icon: `
-<svg xmlns="http://www.w3.org/2000/svg"   viewBox="0 -960 960 960"   fill="currentColor"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>`
+            icon: `<svg xmlns="http://www.w3.org/2000/svg"   viewBox="0 -960 960 960"   fill="currentColor"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>`
+        },
+        {
+            name: 'upload',
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>`
         }
     ];
 
-    this.icon = function (iconName) {
+    this.icon = function (iconName, props) {
         iconName = iconName.trim();
         var iconObject = this.icons.find(icon => icon.name === iconName);
+        if(props && iconObject) {
+            const frag = document.createElement("div");
+            frag.innerHTML = iconObject.icon;
+            const svg = frag.firstElementChild;
+            if(svg) {
+                for (let i in props) {
+                    svg.setAttribute(i, props[i]);
+                }
+                return frag.innerHTML;
+            }
+        }
         return iconObject ? iconObject.icon : '';
     };
 }

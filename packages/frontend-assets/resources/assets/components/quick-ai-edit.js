@@ -65,6 +65,16 @@ const JSONSchema = {
     "items": editSchema
 }
 
+const tagMap = {
+    P: mw.lang('Paragraph'),
+    H1: mw.lang('Heading') + ' 1',
+    H2: mw.lang('Heading') + ' 2',
+    H3: mw.lang('Heading') + ' 3',
+    H4: mw.lang('Heading') + ' 4',
+    H5: mw.lang('Heading') + ' 5',
+    H6: mw.lang('Heading') + ' 6',
+}
+
 
 class QuickEditGUI {
     constructor(instance) {
@@ -73,8 +83,8 @@ class QuickEditGUI {
 
     static _text(obj) {
         return `
-            <div class="form-control-live-edit-label-wrapper my-4">
-                <label class="live-edit-label">${obj.tag}</label>
+            <div class="form-control-live-edit-label-wrapper">
+                <label class="live-edit-label">${tagMap[obj.tag] || obj.tag}</label>
                 <input class="form-control-live-edit-input" value="${obj.text}" id="data-node-id-${obj.id}">
             </div>
         `;
@@ -891,29 +901,16 @@ export class QuickEditComponent extends MicroweberBaseClass {
             section.dataset.sectionId = sectionId; // Store section ID for future reference
             section.$$edit = fieldGroups[sectionId].parentEdit;
 
-            // Create container for styled HR-like header with text in the middle
-            const header = document.createElement('div');
-            header.className = 'quick-ai-card-header';
-
-            // Create the text element - use the title from fieldGroups
-            const headerText = document.createElement('span');
-            headerText.className = 'header-text fw-bold text-secondary';
-            headerText.textContent = fieldGroups[sectionId].title;
-
-
-            // Assemble the header
-
-            header.appendChild(headerText);
 
 
             const body = document.createElement('div');
-            body.className = 'card-body';
+            body.className = 'quick-ai-card-body';
 
             fieldGroups[sectionId].nodes.forEach(field => {
                 body.appendChild(field);
             });
 
-            section.appendChild(header);
+
             section.appendChild(body);
             editFieldsContainer.appendChild(section);
         });

@@ -2,6 +2,8 @@
 
 namespace Modules\Blog\Filament;
 
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -14,6 +16,8 @@ use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
+use Modules\Post\Filament\Admin\Resources\PostResource;
+use Modules\Product\Filament\Admin\Resources\ProductResource;
 
 class BlogSettings extends LiveEditModuleSettings
 {
@@ -28,6 +32,22 @@ class BlogSettings extends LiveEditModuleSettings
                         // Content Tab
                         Tabs\Tab::make('Content')
                             ->schema([
+
+
+
+                                Actions::make([
+
+                                    Action::make('Edit posts')
+                                        ->openUrlInNewTab()
+                                        ->label('Edit posts')
+                                        ->icon('heroicon-o-pencil-square')
+                                        ->url(PostResource::getUrl(), shouldOpenInNewTab: true),
+
+                                ]),
+
+
+
+
                                 TextInput::make('options.title')
                                     ->label('Blog Title')
                                     ->helperText('Enter the title for your blog.')

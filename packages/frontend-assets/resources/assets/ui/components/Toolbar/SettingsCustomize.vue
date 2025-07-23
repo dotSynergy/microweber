@@ -85,7 +85,7 @@
 }
 
 .advanced-popup {
-    position: fixed;
+    position: absolute;
     bottom: 70px;
     right: 60px;
     background: rgba(255, 255, 255, 0.95);

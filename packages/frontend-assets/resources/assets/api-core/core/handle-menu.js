@@ -293,6 +293,9 @@ export const HandleMenu = function(options) {
             btn.append(submenu);
             scope.buildButtons(conf.menu, submenu, submenu);
             btn.on(actionEvents, function(e){
+                e.stopPropagation()
+                e.preventDefault();
+                console.log(999)
                 if(e.type !== "touchstart" && e.which !== 1) {
                     return;
                 }
@@ -304,6 +307,7 @@ export const HandleMenu = function(options) {
             });
         } else if(typeof conf.action === 'function') {
             btn.on(actionEvents, function(e){
+                e.stopPropagation()
                 if(e.type !== "touchstart" && e.which !== 1) {
                     return;
                 }

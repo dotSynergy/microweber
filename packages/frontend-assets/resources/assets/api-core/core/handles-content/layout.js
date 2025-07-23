@@ -401,7 +401,7 @@ export class LayoutHandleContent {
 
     addButtons() {
         var plusLabel = mw.lang('Add Layout');
-        plusLabel = '+ ' + plusLabel;
+        plusLabel = mw.top().app.iconService.icon('plus', {width: '20px', fill: 'currentColor'}) + ' ' + plusLabel.toUpperCase();
         const handlePlus = which => {
             this.dispatch('insertLayoutRequest');
             this.dispatch('insertLayoutRequestOn' + which.charAt(0).toUpperCase() + which.slice(1));

@@ -432,7 +432,10 @@ export class LiveEdit {
 
             if(mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
                 // mw.app.liveEditWidgets.openQuickEditComponent()
-                mw.top().app.liveEditWidgets.setQuickEditorForNode(target);
+                if(mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
+                    mw.top().app.liveEditWidgets.setQuickEditorForNode(target);3
+                }
+
             }
 
 

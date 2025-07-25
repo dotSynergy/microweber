@@ -126,3 +126,4 @@ Templates/ProteinStore2/resources/assets/sass/app.scss
 Templates/ProteinStore2/resources/views/index.blade.php
 Templates/ProteinStore2/resources/views/layouts/master.blade.php
 Templates/ProteinStore2/vite.config.js
+Templates/ProteinStore2/

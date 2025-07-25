@@ -33,6 +33,12 @@
     height: 5px;
     left: 0;
     width: 100%;
+
+
+}
+
+.module-spacer:not(:last-child) .mw-le-resizer-b {
+    top: 0;
 }
 
 .mw-le-resizer-t {

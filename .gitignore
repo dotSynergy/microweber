@@ -116,3 +116,13 @@ Templates/HumanResources/
 Templates/HomeRestoration2/
 Templates/Freelancer2/
 Templates/Barbershop2/
+Templates/ProteinStore2/composer.json
+Templates/ProteinStore2/config/config.php
+Templates/ProteinStore2/module.json
+Templates/ProteinStore2/package.json
+Templates/ProteinStore2/Providers/ProteinStore2ServiceProvider.php
+Templates/ProteinStore2/resources/assets/js/app.js
+Templates/ProteinStore2/resources/assets/sass/app.scss
+Templates/ProteinStore2/resources/views/index.blade.php
+Templates/ProteinStore2/resources/views/layouts/master.blade.php
+Templates/ProteinStore2/vite.config.js

@@ -121,7 +121,7 @@ class ContentResource extends Resource
                                     return $record->getTagNamesAttribute();
                                 }
                                 return [];
-                            })->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set, ?array $state) {
+                            })->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set) {
 
                                 if ($record) {
                                     $categoryIds = $record->getTagNamesAttribute();
@@ -226,6 +226,13 @@ class ContentResource extends Resource
                                 Forms\Components\Textarea::make('description')
                                     ->columnSpan('full'),
 
+                                Forms\Components\RichEditor::make('content_body')
+                                    ->columnSpan('full')
+                                    ->visible(function (Forms\Get $get) {
+                                        return $get('content_type') !== 'page';
+                                    }),
+
+
 //                    MwRichEditor::make('content_body')
 //                        ->columnSpan('full')
 //                        ->visible(function (Forms\Get $get) {
@@ -258,7 +265,7 @@ class ContentResource extends Resource
 
 
                                 Forms\Components\TextInput::make('special_price')
-                                    ->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set, ?array $state) {
+                                    ->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set) {
 
                                         if ($record) {
                                             $getSpecialPrice = $record->getSpecialPriceAttribute();
@@ -461,7 +468,7 @@ class ContentResource extends Resource
 
 
                     Forms\Components\TextInput::make('special_price')
-                        ->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set, ?array $state) {
+                        ->afterStateHydrated(function (?Model $record, Forms\Get $get, Forms\Set $set) {
 
                             if ($record) {
                                 $getSpecialPrice = $record->getSpecialPriceAttribute();
@@ -962,8 +969,7 @@ class ContentResource extends Resource
                     ->query(function ($query, array $data) {
 
 
-
-                        if (! empty($data['value'])) {
+                        if (!empty($data['value'])) {
 
 
                             return $query->whereCategoryIds([$data['value']]);
@@ -986,7 +992,6 @@ class ContentResource extends Resource
                     Tables\Actions\EditAction::make('edit')
                         ->label('Settings')
                         ->icon('heroicon-o-pencil'),
-
 
 
                     Tables\Actions\DeleteAction::make('delete')

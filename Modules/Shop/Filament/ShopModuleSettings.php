@@ -67,20 +67,20 @@ class ShopModuleSettings extends LiveEditModuleSettings
                                         ->default(10)
                                         ->live(),
 
-                                 /*   Toggle::make('options.filtering_by_tags')
-                                        ->label('Enable Tag Filtering')
-                                        ->live()
-                                        ->default(true),
-
-                                    Toggle::make('options.filtering_by_categories')
-                                        ->label('Enable Category Filtering')
-                                        ->live()
-                                        ->default(true),
-
-                                    Toggle::make('options.filtering_by_custom_fields')
-                                        ->label('Enable Custom Field Filtering')
-                                        ->live()
-                                        ->default(true),*/
+//                                  Toggle::make('options.filtering_by_tags')
+//                                        ->label('Enable Tag Filtering')
+//                                        ->live()
+//                                        ->default(true),
+//
+//                                    Toggle::make('options.filtering_by_categories')
+//                                        ->label('Enable Category Filtering')
+//                                        ->live()
+//                                        ->default(true),
+//
+//                                    Toggle::make('options.filtering_by_custom_fields')
+//                                        ->label('Enable Custom Field Filtering')
+//                                        ->live()
+//                                        ->default(true),
                                 ]
                             ),
 

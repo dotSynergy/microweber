@@ -88,7 +88,7 @@
     <div class="col-lg-12 mx-auto">
         <div class="row big-news">
             @if(empty($data))
-                <p class="mw-pictures-clean">No content added. Please add content to the gallery.</p>
+                <p class="mw-pictures-clean">No content added. Please add content to the module.</p>
             @else
                 @foreach ($data as $key => $item)
                 @php

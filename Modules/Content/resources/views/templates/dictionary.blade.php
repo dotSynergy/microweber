@@ -305,7 +305,7 @@ description: Dictionary
                             <h3 class="glossary__results__term title-style--three mb-3">{{ $key }}</h3>
                             <div class="row">
                                 @if(empty($data))
-                                    <p class="mw-pictures-clean">No content added. Please add content to the gallery.</p>
+                                    <p class="mw-pictures-clean">No content added. Please add content to the module.</p>
                                 @else
                                     @foreach ($list as $item)
                                     @php

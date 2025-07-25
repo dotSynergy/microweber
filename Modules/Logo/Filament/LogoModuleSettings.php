@@ -67,8 +67,26 @@ class LogoModuleSettings extends LiveEditModuleSettings
                                 TextInput::make('options.font_size')
                                     ->label('Font Size')
                                     ->numeric()
+                                    ->live(),
+                                MwInputSliderGroup::make()
                                     ->live()
-                                    ->default(30), // Default text size
+                                    ->sliders([
+                                        MwInputSlider::make('options.font_size')
+                                            ->label('Font Size')
+
+                                        ,
+                                    ])
+                                    ->enableTooltips()
+
+
+                                    ->range([
+                                        "min" => 0,
+                                        "max" => 120
+                                    ])
+                                    ->label('Set Font Size'),
+
+
+
                             ]),
                         Tabs\Tab::make('Template')
                             ->schema(

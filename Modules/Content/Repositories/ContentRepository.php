@@ -121,7 +121,7 @@ class ContentRepository extends AbstractRepository
      *
      * @return array
      */
-    public function getContentData($relId) : array
+    public function getContentData($relId): array
     {
 
         return $this->cacheCallback(__FUNCTION__, func_get_args(), function () use ($relId) {
@@ -137,7 +137,7 @@ class ContentRepository extends AbstractRepository
 
             $getContentData = $getContentData->get();
 
-            if(!$getContentData) {
+            if (!$getContentData) {
                 return [];
             }
 
@@ -157,7 +157,7 @@ class ContentRepository extends AbstractRepository
      *
      * @return array
      */
-    public function getCustomFields($relId) : array
+    public function getCustomFields($relId): array
     {
 
         return $this->cacheCallback(__FUNCTION__, func_get_args(), function () use ($relId) {
@@ -198,12 +198,12 @@ class ContentRepository extends AbstractRepository
     /**
      * Retrieve custom fields of a specific type for a given relationship ID.
      *
-     * @param int    $relId The relationship ID.
-     * @param string $type  The type of custom fields to retrieve.
+     * @param int $relId The relationship ID.
+     * @param string $type The type of custom fields to retrieve.
      *
      * @return array An array containing the custom fields of the specified type.
      */
-    public function getCustomFieldsByType($relId, $type) : array
+    public function getCustomFieldsByType($relId, $type): array
     {
         $fields = $this->getCustomFields($relId);
         if ($fields) {
@@ -259,7 +259,7 @@ class ContentRepository extends AbstractRepository
     {
 
         $locale = current_lang();
-        $cacheResponse = $this->cacheCallback(__FUNCTION__.$locale, func_get_args(), function () use ($field, $rel_type, $rel_id) {
+        $cacheResponse = $this->cacheCallback(__FUNCTION__ . $locale, func_get_args(), function () use ($field, $rel_type, $rel_id) {
 
             $check = DB::table('content_fields');
             $check->where('field', $field);
@@ -278,7 +278,7 @@ class ContentRepository extends AbstractRepository
             return false;
         });
 
- //dump($field, $rel_type, $rel_id,$cacheResponse);
+        //dump($field, $rel_type, $rel_id,$cacheResponse);
         if (!empty($cacheResponse)) {
             $hookParams = [];
             $hookParams['getEditField'] = true;
@@ -305,7 +305,7 @@ class ContentRepository extends AbstractRepository
         return $this->cacheCallback(__FUNCTION__, func_get_args(), function () use ($contentId, $returnFullTagsData) {
 
             $query = DB::table('tagging_tagged');
-            $query->where('taggable_type',  morph_name(\Modules\Content\Models\Content::class));
+            $query->where('taggable_type', morph_name(\Modules\Content\Models\Content::class));
             if ($contentId) {
                 $query->where('taggable_id', $contentId);
             }
@@ -338,6 +338,7 @@ class ContentRepository extends AbstractRepository
         return get_pages('content_type=page&is_shop=1&is_deleted=0&single=1');
 
     }
+
     public function getAllShopPages()
     {
         return get_pages('content_type=page&is_deleted=0&is_shop=1');
@@ -354,7 +355,6 @@ class ContentRepository extends AbstractRepository
     {
         return get_pages('content_type=page&subtype=dynamic&is_shop=0&single=1');
     }
-
 
 
     /**
@@ -495,7 +495,31 @@ class ContentRepository extends AbstractRepository
     }
 
 
+    public function createDefaultShopPage()
+    {
+        $shopPage = $this->getFirstShopPage();
+        if (!$shopPage) {
+            $shopPage = new Content();
+            $shopPage->title = 'Shop';
+            $shopPage->content_type = 'page';
+            $shopPage->is_shop = 1;
+            $shopPage->save();
+        }
+        return $shopPage;
+    }
 
+    public function createDefaultBlogPage()
+    {
+        $blogPage = $this->getFirstBlogPage();
+        if (!$blogPage) {
+            $blogPage = new Content();
+            $blogPage->title = 'Blog';
+            $blogPage->content_type = 'page';
+            $blogPage->subtype = 'dynamic';
+            $blogPage->save();
+        }
+        return $blogPage;
+    }
 
 
 }

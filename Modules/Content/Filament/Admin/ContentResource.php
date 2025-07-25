@@ -89,6 +89,35 @@ class ContentResource extends Resource
         $site_url = site_url();
         $sessionId = session()->getId();
 
+
+ 
+
+
+        $allBlogs = app()->content_repository->getAllBlogPages();
+        $allShops = app()->content_repository->getAllShopPages();
+
+
+        if(empty($allShops) and $contentType === 'product') {
+
+            app()->content_repository->createDefaultShopPage();
+            $allShops = app()->content_repository->getAllShopPages();
+        }
+        if(empty($allBlogs) and $contentType === 'post' ) {
+            app()->content_repository->createDefaultBlogPage();
+            $allBlogs = app()->content_repository->getAllBlogPages();
+        }
+
+
+        if ($allBlogs and !empty($allBlogs) and isset($allBlogs[0]['id'])) {
+            $firstBlogId = $allBlogs[0]['id'];
+
+        }
+        if ($allShops and !empty($allShops) and isset($allShops[0]['id'])) {
+            $firstShopId = $allShops[0]['id'];
+
+        }
+
+
         $mainForm = [
 
             Forms\Components\Group::make([
@@ -223,9 +252,6 @@ class ContentResource extends Resource
                                     ->columnSpanFull(),
 
 
-                                Forms\Components\Textarea::make('description')
-                                    ->columnSpan('full'),
-
                                 Forms\Components\RichEditor::make('content_body')
                                     ->columnSpan('full')
                                     ->visible(function (Forms\Get $get) {
@@ -315,7 +341,7 @@ class ContentResource extends Resource
 
 
                         Forms\Components\Section::make('Parent page')
-                            ->schema(function (?Model $record, Forms\Get $get) {
+                            ->schema(function (?Model $record, Forms\Get $get) use ($firstBlogId, $firstShopId) {
                                 $parent = null;
                                 $isShopFilter = null;
                                 $categoryIds = [];
@@ -324,6 +350,17 @@ class ContentResource extends Resource
                                     $categoryIds = $record->getCategoryIdsAttribute();
                                 }
 
+
+//                                $parent = $params['parent'] ?? null;
+//                                if(!$parent and !$id){
+//                                    //set the parent of the blog or shop depending on the content type
+//                                    if ($contentType === 'post' && $firstBlogId) {
+//                                        $parent = $firstBlogId;
+//                                    } elseif ($contentType === 'product' && $firstShopId) {
+//                                        $parent = $firstShopId;
+//                                    }
+//                                }
+//
 
                                 $singleSelect = ($record && $record->content_type === 'page') || $get('content_type') === 'page';
 
@@ -336,6 +373,13 @@ class ContentResource extends Resource
                                     ($record && $record->content_type === 'post') || $get('content_type') === 'post' => 0,
                                     default => null,
                                 };
+
+
+                                if ($isShopFilter) {
+                                    $parent = $firstShopId;
+                                } elseif ($get('content_type') === 'post' && $firstBlogId) {
+                                    $parent = $firstBlogId;
+                                }
 
 
                                 $viewData = [

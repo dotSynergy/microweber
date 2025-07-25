@@ -30,7 +30,7 @@ description: Skin-7
 @endphp
 
    @if(empty($data))
-       <p class="mw-pictures-clean">No products added. Please add products to the gallery.</p>
+       <p class="mw-pictures-clean">No products added. Please add products to the module.</p>
    @else
     <div class="row shop-products">
         @foreach ($data as $key => $item)

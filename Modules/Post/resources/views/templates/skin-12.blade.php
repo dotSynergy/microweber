@@ -13,7 +13,7 @@ description: Posts 12
 <div class="slick-arrows-1">
     <div class="blog-posts-12 slickslider slick-dots-relative">
         @if(empty($data))
-       <p class="mw-pictures-clean">No posts added. Please add posts to the gallery.</p>
+       <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
             @foreach ($data as $item)
                 @php

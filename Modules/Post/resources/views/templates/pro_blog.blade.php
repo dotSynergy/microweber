@@ -49,7 +49,7 @@ description: Posts pro-blog
 
 <div class="row blog-posts-pro-blog">
     @if(empty($data))
-       <p class="mw-pictures-clean">No posts added. Please add posts to the gallery.</p>
+       <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
         @php
             $item = reset($data);

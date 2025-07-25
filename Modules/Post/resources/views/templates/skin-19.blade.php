@@ -35,7 +35,7 @@ description: Posts 19
 
 <div class="row blog-posts-19">
     @if(empty($data))
-       <p class="mw-pictures-clean">No posts added. Please add posts to the gallery.</p>
+       <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
         @foreach ($data as $item)
             @php

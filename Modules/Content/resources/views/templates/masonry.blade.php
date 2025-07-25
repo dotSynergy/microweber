@@ -91,7 +91,7 @@ $rand = uniqid();
         </script>
 
         @if(empty($data))
-            <p class="mw-pictures-clean">No content added. Please add content to the gallery.</p>
+            <p class="mw-pictures-clean">No content added. Please add content to the module.</p>
         @else
             @foreach ($data as $item)
             <div class="masonry-item" itemscope itemtype="{{ $schema_org_item_type_tag }}">

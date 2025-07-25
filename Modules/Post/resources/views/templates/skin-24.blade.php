@@ -76,7 +76,7 @@ description: Posts 24
 
 <div class="row py-4 blog-posts-24">
     @if(empty($data))
-       <p class="mw-pictures-clean">No posts added. Please add posts to the gallery.</p>
+       <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
         @foreach ($data as $key => $item)
             @if ($key == 0)

@@ -257,7 +257,7 @@ description: Posts 22
 
 <div class="blog-posts-22">
     @if(empty($data))
-       <p class="mw-pictures-clean">No posts added. Please add posts to the gallery.</p>
+       <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
         <div class="mw-post-22-element mw-post-22-card-shadow-yes mw-post-22-widget">
             <div class="row mw-post-22-posts mw-post-22-widget-container">

@@ -128,6 +128,13 @@ export class LiveEditWidgetsService extends BaseComponent{
 
         this.status.quickEditComponent = true;
 
+            mw.top().controlBox.getInstances().forEach(instance => {
+                if(instance.id === 'mw-live-edit-quickEditComponent-box') {
+                    instance.remove()
+                }
+            })
+
+
 
         const closeButtonAction = () => {
             this.closeQuickEditComponent();

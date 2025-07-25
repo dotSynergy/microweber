@@ -73,17 +73,34 @@ OLD iframe is commented out, use the new TemplateSettings component instead
 </template>
 
 <style>
+:root{
+    --side-menu-size: 50px;
+}
 .live-edit-sidebar-opened #live-edit-frame-holder {
     left: 250px;
+
+}
+@media (max-width: 700px) {
+    :root{
+
+        --side-menu-size: 0;
+    }
 }
 
-/*body:has(.fi-modal.fi-modal-open) #live-edit-frame-holder,*/
+body:has(.fi-modal.fi-modal-open) #live-edit-frame-holder,
 body:has(#mw-setup-wizard-dialog.active) #live-edit-frame-holder,
 .live-edit-gui-editor-opened #live-edit-frame-holder {
-    right: calc(var(--sidebar-end-size) + 50px);
+    right: calc(var(--sidebar-end-size) + var(--side-menu-size));
 }
 .fi-modal.fi-modal-open .mw-module-settings-live-edit-modal{
-    max-width: calc(var(--sidebar-end-size) + 50px);
+    max-width: calc(var(--sidebar-end-size) + var(--side-menu-size));
+}
+
+html:has(.mw-module-settings-live-edit-modal) {
+    .fi-modal-close-overlay,
+    .fi-modal-close-overlay + *{
+        pointer-events: none;
+    }
 }
 </style>
 

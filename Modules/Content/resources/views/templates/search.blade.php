@@ -57,7 +57,7 @@ if(!isset($tn[1])){
     @if (!empty($data))
         <ul>
             @if(empty($data))
-                <p class="mw-pictures-clean">No content added. Please add content to the gallery.</p>
+                <p class="mw-pictures-clean">No content added. Please add content to the module.</p>
             @else
                 @foreach ($data as $item)
                 <li>

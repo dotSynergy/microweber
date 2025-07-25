@@ -430,6 +430,17 @@ export class LiveEdit {
             this.layoutHandleContent.positionButtons(target);
 
 
+            if(mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
+                // mw.app.liveEditWidgets.openQuickEditComponent()
+                if(mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
+                    mw.top().app.liveEditWidgets.setQuickEditorForNode(target);3
+                }
+
+            }
+
+
+
+
         });
 
         this.layoutHandleContent.handle = layoutHandle;

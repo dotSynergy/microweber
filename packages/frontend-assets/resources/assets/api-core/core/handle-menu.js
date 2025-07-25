@@ -283,7 +283,7 @@ export const HandleMenu = function(options) {
             config: conf,
         });
 
-        const actionEvents = 'mousedown touchstart';
+        const actionEvents = 'click';
         if(conf.menu) {
             var submenu = ElementManager({
                 props: {
@@ -292,7 +292,13 @@ export const HandleMenu = function(options) {
             });
             btn.append(submenu);
             scope.buildButtons(conf.menu, submenu, submenu);
+            btn.on('mousedown touchstart', function(e){
+                e.stopPropagation();
+            })
             btn.on(actionEvents, function(e){
+                e.stopPropagation()
+                e.preventDefault();
+                console.log(999)
                 if(e.type !== "touchstart" && e.which !== 1) {
                     return;
                 }
@@ -303,7 +309,11 @@ export const HandleMenu = function(options) {
                 this.classList.toggle('sub-menu-active');
             });
         } else if(typeof conf.action === 'function') {
+            btn.on('mousedown touchstart', function(e){
+                e.stopPropagation();
+            })
             btn.on(actionEvents, function(e){
+                e.stopPropagation()
                 if(e.type !== "touchstart" && e.which !== 1) {
                     return;
                 }

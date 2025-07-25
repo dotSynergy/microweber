@@ -38,7 +38,7 @@ export default {
     mounted() {
         mw.app.canvas.on('liveEditCanvasLoaded', () => {
             mw.app.state.on('record', () => this.setButtons())
-            mw.app.state.on('undo', () => function () {
+            mw.app.state.on('undo', () => {
                 var undoStateTarget = null;
                 var state = mw.app.state.state();
                 if (state && state[0] && state[0].target) {
@@ -46,10 +46,20 @@ export default {
                 }
                 if (undoStateTarget) {
                     mw.app.registerChange(undoStateTarget);
+
+                    if(mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
+                        // mw.app.liveEditWidgets.openQuickEditComponent()
+                        if(mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
+                            mw.top().app.liveEditWidgets.setQuickEditorForNode(undoStateTarget.closest('.module-layouts'));
+                        }
+
+                    }
+
                 }
+
                 this.setButtons()
             })
-            mw.app.state.on('redo', () => function () {
+            mw.app.state.on('redo', () => {
                 var redoStateTarget = null;
                 var state = mw.app.state.state();
                 if (state && state[0] && state[0].target) {
@@ -57,7 +67,15 @@ export default {
                 }
                 if (redoStateTarget) {
                     mw.app.registerChange(redoStateTarget);
+                    if(mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
+                        // mw.app.liveEditWidgets.openQuickEditComponent()
+                        if(mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
+                            mw.top().app.liveEditWidgets.setQuickEditorForNode(redoStateTarget.closest('.module-layouts'));
+                        }
+
+                    }
                 }
+
                 this.setButtons()
             })
         })

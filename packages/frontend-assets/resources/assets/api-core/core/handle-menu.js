@@ -244,7 +244,7 @@ export const HandleMenu = function(options) {
             const buildTitle = () => {
                 return (typeof conf.title === 'function' ? conf.title(conf, this.getTarget()) : conf.title) || '';
             }
-            Tooltip(btnContent, buildTitle());
+
             var btnTitleConf = {
                 props: {
                     className: 'mw-le-handle-menu-button-content-title',
@@ -259,6 +259,8 @@ export const HandleMenu = function(options) {
                 btn.css({
                     width: 'auto'
                 })
+            } else {
+                Tooltip(btnContent, buildTitle());
             }
             btnContent.append(btnTitle);
         }

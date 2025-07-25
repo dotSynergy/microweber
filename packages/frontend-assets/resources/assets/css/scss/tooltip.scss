@@ -1,0 +1,93 @@
+[data-mw-title]{
+    --tooltip-gap: 10px;
+    --tooltip-bg-color: rgba(90, 90, 90, 1);
+    --tooltip-text-color: white;
+    --tooltip-padding: 5px 16px;
+
+    position: relative;
+
+    &:before{
+        position: absolute;
+        content: attr(data-mw-title);
+        background:  var(--tooltip-bg-color);
+        color: var(--tooltip-text-color);
+        border-radius: 4px;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        display: inline-block;
+        padding: var(--tooltip-padding);
+        text-transform: initial;
+        width: auto;
+        opacity: 1;
+        pointer-events: none;
+        transition-property: opacity, transform;
+        overflow-wrap: break-word;
+        transition: opacity .2s;
+        opacity: 0;
+        pointer-events: none;
+
+    }
+     &:hover:before{
+        opacity: 1;
+    }
+    &[data-tooltip-position="top-center"]::before {
+        bottom: calc(100% + var(--tooltip-gap));
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &[data-tooltip-position="top-left"]::before {
+        bottom: calc(100% + var(--tooltip-gap));
+        left: 0;
+
+    }
+    &[data-tooltip-position="top-right"]::before {
+        bottom: calc(100% + var(--tooltip-gap));
+        right: 0;
+
+    }
+    &[data-tooltip-position="bottom-center"]::before {
+        top: calc(100% + var(--tooltip-gap));
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &[data-tooltip-position="bottom-left"]::before {
+        top: calc(100% + var(--tooltip-gap));
+        left: 0;
+
+    }
+    &[data-tooltip-position="bottom-right"]::before {
+        top: calc(100% + var(--tooltip-gap));
+        right: 0;
+
+    }
+
+    &[data-tooltip-position="left-center"]::before {
+        right: calc(100% + var(--tooltip-gap));
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    &[data-tooltip-position="left-top"]::before {
+        right: calc(100% + var(--tooltip-gap));
+        top: 0;
+
+    }
+    &[data-tooltip-position="left-bottom"]::before {
+        right: calc(100% + var(--tooltip-gap));
+        bottom: 0;
+    }
+    &[data-tooltip-position="right-center"]::before {
+        left: calc(100% + var(--tooltip-gap));
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    &[data-tooltip-position="right-top"]::before {
+        left: calc(100% + var(--tooltip-gap));
+        top: 0;
+
+    }
+    &[data-tooltip-position="right-bottom"]::before {
+        left: calc(100% + var(--tooltip-gap));
+        bottom: 0;
+    }
+}

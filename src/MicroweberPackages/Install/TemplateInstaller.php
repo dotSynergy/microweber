@@ -130,7 +130,6 @@ class TemplateInstaller
             $logData = $manager->start();
 
 
-
             return true;
         } else {
             return false;
@@ -154,9 +153,16 @@ class TemplateInstaller
             $content->is_active = 1;
             $content->content_type = 'page';
             $content->subtype = 'static';
-            $content->layout_file = 'index.php';
+            //  $content->layout_file = 'index.php';
             $content->save();
         }
+
+
+        app()->content_repository->createDefaultShopPage();
+        app()->content_repository->createDefaultBlogPage();
+
+
+
         try {
 
             $existing = Menu::where('title', 'header_menu')->first();

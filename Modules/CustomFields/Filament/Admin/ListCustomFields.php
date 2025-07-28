@@ -285,15 +285,18 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
 
 
                     IconColumn::make('type')
+                        ->action( EditAction::make('custom-field-edit'))
                         ->icon(function (CustomField $customField) {
                             $icon = CustomFieldTypes::from($customField->type);
                             return $icon->getIcons();
                         }),
 
                 TextColumn::make('name')
+                    ->action( EditAction::make('custom-field-edit'))
                     ->label('Name'),
 
                 TextColumn::make('value')
+                    ->action( EditAction::make('custom-field-edit'))
                     ->state(function (CustomField $customField) {
 
 

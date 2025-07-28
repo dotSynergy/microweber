@@ -1,14 +1,9 @@
-
-
-
-
-
 mw.tags = function(options){
 
     "use strict";
 
     options.element = mw.$(options.element)[0];
-    options.size = options.size || 'sm';
+    options.size = options.size || 'xs'; // Changed from 'sm' to 'xs' for smaller tags
 
     this.options = options;
     this.options.map = this.options.map || {
@@ -43,7 +38,7 @@ mw.tags = function(options){
         this.refresh();
     };
     this.rend = function(){
-        scope.options.element.classList.add('mw-tags--container', 'd-flex', 'flex-wrap', 'gap-3')
+        scope.options.element.classList.add('mw-tags--container', 'd-flex', 'flex-wrap', 'gap-2') // Reduced gap from 3 to 2
 
          $.each(this.options.data, function(i){
             var data = $.extend({index:i}, this);
@@ -208,7 +203,7 @@ mw.tags = function(options){
      this.tag = function (options) {
             var config = {
                 close:true,
-                tagBtnClass:'btn btn-' + this.options.size
+                tagBtnClass:'btn btn-' + this.options.size + ' mw-tag-animated' // Added animation class
             };
 
             $.extend(config, options);
@@ -222,14 +217,18 @@ mw.tags = function(options){
 
          if (this.options.color){
              config.tagBtnClass +=  '-' + this.options.color;
+         } else {
+             config.tagBtnClass +=  '-primary'; // Default color for better appearance
          }
-
-
 
          if(this.options.rounded){
              config.tagBtnClass +=  ' btn-rounded';
+         } else {
+             config.tagBtnClass +=  ' rounded-pill'; // Default rounded style for modern look
          }
 
+         // Add shadow and hover effects
+         config.tagBtnClass += ' shadow-sm mw-tag-hover-effect';
 
             var tag_holder = document.createElement('span');
             var tag_close = document.createElement('span');
@@ -239,7 +238,7 @@ mw.tags = function(options){
             tag_holder._config = config;
             tag_holder.dataset.index = config.index;
 
-            tag_holder.className = 'btn-group';
+            tag_holder.className = 'btn-group mw-tag-wrapper'; // Added wrapper class for effects
 
              if(options.image){
 
@@ -277,15 +276,13 @@ mw.tags = function(options){
                 }
             };
 
-            tag_close.className = config.tagBtnClass + ' btn-icon';
-            tag_close.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            tag_close.className = config.tagBtnClass + ' btn-icon mw-tag-close';
+            tag_close.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M4 7l16 0"></path>
-            <path d="M10 11l0 6"></path>
-            <path d="M14 11l0 6"></path>
-            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-         </svg>`;
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+         </svg>`; // Changed to X icon and reduced size to 16x16
+
             if(config.close){
                 tag_close.onclick = function () {
                     scope.removeTag(this._index);
@@ -297,6 +294,69 @@ mw.tags = function(options){
 
      this.init = function () {
          this.rend();
+
+         // Add CSS styles for animations and effects
+         if (!document.getElementById('mw-tags-styles')) {
+             var style = document.createElement('style');
+             style.id = 'mw-tags-styles';
+             style.textContent = `
+                .mw-tag-wrapper {
+                    transition: all 0.2s ease-in-out;
+                    transform: scale(1);
+                }
+
+                .mw-tag-wrapper:hover {
+                    transform: scale(1.05);
+                    z-index: 10;
+                }
+
+                .mw-tag-animated {
+                    transition: all 0.15s ease-in-out;
+                    font-size: 0.55rem !important;
+                    padding: 0.1rem 0.25rem !important;
+                    line-height: 1 !important;
+                    min-height: auto !important;
+                }
+
+                .mw-tag-hover-effect:hover {
+                    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.2) !important;
+                    transform: translateY(-1px);
+                    filter: brightness(1.1) saturate(1.2);
+                }
+
+                .mw-tag-close {
+                    padding: 0.1rem 0.2rem !important;
+                    margin-left: 1px !important;
+                    opacity: 0.7;
+                    transition: all 0.15s ease-in-out;
+                    font-size: 0.55rem !important;
+                }
+
+                .mw-tag-close:hover {
+                    opacity: 1;
+                    transform: scale(1.1);
+                    filter: brightness(0.9) contrast(1.2);
+                }
+
+                .mw-tag-close svg {
+                    width: 10px !important;
+                    height: 10px !important;
+                }
+
+                .mw-tags--container {
+                    gap: 0.2rem !important;
+                }
+
+                .btn-xs {
+                    font-size: 0.55rem;
+                    padding: 0.1rem 0.25rem;
+                    line-height: 1;
+                    min-height: auto;
+                }
+             `;
+             document.head.appendChild(style);
+         }
+
          $(this.options.element).on('click', function (e) {
              if(e.target === scope.options.element){
                  $('input', this).focus();

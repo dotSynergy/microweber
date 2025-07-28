@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center justify-content-between mt-5 gap-3">
     <div class="form-group">
-        @if(get_option('disable_captcha', $params['id']) != 'y')
+        @if(get_option('enable_captcha', $params['id']))
             <module type="captcha" id="captcha_contact_form-{{ $form_id }}"/>
         @endif
     </div>

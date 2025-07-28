@@ -140,10 +140,11 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                     ->live()
                                                     ->helperText('Show the newsletter subscription checkbox?'),
 
-                                                Toggle::make('options.disable_captcha')
-                                                    ->label('Disable Code Verification')
+                                                Toggle::make('options.enable_captcha')
+                                                    ->label('Enable Code Verification')
                                                     ->live()
-                                                    ->helperText('Disable captcha for this contact form'),
+                                                    ->default(true)
+                                                    ->helperText('Enable captcha for this contact form'),
 
                                                 TextInput::make('options.email_redirect_after_submit')
                                                     ->label('Redirect URL')

@@ -54,7 +54,7 @@
                 isLiveOnBlur: @js($isLiveOnBlur),
                 liveDebounce: @js($liveDebounce),
                 mwColorPicker: null,
-                
+
                 init() {
                     if (!(this.state === null || this.state === '')) {
                         this.setState(this.state)
@@ -94,10 +94,10 @@
                         if (this.mwColorPicker && this.mwColorPicker.destroy) {
                             this.mwColorPicker.destroy()
                         }
-                        
+
                         // Clear the container
                         // this.$refs.colorPickerContainer.innerHTML = ''
-                        
+
                         // Create new picker
                         this.mwColorPicker = mw.colorPicker({
                             element: this.$refs.colorPickerContainer,
@@ -109,7 +109,7 @@
                                 }
                             }
                         })
-                        
+
                         // Set initial color if we have one
                         if (this.state && this.mwColorPicker.setColor) {
                             this.mwColorPicker.setColor(this.state)
@@ -154,7 +154,7 @@
                 setState(value) {
                     this.state = value
                     this.$refs.input.value = value
-                    
+
                     // Update the color preview
                     if (this.$refs.colorPreview) {
                         this.$refs.colorPreview.style.backgroundColor = value
@@ -219,12 +219,12 @@
                 wire:key="{{ $this->getId() }}.{{ $statePath }}.{{ $field::class }}.panel"
                 x-cloak
                 x-ref="panel"
-                class="fi-fo-color-picker-panel absolute z-10 hidden rounded-lg shadow-lg p-4 bg-white dark:bg-gray-800"
+                class="fi-fo-color-picker-panel absolute z-20 hidden rounded-lg shadow-lg p-4 bg-white dark:bg-gray-800"
                 style="display: none;"
             >
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Choose Color</span>
-                    <button 
+                    <button
                         type="button"
                         x-on:click="togglePanelVisibility()"
                         class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"

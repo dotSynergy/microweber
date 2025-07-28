@@ -24,6 +24,9 @@ use Modules\Slider\Models\Slider;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
 use Modules\Ai\Facades\AiImages;
 use NeuronAI\Chat\Messages\UserMessage;
+use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
+use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
+use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 
 class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
 {
@@ -68,56 +71,101 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 ->label('Button URL')
                 ->url()
                 ->helperText('Enter a URL for the button'),
-            ColorPicker::make('settings.buttonBackgroundColor')
+            MwColorPicker::make('settings.buttonBackgroundColor')
                 ->label('Button Background Color')
-                ->visible(fn($get) => $get('settings.showButton')),
-            ColorPicker::make('settings.buttonBackgroundHoverColor')
+                ->rgba()
+               ,
+            MwColorPicker::make('settings.buttonBackgroundHoverColor')
                 ->label('Button Background Hover Color')
-                ->visible(fn($get) => $get('settings.showButton')),
-            ColorPicker::make('settings.buttonBorderColor')
+                ->rgba()
+               ,
+            MwColorPicker::make('settings.buttonBorderColor')
                 ->label('Button Border Color')
-                ->visible(fn($get) => $get('settings.showButton')),
-            ColorPicker::make('settings.buttonTextColor')
+                ->rgba()
+               ,
+
+            MwColorPicker::make('settings.buttonTextColor')
                 ->label('Button Text Color')
-                ->visible(fn($get) => $get('settings.showButton')),
-            ColorPicker::make('settings.buttonTextHoverColor')
+                ->rgba()
+               ,
+
+            MwColorPicker::make('settings.buttonTextHoverColor')
                 ->label('Button Text Hover Color')
-                ->visible(fn($get) => $get('settings.showButton')),
+                ->rgba()
+               ,
+
             TextInput::make('settings.buttonFontSize')
                 ->label('Button Font Size')
-                ->suffix('px')
                 ->numeric()
-                ->minValue(8)
+                ->live()
+                ->step(1),
+            MwInputSliderGroup::make()
+                ->live()
+                ->sliders([
+                    MwInputSlider::make('settings.buttonFontSize')
+                        ->label('Button Font Size')
+                        ->step(1),
+                ])
+                ->enableTooltips()
+                ->range([
+                    "min" => 8,
+                    "max" => 72
+                ])
+               ,
 
-                ->default(16)
-                ->visible(fn($get) => $get('settings.showButton')),
-            ColorPicker::make('settings.titleColor')
-                ->label('Title Color'),
+            MwColorPicker::make('settings.titleColor')
+                ->label('Title Color')
+                ->rgba(),
+
             TextInput::make('settings.titleFontSize')
                 ->label('Title Font Size')
-                ->suffix('px')
                 ->numeric()
-                ->minValue(8)
+                ->live(),
+            MwInputSliderGroup::make()
+                ->live()
+                ->sliders([
+                    MwInputSlider::make('settings.titleFontSize')
+                        ->label('Title Font Size'),
+                ])
+                ->enableTooltips()
+                ->range([
+                    "min" => 8,
+                    "max" => 72
+                ]),
 
-                ->default(24),
-            ColorPicker::make('settings.descriptionColor')
-                ->label('Description Color'),
+            MwColorPicker::make('settings.descriptionColor')
+                ->label('Description Color')
+                ->rgba(),
+
             TextInput::make('settings.descriptionFontSize')
                 ->label('Description Font Size')
-                ->suffix('px')
                 ->numeric()
-                ->minValue(8)
+                ->live(),
+            MwInputSliderGroup::make()
+                ->live()
+                ->sliders([
+                    MwInputSlider::make('settings.descriptionFontSize')
+                        ->label('Description Font Size'),
+                ])
+                ->enableTooltips()
+                ->range([
+                    "min" => 8,
+                    "max" => 72
+                ]),
 
-                ->default(16),
-            ColorPicker::make('settings.imageBackgroundColor')
-                ->label('Image Background Color'),
+            MwColorPicker::make('settings.imageBackgroundColor')
+                ->label('Image Background Color')
+                ->rgba(),
+
             TextInput::make('settings.imageBackgroundOpacity')
                 ->label('Image Background Opacity')
                 ->numeric()
-                ->minValue(0)
-                ->maxValue(1)
-                ->step(0.1)
-                ->default(1),
+                ->step( 0.01)
+
+                ->live()
+                ,
+
+
             Select::make('settings.imageBackgroundFilter')
                 ->label('Image Background Filter')
                 ->options([
@@ -141,16 +189,14 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
             ->defaultSort('position', 'asc')->columns([
                 ImageColumn::make('media')
                     ->label('Image')
+                    ->action( EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
                     ->label('Title')
+                    ->action( EditAction::make('edit'))
                     ->searchable(),
-                TextColumn::make('description')
-                    ->label('Description')
-                    ->limit(50),
-                TextColumn::make('button_text')
-                    ->label('Button')
-                    ->limit(20),
+
+
             ])->filters([
                 // ...
             ])

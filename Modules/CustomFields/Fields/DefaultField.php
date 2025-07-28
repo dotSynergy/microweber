@@ -97,7 +97,9 @@ class DefaultField
         }
 
         if (isset($this->data['show_label'])) {
-            $renderSettings['show_label'] = $this->data['show_label'];
+            // Properly convert show_label to boolean
+            $showLabel = $this->data['show_label'];
+            $renderSettings['show_label'] = ($showLabel === true || $showLabel === 1 || $showLabel === '1' || $showLabel === 'true');
         }
 
         if (isset($this->data['required'])) {
@@ -136,17 +138,25 @@ class DefaultField
 
         // Handle show_placeholder setting properly for both boolean and string values
         $showPlaceholder = false;
-        if (isset($renderSettings['show_placeholder'])) {
+        
+        // Check if there's a specific show_placeholder setting from the database options
+        if (isset($this->data['options']['show_placeholder'])) {
+            $placeholderSetting = $this->data['options']['show_placeholder'];
+            if ($placeholderSetting === true || $placeholderSetting === 1 || $placeholderSetting === '1' || $placeholderSetting === 'true') {
+                $showPlaceholder = true;
+            }
+        } elseif (isset($renderSettings['show_placeholder'])) {
             $placeholderSetting = $renderSettings['show_placeholder'];
             if ($placeholderSetting === true || $placeholderSetting === 1 || $placeholderSetting === '1' || $placeholderSetting === 'true') {
                 $showPlaceholder = true;
             }
         }
         
-        if (!$showPlaceholder) {
+        // Also respect the database placeholder field - if it's null/empty, don't show placeholder
+        if (!$showPlaceholder || empty($this->data['placeholder'])) {
             $renderData['placeholder'] = '';
         } else {
-            $renderData['placeholder'] = $renderSettings['placeholder'] ?? $renderData['placeholder'] ?? '';
+            $renderData['placeholder'] = $this->data['placeholder'];
         }
 
         $this->renderData = $renderData;

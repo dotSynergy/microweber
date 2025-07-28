@@ -124,7 +124,46 @@ filter: sepia(100%);
     </div>
 
     <div id="js-slide-pagination-{{ $params['id'] ?? 'default' }}" class="swiper-pagination"></div>
+    <div id="js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}" class="mw-slider-v2-buttons-slide mw-slider-v2-button-prev"></div>
+    <div id="js-slide-pagination-next-{{ $params['id'] ?? 'default' }}" class="mw-slider-v2-buttons-slide mw-slider-v2-button-next"></div>
 </div>
+
+<style>
+    .swiper-pagination {
+        position: absolute !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 10 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .swiper-pagination-bullet {
+        width: 12px !important;
+        height: 12px !important;
+        background: rgba(255, 255, 255, 0.5) !importan t;
+        border-radius: 50% !important;
+        opacity: 1 !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .swiper-pagination-bullet:hover {
+        background: rgba(255, 255, 255, 0.8) !important;
+        transform: scale(1.2) !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #007bff !important;
+        border-color: #ffffff !important;
+        transform: scale(1.3) !important;
+    }
+</style>
 
 <script>
     if (!window.SliderV2) {
@@ -133,21 +172,18 @@ filter: sepia(100%);
 </script>
 
 <script>
+     const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
+        loop: true,
+        pagination: {
+            el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
+            clickable: true
+        },
+    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
-                clickable: true,
-                dynamicBullets: false,
-            },
-            effect: 'slide',
-            speed: 800,
-        });
+    document.querySelector('#js-slide-pagination-next-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+        slider.driverInstance.slideNext();
+    });
+   document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+        slider.driverInstance.slidePrev();
     });
 </script>

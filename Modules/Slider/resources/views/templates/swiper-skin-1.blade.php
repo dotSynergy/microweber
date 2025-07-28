@@ -1,9 +1,9 @@
 @php
-/*
-type: layout
-name: Swiper Skin 1
-description: Modern slider with rounded corners and left-aligned content
-*/
+    /*
+    type: layout
+    name: Swiper Skin 1
+    description: Modern slider with rounded corners and left-aligned content
+    */
 @endphp
 
 
@@ -33,28 +33,28 @@ description: Modern slider with rounded corners and left-aligned content
                             @switch($slide->settings['imageBackgroundFilter'])
                                 @case('blur')
                                 filter: blur(5px);
-                                                        @break
-                                                    @case('mediumBlur')
-                                filter: blur(10px);
-                                                        @break
-                                                    @case('maxBlur')
-                                filter: blur(20px);
-                                                        @break
-                                                    @case('grayscale')
-                                filter: grayscale(100%);
-                                                        @break
-                                                    @case('hue-rotate')
-                                filter: hue-rotate(180deg);
-                                                        @break
-                                                    @case('invert')
-                                filter: invert(100%);
-                                                        @break
-                                                    @case('sepia')
-                                filter: sepia(100%);
-                                                    @break
-                                                @endswitch
-                                                @endif
-                                }
+                        @break
+                    @case('mediumBlur')
+filter: blur(10px);
+                        @break
+                    @case('maxBlur')
+filter: blur(20px);
+                        @break
+                    @case('grayscale')
+filter: grayscale(100%);
+                        @break
+                    @case('hue-rotate')
+filter: hue-rotate(180deg);
+                        @break
+                    @case('invert')
+filter: invert(100%);
+                        @break
+                    @case('sepia')
+filter: sepia(100%);
+                    @break
+                @endswitch
+                @endif
+}
 
                     #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .module-slider-header-section-title {
                         color: {{ $slide->settings['titleColor'] ?? '#000000' }};
@@ -127,21 +127,27 @@ description: Modern slider with rounded corners and left-aligned content
 </div>
 
 <script>
-if (!window.SliderV2) {
-    mw.require('{{ asset('modules/slider/js/slider-v2.js') }}',true)
-}
+    if (!window.SliderV2) {
+        mw.require('{{ asset('modules/slider/js/slider-v2.js') }}',true)
+    }
 </script>
 
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
-    new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
-        loop: true,
-        navigation: {},
-        pagination: {
-            el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
-            clickable: true
-        }
+        const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
+                clickable: true,
+                dynamicBullets: false,
+            },
+            effect: 'slide',
+            speed: 800,
+        });
     });
-});
 </script>

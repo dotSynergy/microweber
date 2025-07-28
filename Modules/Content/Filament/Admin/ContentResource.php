@@ -90,11 +90,14 @@ class ContentResource extends Resource
         $sessionId = session()->getId();
 
 
- 
+
 
 
         $allBlogs = app()->content_repository->getAllBlogPages();
         $allShops = app()->content_repository->getAllShopPages();
+
+        $firstBlogId = false;
+        $firstShopId = false;
 
 
         if(empty($allShops) and $contentType === 'product') {

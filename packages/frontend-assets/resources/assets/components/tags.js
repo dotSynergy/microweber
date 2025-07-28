@@ -330,6 +330,14 @@ mw.tags = function(options){
                     height: 100%;
                 }
 
+                .mw-tag-content i,
+                .mw-tag-content svg,
+                .mw-tag-content .icon {
+                    width: 12px !important;
+                    height: 12px !important;
+                    font-size: 12px !important;
+                }
+
                 .mw-tag-close-inner {
                     display: inline-flex !important;
                     align-items: center !important;

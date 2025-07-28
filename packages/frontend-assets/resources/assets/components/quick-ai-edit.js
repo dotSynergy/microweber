@@ -972,8 +972,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         let chatOptions = null;
         if(this.settings.chatOptions === true) {
             chatOptions = [
-                {id: 'images', content: mw.lang('Regenerate Images'), icon:mw.top().app.iconService.icon('image-change')},
-                {id: 'text', content: mw.lang('Regenerate texts'), icon: mw.top().app.iconService.icon('text')},
+                {id: 'images', content: mw.lang('Regenerate Images'), icon:mw.top().app.iconService.icon('image-change'), selected: true,},
+                {id: 'text', content: mw.lang('Regenerate texts'), icon: mw.top().app.iconService.icon('text'), selected: true,},
 
             ];
         } else if(Array.isArray(this.settings.chatOptions)) {

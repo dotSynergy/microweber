@@ -1,9 +1,9 @@
 @php
-/*
-type: layout
-name: Swiper Skin 1
-description: Modern slider with rounded corners and left-aligned content
-*/
+    /*
+    type: layout
+    name: Swiper Skin 1
+    description: Modern slider with rounded corners and left-aligned content
+    */
 @endphp
 
 
@@ -33,28 +33,28 @@ description: Modern slider with rounded corners and left-aligned content
                             @switch($slide->settings['imageBackgroundFilter'])
                                 @case('blur')
                                 filter: blur(5px);
-                                                        @break
-                                                    @case('mediumBlur')
-                                filter: blur(10px);
-                                                        @break
-                                                    @case('maxBlur')
-                                filter: blur(20px);
-                                                        @break
-                                                    @case('grayscale')
-                                filter: grayscale(100%);
-                                                        @break
-                                                    @case('hue-rotate')
-                                filter: hue-rotate(180deg);
-                                                        @break
-                                                    @case('invert')
-                                filter: invert(100%);
-                                                        @break
-                                                    @case('sepia')
-                                filter: sepia(100%);
-                                                    @break
-                                                @endswitch
-                                                @endif
-                                }
+                        @break
+                    @case('mediumBlur')
+filter: blur(10px);
+                        @break
+                    @case('maxBlur')
+filter: blur(20px);
+                        @break
+                    @case('grayscale')
+filter: grayscale(100%);
+                        @break
+                    @case('hue-rotate')
+filter: hue-rotate(180deg);
+                        @break
+                    @case('invert')
+filter: invert(100%);
+                        @break
+                    @case('sepia')
+filter: sepia(100%);
+                    @break
+                @endswitch
+                @endif
+}
 
                     #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .module-slider-header-section-title {
                         color: {{ $slide->settings['titleColor'] ?? '#000000' }};
@@ -124,24 +124,66 @@ description: Modern slider with rounded corners and left-aligned content
     </div>
 
     <div id="js-slide-pagination-{{ $params['id'] ?? 'default' }}" class="swiper-pagination"></div>
+    <div id="js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}" class="mw-slider-v2-buttons-slide mw-slider-v2-button-prev"></div>
+    <div id="js-slide-pagination-next-{{ $params['id'] ?? 'default' }}" class="mw-slider-v2-buttons-slide mw-slider-v2-button-next"></div>
 </div>
 
+<style>
+    .swiper-pagination {
+        position: absolute !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 10 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .swiper-pagination-bullet {
+        width: 12px !important;
+        height: 12px !important;
+        background: rgba(255, 255, 255, 0.5) !importan t;
+        border-radius: 50% !important;
+        opacity: 1 !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        border: 2px solid rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .swiper-pagination-bullet:hover {
+        background: rgba(255, 255, 255, 0.8) !important;
+        transform: scale(1.2) !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #007bff !important;
+        border-color: #ffffff !important;
+        transform: scale(1.3) !important;
+    }
+</style>
+
 <script>
-if (!window.SliderV2) {
-    mw.require('{{ asset('modules/slider/js/slider-v2.js') }}',true)
-}
+    if (!window.SliderV2) {
+        mw.require('{{ asset('modules/slider/js/slider-v2.js') }}',true)
+    }
 </script>
 
 <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-    new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
+     const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
         loop: true,
-        navigation: {},
         pagination: {
             el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
             clickable: true
-        }
+        },
     });
-});
+
+    document.querySelector('#js-slide-pagination-next-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+        slider.driverInstance.slideNext();
+    });
+   document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+        slider.driverInstance.slidePrev();
+    });
 </script>

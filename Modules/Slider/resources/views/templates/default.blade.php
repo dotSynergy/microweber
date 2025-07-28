@@ -12,14 +12,6 @@ description: Modern slider with Swiper.js integration
     <div class="swiper-wrapper">
         @if($slides && $slides->count() > 0)
             @foreach($slides as $slide)
-
-
-
-
-
-
-
-
                 <style>
                     #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }}  {
                         text-align: {{ $slide->settings['alignItems'] ?? 'center' }};

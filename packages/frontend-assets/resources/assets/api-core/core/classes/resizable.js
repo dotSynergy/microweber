@@ -245,12 +245,19 @@ export class Resizable  {
         this.build();
         const resizers = this.element.querySelectorAll('.mw-le-resizer');
 
-        Array.from(resizers).forEach(resizer => {
+        const abortController = new AbortController();
 
-            resizer.addEventListener('mousedown', e => {
-                this.mouseDownHandler(e, resizer)
-                this.activeHandle = resizer;
-            });
+        const {abort, signal} = abortController
+        this.abort = abort.bind(abortController);
+
+        const handle = (e, resizer) => {
+            this.mouseDownHandler(e, resizer)
+            this.activeHandle = resizer;
+        }
+
+        Array.from(resizers).forEach(resizer => {
+            resizer.addEventListener('mousedown', e => handle(e, resizer), {signal});
+            resizer.addEventListener('touchstart',  e => handle(e, resizer), {signal});
         });
         try {
             if(this.document !== this.document.defaultView.parent.document ) {
@@ -279,11 +286,7 @@ export class Resizable  {
         if(!this.element.dataset.resizable) { return this; }
         this.element.dataset.resizable = false;
         const resizers = this.element.querySelectorAll('.mw-le-resizer');
-        Array.from(resizers).forEach(resizer => {
-            resizer.removeEventListener('mousedown', e => {
-                this.mouseDownHandler(e)
-            });
-        });
+        this.abort()
         this.document.defaultView.removeEventListener('blur', this._blur)
         this.document.defaultView.removeEventListener('visibilitychange', this._blur)
         return this;

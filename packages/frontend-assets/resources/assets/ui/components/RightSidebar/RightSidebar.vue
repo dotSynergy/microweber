@@ -86,7 +86,7 @@ OLD iframe is commented out, use the new TemplateSettings component instead
         --side-menu-size: 0;
     }
 }
-
+/*
 body:has(.fi-modal.fi-modal-open) #live-edit-frame-holder,
 body:has(#mw-setup-wizard-dialog.active) #live-edit-frame-holder,
 .live-edit-gui-editor-opened #live-edit-frame-holder {
@@ -94,14 +94,9 @@ body:has(#mw-setup-wizard-dialog.active) #live-edit-frame-holder,
 }
 .fi-modal.fi-modal-open .mw-module-settings-live-edit-modal{
     max-width: calc(var(--sidebar-end-size) + var(--side-menu-size));
-}
+}*/
 
-html:has(.mw-module-settings-live-edit-modal) {
-    .fi-modal-close-overlay,
-    .fi-modal-close-overlay + *{
-        pointer-events: none;
-    }
-}
+
 </style>
 
 <script>

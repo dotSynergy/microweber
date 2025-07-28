@@ -54,7 +54,7 @@
     bottom: 0;
     width: 50px;
     height: calc(100vh - var(--toolbar-height));
-    transition: transform .4s, right .4s;
+    transition: transform .5s, right .5s;
     display: flex;
     flex-direction: column;
     align-items: center !important;

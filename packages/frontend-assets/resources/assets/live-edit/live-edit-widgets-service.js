@@ -109,7 +109,11 @@ export class LiveEditWidgetsService extends BaseComponent{
     closeQuickEditComponent() {
         if( this.status.quickEditComponent ) {
             this.quickEditComponent.destroyEditor()
-            this.#closeQuickEditComponentBox?.remove();
+            this.#closeQuickEditComponentBox?.hide();
+            setTimeout(() => {
+this.#closeQuickEditComponentBox?.remove();
+            }, 500)
+
             this.status.quickEditComponent = false;
 
 

@@ -83,6 +83,16 @@ export class LiveEdit {
             }
 
 
+            if(node && mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
+                const layout = node.closest(".module-layouts");
+                // mw.app.liveEditWidgets.openQuickEditComponent()
+                if(layout && mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
+                    mw.top().app.liveEditWidgets.setQuickEditorForNode(layout);
+                }
+
+            }
+
+
         })
 
 
@@ -430,13 +440,7 @@ export class LiveEdit {
             this.layoutHandleContent.positionButtons(target);
 
 
-            if(mw.top().app.liveEditWidgets && mw.top().app.liveEditWidgets.quickEditComponentBox) {
-                // mw.app.liveEditWidgets.openQuickEditComponent()
-                if(mw.top().app.liveEditWidgets.quickEditComponentBox.visible() && mw.top().app.liveEditWidgets.quickEditComponentBox.box.parentElement) {
-                    mw.top().app.liveEditWidgets.setQuickEditorForNode(target);
-                }
 
-            }
 
 
 

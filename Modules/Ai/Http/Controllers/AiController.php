@@ -116,8 +116,9 @@ class AiController extends Controller
         $messages = $request->input('messages');
         $options = $request->input('options', []);
 
-
         $response = Ai::sendToChat($messages, $options);
+
+
 
         if (is_string($response)) {
             $response = @json_decode($response);

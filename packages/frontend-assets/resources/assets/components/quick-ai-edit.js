@@ -759,45 +759,12 @@ export class QuickEditComponent extends MicroweberBaseClass {
     }
 
     applyJSON(json = [], extend = true) {
-
-        // Function to recursively find all content arrays in the data structure
-        const findAllContent = (obj, contentItems = []) => {
-            if (!obj || typeof obj !== 'object') {
-                return contentItems;
-            }
-
-            // If this object has a content property that's an array, add all items to our collection
-            if (obj.content && Array.isArray(obj.content)) {
-                contentItems.push(...obj.content);
-            }
-
-            // Recursively search through all properties of this object
-            Object.keys(obj).forEach(key => {
-                const value = obj[key];
-                if (Array.isArray(value)) {
-                    // If it's an array, search through each item
-                    value.forEach(item => {
-                        findAllContent(item, contentItems);
-                    });
-                } else if (value && typeof value === 'object') {
-                    // If it's an object, search through it
-                    findAllContent(value, contentItems);
-                }
-            });
-
-            return contentItems;
-        };
-
-        // Process individual content items
+        // Helper to process a single content/child item
         const processContentItem = (item) => {
-            if (item && item.id && item.text !== undefined) {
+            if (item && item.id && typeof item.text !== "undefined") {
                 const input = document.getElementById(`data-node-id-${item.id}`);
                 const target = this.settings.document.getElementById(`${item.id}`);
-
-                if (input) {
-                    input.value = item.text;
-                }
-
+                if (input) input.value = item.text;
                 if (target) {
                     target.textContent = item.text;
                     mw.top().app.registerChangedState(target);
@@ -805,19 +772,49 @@ export class QuickEditComponent extends MicroweberBaseClass {
             }
         };
 
-        // Handle case where json is wrapped in a success response object
-        let processData = json;
-        if (json.success === true && json.data) {
-            processData = json.data;
+        // Recursively process nodes, supporting both arrays and objects with .items
+        const processNode = (node) => {
+            if (!node || typeof node !== "object") return;
+            // If node is an array, process each element
+            if (Array.isArray(node)) {
+                node.forEach(processNode);
+                return;
+            }
+            // If node has 'items' (as in children/items), process those
+            if (Array.isArray(node.items)) {
+                node.items.forEach(processNode);
+            }
+            // If node has 'content', process those
+            if (Array.isArray(node.content)) {
+                node.content.forEach(processContentItem);
+                node.content.forEach(processNode);
+            }
+            // If node has 'children', process those (could be array or object with items)
+            if (node.children) {
+                if (Array.isArray(node.children)) {
+                    node.children.forEach(processNode);
+                } else if (Array.isArray(node.children.items)) {
+                    node.children.items.forEach(processNode);
+                }
+            }
+            // Also process the node itself if it has id/text
+            processContentItem(node);
+        };
+
+        // Unwrap response if needed
+        let data = json;
+        if (json && typeof json === "object" && json.success === true && json.data) {
+            data = json.data;
         }
 
-        // Find all content items recursively throughout the entire data structure
-        const allContentItems = findAllContent(processData);
-
-        // Process each content item
-        allContentItems.forEach(item => {
-            processContentItem(item);
-        });
+        // If data has children.items (as in your example), process those
+        if (data && data.children && Array.isArray(data.children.items)) {
+            processNode(data.children.items);
+        } else if (Array.isArray(data)) {
+            processNode(data);
+        } else if (typeof data === "object" && data !== null) {
+            processNode(data);
+        }
     }
 
     getType(obj) {
@@ -975,8 +972,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         let chatOptions = null;
         if(this.settings.chatOptions === true) {
             chatOptions = [
-                {id: 'images', content: mw.lang('Regenerate Images'), icon:mw.top().app.iconService.icon('image-change')},
-                {id: 'text', content: mw.lang('Regenerate texts'), icon: mw.top().app.iconService.icon('text')},
+                {id: 'images', content: mw.lang('Regenerate Images'), icon:mw.top().app.iconService.icon('image-change'), selected: true,},
+                {id: 'text', content: mw.lang('Regenerate texts'), icon: mw.top().app.iconService.icon('text'), selected: true,},
 
             ];
         } else if(Array.isArray(this.settings.chatOptions)) {
@@ -1033,7 +1030,6 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const message = `
         You are a website content writer, and you must write the text in a way that is relevant to the user's request,
 
-         By using this schema: \n ${JSON.stringify(this.schema())} \n
 
 
         You are a website content writer, and you must write the text in a way that is relevant to the object,
@@ -1053,33 +1049,74 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
 
 
-        content: \n ${JSON.stringify(this.collectTexts(undefined, true))}
 
 
 
-You must respond ONLY with the JSON schema with the following structure. Do not add any additional comments""" + \\
+
+You must respond ONLY with the JSON schema with the structure. Do not add any additional comments""" + \\
 """[
   JSON
 {
-   { Use the content, populate the content and children of the items  with text ... write the text in the content and children with the existing object IDs and the text in the 'text' node for each object with the existing object IDS }
+   {
 
+    "children": {
+                    "type": "array",
+                    "items": {
+                 ......  please put the content here, with the new text in the content and children objects
+
+                 to this content object: \\n ${JSON.stringify(this.toJSON())}
+
+
+
+                    }
+                }
+
+    }
+}
+]
 """
 
-        Write text to this object and populate the content and children file of the schema items usindg the existing object IDS,
+        Write text to this object and populate the content and children file of the schema items using the existing object IDS,
 
 
-        critical: do not change element IDS,
-        critical: do not change the structure of the schema,
-        critical: use only the existing object IDS,
-        critical: do not assign any new object IDS,
-        critical: return only valid json object,
-        critical: do not change the schema structure,
-        critical: do not change the existing object IDS,
-        critical: keep the existing object IDS,
-        critical: write text in the existing object IDS's content text node
+        note: use only the existing object frpm thje content IDS,
+
+        note: write text in the existing object IDS's content node
+
+        note: write text in content objects and children objects text nodes,
 
 
-        `;
+
+        task: write text in content objects and children objects text nodes,
+
+
+
+
+
+
+
+
+
+
+        Write text about:
+
+         ${about}
+
+
+
+
+
+
+
+
+and add to the schema the content and children objects with the new text in the content and children objects text nodes
+
+
+
+
+       `;
+        //    Use this general schema of reference of what to expect: \\\\n ${JSON.stringify(this.schema())} \\\\n
+//By using this schema: \\n ${JSON.stringify(this.schema())} \\n
 
         mw.top().spinnerProgress({}).show()
 

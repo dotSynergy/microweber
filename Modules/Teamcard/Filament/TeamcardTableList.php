@@ -91,9 +91,11 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
             ->columns([
                 ImageColumn::make('file')
                     ->label('Picture')
+                    ->action( EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
                     ->label('Name')
+                    ->action( EditAction::make('edit'))
                     ->searchable()
                     ->sortable(),
             ])

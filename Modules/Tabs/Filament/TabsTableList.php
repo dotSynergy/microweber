@@ -62,7 +62,9 @@ class TabsTableList extends Component implements HasForms, HasTable
             ->defaultSort('position', 'asc')
             ->columns([
                 TextColumn::make('title')
-                    ->label('Title'),
+                    ->label('Title')
+                    ->action( EditAction::make('edit'))
+                ,
             ])
             ->filters([
                 // ...

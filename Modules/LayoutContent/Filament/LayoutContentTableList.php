@@ -87,7 +87,9 @@ class LayoutContentTableList extends LiveEditModuleTable
             ->defaultSort('position', 'asc')
             ->columns([
                 TextColumn::make('title')
+                    ->action( EditAction::make('edit'))
                     ->label('Title'),
+
                 TextColumn::make('rel_id')
                     ->label('rel_id')
                     ->hidden(),

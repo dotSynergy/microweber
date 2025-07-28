@@ -57,10 +57,9 @@ class FaqTableList extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('question')
                     ->label('Question')
+                    ->action( EditAction::make('edit'))
                     ->searchable(),
-                TextColumn::make('answer')
-                    ->label('Answer')
-                    ->limit(50),
+
                 \Filament\Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Active'),
             ])

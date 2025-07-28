@@ -55,16 +55,20 @@ class RatingTableList extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('rating')
                     ->label('Rating')
+                    ->action( EditAction::make('edit'))
                     ->sortable(),
                 TextColumn::make('comment')
                     ->label('Comment')
+                    ->action( EditAction::make('edit'))
                     ->limit(50),
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime()
+                    ->hidden()
                     ->sortable(),
                 TextColumn::make('created_by')
                     ->label('Created By')
+                    ->hidden()
                     ->sortable(),
             ])
             ->filters([

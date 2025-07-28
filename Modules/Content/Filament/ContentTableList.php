@@ -56,6 +56,7 @@ class ContentTableList extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('title')
                     ->limit(20)
+                    ->action( EditAction::make('edit'))
                     ->label('Title'),
             ])
             ->filters([

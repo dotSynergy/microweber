@@ -63,6 +63,7 @@ class AccordionTableList extends Component implements HasForms, HasTable
             ->defaultSort('position', 'asc')
             ->columns([
                 TextColumn::make('title')
+                    ->action( EditAction::make('edit'))
                     ->label('Title'),
             ])
             ->headerActions([

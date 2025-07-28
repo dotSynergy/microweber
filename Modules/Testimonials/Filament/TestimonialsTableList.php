@@ -85,8 +85,10 @@ class TestimonialsTableList extends LiveEditModuleTable
 
                 ImageColumn::make('client_image')
                     ->label('Picture')
+                    ->action( EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
+                    ->action( EditAction::make('edit'))
                     ->label('Name'),
                 TextColumn::make('rel_id')
                     ->label('rel_id')

@@ -130,6 +130,7 @@
     "microweber-deps/image-comparator": "dev-master",
     "microweber-deps/seo-helper": "dev-master",
     "microweber-deps/ziggy": "1.0",
+    "microweber-deps/filament-slider-input-field": "^1.0",
     "microweber-dev/omnipay-przelewy24": "0.2",
     "microweber-packages/frontend-assets": "*",
     "microweber-packages/frontend-assets-libs": "*",
@@ -146,7 +147,7 @@
     "dutchcodingcompany/filament-socialite": "^2.4",
     "openai-php/client": "^0.12.0",
     "halaxa/json-machine": "^1.2",
-    "inspector-apm/neuron-ai": "dev-workflows"
+    "inspector-apm/neuron-ai": "dev-main"
   },
   "require-dev": {
     "fakerphp/faker": "^1.24",
@@ -271,15 +272,16 @@
       "only": [
         "composer/installers"
       ]
-    },
+    }
+      ,
       {
-      "type": "vcs",
-      "url": "https://github.com/sixty-nine/neuron-ai",
-      "canonical": true,
-      "only": [
-        "inspector-apm/neuron-ai"
-      ]
-    },
+          "type": "vcs",
+          "url": "https://github.com/peter-mw/neuron-ai",
+          "canonical": true,
+          "only": [
+              "inspector-apm/neuron-ai"
+          ]
+      },
     {
       "type": "path",
       "url": "packages/microweber-filament-theme",

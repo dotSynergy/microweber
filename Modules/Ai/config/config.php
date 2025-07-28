@@ -32,7 +32,7 @@ return [
         'openai' => [
             'enabled' => env('OPENAI_ENABLED', false),
             'api_key' => env('OPENAI_API_KEY'),
-            'model' => env('OPENAI_MODEL', 'gpt-4-turbo'),
+            'model' => env('OPENAI_MODEL', 'gpt-4o'),
             'max_tokens' => env('OPENAI_MAX_TOKENS', null),
             'temperature' => env('OPENAI_TEMPERATURE', 0.7),
             'models' => [

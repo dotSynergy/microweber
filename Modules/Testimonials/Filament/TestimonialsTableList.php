@@ -26,6 +26,7 @@ use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
 use Modules\Ai\Facades\AiImages;
 use Modules\Testimonials\Models\Testimonial;
 use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\StructuredOutput\SchemaProperty;
 
 class TestimonialsTableList extends LiveEditModuleTable
 {
@@ -132,9 +133,17 @@ class TestimonialsTableList extends LiveEditModuleTable
                         $createImages = $data['createTestimonialWithAiContentImages'] ?? false;
 
                         $class = new class {
+                            #[SchemaProperty(description: 'The name of the testimonial.', required: true)]
                             public string $name;
+
+                            #[SchemaProperty(description: 'The content of the testimonial.', required: true)]
                             public string $content;
+
+
+                            #[SchemaProperty(description:'The company of the client.', required: true)]
                             public string $client_company;
+
+                            #[SchemaProperty(description: 'The role of the client.', required: true)]
                             public string $client_role;
                         };
 
@@ -148,7 +157,9 @@ class TestimonialsTableList extends LiveEditModuleTable
 
                             $resp = $agent->structured(
                                 new UserMessage($prompt)
-                                , $class::class
+                                , $class::class,
+                                maxRetries: 3
+
                             );
                             $resp = json_decode(json_encode($resp), true);
 

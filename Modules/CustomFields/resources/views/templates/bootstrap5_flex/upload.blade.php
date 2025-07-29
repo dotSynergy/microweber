@@ -5,7 +5,7 @@ $rand = uniqid();
 
 <div class="col-md-{{ $settings['field_size'] }}">
     <div class="form-group">
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="form-label">
                 {{ $data['name'] }}
                 @if($settings['required'])
@@ -18,9 +18,9 @@ $rand = uniqid();
             <div class="row">
                 <div class="col">
                     <div class="custom-file custom-file-{{ $rand }}">
-                        <input type="file" 
-                            name="{{ $data['name_key'] }}" 
-                            class="custom-file-input custom-file-input-{{ $rand }}" 
+                        <input type="file"
+                            name="{{ $data['name_key'] }}"
+                            class="custom-file-input custom-file-input-{{ $rand }}"
                             id="customFile{{ $rand }}"
                         >
                         <label class="custom-file-label custom-file-label-{{ $rand }}" for="customFile{{ $rand }}">

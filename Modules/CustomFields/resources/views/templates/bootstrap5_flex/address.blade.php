@@ -1,6 +1,6 @@
 <div class="col-md-{{ $settings['field_size'] }}">
     @foreach($data['options'] as $key => $value)
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="col-form-label" for="inputDefault">{{ __($value) }}</label>
         @endif
 
@@ -16,22 +16,22 @@
                 </div>
             @else
                 <div class="mb-3 d-flex gap-3 flex-wrap">
-                    <input type="text" 
-                        class="mw-ui-field" 
-                        name="{{ $data['name'] }}[{{ $key }}]" 
-                        @if($settings['required']) required @endif 
+                    <input type="text"
+                        class="mw-ui-field"
+                        name="{{ $data['name'] }}[{{ $key }}]"
+                        @if($settings['required']) required @endif
                         data-custom-field-id="{{ $data['id'] }}"
                     />
                 </div>
             @endif
         @else
             <div class="mb-3 d-flex gap-3 flex-wrap">
-                <input type="text" 
-                    class="form-control" 
-                    name="{{ $data['name'] }}[{{ $key }}]" 
-                    @if($settings['required']) required @endif 
-                    data-custom-field-id="{{ $data['id'] }}" 
-                    placeholder="" 
+                <input type="text"
+                    class="form-control"
+                    name="{{ $data['name'] }}[{{ $key }}]"
+                    @if($settings['required']) required @endif
+                    data-custom-field-id="{{ $data['id'] }}"
+                    placeholder=""
                     id="inputDefault"
                 />
             </div>

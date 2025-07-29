@@ -143,8 +143,8 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
 
 
         $editForm[] = Section::make('Advanced')
-//            ->collapsible()
-//            ->collapsed()
+             ->collapsible()
+           ->collapsed()
             ->compact()
             ->schema([
                 Toggle::make('options.show_placeholder')
@@ -163,9 +163,9 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                 Toggle::make('options.required')
                     ->helperText('Toggle to make this field required for the user')
                     ->label('Required'),
-                Toggle::make('options.show_label')
-                    ->helperText('Toggle to turn on the label and write your text below')
-                    ->label('Show label'),
+                Toggle::make('options.hide_label')
+                    ->helperText('Toggle to turn off the label and write your text below')
+                    ->label('Hide label'),
                 Section::make([
                     Grid::make(3)
                         ->schema([

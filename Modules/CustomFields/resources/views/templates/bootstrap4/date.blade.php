@@ -4,7 +4,7 @@
 
 <div class="col-sm-{{ $settings['field_size_mobile'] }} col-md-{{ $settings['field_size_tablet'] }} col-lg-{{ $settings['field_size_desktop'] }}">
     <div class="form-group">
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="form-label my-3">
                 {{ $data['name'] }}
                 @if($settings['required'])
@@ -13,7 +13,7 @@
             </label>
         @endif
 
-        <input type="text" 
+        <input type="text"
             @if($settings['required']) required @endif
             data-date-format="{{ $settings['date_format'] }}"
             data-custom-field-id="{{ $data['id'] }}"
@@ -40,8 +40,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         if($('#date_{{ $rand }}') && $('#date_{{ $rand }}').datepicker){
-            $('#date_{{ $rand }}').datepicker({ 
-                dateFormat: '{{ $settings['date_format'] }}', 
+            $('#date_{{ $rand }}').datepicker({
+                dateFormat: '{{ $settings['date_format'] }}',
                 language: "{{ current_lang_abbr() }}"
             });
         }

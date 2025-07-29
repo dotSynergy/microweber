@@ -1,6 +1,6 @@
 <div class="col-sm-{{ $settings['field_size_mobile'] }} col-md-{{ $settings['field_size_tablet'] }} col-lg-{{ $settings['field_size_desktop'] }}">
     <div class="mw-text-start my-2">
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="form-label my-3">
                 {{ $data['name'] }}
                 @if($settings['required'])
@@ -9,10 +9,10 @@
             </label>
         @endif
 
-        <textarea type="text" 
-            rows="{{ $settings['rows'] }}" 
-            cols="{{ $settings['cols'] }}" 
-            class="form-control" 
+        <textarea type="text"
+            rows="{{ $settings['rows'] }}"
+            cols="{{ $settings['cols'] }}"
+            class="form-control"
             @if($settings['required']) required @endif
             data-custom-field-id="{{ $data['id'] }}"
             data-custom-field-error-text="{{ $data['error_text'] }}"

@@ -36,7 +36,7 @@ class DefaultField
     public $defaultSettings = [
         'required' => false,
         'multiple' => '',
-        'show_label' => true,
+        'hide_label' => false,
         'show_placeholder' => false,
         'field_size' => 12,
         'field_size_desktop' => 12,
@@ -47,7 +47,7 @@ class DefaultField
     public $defaultSettingsAll = [
         'required' => false,
         'multiple' => '',
-        'show_label' => true,
+        'hide_label' => false,
         'show_placeholder' => false,
         'as_text_area' => false,
         'field_size' => 12,
@@ -138,7 +138,7 @@ class DefaultField
 
         // Handle show_placeholder setting properly for both boolean and string values
         $showPlaceholder = false;
-        
+
         // Check if there's a specific show_placeholder setting from the database options
         if (isset($this->data['options']['show_placeholder'])) {
             $placeholderSetting = $this->data['options']['show_placeholder'];
@@ -151,12 +151,23 @@ class DefaultField
                 $showPlaceholder = true;
             }
         }
-        
-        // Also respect the database placeholder field - if it's null/empty, don't show placeholder
-        if (!$showPlaceholder || empty($this->data['placeholder'])) {
+
+        // Handle placeholder text priority: options.placeholder > data.placeholder > field name
+        if (!$showPlaceholder) {
             $renderData['placeholder'] = '';
         } else {
-            $renderData['placeholder'] = $this->data['placeholder'];
+            // First check for placeholder in options
+            if (isset($this->data['options']['placeholder']) && !empty($this->data['options']['placeholder'])) {
+                $renderData['placeholder'] = $this->data['options']['placeholder'];
+            }
+            // Then check for placeholder in data
+            elseif (isset($this->data['placeholder']) && !empty($this->data['placeholder'])) {
+                $renderData['placeholder'] = $this->data['placeholder'];
+            }
+            // Default to field name if no specific placeholder is set
+            else {
+                $renderData['placeholder'] = $this->data['name'] ?? '';
+            }
         }
 
         $this->renderData = $renderData;

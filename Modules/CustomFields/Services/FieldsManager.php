@@ -480,7 +480,7 @@ class FieldsManager
                     $showPlaceholder = true;
                 }
             }
-            
+
             if ($showPlaceholder) {
                 $customField->placeholder = $fieldData['placeholder'];
             } else {
@@ -816,6 +816,9 @@ class FieldsManager
         }
 
         $field = $this->instanceField($data['type']);
+
+
+
         $field->setData($data);
         $field->setAdminView($settings);
 

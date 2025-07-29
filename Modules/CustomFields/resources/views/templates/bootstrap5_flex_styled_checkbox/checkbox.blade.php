@@ -28,7 +28,7 @@
 </style>
 
 <div class="mb-3 row col-sm-{{ $settings['field_size_mobile'] }} col-md-{{ $settings['field_size_tablet'] }} col-lg-{{ $settings['field_size_desktop'] }}">
-    @if($settings['show_label'])
+    @if(!$settings['hide_label'])
         <label class="form-label my-3">{{ $data['name'] }}</label>
     @endif
 
@@ -36,11 +36,11 @@
         @php $i = $loop->iteration; @endphp
         <div class="col-lg-3 col-6 form-selectgroup form-selectgroup-pills my-3">
             <label class="form-selectgroup-item" for="field-{{ $i }}-{{ $data['id'] }}">
-                <input class="form-selectgroup-input mb-3" 
-                    type="checkbox" 
-                    name="{{ $data['name_key'] }}[]" 
-                    id="field-{{ $i }}-{{ $data['id'] }}" 
-                    data-custom-field-id="{{ $data['id'] }}" 
+                <input class="form-selectgroup-input mb-3"
+                    type="checkbox"
+                    name="{{ $data['name_key'] }}[]"
+                    id="field-{{ $i }}-{{ $data['id'] }}"
+                    data-custom-field-id="{{ $data['id'] }}"
                     value="{{ $value }}"
                 />
                 <span class="form-selectgroup-label">{{ $value }}</span>

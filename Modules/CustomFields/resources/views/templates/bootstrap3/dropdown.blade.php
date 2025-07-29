@@ -11,7 +11,7 @@
     @endif
 
     <div class="form-group">
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="form-label">
                 {{ $data['name'] }}
                 @if($settings['required'])

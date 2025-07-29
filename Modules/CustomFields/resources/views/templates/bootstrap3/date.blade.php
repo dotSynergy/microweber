@@ -4,7 +4,7 @@
 
 <div class="col-md-{{ $settings['field_size'] }}">
     <div class="form-group">
-        @if($settings['show_label'])
+        @if(!$settings['hide_label'])
             <label class="form-label">
                 {{ $data['name'] }}
                 @if($settings['required'])
@@ -14,7 +14,7 @@
         @endif
 
         <div class="mw-custom-field-form-controls">
-            <input type="text" 
+            <input type="text"
                 @if($settings['required']) required @endif
                 data-date-format="{{ $settings['date_format'] }}"
                 data-custom-field-id="{{ $data['id'] }}"
@@ -39,8 +39,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         if($('#date_{{ $rand }}') && $('#date_{{ $rand }}').datepicker){
-            $('#date_{{ $rand }}').datepicker({ 
-                dateFormat: '{{ $settings['date_format'] }}', 
+            $('#date_{{ $rand }}').datepicker({
+                dateFormat: '{{ $settings['date_format'] }}',
                 language: "{{ current_lang_abbr() }}"
             });
         }

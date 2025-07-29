@@ -16,7 +16,6 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminMaintenanceModePage,
     AdminPoweredByPage,
     AdminPrivacyPolicyPage,
-    AdminRobotsPage,
     AdminSeoPage,
     AdminShopAutoRespondEmailPage,
     AdminShopCouponsPage,
@@ -76,7 +75,7 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerPage(AdminMaintenanceModePage::class);
         FilamentRegistry::registerPage(AdminPoweredByPage::class);
         FilamentRegistry::registerPage(AdminPrivacyPolicyPage::class);
-        FilamentRegistry::registerPage(AdminRobotsPage::class);
+
         FilamentRegistry::registerPage(AdminSeoPage::class);
         FilamentRegistry::registerPage(AdminTemplatePage::class);
         FilamentRegistry::registerPage(AdminTrustProxiesPage::class);

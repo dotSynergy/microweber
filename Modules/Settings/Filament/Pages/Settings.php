@@ -2,7 +2,6 @@
 
 namespace Modules\Settings\Filament\Pages;
 
-use Arcanedev\Html\Elements\P;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Page;
@@ -50,8 +49,7 @@ class Settings extends Page
         $settingsPages[] = new AdminMaintenanceModePage();
         $settingsPages[] = new AdminUiColorsPage();
         $settingsPages[] = new AdminPoweredByPage();
-        $settingsPages[] = new AdminRobotsPage();
-        $settingsPages[] = new AdminTrustProxiesPage();
+         $settingsPages[] = new AdminTrustProxiesPage();
         $settingsPages[] = new AdminCustomTagsPage();
 
         $settingsPages[] = new AdminShopGeneralPage();

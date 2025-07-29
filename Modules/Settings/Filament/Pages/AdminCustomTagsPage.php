@@ -18,6 +18,15 @@ class AdminCustomTagsPage extends AdminSettingsPage
 
     public function form(Form $form): Form
     {
+
+        $defaultRobotsTxt = "User-agent: *\n" .
+            "Disallow: /admin/\n" .
+            "Disallow: /api/\n" .
+            "Disallow: /userfiles/modules/\n" .
+            "Disallow: /userfiles/templates/\n\n" .
+            "Sitemap: " . url('sitemap.xml');
+
+
         return $form
             ->schema([
                 Section::make('Custom Head Tags')
@@ -51,6 +60,8 @@ class AdminCustomTagsPage extends AdminSettingsPage
                     ]),
 
                 Section::make('Custom Ads.txt')
+                    ->collapsed()
+                    ->collapsible()
                     ->description('Configure your ads.txt file content')
                     ->schema([
                         Textarea::make('options.website.ads_txt')
@@ -58,6 +69,21 @@ class AdminCustomTagsPage extends AdminSettingsPage
                             ->helperText(new HtmlString('The ads.txt file is used to help prevent unauthorized inventory sales.<br>Learn more about <a href="https://iabtechlab.com/ads-txt/" target="_blank" class="text-primary-600 hover:text-primary-500">ads.txt</a>.'))
                             ->placeholder('google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0')
                             ->rows(5)
+                            ->columnSpanFull()
+                            ->live(),
+                    ]),
+
+
+                Section::make('Custom Robots.txt')
+                    ->collapsed()
+                    ->collapsible()
+                    ->description('Configure your robots.txt file content')
+                    ->schema([
+                        Textarea::make('options.website.robots_txt')
+                            ->label('Robots.txt Content')
+                            ->helperText(new HtmlString('The robots.txt file tells search engine crawlers which URLs they can access on your site.<br>Learn more about <a href="https://developers.google.com/search/docs/crawling-indexing/robots/intro" target="_blank" class="text-primary-600 hover:text-primary-500">robots.txt</a>.'))
+                            ->placeholder($defaultRobotsTxt)
+                            ->rows(10)
                             ->columnSpanFull()
                             ->live(),
                     ])

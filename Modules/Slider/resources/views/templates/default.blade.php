@@ -94,7 +94,7 @@ description: Modern slider with Swiper.js integration
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
-                    } 
+                    }
                 </style>
 
 

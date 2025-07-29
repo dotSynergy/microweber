@@ -3,6 +3,7 @@
 namespace Modules\Settings\Filament\Pages;
 
 use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
@@ -12,6 +13,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
+use Modules\Post\Filament\Admin\Resources\PostResource;
+use Modules\WhiteLabel\Filament\Pages\WhiteLabelSettingsAdminSettingsPage;
 
 class AdminGeneralPage extends AdminSettingsPage
 {
@@ -70,6 +73,20 @@ class AdminGeneralPage extends AdminSettingsPage
                             ])
                             ->placeholder('Select Permalink Structure'),
 
+
+
+
+                        Actions::make([
+
+                            Action::make('Edit SEO site verification')
+                                ->label('SEO site verification codes')
+                                ->icon('heroicon-o-pencil-square')
+                                ->color('gray')
+                                ->url(AdminSeoPage::getUrl()),
+
+                        ]),
+
+
                     ]),
 
 
@@ -85,7 +102,7 @@ class AdminGeneralPage extends AdminSettingsPage
                             ->options(function () {
                                 $options = [];
                                 foreach (app()->format->get_supported_date_formats() as $item) {
-                                    $options[$item] = date($item, time()) . '- ('.$item.')';
+                                    $options[$item] = date($item, time()) . '- (' . $item . ')';
                                 }
                                 return $options;
                             }),
@@ -130,9 +147,9 @@ class AdminGeneralPage extends AdminSettingsPage
                     ->schema([
 
                         Toggle::make('options.website.shop_disabled')
-                            ->label('Enable Online shop')
+                            ->label('Disable Online shop')
                             ->live()
-                            ->helperText('Choose the status of your online shop'),
+                            ->helperText('Disable your online shop'),
 
                     ]),
 
@@ -153,11 +170,17 @@ class AdminGeneralPage extends AdminSettingsPage
                     ->description('Control whether or not "Powered by Microweber" links display in the footer of your site and products.')
                     ->schema([
 
+
                         Actions::make([
-                            Actions\Action::make('edit_powered_by_microweber')
-                                ->size('lg')
-                                ->label('Click here to edit the branding settings'),
-                        ])->columnSpanFull(),
+
+                            Action::make('Edit branding')
+                                ->label('Click here to edit the branding settings')
+                                ->icon('heroicon-o-pencil-square')
+                                ->color('gray')
+                                ->url(WhiteLabelSettingsAdminSettingsPage::getUrl()),
+
+                        ]),
+
 
                     ]),
 

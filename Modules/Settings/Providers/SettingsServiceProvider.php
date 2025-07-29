@@ -14,9 +14,7 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminLanguagePage,
     AdminLoginRegisterPage,
     AdminMaintenanceModePage,
-    AdminPoweredByPage,
     AdminPrivacyPolicyPage,
-    AdminRobotsPage,
     AdminSeoPage,
     AdminShopAutoRespondEmailPage,
     AdminShopCouponsPage,
@@ -29,7 +27,6 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminShopTaxesPage,
     AdminTemplatePage,
     AdminTrustProxiesPage,
-    AdminUiColorsPage,
     AdminUpdatesPage,
     AdminWebManifestPage,
     Settings
@@ -74,13 +71,11 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerPage(AdminLanguagePage::class);
         FilamentRegistry::registerPage(AdminLoginRegisterPage::class);
         FilamentRegistry::registerPage(AdminMaintenanceModePage::class);
-        FilamentRegistry::registerPage(AdminPoweredByPage::class);
         FilamentRegistry::registerPage(AdminPrivacyPolicyPage::class);
-        FilamentRegistry::registerPage(AdminRobotsPage::class);
+
         FilamentRegistry::registerPage(AdminSeoPage::class);
         FilamentRegistry::registerPage(AdminTemplatePage::class);
         FilamentRegistry::registerPage(AdminTrustProxiesPage::class);
-        FilamentRegistry::registerPage(AdminUiColorsPage::class);
         FilamentRegistry::registerPage(AdminWebManifestPage::class);
 
         // Register shop settings pages

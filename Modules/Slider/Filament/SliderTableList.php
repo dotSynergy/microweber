@@ -4,10 +4,12 @@ namespace Modules\Slider\Filament;
 
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -20,6 +22,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
+use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
 use Modules\Slider\Models\Slider;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
 use Modules\Ai\Facades\AiImages;
@@ -27,6 +30,7 @@ use NeuronAI\Chat\Messages\UserMessage;
 use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
+use Filament\Forms\Components\Grid;
 
 class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
 {
@@ -55,130 +59,183 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
             Textarea::make('description')
                 ->label('Slide Description')
                 ->helperText('Provide a description for this slide.'),
-            Select::make('settings.alignItems')
-                ->label('Align Items')
+            ToggleButtons::make('settings.alignItems')
+                ->helperText('Choose the alignment of the slide.')
+                ->live()
                 ->options([
                     'left' => 'Left',
                     'center' => 'Center',
                     'right' => 'Right',
                 ])
-                ->default('center'),
+                ->inline()
+                ->icons([
+                    'left' => 'heroicon-o-bars-3-bottom-left',
+                    'center' => 'heroicon-o-bars-3',
+                    'right' => 'heroicon-o-bars-3-bottom-right',
+                ]),
 
             TextInput::make('button_text')
                 ->label('Button Text')
                 ->helperText('Enter text for the button'),
-            TextInput::make('link')
+            MwLinkPicker::make('link')
                 ->label('Button URL')
+                ->setSimpleMode()
+                ->live()
                 ->url()
                 ->helperText('Enter a URL for the button'),
-            MwColorPicker::make('settings.buttonBackgroundColor')
-                ->label('Button Background Color')
-                ->rgba()
-               ,
-            MwColorPicker::make('settings.buttonBackgroundHoverColor')
-                ->label('Button Background Hover Color')
-                ->rgba()
-               ,
-            MwColorPicker::make('settings.buttonBorderColor')
-                ->label('Button Border Color')
-                ->rgba()
-               ,
 
-            MwColorPicker::make('settings.buttonTextColor')
-                ->label('Button Text Color')
-                ->rgba()
-               ,
 
-            MwColorPicker::make('settings.buttonTextHoverColor')
-                ->label('Button Text Hover Color')
-                ->rgba()
-               ,
+            Section::make('Styling')
+                ->collapsible()
+                ->collapsed()
+                ->schema([
 
-            TextInput::make('settings.buttonFontSize')
-                ->label('Button Font Size')
-                ->numeric()
-                ->live()
-                ->step(1),
-            MwInputSliderGroup::make()
-                ->live()
-                ->sliders([
-                    MwInputSlider::make('settings.buttonFontSize')
-                        ->label('Button Font Size')
-                        ->step(1),
+
+                    Grid::make()
+                        ->columns(2)
+                        ->schema([
+
+
+                            MwColorPicker::make('settings.buttonBackgroundColor')
+                                ->label('Button Background Color')
+                                ->rgba()
+                            ,
+                            MwColorPicker::make('settings.buttonBackgroundHoverColor')
+                                ->label('Button Background Hover Color')
+                                ->rgba()
+                            ,
+                            MwColorPicker::make('settings.buttonBorderColor')
+                                ->label('Button Border Color')
+                                ->rgba()
+                            ,
+
+                            MwColorPicker::make('settings.buttonTextColor')
+                                ->label('Button Text Color')
+                                ->rgba()
+                            ,
+
+
+                            MwColorPicker::make('settings.buttonTextHoverColor')
+                                ->label('Button Text Hover Color')
+                                ->rgba(),
+
+
+                            MwColorPicker::make('settings.imageBackgroundColor')
+                                ->label('Image Background Color')
+                                ->rgba(),
+
+                        ]),
+
+
+                    Grid::make()
+                        ->columns(2)
+                        ->schema([
+                            MwInputSliderGroup::make()
+                                ->live()
+                                ->columns(10)
+                                ->label('Button Font Size')
+                                ->sliders([
+                                    MwInputSlider::make('settings.buttonFontSize')
+                                        ->label('Button Font Size')
+                                        ->step(1),
+                                ])
+                                ->enableTooltips()
+                                ->range([
+                                    "min" => 8,
+                                    "max" => 72
+                                ]),
+                            TextInput::make('settings.buttonFontSize')
+                                ->label('Button Font Size')
+                                ->numeric()
+                                ->columns(2)
+                                ->live()
+                                ->step(1),
+
+                        ]),
+
+                    Grid::make()
+                        ->columns(3)
+                        ->schema([
+                            MwColorPicker::make('settings.titleColor')
+                                ->label('Title Color')
+                                ->live()
+                                ->rgba(),
+
+                            MwInputSliderGroup::make()
+                                ->live()
+                                ->label('Title Font Size')
+                                ->sliders([
+                                    MwInputSlider::make('settings.titleFontSize')
+                                        ->label('Title Font Size'),
+                                ])
+                                ->enableTooltips()
+                                ->range([
+                                    "min" => 8,
+                                    "max" => 72
+                                ]),
+
+                            TextInput::make('settings.titleFontSize')
+                                ->label('Set Title Font Size')
+                                ->numeric()
+                                ->live(),
+                        ]),
+
+                    Grid::make(3)
+                        ->columns(3)
+                        ->schema([
+
+                            MwColorPicker::make('settings.descriptionColor')
+                                ->label('Description Color')
+                                ->live()
+                                ->rgba(),
+
+
+                            MwInputSliderGroup::make()
+                                ->live()
+                                ->label('Description Font Size')
+                                ->sliders([
+                                    MwInputSlider::make('settings.descriptionFontSize')
+                                        ->label('Description Font Size'),
+                                ])
+                                ->enableTooltips()
+                                ->range([
+                                    "min" => 8,
+                                    "max" => 72
+                                ]),
+                            TextInput::make('settings.descriptionFontSize')
+                                ->label('Set Description Font Size')
+                                ->numeric()
+                                ->live(),
+
+                        ]),
+
+
+                    TextInput::make('settings.imageBackgroundOpacity')
+                        ->label('Image Background Opacity')
+                        ->numeric()
+                        ->step(0.01)
+                        ->live()
+                    ,
+
+
+                    Select::make('settings.imageBackgroundFilter')
+                        ->label('Image Background Filter')
+                        ->live()
+                        ->options([
+                            'none' => 'None',
+                            'blur' => 'Blur',
+                            'mediumBlur' => 'Medium Blur',
+                            'maxBlur' => 'Max Blur',
+                            'grayscale' => 'Grayscale',
+                            'hue-rotate' => 'Hue Rotate',
+                            'invert' => 'Invert',
+                            'sepia' => 'Sepia',
+                        ])
+                        ->default('none'),
+
                 ])
-                ->enableTooltips()
-                ->range([
-                    "min" => 8,
-                    "max" => 72
-                ])
-               ,
-
-            MwColorPicker::make('settings.titleColor')
-                ->label('Title Color')
-                ->rgba(),
-
-            TextInput::make('settings.titleFontSize')
-                ->label('Title Font Size')
-                ->numeric()
-                ->live(),
-            MwInputSliderGroup::make()
-                ->live()
-                ->sliders([
-                    MwInputSlider::make('settings.titleFontSize')
-                        ->label('Title Font Size'),
-                ])
-                ->enableTooltips()
-                ->range([
-                    "min" => 8,
-                    "max" => 72
-                ]),
-
-            MwColorPicker::make('settings.descriptionColor')
-                ->label('Description Color')
-                ->rgba(),
-
-            TextInput::make('settings.descriptionFontSize')
-                ->label('Description Font Size')
-                ->numeric()
-                ->live(),
-            MwInputSliderGroup::make()
-                ->live()
-                ->sliders([
-                    MwInputSlider::make('settings.descriptionFontSize')
-                        ->label('Description Font Size'),
-                ])
-                ->enableTooltips()
-                ->range([
-                    "min" => 8,
-                    "max" => 72
-                ]),
-
-            MwColorPicker::make('settings.imageBackgroundColor')
-                ->label('Image Background Color')
-                ->rgba(),
-
-            TextInput::make('settings.imageBackgroundOpacity')
-                ->label('Image Background Opacity')
-                ->numeric()
-                ->step( 0.01)
-
-                ->live()
-                ,
 
 
-            Select::make('settings.imageBackgroundFilter')
-                ->label('Image Background Filter')
-                ->options([
-                    'none' => 'None',
-                    'blur' => 'Blur',
-                    'mediumBlur' => 'Medium Blur',
-                    'maxBlur' => 'Max Blur',
-                    'grayscale' => 'Grayscale',
-                    'hue-rotate' => 'Hue Rotate',
-                    'invert' => 'Invert',
-                    'sepia' => 'Sepia',
-                ])
-                ->default('none'),
         ];
     }
 
@@ -189,11 +246,11 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
             ->defaultSort('position', 'asc')->columns([
                 ImageColumn::make('media')
                     ->label('Image')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
                     ->label('Title')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->searchable(),
 
 
@@ -273,7 +330,6 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                                         }
                                     } catch (\Exception $e) {
                                         // Log error but continue with slide creation
-                                        \Log::error('Failed to generate image for slide: ' . $e->getMessage());
                                     }
                                 }
                             }

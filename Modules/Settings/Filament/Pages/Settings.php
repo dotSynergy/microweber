@@ -2,7 +2,6 @@
 
 namespace Modules\Settings\Filament\Pages;
 
-use Arcanedev\Html\Elements\P;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Page;
@@ -48,10 +47,7 @@ class Settings extends Page
         $settingsPages[] = new AdminWebManifestPage();
         //$settingsPages[] = new AdminExperimentalPage();
         $settingsPages[] = new AdminMaintenanceModePage();
-        $settingsPages[] = new AdminUiColorsPage();
-        $settingsPages[] = new AdminPoweredByPage();
-        $settingsPages[] = new AdminRobotsPage();
-        $settingsPages[] = new AdminTrustProxiesPage();
+         $settingsPages[] = new AdminTrustProxiesPage();
         $settingsPages[] = new AdminCustomTagsPage();
 
         $settingsPages[] = new AdminShopGeneralPage();
@@ -87,9 +83,19 @@ class Settings extends Page
         //  $panelNavigationGroups = Filament::getCurrentPanel()->getNavigationGroups();
         $panelNavigationItems = Filament::getCurrentPanel()->getNavigation();
 
-//dd($panelNavigationGroups,$panelNavigationItems);
+ //dd($panelNavigationItems);
         if ($panelNavigationItems) {
             foreach ($panelNavigationItems as $navGroup) {
+
+
+                //if not end with settings skip
+                if (method_exists($navGroup, 'getLabel') && !str_ends_with($navGroup->getLabel(), 'Settings')) {
+                    continue;
+                }
+                if (method_exists($navGroup, 'getLabel') && $navGroup->getLabel() ==  'Settings') {
+                    continue;
+                }
+
                 $settingsGroupsNavGroup = $this->buildNavFromPanelNavGroup($navGroup);
 
                 if (!empty($settingsGroupsNavGroup)) {
@@ -132,6 +138,18 @@ class Settings extends Page
             if (method_exists($instance, 'getDescription')) {
                 $description = $instance->getDescription();
             }
+
+            //check if description property exists
+            if (!isset($description) or $description == '') {
+
+                $reflectionClass = new \ReflectionClass($instance);
+                 $descriptionProp = $reflectionClass->hasProperty('description') ? $reflectionClass->getProperty('description') : null;
+                if ($descriptionProp) {
+                     $description = $descriptionProp->getValue($instance);
+                }
+            }
+
+
 
             $heading = '';
             if (method_exists($instance, 'getHeading')) {
@@ -332,6 +350,21 @@ class Settings extends Page
                                     $childItemData['description'] = FilamentHelpers::getNavigationItemDescription($childItem);
 
                                 }
+/*
+
+                                if (!isset($childItemData['description']) or $childItemData['description'] == '') {
+                                    $instance = $childItem;
+                                    $reflectionClass = new \ReflectionClass($instance);
+                                    $descriptionProp = $reflectionClass->hasProperty('description') ? $reflectionClass->getProperty('description') : null;
+                                    if ($descriptionProp) {
+                                        $childItemData['description'] = $descriptionProp->getValue($instance);
+                                    }
+
+                                }*/
+
+
+
+
 
 
                                 $settingsGroups[$groupLabel][] = $childItemData;

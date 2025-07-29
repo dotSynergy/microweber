@@ -216,11 +216,15 @@ class MenusList extends Component implements HasForms, HasActions
                 }),
 
 
-            TextInput::make('display_title')
-                ->disabled()
-                ->hidden(function (Get $get) {
-                    return $get('use_custom_title') === true;
-                }),
+            TextInput::make('display_title') // This is the title that will be displayed in the menu
+                ->label('Display title')
+                ->required()
+                ->live()
+                ->maxLength(255)
+                ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),
+
+
+
 
             TextInput::make('title')
                 ->hidden(function (Get $get) {

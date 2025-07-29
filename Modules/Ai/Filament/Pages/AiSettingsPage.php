@@ -22,7 +22,7 @@ class AiSettingsPage extends AdminSettingsPage
 
     protected static string $description = 'Configure your ai settings';
 
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'System Settings';
     protected static ?int $navigationSort = 3000;
 
     public array $optionGroups = [

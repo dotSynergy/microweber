@@ -47,8 +47,6 @@ class Settings extends Page
         $settingsPages[] = new AdminWebManifestPage();
         //$settingsPages[] = new AdminExperimentalPage();
         $settingsPages[] = new AdminMaintenanceModePage();
-        $settingsPages[] = new AdminUiColorsPage();
-        $settingsPages[] = new AdminPoweredByPage();
          $settingsPages[] = new AdminTrustProxiesPage();
         $settingsPages[] = new AdminCustomTagsPage();
 
@@ -140,6 +138,18 @@ class Settings extends Page
             if (method_exists($instance, 'getDescription')) {
                 $description = $instance->getDescription();
             }
+
+            //check if description property exists
+            if (!isset($description) or $description == '') {
+
+                $reflectionClass = new \ReflectionClass($instance);
+                 $descriptionProp = $reflectionClass->hasProperty('description') ? $reflectionClass->getProperty('description') : null;
+                if ($descriptionProp) {
+                     $description = $descriptionProp->getValue($instance);
+                }
+            }
+
+
 
             $heading = '';
             if (method_exists($instance, 'getHeading')) {
@@ -340,6 +350,21 @@ class Settings extends Page
                                     $childItemData['description'] = FilamentHelpers::getNavigationItemDescription($childItem);
 
                                 }
+/*
+
+                                if (!isset($childItemData['description']) or $childItemData['description'] == '') {
+                                    $instance = $childItem;
+                                    $reflectionClass = new \ReflectionClass($instance);
+                                    $descriptionProp = $reflectionClass->hasProperty('description') ? $reflectionClass->getProperty('description') : null;
+                                    if ($descriptionProp) {
+                                        $childItemData['description'] = $descriptionProp->getValue($instance);
+                                    }
+
+                                }*/
+
+
+
+
 
 
                                 $settingsGroups[$groupLabel][] = $childItemData;

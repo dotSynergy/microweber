@@ -24,6 +24,10 @@ class AdminTemplatePage extends Page
 
     protected static ?string $title = 'Template';
 
+
+    protected static ?string $navigationGroup = 'Website Settings';
+
+
     protected static string $description = 'Configure your template settings';
 
     public $selectedTemplate = '';

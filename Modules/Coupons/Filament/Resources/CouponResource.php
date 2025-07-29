@@ -19,6 +19,9 @@ class CouponResource extends Resource
     protected static ?string $model = Coupon::class;
     protected static ?string $navigationGroup = 'Shop Settings';
     protected static ?int $navigationSort = 12;
+
+    protected static string $description = 'Configure your shop coupons settings';
+
     public static function form(Form $form): Form
     {
         return $form->schema([

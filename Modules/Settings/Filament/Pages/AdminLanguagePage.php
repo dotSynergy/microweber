@@ -11,6 +11,7 @@ class AdminLanguagePage extends AdminSettingsPage
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
 
     protected static ?string $title = 'Language';
+    protected static ?string $navigationGroup = 'Language Settings';
 
     protected static string $description = 'Configure your language settings';
 

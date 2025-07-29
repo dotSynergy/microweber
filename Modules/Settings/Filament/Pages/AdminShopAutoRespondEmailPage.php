@@ -26,7 +26,7 @@ class AdminShopAutoRespondEmailPage extends AdminSettingsPage
 
     protected static string $description = 'Configure your shop auto respond email settings';
 
-    protected static ?string $navigationGroup = 'Shop Settings';
+    protected static ?string $navigationGroup = 'Email Settings';
 
     public array $optionGroups = [
         'orders',

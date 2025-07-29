@@ -29,7 +29,7 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
 
     protected static string $description = 'Configure multilanguage settings for your website';
 
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'Language Settings';
 
     protected static ?int $navigationSort = 2000;
 

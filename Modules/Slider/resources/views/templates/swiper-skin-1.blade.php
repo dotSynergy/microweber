@@ -79,7 +79,7 @@ filter: sepia(100%);
                     #js-slider-{{ $params['id'] }} .swiper-slide-{{ $slide->id }} .slider-button {
                         display: inline-block;
                         padding: 8px 20px;
-                        background-color: {{ $slide->settings['buttonBackgroundColor'] ?? '#007bff' }};
+                        background-color: {{ $slide->settings['buttonBackgroundColor'] ?? 'var(--mw-btn-background-color)' }};
                         color: {{ $slide->settings['buttonTextColor'] ?? '#ffffff' }};
                         border: 1px solid {{ $slide->settings['buttonBorderColor'] ?? 'transparent' }};
                         font-size: {{ $slide->settings['buttonFontSize'] ?? '16' }}px;
@@ -113,7 +113,7 @@ filter: sepia(100%);
                         </p>
 
                         @if($slide->button_text)
-                            <a href="{{ $slide->link }}" class="slider-button js-slide-button-{{ $slide->id }}">
+                            <a href="{{ $slide->link }}" class="slider-button btn btn-primary js-slide-button-{{ $slide->id }}">
                                 {{ $slide->button_text }}
                             </a>
                         @endif
@@ -159,7 +159,7 @@ filter: sepia(100%);
     }
 
     .swiper-pagination-bullet-active {
-        background: #007bff !important;
+        background: var(--mw-btn-background-color) !important;
         border-color: #ffffff !important;
         transform: scale(1.3) !important;
     }

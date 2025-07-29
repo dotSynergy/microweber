@@ -24,11 +24,12 @@ class AdminSeoPage extends AdminSettingsPage
 
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
 
-    protected static ?string $title = 'SEO';
+    protected static ?string $title = 'SEO verification';
 
     protected static string $description = 'Configure your SEO settings';
 
     protected static ?string $slug = 'settings/seo-page';
+
 
     public function form(Form $form): Form
     {
@@ -46,6 +47,16 @@ class AdminSeoPage extends AdminSettingsPage
                     ->view('filament-forms::sections.section')
                     ->description('Make these settings to get the best results when finding your website.')
                     ->schema([
+
+
+                        Actions::make([
+
+                            \Filament\Forms\Components\Actions\Action::make('Edit SEO keywords')
+                                ->label('Edit SEO Keywords')
+                                ->icon('heroicon-o-pencil-square')
+                                ->url(AdminGeneralPage::getUrl()),
+
+                        ]),
 
 
                         TextInput::make('options.website.google-site-verification-code')

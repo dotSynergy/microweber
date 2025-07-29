@@ -87,9 +87,19 @@ class Settings extends Page
         //  $panelNavigationGroups = Filament::getCurrentPanel()->getNavigationGroups();
         $panelNavigationItems = Filament::getCurrentPanel()->getNavigation();
 
-//dd($panelNavigationGroups,$panelNavigationItems);
+ //dd($panelNavigationItems);
         if ($panelNavigationItems) {
             foreach ($panelNavigationItems as $navGroup) {
+
+
+                //if not end with settings skip
+                if (method_exists($navGroup, 'getLabel') && !str_ends_with($navGroup->getLabel(), 'Settings')) {
+                    continue;
+                }
+                if (method_exists($navGroup, 'getLabel') && $navGroup->getLabel() ==  'Settings') {
+                    continue;
+                }
+
                 $settingsGroupsNavGroup = $this->buildNavFromPanelNavGroup($navGroup);
 
                 if (!empty($settingsGroupsNavGroup)) {

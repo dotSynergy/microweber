@@ -37,7 +37,7 @@ description: Skin-17
                         <h4>{{ $member['name'] }}</h4>
                         <p class="mw-big-team-bio">{{ $member['bio'] }}</p>
                         <div class="social-icons">
-                            <module type="social_links" id="teamcard-socials-{{ $params['id'] }}" template="skin-1"/>
+                            <module type="social_links" id="teamcard-socials-{{ $params['id'] }}-{{ $member['id'] }}" template="skin-1"/>
                         </div>
                     </div>
                 </div>

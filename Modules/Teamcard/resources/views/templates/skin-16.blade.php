@@ -49,7 +49,7 @@ description: Skin-16
                     </div>
 
                     <div class="mt-3">
-                        <module type="social_links" id="teamcard-socials-{{ $params['id'] }}" template="skin-1"/>
+                        <module type="social_links" id="teamcard-socials-{{ $params['id'] }}-{{ $member['id'] }}" template="skin-1"/>
                     </div>
                 </div>
             </div>

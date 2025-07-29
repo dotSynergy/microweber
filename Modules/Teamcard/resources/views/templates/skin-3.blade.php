@@ -31,7 +31,7 @@ description: Skin-3
                         <h4 class="mb-2"><?php print array_get($member, 'name'); ?></h4>
                         <p class="mb-4"><?php print array_get($member, 'role'); ?></p>
                         <p><?php print str_limit(array_get($member, 'bio'), 100); ?></p>
-                        <module type="social_links" template="skin-1"/>
+                        <module id="teamcard-socials-{{ $params['id'] }}-{{ $member['id'] }}" type="social_links" template="skin-1"/>
                     </div>
                 </div>
             </div>

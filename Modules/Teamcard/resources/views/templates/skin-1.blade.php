@@ -47,7 +47,7 @@ description: Skin-1
                         <h1 class="mb-1">{{ $member['name'] }}</h1>
                         <p class="mb-3">{{ $member['role'] }}</p>
                         <p>{{ $member['bio'] }}</p>
-                        <module type="social_links" template="skin-2"/>
+                        <module type="social_links" id="teamcard-socials-{{ $params['id'] }}-{{ $member['id'] }}" template="skin-2"/>
                     </div>
                 @endforeach
             @endif

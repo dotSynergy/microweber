@@ -116,7 +116,7 @@ description: Skin-18
                             <p class="mw-team-18-job-role my-3">{{ $member['role'] }}</p>
                             <p class="mw-big-team-bio col-xl-8 text-center">{{ $member['bio'] }}</p>
 
-                            <module class="d-flex justify-content-center" type="social_links" id="teamcard-socials-{{ $params['id'] }}" template="skin-6"/>
+                            <module class="d-flex justify-content-center" type="social_links" id="teamcard-socials-{{ $params['id'] }}-{{ $member['id'] }}" template="skin-6"/>
                         </div>
                     </div>
                 </div>

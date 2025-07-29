@@ -1246,7 +1246,7 @@ and add to the schema the content and children objects with the new text in the 
 
                 images_prompt += `
                 The image should represent the subject and the specific context, and should be suitable for use as an asset.
-                Make the image relevant to both the general subject "${about}" and the specific context provided.
+                Make the image relevant to both the general subject "${about}" and the specific context provided, but focus more the context   "${contextText.substring(0, 200)}"  "
                 `;
 
                 // Update progress for each image

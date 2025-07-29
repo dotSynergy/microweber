@@ -24,7 +24,7 @@ class AdminSeoPage extends AdminSettingsPage
 
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
 
-    protected static ?string $title = 'SEO verification';
+    protected static ?string $title = 'SEO settings';
 
     protected static string $description = 'Configure your SEO settings';
 

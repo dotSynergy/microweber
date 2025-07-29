@@ -1189,17 +1189,88 @@ and add to the schema the content and children objects with the new text in the 
             currentStep++;
             mw.top().spinnerProgress({}).set(currentStep * step,mw.lang('Generating images') + '...')
 
-            let images_prompt = `Generate website assets related to the subject: ${about}
-            The images should made for the websites context, and should be suitable for use in a website element00.
-            The images should be suitable for use in a website assets such as banners, backgrounds, and other website elements.
-            The image should represent the subject of the website, and should be suitable for use in a website context.
-            Important: Do not make full website images, but rather website assets that can be used in a website context.
-             `;
+            const images = this.collectImages(undefined, true);
+            const imageResults = [];
+
+            // Process each image individually with contextual prompts
+            for (let i = 0; i < images.length; i++) {
+                const image = images[i];
+
+                // Find the closest text element to this image
+                let contextText = '';
+                const imageNode = this.settings.document.getElementById(image.id);
+
+                if (imageNode) {
+                    // Look for text in the same parent container
+                    let parent = imageNode.parentElement;
+                    while (parent && !contextText) {
+                        // Find text elements within the same container
+                        const textElements = parent.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
+                        for (const textEl of textElements) {
+                            const text = textEl.textContent.trim();
+                            if (text && text.length > 10 && !textEl.contains(imageNode)) {
+                                contextText = text;
+                                break;
+                            }
+                        }
+
+                        // If no text found, try parent's parent (but limit the search)
+                        if (!contextText && parent.parentElement && parent !== this.settings.root) {
+                            parent = parent.parentElement;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    // If still no context found, look for nearby text elements
+                    if (!contextText) {
+                        const allTextElements = this.settings.root.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
+                        for (const textEl of allTextElements) {
+                            const text = textEl.textContent.trim();
+                            if (text && text.length > 10) {
+                                contextText = text;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Create contextual prompt for this specific image
+                let images_prompt = `Generate a image asset image related to the subject: ${about}`;
+
+                if (contextText) {
+                    images_prompt += `
+                    The image should be contextually relevant to this specific content: "${contextText.substring(0, 200)}"
+                    `;
+                }
+
+                images_prompt += `
+                The image should represent the subject and the specific context, and should be suitable for use as an asset.
+                Make the image relevant to both the general subject "${about}" and the specific context provided.
+                `;
+
+                // Update progress for each image
+                const imageProgress = Math.round(currentStep * step + ((i + 1) / images.length) * step);
 
 
-            let imageRes = await this.aiImagesAdapter(images_prompt, this.collectImages(undefined, true).length);
-            this.applyImages(imageRes)
 
+                mw.top().spinnerProgress({}).set(imageProgress, mw.lang('Generating image') + ` ${i + 1}/${images.length}...`);
+
+                try {
+                    let imageRes = await this.aiImagesAdapter(images_prompt, 1);
+                    if (imageRes && imageRes.length > 0) {
+                        imageResults.push(imageRes[0]);
+                    }
+                } catch (error) {
+                    console.error('Error generating image:', error);
+                    // Continue with the next image even if one fails
+                }
+            }
+
+            // Apply all generated images at once
+            if (imageResults.length > 0) {
+                this.applyImages(imageResults);
+            }
         }
 
 

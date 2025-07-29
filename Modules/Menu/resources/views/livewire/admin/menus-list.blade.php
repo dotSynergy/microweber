@@ -59,8 +59,8 @@
         </div>
         <div
             x-ignore
-            ax-load
-            ax-load-src="{{ asset('modules/menu/js/sortableMenu.js') }}"
+            ax-load="visible"
+            x-load-src="{{ asset('modules/menu/js/sortableMenu.js') }}"
             x-data="sortableMenu()"
         >
                 <div class="admin-menu-items-holder bg-white shadow mt-4 mb-4">
@@ -105,10 +105,13 @@
                 {{ $menu->title }}  selected
             </div>
 
-            <div>
+            <div class="d-none">
                 {{ ($this->editAction)(['id' => $menu->id]) }}
-                {{ ($this->deleteAction)(['id' => $menu->id]) }}
             </div>
+
+
+                {{ ($this->deleteAction)(['id' => $menu->id]) }}
+
         </div>
 
     @endif

@@ -2,9 +2,18 @@
 
 namespace Modules\WhiteLabel\Providers;
 
+use Filament\Facades\Filament;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\AdminLiveEditSidebarElementStyleEditorPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\AdminLiveEditSidebarTemplateSettingsPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\EditorTools\AddContentModalPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\EditorTools\CodeEditorModuleSettingsPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\EditorTools\ModulePresetsModuleSettingsPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\EditorTools\ResetContentModuleSettingsPage;
+use MicroweberPackages\LiveEdit\Filament\Admin\Pages\UnlockPackage\UnlockPackageModuleSettingsPage;
 use MicroweberPackages\Microweber\Facades\Microweber;
+use MicroweberPackages\Module\Facades\ModuleAdmin;
 use Modules\Settings\Filament\Pages\Settings;
 use Modules\WhiteLabel\Filament\Pages\WhiteLabelSettingsAdminSettingsPage;
 use Modules\WhiteLabel\Microweber\WhiteLabelModule;
@@ -31,7 +40,19 @@ class WhiteLabelServiceProvider extends BaseModuleServiceProvider
             event_bind('mw.admin', function () {
                 app(WhiteLabelService::class)->applyWhiteLabelSettings();
             });
-        }
+
+
+          Filament::serving(function () {
+              $panelId = Filament::getCurrentPanel()->getId();
+              if ($panelId == 'admin') {
+                  ModuleAdmin::registerLiveEditSettingsUrl('white_label/admin', WhiteLabelSettingsAdminSettingsPage::getUrl());
+
+
+              }
+          });
+
+
+      }
     }
 
     /**
@@ -55,5 +76,12 @@ class WhiteLabelServiceProvider extends BaseModuleServiceProvider
 
         // Register Microweber module
         Microweber::module(WhiteLabelModule::class);
+
+
+
+
+
+
+
     }
 }

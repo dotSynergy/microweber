@@ -38,6 +38,7 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
 
                                         \LaraZeus\Accordion\Forms\Accordion::make('from_fields')
                                             ->columns()
+                                            ->icon( 'heroicon-o-rectangle-stack')
                                             ->label('From Fields')
                                             ->schema(function () use ($relId) {
 
@@ -58,6 +59,7 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                         \LaraZeus\Accordion\Forms\Accordion::make('auto_respond_settings')
                                             ->columnSpanFull()
                                             ->label('Auto Respond Settings')
+                                            ->icon( 'heroicon-o-envelope-open')
                                             ->schema([
                                                 Toggle::make('options.email_autorespond_enable')
                                                     ->label('Enable auto respond message to user')
@@ -104,23 +106,10 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                     ->visible(fn (callable $get) => $get('options.email_autorespond_enable') && $get('options.email_autorespond_custom_sender'))
 
                                             ]),
-                                        \LaraZeus\Accordion\Forms\Accordion::make('receivers')
-                                            ->columnSpanFull()
-                                            ->label('Receivers')
-                                            ->schema([
-                                                Toggle::make('options.email_custom_receivers')
-                                                    ->label('Send contact form data to custom receivers when is submitted')
-                                                    ->helperText('Use custom receivers settings for the current contact form.')
-                                                    ->live(),
 
-                                                TextInput::make('options.email_to')
-                                                    ->label('To e-mail addresses')
-                                                    ->live()
-                                                    ->helperText('E-mail address of the receivers separated with comma.')
-                                                    ->visible(fn (callable $get) => $get('options.email_custom_receivers'))
-                                            ]),
                                         \LaraZeus\Accordion\Forms\Accordion::make('advanced')
                                             ->columnSpanFull()
+                                            ->icon('heroicon-o-cog')
                                             ->label('Advanced')
                                             ->schema([
 
@@ -151,6 +140,22 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                     ->live()
                                                     ->helperText('Redirect to URL after submit for example for "Thank you" page')
                                                     ->url(),
+
+
+
+                                                Toggle::make('options.email_custom_receivers')
+                                                    ->label('Send contact form data to custom receivers when is submitted')
+                                                    ->helperText('Use custom receivers settings for the current contact form.')
+                                                    ->live(),
+
+                                                TextInput::make('options.email_to')
+                                                    ->label('To e-mail addresses')
+                                                    ->live()
+                                                    ->helperText('E-mail address of the receivers separated with comma.')
+                                                    ->visible(fn (callable $get) => $get('options.email_custom_receivers'))
+
+
+
                                             ]),
                                     ]),
 

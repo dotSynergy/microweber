@@ -415,12 +415,14 @@ if(window.self !== window.top) {
             mw.top().app.canvas.dispatch('iframeKeyDown', {event})
         });
 
+/*
 
         mw.$('span.mw-powered-by').on("click", function (e) {
             mw.top().tools.open_global_module_settings_modal('white_label/admin', 'mw-powered-by');
             return false;
         });
 
+*/
 
         const _handleEmptyEditFields = function () {
 

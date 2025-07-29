@@ -143,19 +143,19 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
 
 
         $editForm[] = Section::make('Advanced')
-            ->collapsible()
-            ->collapsed()
+//            ->collapsible()
+//            ->collapsed()
             ->compact()
             ->schema([
                 Toggle::make('options.show_placeholder')
                     ->helperText('Toggle to turn on the placeholder and write your text below')
                     ->label('Show placeholder')
-                    ->reactive()
+                    ->live()
                     ->columnSpanFull(),
 
                 TextInput::make('options.placeholder')
                     ->label('Placeholder')
-                    ->reactive()
+                    ->live()
                     ->visible(fn (Get $get) => $get('options.show_placeholder'))
                     ->placeholder('Placeholder text')
                     ,

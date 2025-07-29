@@ -105,6 +105,9 @@
                     let result = pagesTree.tree.getSelected();
                     this.state = result;
                 })
+ 
+                pagesTree.tree.openAll()
+
             };
 
 

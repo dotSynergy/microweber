@@ -10,27 +10,31 @@ use Modules\Category\Filament\Admin\Resources\CategoryResource;
 class CreateCategory extends CreateRecord
 {
     use CreateRecord\Concerns\Translatable;
-    
+    protected static bool $canCreateAnother = false;
+
     protected static string $resource = CategoryResource::class;
-    
+
     protected function handleRecordCreation(array $data): Model
     {
         if($this->activeLocale) {
             $data['lang'] = $this->activeLocale;
         }
-        
+
         return static::getModel()::create($data);
     }
-    
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index');
+    }
     protected function getHeaderActions(): array
     {
         $actions = [];
-        
+
         $multilanguageIsEnabled = true; // TODO
         if ($multilanguageIsEnabled) {
             $actions[] = Actions\LocaleSwitcher::make();
         }
-        
+
         return $actions;
     }
 }

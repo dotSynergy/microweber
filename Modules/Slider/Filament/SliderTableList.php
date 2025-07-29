@@ -9,6 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -21,6 +22,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
+use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
 use Modules\Slider\Models\Slider;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
 use Modules\Ai\Facades\AiImages;
@@ -57,20 +59,28 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
             Textarea::make('description')
                 ->label('Slide Description')
                 ->helperText('Provide a description for this slide.'),
-            Select::make('settings.alignItems')
-                ->label('Align Items')
+            ToggleButtons::make('settings.alignItems')
+                ->helperText('Choose the alignment of the slide.')
+                ->live()
                 ->options([
                     'left' => 'Left',
                     'center' => 'Center',
                     'right' => 'Right',
                 ])
-                ->default('center'),
+                ->inline()
+                ->icons([
+                    'left' => 'heroicon-o-bars-3-bottom-left',
+                    'center' => 'heroicon-o-bars-3',
+                    'right' => 'heroicon-o-bars-3-bottom-right',
+                ]),
 
             TextInput::make('button_text')
                 ->label('Button Text')
                 ->helperText('Enter text for the button'),
-            TextInput::make('link')
+            MwLinkPicker::make('link')
                 ->label('Button URL')
+                ->setSimpleMode()
+                ->live()
                 ->url()
                 ->helperText('Enter a URL for the button'),
 

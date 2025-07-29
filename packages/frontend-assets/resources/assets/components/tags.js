@@ -208,7 +208,6 @@ mw.tags = function(options){
 
             $.extend(config, options);
 
-
          config.tagBtnClass +=  '  btn';
 
          if (this.options.outline){
@@ -231,20 +230,34 @@ mw.tags = function(options){
          config.tagBtnClass += ' shadow-sm mw-tag-hover-effect';
 
             var tag_holder = document.createElement('span');
-            var tag_close = document.createElement('span');
+            var tag_button = document.createElement('span');
 
-            tag_close._index = config.index;
             tag_holder._index = config.index;
             tag_holder._config = config;
             tag_holder.dataset.index = config.index;
 
-            tag_holder.className = 'btn-group mw-tag-wrapper'; // Added wrapper class for effects
+            tag_holder.className = 'mw-tag-wrapper'; // Single tag wrapper
 
              if(options.image){
 
              }
 
-            tag_holder.innerHTML = '<span class="' + config.tagBtnClass + '">' + this.dataTitle(config) + '</span>';
+            // Create the main tag content with close button inside
+            var tagContent = this.dataTitle(config);
+            var closeIcon = '';
+
+            if(config.close){
+                closeIcon = `<span class="mw-tag-close-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="10" height="10" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M18 6l-12 12"></path>
+                        <path d="M6 6l12 12"></path>
+                    </svg>
+                </span>`;
+            }
+
+            tag_button.className = config.tagBtnClass + ' mw-tag-single';
+            tag_button.innerHTML = `<span class="mw-tag-content">${tagContent}</span>${closeIcon}`;
 
              if(typeof this.options.disableItem === 'function') {
                  if(this.options.disableItem(config)){
@@ -258,37 +271,26 @@ mw.tags = function(options){
              }
 
             var icon = this.createIcon(config);
-
             var image = this.createImage(config);
 
              if(image){
-                 mw.$(':first-child', tag_holder).prepend(image);
+                 tag_button.querySelector('.mw-tag-content').prepend(image);
              }
              if(icon){
-                 mw.$(':first-child', tag_holder).prepend(icon);
+                 tag_button.querySelector('.mw-tag-content').prepend(icon);
              }
 
-
-            tag_holder.onclick = function (e) {
-                if(e.target !== tag_close){
-                    mw.$(scope).trigger('tagClick', [this._config, this._index, this]);
-                    scope.dispatch('tagClick', [this._config, this._index, this]);
+            tag_button.onclick = function (e) {
+                var closeButton = e.target.closest('.mw-tag-close-inner');
+                if(closeButton && config.close){
+                    scope.removeTag(config.index);
+                } else {
+                    mw.$(scope).trigger('tagClick', [config, config.index, tag_holder]);
+                    scope.dispatch('tagClick', [config, config.index, tag_holder]);
                 }
             };
 
-            tag_close.className = config.tagBtnClass + ' btn-icon mw-tag-close';
-            tag_close.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M18 6l-12 12"></path>
-            <path d="M6 6l12 12"></path>
-         </svg>`; // Changed to X icon and reduced size to 16x16
-
-            if(config.close){
-                tag_close.onclick = function () {
-                    scope.removeTag(this._index);
-                };
-            }
-            tag_holder.appendChild(tag_close);
+            tag_holder.appendChild(tag_button);
             return tag_holder;
         };
 
@@ -303,6 +305,7 @@ mw.tags = function(options){
                 .mw-tag-wrapper {
                     transition: all 0.2s ease-in-out;
                     transform: scale(1);
+                    display: inline-block;
                 }
 
                 .mw-tag-wrapper:hover {
@@ -310,12 +313,66 @@ mw.tags = function(options){
                     z-index: 10;
                 }
 
+                .mw-tag-single {
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    gap: 0.25rem !important;
+                    position: relative !important;
+                    cursor: pointer !important;
+                    min-height: 22px !important;
+                    height: 22px !important;
+                }
+
+                .mw-tag-content {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.2rem;
+                    height: 100%;
+                }
+
+                .mw-tag-content i,
+                .mw-tag-content svg,
+                .mw-tag-content .icon {
+                    width: 12px !important;
+                    height: 12px !important;
+                    font-size: 12px !important;
+                }
+
+                .mw-tag-close-inner {
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    width: 16px !important;
+                    height: 16px !important;
+                    border-radius: 50% !important;
+                    background-color: rgba(255,255,255,0.2) !important;
+                    transition: all 0.15s ease-in-out !important;
+                    margin-left: 0.15rem !important;
+                    opacity: 0.7 !important;
+                    cursor: pointer !important;
+                    flex-shrink: 0 !important;
+                }
+
+                .mw-tag-close-inner:hover {
+                    background-color: rgba(255,255,255,0.3) !important;
+                    opacity: 1 !important;
+                    transform: scale(1.1) !important;
+                }
+
+                .mw-tag-close-inner svg {
+                    width: 8px !important;
+                    height: 8px !important;
+                    stroke-width: 3 !important;
+                }
+
                 .mw-tag-animated {
                     transition: all 0.15s ease-in-out;
                     font-size: 0.55rem !important;
-                    padding: 0.1rem 0.25rem !important;
-                    line-height: 1 !important;
-                    min-height: auto !important;
+                    padding: 0.15rem 0.3rem !important;
+                    line-height: 1.1 !important;
+                    min-height: 22px !important;
+                    height: 22px !important;
+                    box-sizing: border-box !important;
                 }
 
                 .mw-tag-hover-effect:hover {
@@ -324,34 +381,18 @@ mw.tags = function(options){
                     filter: brightness(1.1) saturate(1.2);
                 }
 
-                .mw-tag-close {
-                    padding: 0.1rem 0.2rem !important;
-                    margin-left: 1px !important;
-                    opacity: 0.7;
-                    transition: all 0.15s ease-in-out;
-                    font-size: 0.55rem !important;
-                }
-
-                .mw-tag-close:hover {
-                    opacity: 1;
-                    transform: scale(1.1);
-                    filter: brightness(0.9) contrast(1.2);
-                }
-
-                .mw-tag-close svg {
-                    width: 10px !important;
-                    height: 10px !important;
-                }
-
                 .mw-tags--container {
-                    gap: 0.2rem !important;
+                    gap: 0.25rem !important;
+                    align-items: center !important;
                 }
 
                 .btn-xs {
                     font-size: 0.55rem;
-                    padding: 0.1rem 0.25rem;
-                    line-height: 1;
-                    min-height: auto;
+                    padding: 0.15rem 0.3rem;
+                    line-height: 1.1;
+                    min-height: 22px;
+                    height: 22px;
+                    box-sizing: border-box;
                 }
              `;
              document.head.appendChild(style);

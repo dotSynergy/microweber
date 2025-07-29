@@ -148,9 +148,15 @@ export class LiveEditWidgetsService extends BaseComponent{
         const isWholePage = mw.top().app.liveEditWidgets.quickEditComponent.settings.root === mw.top().app.canvas.getDocument().body;
 
         const tabs = ElementManager(`
-            <div>
-                <button type="button" class="btn btn-dark ${!isWholePage ? 'active' : ''}" data-target="layout">Active layout</button>
-                <button type="button" class="btn btn-dark ${isWholePage ? 'active' : ''}" data-target="page">Whole page</button>
+            <div class="flex gap-4 mb-4 items-center">
+                ${mw.lang('Edit')}
+                ${isWholePage
+                    ?
+                    `<button type="button" class="btn btn-dark" style="" data-target="layout">Active layout</button>`
+                    :
+                    `<button type="button" class="btn btn-dark" data-target="page">Whole page</button>`
+                }
+
             </div>
         `).get(0);
 
@@ -168,7 +174,14 @@ export class LiveEditWidgetsService extends BaseComponent{
                     this.setQuickEditorForNode(mw.top().app.canvas.getDocument().body)
                 } else if(action === 'layout') {
 
-                    const activeLayout = mw.top().app.liveEdit.layoutHandle.getTarget();
+                    let activeLayout = mw.top().app.liveEdit.layoutHandle.getTarget();
+
+                    if(!activeLayout) {
+                        const activeElement = mw.top().app.liveEdit.elementHandle.getTarget();
+                        if(activeElement) {
+                            activeLayout = activeElement.closest('.module-layouts');
+                        }
+                    }
 
                     if(activeLayout) {
                         this.setQuickEditorForNode(activeLayout)

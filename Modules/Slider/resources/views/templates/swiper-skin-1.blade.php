@@ -184,7 +184,7 @@ filter: sepia(100%);
         document.querySelector('#js-slide-pagination-next-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
             slider.driverInstance.slideNext();
         });
-    document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+        document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
             slider.driverInstance.slidePrev();
         });
     })();

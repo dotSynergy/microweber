@@ -2,7 +2,7 @@
 import { QuickEditComponent } from "../components/quick-ai-edit.js";
 import BaseComponent from "../containers/base-class.js";
 
-
+import {ElementManager} from "../api-core/core/classes/element.js";
 
 export class LiveEditWidgetsService extends BaseComponent{
     constructor(){
@@ -145,6 +145,41 @@ export class LiveEditWidgetsService extends BaseComponent{
             this.status.quickEditComponent = false;
         }
 
+        const isWholePage = mw.top().app.liveEditWidgets.quickEditComponent.settings.root === mw.top().app.canvas.getDocument().body;
+
+        const tabs = ElementManager(`
+            <div>
+                <button type="button" class="btn btn-dark ${!isWholePage ? 'active' : ''}" data-target="layout">Active layout</button>
+                <button type="button" class="btn btn-dark ${isWholePage ? 'active' : ''}" data-target="page">Whole page</button>
+            </div>
+        `).get(0);
+
+
+
+
+        tabs.addEventListener("click", (e) => {
+            const target = e.target.closest("button:not(.active)");
+            if(target) {
+
+                const action = target.dataset.target;
+
+                if(action === 'page') {
+
+                    this.setQuickEditorForNode(mw.top().app.canvas.getDocument().body)
+                } else if(action === 'layout') {
+
+                    const activeLayout = mw.top().app.liveEdit.layoutHandle.getTarget();
+
+                    if(activeLayout) {
+                        this.setQuickEditorForNode(activeLayout)
+                    }
+
+
+                }
+            }
+
+        })
+
         const box = new (mw.top()).controlBox({
             content:``,
             position:  'right',
@@ -159,6 +194,7 @@ export class LiveEditWidgetsService extends BaseComponent{
 
         this.#closeQuickEditComponentBox = box;
 
+        box.boxContent.appendChild(tabs);
         box.boxContent.appendChild(this.quickEditComponent.editor());
 
         box.show();

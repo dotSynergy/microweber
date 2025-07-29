@@ -149,9 +149,7 @@ if (!window.SliderV2) {
 
 
 
-
-
-
+;(function(){
      const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
         loop: true,
         pagination: {
@@ -169,6 +167,11 @@ if (!window.SliderV2) {
    document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
         slider.driverInstance.slidePrev();
     });
+
+})();
+
+
+
 
 </script>
 

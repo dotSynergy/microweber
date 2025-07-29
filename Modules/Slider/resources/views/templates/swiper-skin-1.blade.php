@@ -172,18 +172,20 @@ filter: sepia(100%);
 </script>
 
 <script>
-     const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
-        loop: true,
-        pagination: {
-            el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
-            clickable: true
-        },
-    });
+    ;(function(){
+         const slider = new SliderV2('#js-slider-{{ $params['id'] ?? 'default' }}', {
+            loop: true,
+            pagination: {
+                el: '#js-slide-pagination-{{ $params['id'] ?? 'default' }}',
+                clickable: true
+            },
+        });
 
-    document.querySelector('#js-slide-pagination-next-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
-        slider.driverInstance.slideNext();
-    });
-   document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
-        slider.driverInstance.slidePrev();
-    });
+        document.querySelector('#js-slide-pagination-next-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+            slider.driverInstance.slideNext();
+        });
+    document.querySelector('#js-slide-pagination-previous-{{ $params['id'] ?? 'default' }}').addEventListener('click', () => {
+            slider.driverInstance.slidePrev();
+        });
+    })();
 </script>

@@ -56,6 +56,14 @@ export class LiveEditWidgetsService extends BaseComponent{
             console.log(node, 'is not defined');
             return;
          }
+
+
+
+
+         if(node.nodeName !== 'BODY'&& this.#mode === 'page') {
+            return;
+        }
+
          this.quickEditor({
             root: node
          });
@@ -132,7 +140,12 @@ export class LiveEditWidgetsService extends BaseComponent{
 
     }
 
+    #mode = 'default';
+
     openQuickEditComponent() {
+        const isWholePage = mw.top().app.liveEditWidgets.quickEditComponent.settings.root === mw.top().app.canvas.getDocument().body;
+
+
 
         this.status.quickEditComponent = true;
 
@@ -149,7 +162,7 @@ export class LiveEditWidgetsService extends BaseComponent{
             this.status.quickEditComponent = false;
         }
 
-        const isWholePage = mw.top().app.liveEditWidgets.quickEditComponent.settings.root === mw.top().app.canvas.getDocument().body;
+
 
         const tabs = ElementManager(`
             <div class="flex gap-4 mb-4 items-center">
@@ -166,9 +179,13 @@ export class LiveEditWidgetsService extends BaseComponent{
 
         tabs.addEventListener("click", (e) => {
             const target = e.target.closest("button:not(.active)");
+
+
             if(target) {
 
                 const action = target.dataset.target;
+
+                this.#mode = action;
 
                 if(action === 'page') {
 

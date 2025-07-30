@@ -208,33 +208,22 @@ export class ElementActions extends MicroweberBaseClass {
 
     removeLink(el) {
         //check if is IMG and is in A tag, then select A tag
-        if (el.nodeName === 'IMG' && el.parentNode && el.parentNode.nodeName === 'A') {
-            el = el.parentNode;
-        }
+        var closestLink = el.closest("a");
+
+
 
 
         //get the link
 
-        var closestLink = DomService.firstParentOrCurrentWithTag(el, 'a');
+
         if (closestLink) {
             var elementForUndo = closestLink.parentNode || closestLink;
             mw.app.registerUndoState(elementForUndo)
 
-            el = closestLink;
-
             el.removeAttribute('href');
-            el.removeAttribute('target');
+            el.removeAttribute('data-href');
 
-            var shouldUnWrap = true;
-            if (shouldUnWrap) {
-                //unwrap the link
-                var parent = el.parentNode;
-                while (el.firstChild) {
-                    parent.insertBefore(el.firstChild, el);
-                }
-                el.remove();
-            }
-            this.proto.refreshElementHandle(el);
+            this.proto.refreshElementHandle(closestLink);
             mw.app.registerChangedState(elementForUndo);
         }
 
@@ -256,20 +245,23 @@ export class ElementActions extends MicroweberBaseClass {
                 newUrl = data.url;
             }
 
+            console.log("", el);
 
-            var shouldWrap = false;
-            if (el.nodeName === 'IMG' && el.parentNode && el.parentNode.nodeName !== 'A') {
-                shouldWrap = true;
-            } else if (el.nodeName === 'IMG' && !el.parentNode) {
-                shouldWrap = true;
-            }
-            if (shouldWrap) {
+            const target = el;
+            el = el.closest('a');
+
+            if (!el) {
                 var wrap = document.createElement('a');
-                el.parentNode.insertBefore(wrap, el);
-                wrap.appendChild(el);
-                el = wrap;
+                target.parentNode.insertBefore(wrap, target);
+                wrap.appendChild(target);
+                target = wrap;
             }
-            el.setAttribute('href', newUrl);
+
+
+
+            el.removeAttribute('href');
+
+            el.setAttribute('data-href', newUrl);
             if (data.openInNewWindow) {
                 el.setAttribute('target', '_blank');
             } else {

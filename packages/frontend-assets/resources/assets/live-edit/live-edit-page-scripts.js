@@ -37,6 +37,9 @@ if(window.self !== window.top) {
                 var body = mw.tools.parseHtml(this.html).body;
                 mw.liveEditSaveService.grammarlyFix(body);
                 mw.liveEditSaveService.animationsClearFix(body);
+                body.querySelectorAll('[data-href]').forEach(function (el) {
+                    el.href = el.dataset.href;
+                })
                 this.html = body.innerHTML;
             });
             mw.liveEditSaveService.saving = true;

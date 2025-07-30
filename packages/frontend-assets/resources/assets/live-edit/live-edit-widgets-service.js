@@ -59,9 +59,13 @@ export class LiveEditWidgetsService extends BaseComponent{
          this.quickEditor({
             root: node
          });
+         const children = Array.from(this.quickEditComponentBox.boxContent.children);
 
-        this.quickEditComponentBox.boxContent.innerHTML = '';
         this.quickEditComponentBox.boxContent.appendChild(this.quickEditComponent.editor());
+
+        for (let i = 0; i < children.length; i++) {
+            children[i].remove()
+        }
 
 
 
@@ -149,13 +153,10 @@ export class LiveEditWidgetsService extends BaseComponent{
 
         const tabs = ElementManager(`
             <div class="flex gap-4 mb-4 items-center">
-                ${mw.lang('Edit')}
-                ${isWholePage
-                    ?
-                    `<button type="button" class="btn btn-dark" style="" data-target="layout">Active layout</button>`
-                    :
-                    `<button type="button" class="btn btn-dark" data-target="page">Whole page</button>`
-                }
+
+                     <button type="button" class="btn ${isWholePage ? '' : 'active'}" data-target="layout">Active layout</button>
+
+                     <button type="button" class="btn ${isWholePage ? 'active' : ''}"  data-target="page">Whole page</button>
 
             </div>
         `).get(0);

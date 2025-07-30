@@ -207,7 +207,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             selfVisible = false;
         }
 
-        if (DomService.hasAnyOfClassesOnNodeOrParent(target, ['img-as-background'])) {
+        if (DomService.hasAnyOfClassesOnNodeOrParent(target, ['img-as-background', 'no-drag'])) {
             selfVisible = false;
         }
         if(selfVisible){

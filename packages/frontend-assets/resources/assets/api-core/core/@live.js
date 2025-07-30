@@ -1010,6 +1010,11 @@ export class LiveEdit {
 
                 } else {
                     title = this.lang('Text');
+                    const hasLink = target.closest('a[href]');
+                    if(hasLink) {
+                        hasLink.dataset.href = hasLink.href;
+                        hasLink.removeAttribute('href')
+                    }
                 }
 
 

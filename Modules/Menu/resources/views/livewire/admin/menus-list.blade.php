@@ -58,10 +58,10 @@
            </p>
         </div>
         <div
-            x-ignore
+
             ax-load="visible"
-            x-load-src="{{ asset('modules/menu/js/sortableMenu.js') }}"
-            x-data="sortableMenu()"
+            ax-load-src="{{ asset('modules/menu/js/sortableMenu.js') }}"
+            ax-data="sortableMenu()"
         >
                 <div class="admin-menu-items-holder bg-white shadow mt-4 mb-4">
                     <div data-menu-id="{{ $menu->id }}" class="px-4 pb-4 pt-4">
@@ -108,10 +108,10 @@
             <div class="d-none">
                 {{ ($this->editAction)(['id' => $menu->id]) }}
             </div>
-
+            <div>
 
                 {{ ($this->deleteAction)(['id' => $menu->id]) }}
-
+            </div>
         </div>
 
     @endif

@@ -14,7 +14,7 @@ class AdminShopGeneralPage extends AdminSettingsPage
 
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
 
-    protected static ?string $title = 'General';
+    protected static ?string $title = 'Main Shop Settings';
 
     protected static string $description = 'Configure your shop general settings';
 

@@ -44,10 +44,8 @@ class Settings extends Page
         $settingsPages[] = new AdminLoginRegisterPage();
         $settingsPages[] = new AdminLanguagePage();
         $settingsPages[] = new AdminPrivacyPolicyPage();
-        $settingsPages[] = new AdminWebManifestPage();
         //$settingsPages[] = new AdminExperimentalPage();
         $settingsPages[] = new AdminMaintenanceModePage();
-         $settingsPages[] = new AdminTrustProxiesPage();
         $settingsPages[] = new AdminCustomTagsPage();
 
         $settingsPages[] = new AdminShopGeneralPage();

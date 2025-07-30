@@ -2,7 +2,24 @@
 
 namespace Modules\Settings\Filament\Pages;
 
+use Filament\Actions\Action;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Livewire;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
+use MicroweberPackages\Translation\Models\TranslationKey;
+use MicroweberPackages\Translation\Models\TranslationText;
+use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
 
 class AdminLanguagePage extends AdminSettingsPage
 {
@@ -14,6 +31,10 @@ class AdminLanguagePage extends AdminSettingsPage
     protected static ?string $navigationGroup = 'Language Settings';
 
     protected static string $description = 'Configure your language settings';
+
+    public array $optionGroups = [
+        'website'
+    ];
 
     public static function getNavigation(): array
     {
@@ -27,4 +48,453 @@ class AdminLanguagePage extends AdminSettingsPage
         ];
     }
 
+    protected function getHeaderActions(): array
+    {
+        $actions = [];
+
+        // Import/Export actions for translations
+        $actions[] = Action::make('import_translations')
+            ->label('Import Translations')
+            ->icon('heroicon-o-arrow-down-tray')
+            ->modal()
+            ->modalHeading('Import Language File')
+            ->modalDescription('Upload a .xlsx or .json file to import translations')
+            ->modalSubmitActionLabel('Import')
+            ->form([
+                Select::make('locale')
+                    ->label('Target Language')
+                    ->options(function () {
+                        $supportedLanguages = [];
+                        if (function_exists('get_supported_languages')) {
+                            $languages = get_supported_languages(true);
+                            foreach ($languages as $language) {
+                                $supportedLanguages[$language['locale']] = strtoupper($language['locale']) . ' - ' . $language['language'];
+                            }
+                        } else {
+                            // Default language fallback
+                            $defaultLang = function_exists('mw') ? mw()->lang_helper->default_lang() : 'en_US';
+                            $supportedLanguages[$defaultLang] = strtoupper($defaultLang) . ' - Default';
+                        }
+                        return $supportedLanguages;
+                    })
+                    ->required()
+                    ->helperText('Select the language to import translations for'),
+
+                \Filament\Forms\Components\FileUpload::make('translation_file')
+                    ->label('Translation File')
+                    ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/json', '.xlsx', '.json'])
+                    ->required()
+                    ->helperText('Upload a .xlsx or .json file containing translations')
+                    ->directory('temp/translations')
+                    ->visibility('private'),
+
+                Toggle::make('replace_values')
+                    ->label('Replace existing values')
+                    ->helperText('If enabled, existing translations will be overwritten')
+                    ->default(false),
+            ])
+            ->action(function (array $data) {
+                return $this->handleImport($data);
+            });
+
+        $actions[] = Action::make('export_translations')
+            ->label('Export Translations')
+            ->icon('heroicon-o-arrow-up-tray')
+            ->modal()
+            ->modalHeading('Export Language File')
+            ->modalDescription('Export translations to a file')
+            ->modalSubmitActionLabel('Export')
+            ->form([
+                Select::make('locale')
+                    ->label('Language to export')
+                    ->options(function () {
+                        $supportedLanguages = [];
+                        if (function_exists('get_supported_languages')) {
+                            $languages = get_supported_languages(true);
+                            foreach ($languages as $language) {
+                                $supportedLanguages[$language['locale']] = strtoupper($language['locale']) . ' - ' . $language['language'];
+                            }
+                        } else {
+                            // Default language fallback
+                            $defaultLang = function_exists('mw') ? mw()->lang_helper->default_lang() : 'en_US';
+                            $supportedLanguages[$defaultLang] = strtoupper($defaultLang) . ' - Default';
+                        }
+                        return $supportedLanguages;
+                    })
+                    ->required(),
+
+                Select::make('format')
+                    ->label('Export format')
+                    ->options([
+                        'xlsx' => '.xlsx (Excel)',
+                        'json' => '.json'
+                    ])
+                    ->default('xlsx')
+                    ->required(),
+
+                Select::make('namespace')
+                    ->label('Translation namespace')
+                    ->options(function () {
+                        $options = [
+                            '*' => 'All translations',
+                            'global' => 'Global translations',
+                        ];
+
+                        // Get dynamic namespaces
+                        if (class_exists('\MicroweberPackages\Translation\Models\TranslationKey')) {
+                            $namespaces = \MicroweberPackages\Translation\Models\TranslationKey::getNamespaces();
+                            foreach ($namespaces as $ns => $nsData) {
+                                if (!in_array($ns, ['*', 'global']) && !empty($nsData['translation_namespace'])) {
+                                    $label = ucfirst(str_replace(['modules-', 'templates-', '-'], ['', '', ' '], $ns));
+                                    $options[$nsData['translation_namespace']] = $label . ' (' . $nsData['translation_namespace'] . ')';
+                                }
+                            }
+                        }
+
+                        return $options;
+                    })
+                    ->default('*')
+                    ->required(),
+            ])
+            ->action(function (array $data) {
+                return $this->handleExport($data);
+            });
+
+        return $actions;
+    }
+
+    protected function handleImport(array $data): void
+    {
+        try {
+            if (empty($data['translation_file'])) {
+                Notification::make()
+                    ->title('No file selected')
+                    ->body('Please select a file to import')
+                    ->danger()
+                    ->send();
+                return;
+            }
+
+            // Try different possible file paths
+            $possiblePaths = [
+                storage_path('app/public/' . $data['translation_file']),
+                storage_path('app/public/temp/translations/' . basename($data['translation_file'])),
+                storage_path('app/' . $data['translation_file']),
+                storage_path('app/temp/translations/' . basename($data['translation_file'])),
+            ];
+
+            $filePath = null;
+            foreach ($possiblePaths as $path) {
+                if (file_exists($path)) {
+                    $filePath = $path;
+                    break;
+                }
+            }
+
+            if (!$filePath) {
+                Notification::make()
+                    ->title('File not found')
+                    ->body('The uploaded file could not be found. Tried paths: ' . implode(', ', $possiblePaths))
+                    ->danger()
+                    ->send();
+                return;
+            }
+
+            // Import using existing controller logic
+            if (class_exists('\MicroweberPackages\Translation\Http\Controllers\TranslationController')) {
+                $request = new \Illuminate\Http\Request();
+                $request->merge([
+                    'src' =>$filePath,
+                    'locale' => $data['locale'],
+                    'replace_values' => $data['replace_values'] ? 1 : 0
+                ]);
+
+                $controller = new \MicroweberPackages\Translation\Http\Controllers\TranslationController();
+                $result = $controller->import($request);
+
+                if (isset($result['success'])) {
+                    Notification::make()
+                        ->title('Import successful')
+                        ->body($result['success'])
+                        ->success()
+                        ->send();
+                } else {
+                    Notification::make()
+                        ->title('Import failed')
+                        ->body($result['error'] ?? 'Unknown error occurred')
+                        ->danger()
+                        ->send();
+                }
+            } else {
+                Notification::make()
+                    ->title('Import functionality not available')
+                    ->body('Translation import controller not found')
+                    ->warning()
+                    ->send();
+            }
+
+            // Clean up uploaded file
+            if ($filePath && file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Import error')
+                ->body('An error occurred during import: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
+    }
+
+    protected function handleExport(array $data): void
+    {
+        try {
+            // Export using existing controller logic
+            if (class_exists('\MicroweberPackages\Translation\Http\Controllers\TranslationController')) {
+                $request = new \Illuminate\Http\Request();
+                $request->merge($data);
+
+                $controller = new \MicroweberPackages\Translation\Http\Controllers\TranslationController();
+                $result = $controller->export($request);
+
+                if (isset($result['files']) && !empty($result['files'])) {
+                    $fileInfo = $result['files'][0];
+                    if (isset($fileInfo['download'])) {
+                        // Trigger download via notification with link
+                        Notification::make()
+                            ->title('Export ready')
+                            ->body('Your translation export is ready for download.')
+                            ->success()
+                            ->actions([
+                                \Filament\Notifications\Actions\Action::make('download')
+                                    ->label('Download File')
+                                    ->url($fileInfo['download'])
+                                    ->openUrlInNewTab()
+                            ])
+                            ->send();
+                        return;
+                    } elseif (isset($fileInfo['filepath'])) {
+                        // Create public download link
+                        $filename = basename($fileInfo['filepath']);
+                        $publicPath = 'storage/exports/' . $filename;
+
+                        // Copy file to public storage if needed
+                        if (!file_exists(public_path($publicPath))) {
+                            @mkdir(dirname(public_path($publicPath)), 0755, true);
+                            copy($fileInfo['filepath'], public_path($publicPath));
+                        }
+
+                        Notification::make()
+                            ->title('Export ready')
+                            ->body('Your translation export is ready for download.')
+                            ->success()
+                            ->actions([
+                                \Filament\Notifications\Actions\Action::make('download')
+                                    ->label('Download File')
+                                    ->url(url($publicPath))
+                                    ->openUrlInNewTab()
+                            ])
+                            ->send();
+                        return;
+                    }
+                }
+
+                Notification::make()
+                    ->title('Export failed')
+                    ->body('Could not generate export file')
+                    ->danger()
+                    ->send();
+
+            } else {
+                Notification::make()
+                    ->title('Export functionality not available')
+                    ->body('Translation export controller not found')
+                    ->warning()
+                    ->send();
+            }
+
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Export error')
+                ->body('An error occurred during export: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
+    }
+
+    public function form(Form $form): Form
+    {
+        // Get available languages
+        $availableLanguages = [];
+        if (class_exists('\MicroweberPackages\Translation\LanguageHelper')) {
+            $langs = \MicroweberPackages\Translation\LanguageHelper::getLanguagesWithDefaultLocale();
+            if ($langs) {
+                foreach ($langs as $languageName => $languageDetails) {
+                    $availableLanguages[$languageDetails['locale']] = $languageDetails['name'] . ' (' . $languageDetails['locale'] . ')';
+                }
+            }
+        }
+
+        // Check if multilanguage is available and activated
+        $hasMultilanguageModule = is_module('multilanguage');
+        $isMultilanguageActivated = false;
+        if ($hasMultilanguageModule && function_exists('get_supported_languages')) {
+            $supportedLanguages = get_supported_languages(true);
+            $isMultilanguageActivated = !empty($supportedLanguages);
+        }
+
+        // Check if translations exist in database
+        $translationsExist = false;
+        if (function_exists('mw') && mw()->lang_helper) {
+            $currentLang = mw()->lang_helper->current_lang();
+            $translationsExist = TranslationText::where('translation_locale', $currentLang)->count() > 0;
+        }
+
+        return $form
+            ->schema([
+                Section::make('Default Language Settings')
+                    ->description('Set the default language for your website')
+                    ->schema([
+                        Select::make('options.website.language')
+                            ->label('Default Language')
+                            ->options($availableLanguages)
+                            ->searchable()
+                            ->helperText('This will be the default language for your website')
+                            ->live()
+                            ->afterStateUpdated(function ($state) {
+                                if ($state) {
+                                    // Apply language change logic
+                                    Notification::make()
+                                        ->title('Language settings updated')
+                                        ->success()
+                                        ->send();
+                                }
+                            }),
+                    ]),
+
+                Section::make('Multilanguage Support')
+                    ->description('Enable support for multiple languages on your website')
+                    ->schema([
+                        Actions::make([
+                            FormAction::make('manage_multilanguage')
+                                ->label($hasMultilanguageModule ? 'Manage Multilanguage Settings' : 'Install Multilanguage Module')
+                                ->icon($hasMultilanguageModule ? 'heroicon-o-cog-6-tooth' : 'heroicon-o-plus')
+                                ->color($hasMultilanguageModule ? 'primary' : 'success')
+                                ->url(function () use ($hasMultilanguageModule) {
+                                    if ($hasMultilanguageModule && class_exists(MultilanguageSettingsAdmin::class)) {
+                                        return MultilanguageSettingsAdmin::getUrl();
+                                    }
+                                    return '#'; // Install URL would go here
+                                }, shouldOpenInNewTab: false)
+                                ->visible(true),
+                        ]),
+
+                        \Filament\Forms\Components\Placeholder::make('multilanguage_status')
+                            ->label('Status')
+                            ->content(function () use ($hasMultilanguageModule, $isMultilanguageActivated) {
+                                if (!$hasMultilanguageModule) {
+                                    return new HtmlString('<span class="text-orange-600">Multilanguage module not installed</span>');
+                                }
+                                if ($isMultilanguageActivated) {
+                                    return new HtmlString('<span class="text-green-600">Multilanguage is active</span>');
+                                }
+                                return new HtmlString('<span class="text-gray-600">Multilanguage is available but not activated</span>');
+                            }),
+                    ]),
+
+                Section::make('Translation Management')
+                    ->description('Manage translations for your website content')
+                    ->schema([
+                        // Import missing translations action
+                        Actions::make([
+                            FormAction::make('import_missing_translations')
+                                ->label('Import Missing Translations')
+                                ->icon('heroicon-o-arrow-down-tray')
+                                ->color('info')
+                                ->action(function () {
+                                    // Import missing translations logic
+                                    if (function_exists('get_supported_languages')) {
+                                        $supportedLanguages = get_supported_languages();
+                                        if (!empty($supportedLanguages)) {
+                                            foreach ($supportedLanguages as $supportedLanguage) {
+                                                $translationsCount = TranslationText::where('translation_locale', $supportedLanguage['locale'])->count();
+                                                if ($translationsCount == 0) {
+                                                    if (class_exists('\MicroweberPackages\Translation\TranslationPackageInstallHelper')) {
+                                                        \MicroweberPackages\Translation\TranslationPackageInstallHelper::installLanguage($supportedLanguage['locale']);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Notification::make()
+                                        ->title('Missing translations imported')
+                                        ->success()
+                                        ->send();
+                                })
+                                ->visible(!$translationsExist),
+                        ]),
+
+                        // Translation editing tabs
+                        Tabs::make('Translation Management')
+                            ->tabs([
+                                Tabs\Tab::make('Global Translations')
+                                    ->schema([
+                                        \Filament\Forms\Components\Placeholder::make('global_translations_info')
+                                            ->label('Global Translations')
+                                            ->content(new HtmlString('Manage global translation strings used throughout your website. These translations apply to core system messages, common interface elements, and general content.')),
+
+                                        \Filament\Forms\Components\ViewField::make('global_translations')
+                                            ->view('modules.settings::filament.admin.components.translation-browser', [
+                                                'namespace' => 'global',
+                                                'title' => 'Global Translations'
+                                            ]),
+                                    ]),
+
+                                Tabs\Tab::make('Module Translations')
+                                    ->schema([
+                                        \Filament\Forms\Components\Placeholder::make('module_translations_info')
+                                            ->label('Module Translations')
+                                            ->content(new HtmlString('Manage translations specific to installed modules. Each module can have its own set of translatable strings for module-specific functionality.')),
+
+                                        \Filament\Forms\Components\ViewField::make('module_translations')
+                                            ->view('modules.settings::filament.admin.components.translation-browser', [
+                                                'namespace' => 'modules',
+                                                'title' => 'Module Translations'
+                                            ]),
+                                    ]),
+
+                                Tabs\Tab::make('Template Translations')
+                                    ->schema([
+                                        \Filament\Forms\Components\Placeholder::make('template_translations_info')
+                                            ->label('Template Translations')
+                                            ->content(new HtmlString('Manage translations for template-specific content. These translations are used by themes and custom templates to display localized content.')),
+
+                                        \Filament\Forms\Components\ViewField::make('template_translations')
+                                            ->view('modules.settings::filament.admin.components.translation-browser', [
+                                                'namespace' => 'templates',
+                                                'title' => 'Template Translations'
+                                            ]),
+                                    ]),
+                            ])
+                            ->visible($translationsExist),
+
+                        // Help section
+                        \Filament\Forms\Components\Placeholder::make('translation_help')
+                            ->label('Need Help?')
+                            ->content(function () {
+                                $helpContent = 'Translation help resources:<br>';
+                                $helpContent .= '• Use the search function to quickly find specific translation keys<br>';
+                                $helpContent .= '• Export translations to work offline and import them back<br>';
+                                $helpContent .= '• Each language can be managed separately<br>';
+                                if (config('app.debug', false)) {
+                                    $helpContent .= '• Check the official documentation for advanced translation features';
+                                }
+                                return new HtmlString($helpContent);
+                            })
+                            ->visible($translationsExist),
+                    ]),
+            ]);
+    }
 }

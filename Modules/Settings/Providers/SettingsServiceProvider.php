@@ -26,9 +26,7 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminShopShippingPage,
     AdminShopTaxesPage,
     AdminTemplatePage,
-    AdminTrustProxiesPage,
     AdminUpdatesPage,
-    AdminWebManifestPage,
     Settings
 };
 
@@ -43,8 +41,8 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
      */
     public function boot(): void
     {
-
-
+        // Register Livewire components
+        \Livewire\Livewire::component('modules.settings::translation-manager', \Modules\Settings\Livewire\TranslationManager::class);
     }
 
     /**
@@ -75,8 +73,6 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
 
         FilamentRegistry::registerPage(AdminSeoPage::class);
         FilamentRegistry::registerPage(AdminTemplatePage::class);
-        FilamentRegistry::registerPage(AdminTrustProxiesPage::class);
-        FilamentRegistry::registerPage(AdminWebManifestPage::class);
 
         // Register shop settings pages
         FilamentRegistry::registerPage(AdminShopAutoRespondEmailPage::class);

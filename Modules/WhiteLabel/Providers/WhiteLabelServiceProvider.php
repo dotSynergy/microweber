@@ -38,11 +38,15 @@ class WhiteLabelServiceProvider extends BaseModuleServiceProvider
                 app(WhiteLabelService::class)->applyWhiteLabelSettings();
             });
             event_bind('mw.admin', function () {
+
                 app(WhiteLabelService::class)->applyWhiteLabelSettings();
+
             });
 
 
           Filament::serving(function () {
+
+              app(WhiteLabelService::class)->applyWhiteLabelSettings();
               $panelId = Filament::getCurrentPanel()->getId();
               if ($panelId == 'admin') {
                   ModuleAdmin::registerLiveEditSettingsUrl('white_label/admin', WhiteLabelSettingsAdminSettingsPage::getUrl());

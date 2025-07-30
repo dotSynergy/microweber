@@ -103,6 +103,9 @@ class FilamentAdminPanelProvider extends PanelProvider
             ->brandLogo(function () {
                 return mw()->ui->admin_logo();
             })
+            ->brandName(function () {
+                return mw()->ui->brand_name();
+            })
             ->sidebarWidth('15rem')
             ->colors([
                 'primary' => MwColors::Blue,

@@ -50,11 +50,19 @@ class NewsletterFilamentAdminPanelProvider extends FilamentAdminPanelProvider
             ->globalSearch(true)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->font('Inter')
-            ->brandLogoHeight('34px')
-            ->brandLogo(fn() => mw()->ui->admin_logo())
             ->unsavedChangesAlerts()
             ->sidebarWidth('15rem')
             ->databaseNotifications(true)
+
+            ->brandLogoHeight('34px')
+
+            ->brandLogo(function () {
+                return mw()->ui->admin_logo();
+            })
+            ->brandName(function () {
+                return mw()->ui->brand_name();
+            })
+
             ->colors([
                 'primary' => Color::Blue,
             ])->pages([

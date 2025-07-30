@@ -21,8 +21,16 @@ class BillingFilamentAdminPanelProvider extends FilamentAdminPanelProvider
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->font('Inter')
             ->brandLogoHeight('34px')
-            ->brandLogo(fn () => mw()->ui->admin_logo())
-            ->brandName('Billing')
+
+            ->brandLogo(function () {
+                return mw()->ui->admin_logo();
+            })
+            ->brandName(function () {
+                return mw()->ui->brand_name();
+            })
+
+
+
             ->unsavedChangesAlerts()
             ->sidebarWidth('15rem')
             ->databaseNotifications(true)

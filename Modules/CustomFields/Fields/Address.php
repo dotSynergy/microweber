@@ -42,7 +42,7 @@ class Address extends DefaultField
         $this->renderData['values'] = $addressFields;
 
         $this->renderSettings['required'] = true;
-        $this->renderSettings['show_label'] = true;
+        $this->renderSettings['hide_label'] = false;
        // $this->renderSettings = $this->calculateFieldSize($this->renderSettings);
     }
 }

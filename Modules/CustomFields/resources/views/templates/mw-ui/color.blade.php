@@ -1,6 +1,6 @@
 <div class="col-sm-<?php echo $settings['field_size_mobile']; ?> col-md-<?php echo $settings['field_size_tablet']; ?> col-lg-<?php echo $settings['field_size_desktop']; ?>">
     <div class="mw-field">
-        <?php if($settings['show_label']): ?>
+        <?php if(!$settings['hide_label']): ?>
             <label class="mw-field-label">
                 <?php echo $data['name']; ?>
                 <?php if ($settings['required']): ?>
@@ -10,8 +10,8 @@
         <?php endif; ?>
 
         <div class="mw-field-content">
-            <input type="color" 
-                   class="mw-field-color" 
+            <input type="color"
+                   class="mw-field-color"
                    <?php if ($settings['required']): ?>required<?php endif; ?>
                    data-custom-field-id="<?php echo $data['id']; ?>"
                    data-custom-field-error-text="<?php echo $data['error_text']; ?>"

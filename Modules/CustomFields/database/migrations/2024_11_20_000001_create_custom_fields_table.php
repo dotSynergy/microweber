@@ -31,7 +31,7 @@ return new class extends Migration {
             $table->integer('edited_by')->nullable();
             $table->string('session_id')->nullable();
             $table->longText('options')->nullable();
-            $table->integer('show_label')->nullable();
+       //     $table->integer('show_label')->nullable();
             $table->integer('is_active')->nullable();
             $table->integer('required')->nullable();
             $table->integer('copy_of_field')->nullable();

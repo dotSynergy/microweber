@@ -86,7 +86,6 @@ class DefaultField
     {
 
 
-
         // Render settings
         $renderSettings = [];
         if (!empty($this->settings)) {
@@ -96,10 +95,9 @@ class DefaultField
             $renderSettings = array_merge($renderSettings, $this->data['options']);
         }
 
-        if (isset($this->data['show_label'])) {
-            // Properly convert show_label to boolean
-            $showLabel = $this->data['show_label'];
-            $renderSettings['show_label'] = ($showLabel === true || $showLabel === 1 || $showLabel === '1' || $showLabel === 'true');
+        if (isset($this->data['hide_label']) and !empty($this->data['hide_label'])) {
+            $renderSettings['hide_label']  = $this->data['hide_label'];
+            $renderSettings['show_label'] = false;
         }
 
         if (isset($this->data['required'])) {
@@ -159,12 +157,10 @@ class DefaultField
             // First check for placeholder in options
             if (isset($this->data['options']['placeholder']) && !empty($this->data['options']['placeholder'])) {
                 $renderData['placeholder'] = $this->data['options']['placeholder'];
-            }
-            // Then check for placeholder in data
+            } // Then check for placeholder in data
             elseif (isset($this->data['placeholder']) && !empty($this->data['placeholder'])) {
                 $renderData['placeholder'] = $this->data['placeholder'];
-            }
-            // Default to field name if no specific placeholder is set
+            } // Default to field name if no specific placeholder is set
             else {
                 $renderData['placeholder'] = $this->data['name'] ?? '';
             }

@@ -23,7 +23,7 @@ class WhiteLabelSettingsAdminSettingsPage extends AdminSettingsPage
 
     protected static ?string $navigationIcon = 'modules.white_label-icon';
 
-    protected static ?string $navigationGroup = 'Website Settings';
+    protected static ?string $navigationGroup = 'System Settings';
 
     protected static string $view = 'modules.settings::filament.admin.pages.settings-form';
 

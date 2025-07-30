@@ -3,7 +3,7 @@
 <script>mw.require('forms.js');</script>
 
 
-    <?php if($settings['show_label']): ?>
+    <?php if(!$settings['hide_label']): ?>
 	<label class="mw-ui-label">
 	<?php echo $data['name']; ?>
 	<?php if ($settings['required']): ?>

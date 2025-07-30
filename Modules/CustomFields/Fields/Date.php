@@ -19,7 +19,7 @@ class Date extends DefaultField {
     public $defaultSettings = [
         'required'=>false,
         'multiple'=>'',
-        'show_label'=>true,
+        'hide_label'=>false,
         'show_placeholder'=>false,
         'date_format'=> 'yyyy-mm-dd',
         'field_size'=>12,

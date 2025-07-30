@@ -20,7 +20,7 @@ class Text extends DefaultField
         'required'=>false,
         'rows'=> 3,
         'multiple'=>'',
-        'show_label'=>true,
+        'hide_label'=>false,
         'show_placeholder'=>false,
         'field_size'=>12,
         'field_size_desktop'=>12,

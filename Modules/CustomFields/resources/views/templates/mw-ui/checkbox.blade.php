@@ -1,7 +1,7 @@
 <div class="mw-flex-col-md-<?php echo $settings['field_size']; ?>">
 <div class="mw-ui-field-holder custom-fields-type-checkbox">
 
-    <?php if($settings['show_label']): ?>
+    <?php if(!$settings['hide_label']): ?>
     <div class="mw-ui-label"><?php echo $data["name"]; ?></div>
     <?php endif; ?>
 

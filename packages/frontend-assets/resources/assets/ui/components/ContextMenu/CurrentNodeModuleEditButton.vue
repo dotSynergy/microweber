@@ -289,6 +289,12 @@ export default {
                 // Set the editing state
                 this.isEditingModule = true;
 
+
+                mw.top().app.canvas.getWindow().mw.tools.scrollTo(this.currentElement, undefined, 100);
+
+
+
+
                 // Trigger appropriate settings request
                 if (this.isLayoutElement) {
                     // Trigger layout settings request

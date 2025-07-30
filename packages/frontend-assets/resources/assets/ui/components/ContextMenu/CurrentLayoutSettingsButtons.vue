@@ -34,21 +34,21 @@
                     {{ module.title || module.type }}
                 </v-tooltip>
                 <span v-html="getModuleIcon(module)"></span>
-                
+
                 <!-- Background indicators for background modules -->
                 <div v-if="module.type === 'background'" class="background-indicators">
-                    <div 
+                    <div
                         v-if="module.backgroundImage"
                         class="background-indicator background-image-indicator"
                         :style="{ backgroundImage: `url('${module.backgroundImage}')` }"
                     ></div>
-                    <div 
+                    <div
                         v-else-if="module.backgroundVideo"
                         class="background-indicator background-video-indicator"
                     >
                         <span class="video-icon">▶</span>
                     </div>
-                    <div 
+                    <div
                         v-else-if="module.backgroundColor"
                         class="background-indicator background-color-indicator"
                         :style="{ backgroundColor: module.backgroundColor }"
@@ -245,7 +245,7 @@ export default {
                 window.mw.app.editor.on('onModuleSettingsRequest', (module) => {
                     this.activeModuleId = module?.id || null;
                 });
-                
+
                 // Listen for layout background changes
                 window.mw.app.editor.on('onLayoutBackgroundChanged', () => {
                     this.updateCurrentLayout();
@@ -529,7 +529,7 @@ export default {
         hasBackgroundContent(moduleElement) {
             // Check if background module has actual content (image, video, or color)
             if (!moduleElement) return false;
-            
+
             try {
                 // Get the layout element that contains the background
                 const layoutElement = this.getCurrentLayoutElement();
@@ -610,7 +610,7 @@ export default {
                     // Set the active module ID
                     this.activeModuleId = module.id;
                     this.updateActiveModule();
-
+                    mw.top().app.canvas.getWindow().mw.tools.scrollTo(module.element, undefined, 100);
                     // Dispatch the module settings request
                     window.mw.top().app.editor.dispatch('onModuleSettingsRequest', module.element);
                 }  else {

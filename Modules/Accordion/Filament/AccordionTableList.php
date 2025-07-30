@@ -61,7 +61,9 @@ class AccordionTableList extends Component implements HasForms, HasTable
         return $table
             ->query(Accordion::query()->where('rel_id', $this->rel_id)->where('rel_type', $this->rel_type))
             ->defaultSort('position', 'asc')
-            ->columns([
+            ->reorderable('position')
+            ->emptyStateHeading('No accordion items found')
+             ->columns([
                 TextColumn::make('title')
                     ->action( EditAction::make('edit'))
                     ->label('Title'),
@@ -130,9 +132,9 @@ class AccordionTableList extends Component implements HasForms, HasTable
             ])
             ->reorderable('position')
             ->bulkActions([
-//                BulkActionGroup::make([
-//                    DeleteBulkAction::make()
-//                ])
+
+                    DeleteBulkAction::make()
+
             ]);
     }
 

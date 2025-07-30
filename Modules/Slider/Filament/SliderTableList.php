@@ -13,6 +13,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -348,7 +349,9 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
             ])
             ->reorderable('position')
             ->bulkActions([
-                // ...
+
+                DeleteBulkAction::make()
+
             ]);
     }
 

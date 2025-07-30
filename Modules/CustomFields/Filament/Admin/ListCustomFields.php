@@ -116,6 +116,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ->live()
                     ->label('Use as textarea')
                     ->columnSpanFull()
+                    ->visible(fn (Get $get) => $get('type') == 'text' )
                     ->default(false)
             ]);
 
@@ -161,9 +162,11 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ,
 
                 Toggle::make('options.required')
+                    ->live()
                     ->helperText('Toggle to make this field required for the user')
                     ->label('Required'),
                 Toggle::make('options.hide_label')
+                    ->live()
                     ->helperText('Toggle to turn off the label and write your text below')
                     ->label('Hide label'),
                 Section::make([
@@ -171,6 +174,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                         ->schema([
                             Select::make('options.field_size_desktop')
                                 ->label('Grid Desktop')
+                                ->live()
                                 ->options([
                                     '1' => 'col-1',
                                     '2' => 'col-2',
@@ -187,6 +191,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                                 ]),
                             Select::make('options.field_size_tablet')
                                 ->label('Grid Tablet')
+                                ->live()
                                 ->options([
                                     '1' => 'col-1',
                                     '2' => 'col-2',
@@ -203,6 +208,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                                 ]),
                             Select::make('options.field_size_mobile')
                                 ->label('Grid Mobile')
+                                ->live()
                                 ->options([
                                     '1' => 'col-1',
                                     '2' => 'col-2',

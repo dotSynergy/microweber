@@ -12,7 +12,15 @@ class TranslationKey extends Model
 
     public $timestamps = false;
     public $table = 'translation_keys';
+    protected $fillable = [
+        'id',
+        'translation_key',
+        'translation_namespace',
+        'translation_group',
 
+
+
+    ];
     protected $searchable = [
         'id',
         'translation_keys',
@@ -21,7 +29,7 @@ class TranslationKey extends Model
 
     public function texts()
     {
-        return $this->hasMany(TranslationText::class);
+        return $this->hasMany(TranslationText::class, 'translation_key_id');
     }
 
     public static function getNamespaces()

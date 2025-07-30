@@ -10,13 +10,14 @@ namespace MicroweberPackages\Translation\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use MicroweberPackages\Restore\Formats\XlsxReader;
-use MicroweberPackages\Export\Formats\JsonBackup;
-use MicroweberPackages\Export\Formats\XlsxExport;
+
 use MicroweberPackages\Translation\Models\TranslationKey;
 use MicroweberPackages\Translation\Models\TranslationText;
 use MicroweberPackages\Translation\TranslationImport;
 use MicroweberPackages\Translation\TranslationPackageInstallHelper;
+use Modules\Backup\Formats\JsonBackup;
+use Modules\Export\Formats\XlsxExport;
+use Modules\Restore\Formats\XlsxReader;
 
 class TranslationController {
 
@@ -28,27 +29,68 @@ class TranslationController {
 
     public function import(Request $request) {
 
-        $src = $request->post('src');
-        $file = url2dir($src);
+        $src = $request->get('src');
 
-        $readFile = new XlsxReader($file);
-        $data = $readFile->readData();
+
+        if(!is_file($src)){
+            if (is_string($src) && strpos($src, 'http') === 0) {
+                $src = url2dir($src);
+            } else {
+                return ['error' => 'File not found'];
+            }
+        }
+        $file = $src;
+
+        try {
+            $readFile = new XlsxReader($file);
+            $data = $readFile->readData();
+        } catch (\Exception $e) {
+            return ['error' => 'Failed to read file: ' . $e->getMessage()];
+        }
+
+        if (empty($data['content'])) {
+            return ['error' => 'No data found in file'];
+        }
+
         $translations = $data['content'];
+
+        // Filter out entries with missing required data
+        $filteredTranslations = [];
+        foreach ($translations as $translation) {
+            if (isset($translation['translation_key']) &&
+                isset($translation['translation_namespace']) &&
+                isset($translation['translation_group'])) {
+
+                // Set defaults for optional fields
+                if (!isset($translation['translation_text'])) {
+                    $translation['translation_text'] = '';
+                }
+                if (!isset($translation['translation_locale'])) {
+                    $translation['translation_locale'] = '';
+                }
+
+                $filteredTranslations[] = $translation;
+            }
+        }
+
+        if (empty($filteredTranslations)) {
+            return ['error' => 'No valid translation entries found in file'];
+        }
 
         $import = new TranslationImport();
         $replace_values = intval($request->post('replace_values'));
 
         $import->replaceTexts($replace_values);
 
-        return $import->import($translations);
+        return $import->import($filteredTranslations);
 
     }
 
     public function export(Request $request) {
 
-        $namespace = $request->post('namespace','*');
-        $locale = $request->post('locale', mw()->lang_helper->default_lang());
-        $format = $request->post('format', 'json');
+        $namespace = $request->get('namespace','*');
+        $locale = $request->get('locale', mw()->lang_helper->default_lang());
+        $format = $request->get('format', 'json');
 
         if (!is_lang_correct($locale)) {
             return [];

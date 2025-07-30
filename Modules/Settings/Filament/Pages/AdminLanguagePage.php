@@ -17,6 +17,7 @@ use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use MicroweberPackages\Translation\Models\TranslationKey;
 use MicroweberPackages\Translation\Models\TranslationText;
 use Modules\Multilanguage\Filament\Pages\MultilanguageSettingsAdmin;
@@ -327,22 +328,18 @@ class AdminLanguagePage extends AdminSettingsPage
     {
         // Get available languages
         $availableLanguages = [];
-        if (class_exists('\MicroweberPackages\Translation\LanguageHelper')) {
-            $langs = \MicroweberPackages\Translation\LanguageHelper::getLanguagesWithDefaultLocale();
-            if ($langs) {
-                foreach ($langs as $languageName => $languageDetails) {
-                    $availableLanguages[$languageDetails['locale']] = $languageDetails['name'] . ' (' . $languageDetails['locale'] . ')';
-                }
-            }
+        if (function_exists('get_supported_languages')) {
+            $availableLanguages = get_available_languages();
         }
 
         // Check if multilanguage is available and activated
         $hasMultilanguageModule = is_module('multilanguage');
         $isMultilanguageActivated = false;
         if ($hasMultilanguageModule && function_exists('get_supported_languages')) {
-            $supportedLanguages = get_supported_languages(true);
-            $isMultilanguageActivated = !empty($supportedLanguages);
+            $isMultilanguageActivated = MultilanguageHelpers::multilanguageIsEnabled();
+
         }
+
 
         // Check if translations exist in database
         $translationsExist = false;
@@ -406,8 +403,20 @@ class AdminLanguagePage extends AdminSettingsPage
                 Section::make('Translation Management')
                     ->description('Manage translations for your website content')
                     ->schema([
-                        // Import missing translations action
+                        // Quick access to translation manager
                         Actions::make([
+                            FormAction::make('manage_translations')
+                                ->label('Manage Translations')
+                                ->icon('heroicon-o-language')
+                                ->color('primary')
+                                ->url(function () {
+                                    if (class_exists('\Modules\Settings\Filament\Resources\TranslationResource')) {
+                                        return \Modules\Settings\Filament\Resources\TranslationResource::getUrl();
+                                    }
+                                    return '#';
+                                }, shouldOpenInNewTab: false)
+                                ->visible(true),
+
                             FormAction::make('import_missing_translations')
                                 ->label('Import Missing Translations')
                                 ->icon('heroicon-o-arrow-down-tray')
@@ -436,56 +445,30 @@ class AdminLanguagePage extends AdminSettingsPage
                                 ->visible(!$translationsExist),
                         ]),
 
-                        // Translation editing tabs
-                        Tabs::make('Translation Management')
-                            ->tabs([
-                                Tabs\Tab::make('Global Translations')
-                                    ->schema([
-                                        \Filament\Forms\Components\Placeholder::make('global_translations_info')
-                                            ->label('Global Translations')
-                                            ->content(new HtmlString('Manage global translation strings used throughout your website. These translations apply to core system messages, common interface elements, and general content.')),
-
-                                        \Filament\Forms\Components\ViewField::make('global_translations')
-                                            ->view('modules.settings::filament.admin.components.translation-browser', [
-                                                'namespace' => 'global',
-                                                'title' => 'Global Translations'
-                                            ]),
-                                    ]),
-
-                                Tabs\Tab::make('Module Translations')
-                                    ->schema([
-                                        \Filament\Forms\Components\Placeholder::make('module_translations_info')
-                                            ->label('Module Translations')
-                                            ->content(new HtmlString('Manage translations specific to installed modules. Each module can have its own set of translatable strings for module-specific functionality.')),
-
-                                        \Filament\Forms\Components\ViewField::make('module_translations')
-                                            ->view('modules.settings::filament.admin.components.translation-browser', [
-                                                'namespace' => 'modules',
-                                                'title' => 'Module Translations'
-                                            ]),
-                                    ]),
-
-                                Tabs\Tab::make('Template Translations')
-                                    ->schema([
-                                        \Filament\Forms\Components\Placeholder::make('template_translations_info')
-                                            ->label('Template Translations')
-                                            ->content(new HtmlString('Manage translations for template-specific content. These translations are used by themes and custom templates to display localized content.')),
-
-                                        \Filament\Forms\Components\ViewField::make('template_translations')
-                                            ->view('modules.settings::filament.admin.components.translation-browser', [
-                                                'namespace' => 'templates',
-                                                'title' => 'Template Translations'
-                                            ]),
-                                    ]),
-                            ])
-                            ->visible($translationsExist),
+                        // Translation status information
+                        \Filament\Forms\Components\Placeholder::make('translation_info')
+                            ->label('Translation Status')
+                            ->content(function () use ($translationsExist) {
+                                if ($translationsExist) {
+                                    $totalKeys = TranslationKey::count();
+                                    $totalTranslations = TranslationText::count();
+                                    return new HtmlString("
+                                        <div class='space-y-2'>
+                                            <div>Total translation keys: <strong>{$totalKeys}</strong></div>
+                                            <div>Total translations: <strong>{$totalTranslations}</strong></div>
+                                            <div class='text-sm text-gray-600'>Use the 'Manage Translations' button above to add, edit, or delete translations.</div>
+                                        </div>
+                                    ");
+                                }
+                                return new HtmlString('<div class="text-gray-600">No translations found. Import missing translations to get started.</div>');
+                            }),
 
                         // Help section
                         \Filament\Forms\Components\Placeholder::make('translation_help')
                             ->label('Need Help?')
                             ->content(function () {
                                 $helpContent = 'Translation help resources:<br>';
-                                $helpContent .= '• Use the search function to quickly find specific translation keys<br>';
+                                $helpContent .= '• Use the Translation Manager to edit individual translations<br>';
                                 $helpContent .= '• Export translations to work offline and import them back<br>';
                                 $helpContent .= '• Each language can be managed separately<br>';
                                 if (config('app.debug', false)) {

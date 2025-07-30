@@ -1159,30 +1159,38 @@ class Lang
      * $langs = get_available_languages();
      * var_dump($langs);
      * </code>
-     *
-     * <code>
-     * //set language for the user
-     *  setcookie("lang", 'en'); //sets english language
-     * </code>
      */
     function get_available_languages()
     {
-        global $mw_all_langs;
 
-        if (!empty($mw_all_langs)) {
-            return $mw_all_langs;
+        $availableLanguages = [];
+        if (class_exists('\MicroweberPackages\Translation\LanguageHelper')) {
+            $langs = \MicroweberPackages\Translation\LanguageHelper::getLanguagesWithDefaultLocale();
+            if ($langs) {
+                foreach ($langs as $languageName => $languageDetails) {
+                    $availableLanguages[$languageDetails['locale']] = $languageDetails['name'] . ' (' . $languageDetails['locale'] . ')';
+                }
+            }
         }
 
-        $lang_dir = mw_includes_path() . 'language' . DIRECTORY_SEPARATOR;
+        return $availableLanguages;
 
-        $files = array();
-        foreach (glob($lang_dir . '*.json') as $filename) {
-            $item = basename($filename);
-            $item = no_ext($item);
-            $mw_all_langs[] = $item;
-        }
-
-        return $mw_all_langs;
+//        global $mw_all_langs;
+//
+//        if (!empty($mw_all_langs)) {
+//            return $mw_all_langs;
+//        }
+//
+//        $lang_dir = mw_includes_path() . 'language' . DIRECTORY_SEPARATOR;
+//
+//        $files = array();
+//        foreach (glob($lang_dir . '*.json') as $filename) {
+//            $item = basename($filename);
+//            $item = no_ext($item);
+//            $mw_all_langs[] = $item;
+//        }
+//
+//        return $mw_all_langs;
     }
 
 //    function is_supported($lang)

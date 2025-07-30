@@ -190,7 +190,7 @@ function _ejs($k, $to_return = false, $replace = [])
  */
 function get_available_languages()
 {
-    return mw()->lang_helper->get_available_languages();
+    return app()->lang_helper->get_available_languages();
 
 
 }

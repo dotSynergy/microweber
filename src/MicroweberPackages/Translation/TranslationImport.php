@@ -23,13 +23,23 @@ class TranslationImport
             $validateImport = true;
         }
 
-        if (empty($inputTranslations[0]['translation_key'])
-            || empty($inputTranslations[0]['translation_namespace'])
-            || empty($inputTranslations[0]['translation_group'])
-            || empty($inputTranslations[0]['translation_locale'])
-            || empty($inputTranslations[0]['translation_text'])
-        ) {
+        // Check if required structure exists (but allow empty translation_text and translation_locale)
+        if (empty($inputTranslations) || !is_array($inputTranslations) || empty($inputTranslations[0])) {
             $validateImport = false;
+        } else {
+            $firstItem = $inputTranslations[0];
+
+            // Check required fields exist (translation_text and translation_locale can be empty)
+            if (!isset($firstItem['translation_key']) ||
+                !isset($firstItem['translation_namespace']) ||
+                !isset($firstItem['translation_group']) ||
+                !isset($firstItem['translation_locale']) ||
+                !isset($firstItem['translation_text']) ||
+                empty($firstItem['translation_key']) ||
+                empty($firstItem['translation_namespace']) ||
+                empty($firstItem['translation_group'])) {
+                $validateImport = false;
+            }
         }
 
         if (!$validateImport) {
@@ -261,7 +271,15 @@ class TranslationImport
             $translation['translation_namespace'] = trim($translation['translation_namespace']);
             $translation['translation_group'] = trim($translation['translation_group']);
             $translation['translation_key'] = trim($translation['translation_key']);
-            $translation['translation_text'] = trim($translation['translation_text']);
+            $translation['translation_text'] = isset($translation['translation_text']) ? trim($translation['translation_text']) : '';
+            $translation['translation_locale'] = isset($translation['translation_locale']) ? trim($translation['translation_locale']) : '';
+
+            // Skip items with empty required fields
+            if (empty($translation['translation_key']) ||
+                empty($translation['translation_namespace']) ||
+                empty($translation['translation_group'])) {
+                continue;
+            }
 
             $readyTranslations[$this->_hashFields($translation)] = $translation;
         }

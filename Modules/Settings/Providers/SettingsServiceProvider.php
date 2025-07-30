@@ -5,6 +5,7 @@ namespace Modules\Settings\Providers;
 
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use Modules\Settings\Filament\Resources\TranslationResource;
 use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminCustomTagsPage,
     AdminEmailPage,
@@ -42,8 +43,7 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
     public function boot(): void
     {
         // Register Livewire components
-        \Livewire\Livewire::component('modules.settings::translation-manager', \Modules\Settings\Livewire\TranslationManager::class);
-    }
+     }
 
     /**
      * Register the service provider.
@@ -58,6 +58,9 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
 
         // Register main settings page
         FilamentRegistry::registerPage(Settings::class);
+
+        // Register translation resource
+        FilamentRegistry::registerResource(TranslationResource::class);
 
         // Register website settings pages
         FilamentRegistry::registerPage(AdminAdvancedPage::class);

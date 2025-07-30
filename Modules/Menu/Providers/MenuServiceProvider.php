@@ -9,6 +9,7 @@ use MicroweberPackages\LiveEdit\Facades\LiveEditManager;
 use MicroweberPackages\Microweber\Facades\Microweber;
 use MicroweberPackages\Multilanguage\TranslateManager;
 use Modules\Menu\Filament\Admin\MenuFilamentPlugin;
+use Modules\Menu\Filament\Admin\Pages\AdminMenusPage;
 use Modules\Menu\Filament\MenuModuleSettings;
 use Modules\Menu\Livewire\Admin\MenusList;
 use Modules\Menu\Models\Menu;
@@ -61,7 +62,8 @@ class MenuServiceProvider extends BaseModuleServiceProvider
 
 
         // Register filament page for Microweber module settings
-        FilamentRegistry::registerPlugin(MenuFilamentPlugin::class);
+
+        FilamentRegistry::registerPage(AdminMenusPage::class);
         FilamentRegistry::registerPage(MenuModuleSettings::class);
         Livewire::component('admin-menus-list', MenusList::class);
 

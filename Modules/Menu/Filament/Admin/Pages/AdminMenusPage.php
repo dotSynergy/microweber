@@ -18,5 +18,6 @@ class AdminMenusPage extends AdminSettingsPage
     protected static string $description = 'Configure your menus';
 
     protected static ?string $slug = 'settings/menus';
+    protected static bool $shouldRegisterNavigation = true;
 
 }

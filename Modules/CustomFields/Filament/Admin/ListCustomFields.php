@@ -97,7 +97,7 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ->schema([
                         TextInput::make('value'),
                     ])->hidden(function (Get $get) {
-                        if ($get('options.as_textarea')) {
+                        if ($get('options.as_text_area')) {
                             return true;
                         }
                         return false;
@@ -107,12 +107,12 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
                     ->schema([
                         Textarea::make('value'),
                     ])->hidden(function (Get $get) {
-                        if ($get('options.as_textarea')) {
+                        if ($get('options.as_text_area')) {
                             return false;
                         }
                         return true;
                     }),
-                Toggle::make('options.as_textarea')
+                Toggle::make('options.as_text_area')
                     ->live()
                     ->label('Use as textarea')
                     ->columnSpanFull()

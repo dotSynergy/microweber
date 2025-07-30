@@ -3,6 +3,7 @@
 namespace Modules\WhiteLabel\Providers;
 
 use Filament\Facades\Filament;
+use Livewire\Livewire;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\AdminLiveEditSidebarElementStyleEditorPage;
@@ -15,6 +16,7 @@ use MicroweberPackages\LiveEdit\Filament\Admin\Pages\UnlockPackage\UnlockPackage
 use MicroweberPackages\Microweber\Facades\Microweber;
 use MicroweberPackages\Module\Facades\ModuleAdmin;
 use Modules\Settings\Filament\Pages\Settings;
+use Modules\WhiteLabel\Filament\Admin\WhiteLabelLicenseManager;
 use Modules\WhiteLabel\Filament\Pages\WhiteLabelSettingsAdminSettingsPage;
 use Modules\WhiteLabel\Microweber\WhiteLabelModule;
 use Modules\WhiteLabel\Services\WhiteLabelService;
@@ -32,6 +34,9 @@ class WhiteLabelServiceProvider extends BaseModuleServiceProvider
     {
 
       if (mw_is_installed()) {
+
+            // Register Livewire components
+            Livewire::component('white-label-license-manager', WhiteLabelLicenseManager::class);
 
             // Bind event for applying white label settings
             event_bind('mw.front', function () {

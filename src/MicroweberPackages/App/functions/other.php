@@ -370,7 +370,7 @@ if (!function_exists('powered_by_link')) {
     {
         $link = mw('ui')->powered_by_link();
         if (trim(empty($link))) {
-            return "Your Company";
+            return "";
         }
         return $link;
     }

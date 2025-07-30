@@ -90,9 +90,6 @@ class ContentResource extends Resource
         $sessionId = session()->getId();
 
 
-
-
-
         $allBlogs = app()->content_repository->getAllBlogPages();
         $allShops = app()->content_repository->getAllShopPages();
 
@@ -100,12 +97,12 @@ class ContentResource extends Resource
         $firstShopId = false;
 
 
-        if(empty($allShops) and $contentType === 'product') {
+        if (empty($allShops) and $contentType === 'product') {
 
             app()->content_repository->createDefaultShopPage();
             $allShops = app()->content_repository->getAllShopPages();
         }
-        if(empty($allBlogs) and $contentType === 'post' ) {
+        if (empty($allBlogs) and $contentType === 'post') {
             app()->content_repository->createDefaultBlogPage();
             $allBlogs = app()->content_repository->getAllBlogPages();
         }
@@ -1003,6 +1000,52 @@ class ContentResource extends Resource
                         Tables\Filters\QueryBuilder\Constraints\TextConstraint::make('barcode')
                             ->relationship('metaData', 'barcode'),
                     ]),
+
+                Tables\Filters\SelectFilter::make('content_type')
+                    ->label('Content Type')
+                    ->options([
+                        'page' => 'Page',
+                        'post' => 'Post',
+                        'product' => 'Product',
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['value'])) {
+                            return $query->where('content_type', $data['value']);
+                        }
+                        return $query;
+                    }),
+
+
+                Tables\Filters\SelectFilter::make('content_subtype')
+                    ->label('Content Subtype')
+                    ->options([
+                        'static' => 'Static',
+                        'post' => 'Post',
+                        'product' => 'Product',
+                        'dynamic' => 'Dynamic',
+                    ])
+                    ->query(function ($query, array $data) {
+                        if (!empty($data['value'])) {
+                            return $query->where('subtype', $data['value']);
+                        }
+                        return $query;
+                    }),
+
+
+                Tables\Filters\SelectFilter::make('is_active')
+                    ->label('Status')
+                    ->options([
+                        1 => 'Published',
+                        0 => 'Unpublished',
+                    ])
+                    ->query(function ($query, array $data) {
+
+                        if (isset($data['value'])) {
+                            return $query->where('is_active', '=', intval($data['value']));
+                        }
+                        return $query;
+                    }),
+
 
                 Tables\Filters\SelectFilter::make('category_id')
                     ->label('Category')

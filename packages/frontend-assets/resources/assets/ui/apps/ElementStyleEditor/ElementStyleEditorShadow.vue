@@ -11,22 +11,43 @@
     </div>
 
     <div v-if="showShadow">
+        <!-- Tab Navigation -->
+        <div class="mw-admin-action-links-holder mb-3">
+            <span
+                class="mw-admin-action-links mw-adm-liveedit-tabs"
+                :class="{'active': activeTab === 'box'}"
+                @click="setActiveTab('box')">
+                Box Shadow
+            </span>
+            <span
+                class="mw-admin-action-links mw-adm-liveedit-tabs ms-2"
+                :class="{'active': activeTab === 'text'}"
+                @click="setActiveTab('text')">
+                Text Shadow
+            </span>
+        </div>
+
+        <!-- Tab Content -->
         <div>
-            <ElementStyleEditorBoxShadow></ElementStyleEditorBoxShadow>
+            <ElementStyleEditorBoxShadow v-show="activeTab === 'box'"></ElementStyleEditorBoxShadow>
+            <ElementStyleEditorTextShadow v-show="activeTab === 'text'"></ElementStyleEditorTextShadow>
         </div>
     </div>
 </template>
 
 <script>
 import ElementStyleEditorBoxShadow from './ElementStyleEditorBoxShadow.vue';
+import ElementStyleEditorTextShadow from './ElementStyleEditorTextShadow.vue';
 
 export default {
     components: {
-        ElementStyleEditorBoxShadow
+        ElementStyleEditorBoxShadow,
+        ElementStyleEditorTextShadow
     },
     data() {
         return {
             'showShadow': false,
+            'activeTab': 'box',
         };
     },
     mounted() {
@@ -41,7 +62,16 @@ export default {
     methods: {
         toggleShadow: function () {
             this.showShadow = !this.showShadow;
+
+ 
+
         },
+        setActiveTab(tab) {
+
+            this.emitter.emit('element-style-editor-show', 'showShadow');
+
+            this.activeTab = tab;
+        }
     }
 }
 </script>

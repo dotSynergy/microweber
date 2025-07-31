@@ -596,6 +596,12 @@ export default {
                 if (mw.app.isPreview()) {
                     return;
                 }
+
+                if(!event.target){
+                    return;
+                }
+
+
                 var can = mw.app.liveEdit.canBeEditable(event.target)
                 if (!can) {
                     return;

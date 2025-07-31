@@ -355,6 +355,17 @@ class QuickEditService extends MicroweberBaseClass {
                     return;
                 }
 
+
+                if(!node){
+                    return;
+                }
+                if(!mw.app.liveEdit){
+                    console.warn('Live Edit is not initialized, skipping node collection');
+                    return;
+                }
+
+
+
                 var can = mw.app.liveEdit.canBeEditable(node) || node.classList.contains('mw-layout-background-node')
                 if (!can) {
                     return;

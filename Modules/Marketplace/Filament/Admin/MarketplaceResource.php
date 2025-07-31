@@ -24,13 +24,19 @@ class MarketplaceResource extends Resource
     protected static ?string $navigationIcon = 'mw-marketplace';
     protected static ?string $navigationLabel = 'Marketplace';
 
-    protected static ?string $navigationGroup = 'System Settings';
+    protected static ?string $navigationGroup = 'Customization Settings';
 
     protected static ?string $breadcrumb = 'Marketplace';
 
     protected static ?string $pluralLabel = 'Marketplaces';
 
     protected static ?string $slug = 'marketplace';
+    public static string $description = 'Extend your website with modules, themes, and more from the Marketplace';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
 
     public static function form(Form $form): Form
     {

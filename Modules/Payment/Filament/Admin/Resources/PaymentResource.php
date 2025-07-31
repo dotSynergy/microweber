@@ -26,6 +26,13 @@ class PaymentResource extends Resource
     protected static ?string $navigationGroup = 'Shop Settings';
     protected static ?int $navigationSort = 4;
 
+
+    public static string $description = 'Manage payments and transactions';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
     public static function form(Form $form): Form
     {
         return $form

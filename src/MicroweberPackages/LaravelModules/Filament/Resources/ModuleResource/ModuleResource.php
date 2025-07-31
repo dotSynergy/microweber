@@ -22,9 +22,18 @@ class ModuleResource extends Resource
 
     protected static ?string $navigationIcon = 'mw-modules';
 
-    protected static ?string $navigationGroup = 'System Settings';
+    protected static ?string $navigationGroup = 'Customization Settings';
 
     protected static ?string $label = 'Modules';
+
+    protected static ?int $navigationSort = 120;
+
+    public static string $description = 'Manage system modules';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
 
     public static function form(Form $form): Form
     {

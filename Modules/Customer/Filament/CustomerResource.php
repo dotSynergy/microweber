@@ -23,7 +23,12 @@ class CustomerResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static string $description = 'Manage customers for your shop';
+    public function getDescription(): string
+    {
 
+        return static::$description;
+    }
     public static function form(Form $form): Forms\Form
     {
         return $form

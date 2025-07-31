@@ -20,7 +20,7 @@ use Modules\Backup\SessionStepper;
 
 class BackupResource extends Resource
 {
-    protected static ?string $navigationGroup = 'System';
+    protected static ?string $navigationGroup = 'System Settings';
 
     protected static ?string $model = Backup::class;
 
@@ -33,6 +33,13 @@ class BackupResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
 
     public static $restoreType = null;
+    public static string $description = 'Manage your backups, restore content, and download backup files';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
+
 
     public static function form(Form $form): Form
     {

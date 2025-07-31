@@ -10,7 +10,7 @@ export class TemplateSettings extends MicroweberBaseClass {
 
     cssBoxShadowsParser = null;
     colorPaletteManager = null;
-    predefinedElementStylesManager =  null;
+    predefinedElementStylesManager = null;
 
     constructor() {
         super();
@@ -322,9 +322,48 @@ export class TemplateSettings extends MicroweberBaseClass {
         return predefinedShadows;
     }
 
+    getPredefinedTextShadows() {
+        var predefinedTextShadows = [
+            {
+                name: "None",
+                value: ""
+            },
+            {
+                name: "Soft Drop",
+                value: "1px 1px 2px rgba(0, 0, 0, 0.3)"
+            },
+            {
+                name: "Classic",
+                value: "2px 2px 4px rgba(0, 0, 0, 0.5)"
+            },
+            {
+                name: "Bold Shadow",
+                value: "3px 3px 6px rgba(0, 0, 0, 0.6)"
+            },
+            {
+                name: "Glow",
+                value: "0px 0px 8px rgba(255, 255, 255, 0.8)"
+            },
+            {
+                name: "Neon Blue",
+                value: "0px 0px 10px rgba(0, 123, 255, 0.8)"
+            },
+            {
+                name: "Fire Glow",
+                value: "0px 0px 12px rgba(255, 69, 0, 0.9)"
+            },
+            {
+                name: "Deep Shadow",
+                value: "4px 4px 8px rgba(0, 0, 0, 0.7)"
+            },
+            {
+                name: "Embossed",
+                value: "1px 1px 1px rgba(255, 255, 255, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.3)"
+            }
+        ];
+
+        return predefinedTextShadows;
+    }
+
 
 }
-
-
-
-

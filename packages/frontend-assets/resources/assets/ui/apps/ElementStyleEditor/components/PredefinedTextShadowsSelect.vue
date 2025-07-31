@@ -1,0 +1,89 @@
+<template>
+    <div class="predefined-text-shadows-select">
+        <div class="row">
+            <div class="col-4 mb-2" v-for="(shadow, index) in predefinedShadows" :key="index">
+                <div class="predefined-text-shadow-item"
+                     :class="{ 'active': selectedShadow === shadow.value }"
+                     @click="selectShadow(shadow.value)">
+                    <div class="text-shadow-preview" :style="{ textShadow: shadow.value }">
+                        Text
+                    </div>
+                    <small class="text-shadow-name">{{ shadow.name }}</small>
+                </div>
+            </div>
+            <div class="col-4 mb-2">
+                <div class="predefined-text-shadow-item"
+                     :class="{ 'active': selectedShadow === 'custom' }"
+                     @click="selectShadow('custom')">
+                    <div class="text-shadow-preview custom-preview">
+                        <i class="fa fa-cog"></i>
+                    </div>
+                    <small class="text-shadow-name">Customize</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        predefinedShadows: {
+            type: Array,
+            default: () => []
+        },
+        selectedShadow: {
+            type: String,
+            default: ''
+        }
+    },
+    methods: {
+        selectShadow(shadowValue) {
+            this.$emit('update:selectedShadow', shadowValue);
+        }
+    }
+}
+</script>
+
+<style scoped>
+.predefined-text-shadow-item {
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.predefined-text-shadow-item:hover {
+    border-color: #007bff;
+}
+
+.predefined-text-shadow-item.active {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.text-shadow-preview {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.custom-preview {
+    color: #007bff;
+    font-size: 18px;
+}
+
+.text-shadow-name {
+    display: block;
+    margin-top: 4px;
+    color: #666;
+    font-size: 11px;
+}
+</style>
+

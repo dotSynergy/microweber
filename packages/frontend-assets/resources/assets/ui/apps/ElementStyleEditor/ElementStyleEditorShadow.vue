@@ -63,7 +63,7 @@ export default {
         toggleShadow: function () {
             this.showShadow = !this.showShadow;
 
- 
+
 
         },
         setActiveTab(tab) {

@@ -230,15 +230,6 @@ class FieldsManager
                         }
                     }
 
-                    $show_label = true;
-                    if (isset($field['settings']['show_label'])) {
-                        if ($field['settings']['show_label'] == 'false' || $field['settings']['show_label'] == 0 || $field['settings']['show_label'] == '0') {
-                            $show_label = false;
-                        }
-                        if ($field['settings']['show_label'] == 'true' || $field['settings']['show_label'] == 1 || $field['settings']['show_label'] == '1') {
-                            $show_label = true;
-                        }
-                    }
 
                     if (isset($field['settings']['required'])) {
                         if ($field['settings']['required'] == 'false' || $field['settings']['required'] == 0 || $field['settings']['required'] == '0') {
@@ -282,7 +273,7 @@ class FieldsManager
                         $make_field['rel_id'] = $rel_id;
                         $make_field['position'] = $pos;
                         $make_field['name'] = ucfirst($field_name);
-                        $make_field['show_label'] = $show_label;
+                     //   $make_field['show_label'] = $show_label;
                         $make_field['required'] = $required;
                         if ($values) {
                             $make_field['value'] = $values;
@@ -356,7 +347,7 @@ class FieldsManager
                 $fieldData['name'] = $existing['name'];
                 $fieldData['name_key'] = $existing['name_key'];
                 $fieldData['options'] = $existing['options'];
-                $fieldData['show_label'] = $existing['show_label'];
+             //   $fieldData['show_label'] = $existing['show_label'];
                 $fieldData['is_active'] = $existing['is_active'];
                 $fieldData['required'] = $existing['required'];
                 $fieldData['placeholder'] = $existing['placeholder'];
@@ -461,10 +452,10 @@ class FieldsManager
             $customField->name_key = $fieldData['name_key'];
         }
 
-        $customField->show_label = true;
-        if (isset($fieldData['show_label'])) {
-            $customField->show_label = $fieldData['show_label'];
-        }
+//        $customField->show_label = true;
+//        if (isset($fieldData['show_label'])) {
+//            $customField->show_label = $fieldData['show_label'];
+//        }
 
         if (!empty($fieldData['options'])) {
             $customField->options = $fieldData['options'];

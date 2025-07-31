@@ -47,14 +47,14 @@ class MultilanguageServiceProvider extends ServiceProvider
 
 
         include_once(__DIR__ . '/helpers/multilanguage_functions.php');
-
+        $this->app->singleton('translate_manager', function ($app) {
+            return new TranslateManager();
+        });
         if (!mw_is_installed()) {
             return;
         }
 
-        $this->app->singleton('translate_manager', function ($app) {
-            return new TranslateManager();
-        });
+
 
         /**
          * @property MultilanguageRepository $multilanguage_repository

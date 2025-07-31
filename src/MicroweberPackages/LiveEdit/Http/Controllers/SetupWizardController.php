@@ -17,7 +17,8 @@ class SetupWizardController extends AdminController
         $remove = ['cms', 'template', 'templates', 'default', 'website', 'default-template'];
         $templateNamesOnTop=[
 
-            'Yummy2',
+
+            'OnlineLearning2',
             'Big2',
             'Freelancer2',
             'Coffeeshop2',
@@ -27,11 +28,11 @@ class SetupWizardController extends AdminController
             'Tattoo2',
             'Office2',
             'Nomad2',
-            'OnlineLearning2',
+
             'Pricing',
             'NotaryServices2',
 
-
+            'Yummy2',
             'Conference2',
             'Events2' ,
             'MobileApp2'];

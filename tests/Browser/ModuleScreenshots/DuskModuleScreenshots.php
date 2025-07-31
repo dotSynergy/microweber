@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\ModuleScreenshots;
 
+use Illuminate\Support\Facades\Log;
 use Laravel\Dusk\Browser;
 use SapientPro\ImageComparator\ImageComparator;
 use Tests\DuskTestCase;
@@ -184,6 +185,8 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
                     // dump('/preview-skin?module='.$module['module'].'&skin=' . $layoutName . '&no_editmode=1');
                     $browser->visit('/template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
+
+Log::info('Visiting: /template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
                     $browser->waitFor('#preview-skin-file', 30);
                     $browser->pause(1000);
 

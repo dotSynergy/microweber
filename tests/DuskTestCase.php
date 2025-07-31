@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use MicroweberPackages\App\Managers\PermalinkManager;
+use MicroweberPackages\Install\Http\Controllers\InstallController;
 use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use MicroweberPackages\Multilanguage\MultilanguagePermalinkManager;
 use MicroweberPackages\User\Models\User;
@@ -138,6 +139,35 @@ abstract class DuskTestCase extends BaseTestCase
 
         $this->assertEquals('testing', \Illuminate\Support\Env::get('APP_ENV'));
         $this->assertEquals('testing', app()->environment());
+
+        if (!mw_is_installed()) {
+            // install
+            $installController = new InstallController();
+            
+            // Basic installation parameters
+            $installParams = [
+                'make_install' => 1,
+                'db_driver' => 'sqlite',
+                'db_name' => storage_path('database.sqlite'),
+                'db_username' => '',
+                'db_password' => '',
+                'db_prefix' => 'mw_test_',
+                'admin_username' => 'admin',
+                'admin_email' => 'admin@localhost',
+                'admin_password' => 'admin123',
+                'default_template' => $this->template_name,
+                'with_default_content' => 1,
+                'site_lang' => 'en_US'
+            ];
+            
+            $installResult = $installController->index($installParams);
+            
+            if ($installResult !== 'done' && !is_array($installResult)) {
+                throw new \Exception('Installation failed: ' . $installResult);
+            }
+        }
+
+
 
         if (mw_is_installed()) {
 

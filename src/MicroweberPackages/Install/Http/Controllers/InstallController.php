@@ -233,16 +233,16 @@ class InstallController extends Controller
                     $input['db_username'] = trim($input['db_username']);
                 }
             } else {
-                if (is_null($input['db_username'])) {
+                if (empty($input['db_username'])) {
                     $input['db_username'] = '';
                 }
-                if (is_null($input['db_username'])) {
+                if (empty($input['db_username'])) {
                     $input['db_host'] = '';
                 }
-                if (is_null($input['db_name'])) {
+                if (empty($input['db_name'])) {
                     $input['db_name'] = '';
                 }
-                if (is_null($input['db_host'])) {
+                if (empty($input['db_host'])) {
                     $input['db_host'] = '';
                 }
             }

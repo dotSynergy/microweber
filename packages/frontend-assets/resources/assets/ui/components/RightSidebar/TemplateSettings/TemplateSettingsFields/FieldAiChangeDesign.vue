@@ -303,7 +303,35 @@ You must respond ONLY with the JSON schema with the following structure. Do not 
   JSON
 {
    { Populated Schema Definition with the items filled with text ... populate the schema with the existing object IDs and the text  }
-"""`;
+"""
+
+
+
+Note: The JSON schema must be valid and must not contain any additional comments or explanations.
+Note: the font color must aways be in hex format, like #ffffff, and the font size must be in px, like 16px.
+Note: the font color must aways be visible in the design, so you must use a color that is visible on the background.
+Note: Make sure the background color is also visible and does not conflict with the font color.
+Note: Use background clip to make sure the background is visible and does not conflict with the font color.
+Note: If color is not specified, use the default color for the element.
+Note: If color is applied to a specific element, use the color of that element.
+Note: If color is requested by user, make sure to use the color that is visible on the background.
+Note: If the user specifies more than one color, use the first color as the primary color and the second color as the secondary color.
+Note: If the user specifies more than one color, you must use the first color as the primary color and the second color as the secondary color and use clip background to make sure the background is visible and does not conflict with the font color.
+Critical: the font color must never conflict with the background color, so you must use a color that is visible on the background.
+Critical: you must never apply color transparent or rgba(0,0,0,0) to the font color or background color.
+Critical: If you apply background linear-gradient make sure also to appy background-clip: text; to make sure the background is visible and does not conflict with the font color and font color is visible on the background.
+Critical: If never apply color transparent to the font color.
+Critical: If the user does not specify font color, but only background, you must use a font color that is visible on the background. If needed, use a contrasting color to ensure visibility.
+Critical: If the user specifies new colors for font and background, you must use the first color as the primary color and the second color as the secondary color and use clip background to make sure the background is visible and does not conflict with the font color.
+
+
+
+
+`
+
+
+
+            ;
 
             let messageOptions = {schema: editSchema};
 

@@ -40,49 +40,30 @@ class TranslationController {
             }
         }
         $file = $src;
+    // .//   $file = url2dir($src);
 
-        try {
-            $readFile = new XlsxReader($file);
-            $data = $readFile->readData();
-        } catch (\Exception $e) {
-            return ['error' => 'Failed to read file: ' . $e->getMessage()];
+        //check fi files is xslsx
+
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        if ($ext !== 'xlsx' && $ext !== 'xls') {
+            return ['error' => 'File must be xlsx or xls'];
         }
 
-        if (empty($data['content'])) {
-            return ['error' => 'No data found in file'];
-        }
+
+
+
+        $readFile = new XlsxReader($file);
+        $data = $readFile->readData();
+
 
         $translations = $data['content'];
-
-        // Filter out entries with missing required data
-        $filteredTranslations = [];
-        foreach ($translations as $translation) {
-            if (isset($translation['translation_key']) &&
-                isset($translation['translation_namespace']) &&
-                isset($translation['translation_group'])) {
-
-                // Set defaults for optional fields
-                if (!isset($translation['translation_text'])) {
-                    $translation['translation_text'] = '';
-                }
-                if (!isset($translation['translation_locale'])) {
-                    $translation['translation_locale'] = '';
-                }
-
-                $filteredTranslations[] = $translation;
-            }
-        }
-
-        if (empty($filteredTranslations)) {
-            return ['error' => 'No valid translation entries found in file'];
-        }
 
         $import = new TranslationImport();
         $replace_values = intval($request->post('replace_values'));
 
         $import->replaceTexts($replace_values);
 
-        return $import->import($filteredTranslations);
+        return $import->import($translations);
 
     }
 

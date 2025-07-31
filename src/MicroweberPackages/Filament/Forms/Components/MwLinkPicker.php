@@ -15,6 +15,8 @@ class MwLinkPicker extends TextInput
     protected string|Closure|null $selectedData = null;
 
     protected bool $simpleMode = false;
+    protected string|Closure|null $suffixIcon = 'heroicon-m-globe-alt';
+    protected Closure|bool $isReadOnly = true;
 
     public function selectedData(string|Closure|null $selectedData): static
     {

@@ -72,7 +72,7 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
                             ->schema([
 
                                 Toggle::make('options.multilanguage_settings.is_active')
-                                    ->label('Multilanguage is active')
+                                    ->label('Activate multilanguage')
                                     ->helperText('Enable or disable multilanguage functionality for your website')
                                     ->live(),
 

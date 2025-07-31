@@ -20,6 +20,7 @@ class AdminFilesPage extends AdminSettingsPage
 
     protected static string $description = 'Configure your file settings';
 
+    protected static ?string $navigationGroup = 'Other';
 
 
 }

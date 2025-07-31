@@ -160,6 +160,7 @@ class FilamentAdminPanelProvider extends PanelProvider
                     ->extraSidebarAttributes([
                         'class' => 'hidden bg-gray-50 dark:bg-gray-900',
                     ])
+
                     ->label('Website Settings')
                     ->collapsed(false)
                     ->collapsible(true),
@@ -170,6 +171,23 @@ class FilamentAdminPanelProvider extends PanelProvider
                         'class' => 'hidden bg-gray-50 dark:bg-gray-900',
                     ])
                     ->label('Shop Settings')
+                    ->collapsed(false)
+                    ->collapsible(true),
+
+                'Email Settings' => NavigationGroup::make()
+                    ->extraSidebarAttributes([
+                        'class' => 'hidden bg-gray-50 dark:bg-gray-900',
+                    ])
+                    ->label('Email Settings')
+                    ->collapsed(false)
+                    ->collapsible(true),
+
+
+                'Customization Settings' => NavigationGroup::make()
+                    ->extraSidebarAttributes([
+                        'class' => 'hidden bg-gray-50 dark:bg-gray-900',
+                    ])
+                    ->label('Customization Settings')
                     ->collapsed(false)
                     ->collapsible(true),
 

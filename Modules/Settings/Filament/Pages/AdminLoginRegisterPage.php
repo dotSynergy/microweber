@@ -20,6 +20,11 @@ class AdminLoginRegisterPage extends AdminSettingsPage
 
     protected static string $description = 'Configure your login and registration settings';
 
+    protected static ?string $navigationGroup = 'Other';
+
+
+
+
     public array $optionGroups = [
         'users'
     ];

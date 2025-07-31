@@ -25,6 +25,7 @@ class AdminAdvancedPage extends AdminSettingsPage
 
     protected static ?string $title = 'Advanced';
 
+    protected static ?string $navigationGroup = 'Other';
 
     public function getView(): string
     {

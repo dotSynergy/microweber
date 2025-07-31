@@ -182,10 +182,26 @@ class Settings extends Page
         }
 
 
+// make the hardcoded order of the settings groups $settingsGroups
+        $topOrder = [
+            'Website Settings',
+            'Shop Settings',
+            'Customization Settings',
+            'Email Settings',
+            'System Settings',
+            'Language Settings',
+
+        ];
+        $settingsGroups = array_merge(array_flip($topOrder), $settingsGroups);
+
+
+
+
         //sort $settingsGroups items postion iside the groups
 
         foreach ($settingsGroups as $group => $items) {
             usort($items, function ($a, $b) {
+
                 if (isset($a['position']) && isset($b['position']) && $a['position'] === $b['position']) {
                     return 0;
 
@@ -202,7 +218,6 @@ class Settings extends Page
             });
             $settingsGroups[$group] = $items;
         }
-
 
         return [
             'settingsGroups' => $settingsGroups,

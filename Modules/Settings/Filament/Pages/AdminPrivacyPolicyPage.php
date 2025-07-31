@@ -22,6 +22,9 @@ class AdminPrivacyPolicyPage extends AdminSettingsPage
 
     protected static string $description = 'Configure your privacy policy settings';
 
+    protected static ?string $navigationGroup = 'Other';
+
+
     public array $optionGroups = [
         'users',
         'module-settings-group-website-group-settings-group-privacy',

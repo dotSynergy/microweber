@@ -49,10 +49,7 @@ class Settings extends Page
         $settingsPages[] = new AdminCustomTagsPage();
 
         $settingsPages[] = new AdminShopGeneralPage();
-        $settingsPages[] = new AdminShopCouponsPage();
-        $settingsPages[] = new AdminShopOffersPage();
       //  $settingsPages[] = new AdminShopPaymentsPage();
-        $settingsPages[] = new AdminShopTaxesPage();
          $settingsPages[] = new AdminShopAutoRespondEmailPage();
         $settingsPages[] = new AdminShopOtherPage();
    //     $settingsPages[] = new AdminShopOtherPage();

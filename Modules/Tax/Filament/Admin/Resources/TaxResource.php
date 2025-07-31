@@ -5,12 +5,14 @@ namespace Modules\Tax\Filament\Admin\Resources;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Support\HtmlString;
 use Modules\Tax\Models\TaxType;
 
@@ -22,6 +24,17 @@ class TaxResource extends Resource
     protected static ?string $navigationGroup = 'Shop Settings';
     protected static ?string $modelLabel = 'Tax';
     protected static ?int $navigationSort = 7;
+
+
+    protected static string $description = 'Configure your shop taxes settings';
+
+
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
+
 
 
     public static function form(Form $form): Form
@@ -73,7 +86,6 @@ class TaxResource extends Resource
                             $exampleTaxFor100Dollars = $get('rate') ;
                         }
 
-
                         return new HtmlString("
             <div class='bg-gray-100 p-4 rounded-lg'>
                 <div class='mt-2'>
@@ -90,6 +102,36 @@ class TaxResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                Action::make('toggle_taxes')
+                    ->label(function () {
+                        return get_option('enable_taxes', 'shop') == 1 ? 'Disable Taxes' : 'Enable Taxes';
+                    })
+                    ->icon(function () {
+                        return get_option('enable_taxes', 'shop') == 1 ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle';
+                    })
+                    ->color(function () {
+                        return get_option('enable_taxes', 'shop') == 1 ? 'danger' : 'success';
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading(function () {
+                        return get_option('enable_taxes', 'shop') == 1 ? 'Disable Taxes Globally?' : 'Enable Taxes Globally?';
+                    })
+                    ->modalDescription(function () {
+                        return get_option('enable_taxes', 'shop') == 1
+                            ? 'This will disable tax calculations for the entire shop during checkout.'
+                            : 'This will enable tax calculations for the entire shop during checkout.';
+                    })
+                    ->action(function () {
+                        $currentValue = get_option('enable_taxes', 'shop');
+                        $newValue = $currentValue == 1 ? '0' : '1';
+                        save_option('enable_taxes', $newValue, 'shop');
+                    })
+                    ->after(function () {
+
+
+                    }),
+            ])
             ->emptyState(function (Table $table) {
                 $modelName = static::$model;
                 return view('modules.content::filament.admin.empty-state', ['modelName' => $modelName]);
@@ -116,6 +158,17 @@ class TaxResource extends Resource
                     ->label('Description')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('global_status')
+                    ->label('Global Status')
+                    ->getStateUsing(function () {
+                        return get_option('enable_taxes', 'shop') == 1 ? 'Enabled' : 'Disabled';
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Enabled' => 'success',
+                        'Disabled' => 'warning',
+                    }),
             ])
             ->filters([
 

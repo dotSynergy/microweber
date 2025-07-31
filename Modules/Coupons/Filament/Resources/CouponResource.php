@@ -22,6 +22,12 @@ class CouponResource extends Resource
 
     protected static string $description = 'Configure your shop coupons settings';
 
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([

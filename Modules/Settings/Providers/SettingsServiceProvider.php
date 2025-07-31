@@ -19,13 +19,9 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminPrivacyPolicyPage,
     AdminSeoPage,
     AdminShopAutoRespondEmailPage,
-    AdminShopCouponsPage,
     AdminShopGeneralPage,
-    AdminShopOffersPage,
     AdminShopOtherPage,
     AdminShopPaymentsPage,
-    AdminShopShippingPage,
-    AdminShopTaxesPage,
     AdminTemplatePage,
     AdminUpdatesPage,
     Settings
@@ -79,12 +75,9 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
 
         // Register shop settings pages
         FilamentRegistry::registerPage(AdminShopAutoRespondEmailPage::class);
-        FilamentRegistry::registerPage(AdminShopCouponsPage::class);
         FilamentRegistry::registerPage(AdminShopGeneralPage::class);
-        FilamentRegistry::registerPage(AdminShopOffersPage::class);
         FilamentRegistry::registerPage(AdminShopOtherPage::class);
         FilamentRegistry::registerPage(AdminShopPaymentsPage::class);
-        FilamentRegistry::registerPage(AdminShopTaxesPage::class);
 
         // Register filament page for Microweber module settings
         // FilamentRegistry::registerPage(SettingsModuleSettings::class);

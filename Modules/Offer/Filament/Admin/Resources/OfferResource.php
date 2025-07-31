@@ -23,6 +23,14 @@ class OfferResource extends Resource
     protected static ?string $modelLabel = 'Offer';
     protected static ?int $navigationSort = 8;
 
+
+    protected static string $description = 'Configure your shop offers settings';
+
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
     public static function form(Form $form): Form
     {
         return $form

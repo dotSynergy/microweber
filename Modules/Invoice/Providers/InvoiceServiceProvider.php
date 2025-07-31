@@ -4,6 +4,7 @@ namespace Modules\Invoice\Providers;
 
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use Modules\Invoice\Filament\Pages\AdminShopInvoicesPage;
 use Modules\Invoice\Filament\Resources\InvoiceResource;
 use Modules\Invoice\Services\InvoiceService;
 
@@ -39,5 +40,9 @@ class InvoiceServiceProvider extends BaseModuleServiceProvider
         });
 
         FilamentRegistry::registerResource(InvoiceResource::class);
+
+
+        FilamentRegistry::registerPage(AdminShopInvoicesPage::class);
+
     }
 }

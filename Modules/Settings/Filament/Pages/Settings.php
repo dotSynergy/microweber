@@ -7,7 +7,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Page;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\Filament\Support\FilamentHelpers;
-use Modules\Payment\Filament\Admin\Resources\PaymentProviderResource;
+use Modules\Invoice\Filament\Pages\AdminShopInvoicesPage;
 
 
 class Settings extends Page
@@ -49,13 +49,11 @@ class Settings extends Page
         $settingsPages[] = new AdminCustomTagsPage();
 
         $settingsPages[] = new AdminShopGeneralPage();
-        $settingsPages[] = new AdminShopShippingPage();
         $settingsPages[] = new AdminShopCouponsPage();
         $settingsPages[] = new AdminShopOffersPage();
       //  $settingsPages[] = new AdminShopPaymentsPage();
         $settingsPages[] = new AdminShopTaxesPage();
-        $settingsPages[] = new AdminShopInvoicesPage();
-        $settingsPages[] = new AdminShopAutoRespondEmailPage();
+         $settingsPages[] = new AdminShopAutoRespondEmailPage();
         $settingsPages[] = new AdminShopOtherPage();
    //     $settingsPages[] = new AdminShopOtherPage();
 

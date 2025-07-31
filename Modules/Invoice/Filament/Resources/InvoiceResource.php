@@ -23,6 +23,15 @@ class InvoiceResource extends Resource
     protected static ?string $slug = 'invoices';
     protected static ?int $navigationSort = 12;
 
+
+
+    public static string $description = 'Manage invoices';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

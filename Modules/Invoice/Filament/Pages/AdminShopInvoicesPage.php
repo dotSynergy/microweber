@@ -1,7 +1,8 @@
 <?php
 
-namespace Modules\Settings\Filament\Pages;
+namespace Modules\Invoice\Filament\Pages;
 
+use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -10,6 +11,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
+use Modules\Invoice\Filament\Resources\InvoiceResource;
 
 class AdminShopInvoicesPage extends AdminSettingsPage
 {
@@ -23,11 +25,20 @@ class AdminShopInvoicesPage extends AdminSettingsPage
 
     protected static ?string $navigationGroup = 'Shop Settings';
 
+    protected static bool $shouldRegisterNavigation = true;
+
 
     public array $optionGroups = [
         'shop'
     ];
-
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('InvoiceResourceList')
+                ->label('Invoices List')
+                ->url(InvoiceResource::getUrl())
+        ];
+    }
 
     public function form(Form $form): Form
     {

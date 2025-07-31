@@ -16,8 +16,17 @@ class ShippingProviderResource extends Resource
 
     protected static ?string $navigationGroup = 'Shop Settings';
     protected static ?string $navigationIcon = 'mw-shipping';
+    protected static ?string $navigationLabel = 'Shipping Providers';
+    protected static ?int $navigationSort = 15;
 
-    protected static ?int $navigationSort = 5;
+
+    public static string $description = 'Configure your shop Shipping Providers';
+    public function getDescription(): string
+    {
+
+        return static::$description;
+    }
+
 
     public static function getAvailableToSetup()
     {

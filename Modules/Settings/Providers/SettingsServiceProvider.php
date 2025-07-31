@@ -5,6 +5,7 @@ namespace Modules\Settings\Providers;
 
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use Modules\Invoice\Filament\Pages\AdminShopInvoicesPage;
 use Modules\Settings\Filament\Resources\TranslationResource;
 use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminCustomTagsPage,
@@ -20,7 +21,6 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminShopAutoRespondEmailPage,
     AdminShopCouponsPage,
     AdminShopGeneralPage,
-    AdminShopInvoicesPage,
     AdminShopOffersPage,
     AdminShopOtherPage,
     AdminShopPaymentsPage,
@@ -81,11 +81,9 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerPage(AdminShopAutoRespondEmailPage::class);
         FilamentRegistry::registerPage(AdminShopCouponsPage::class);
         FilamentRegistry::registerPage(AdminShopGeneralPage::class);
-        FilamentRegistry::registerPage(AdminShopInvoicesPage::class);
         FilamentRegistry::registerPage(AdminShopOffersPage::class);
         FilamentRegistry::registerPage(AdminShopOtherPage::class);
         FilamentRegistry::registerPage(AdminShopPaymentsPage::class);
-        FilamentRegistry::registerPage(AdminShopShippingPage::class);
         FilamentRegistry::registerPage(AdminShopTaxesPage::class);
 
         // Register filament page for Microweber module settings

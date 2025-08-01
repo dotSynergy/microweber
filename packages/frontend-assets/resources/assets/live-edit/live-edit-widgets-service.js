@@ -16,7 +16,7 @@ export class LiveEditWidgetsService extends BaseComponent{
             if(!mw.app.liveEditWidgets.quickEditComponent.editorNodes) {
                 return;
             }
-            const field = mw.app.liveEditWidgets.quickEditComponent.editorNodes.find(node => node.$$ref.node === target);
+            const field = mw.app.liveEditWidgets.quickEditComponent.editorNodes.find(node => node.$$ref && node.$$ref.node === target);
             if(field) {
                 const input = field.querySelector('input,select,textarea');
                 if(input && input.ownerDocument.activeElement !== input) {
@@ -140,7 +140,7 @@ export class LiveEditWidgetsService extends BaseComponent{
 
     }
 
-    #mode = 'default';
+    #mode = 'page';
 
     openQuickEditComponent() {
         const isWholePage = mw.top().app.liveEditWidgets.quickEditComponent.settings.root === mw.top().app.canvas.getDocument().body;

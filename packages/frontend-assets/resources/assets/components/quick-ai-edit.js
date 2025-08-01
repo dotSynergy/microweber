@@ -1,4 +1,7 @@
+import { DomService } from "../api-core/core/classes/dom.js";
+import { ElementManager } from "../api-core/core/classes/element.js";
 import MicroweberBaseClass from "../api-core/services/containers/base-class.js";
+import { Helpers } from "../core/helpers.js";
 import {AIChatForm} from "./ai-chat.js";
 import { generateSiteInfoWithAI } from "./ai-site-description.service.js";
 
@@ -91,6 +94,7 @@ class QuickEditGUI {
     }
 
     build(obj, type = 'text') {
+
         const node = this[type](obj)
         return node;
     }
@@ -288,6 +292,35 @@ class QuickEditGUI {
 
 
 
+    module(obj) {
+        const node = obj.node;
+        if(!node ) {
+            return;
+        }
+
+        const frag = ElementManager(`
+            <div class="py-2">
+                <div class="btn btn-icon module-settings-button gap-2 cursor-pointer justify-start">
+                        ${mw.top().app.modules.getModuleIcon(node.dataset.type)}
+                        ${node.dataset.title || node.dataset.type}
+
+                </div>
+            </div>
+        `);
+
+        frag.on("click", function () {
+            mw.top().app.canvas.getWindow().mw.tools.scrollTo(node, undefined, 100);
+
+            mw.top().app.editor.dispatch('onModuleSettingsRequest', node);
+        })
+
+
+        frag.$$ref = obj;
+
+        return frag.get(0);
+    }
+
+
     text(obj) {
         const frag = document.createElement("div");
         frag.innerHTML = QuickEditGUI._text(obj);
@@ -345,13 +378,21 @@ class QuickEditService extends MicroweberBaseClass {
     #collectSingle(editNode, toJson, onNode) {
         const nestedEdits = Array.from(editNode.querySelectorAll(this.component.settings.editsSelector));
         const skipTags = ['IFRAME'];
+        const skipClasses = ['module-layouts'];
+
+
         return Array
             .from(editNode.querySelectorAll(this.component.settings.nodesSelector))
             .filter(node => {
                 return nestedEdits.length === 0 || !nestedEdits.find(edit => this.#editNodeContains(edit, node))
             })
             .map(node => {
+
                 if (skipTags.indexOf(node.nodeName) !== -1) {
+                    return;
+                }
+
+                if (DomService.hasAnyOfClasses(node, skipClasses)) {
                     return;
                 }
 
@@ -367,7 +408,7 @@ class QuickEditService extends MicroweberBaseClass {
 
 
                 var can = mw.app.liveEdit.canBeEditable(node) || node.classList.contains('mw-layout-background-node')
-                if (!can) {
+                if (!can && !node.classList.contains('module')) {
                     return;
                 }
 
@@ -398,23 +439,67 @@ class QuickEditService extends MicroweberBaseClass {
             .filter(itm => !!itm);
     }
 
+    collectx(edits, toJson, onNode) {
+        const result = [];
+
+
+
+
+
+            const children = Array
+            .from(this.component.settings.root.querySelectorAll(this.component.settings.editsSelector))
+            .filter(node => node.classList.contains('module') || Helpers.isEditable(node));
+
+            const curr = {
+
+                id: this.component.settings.root.id,
+
+
+                content: this.#collectSingle(this.component.settings.root, toJson, onNode)
+            }
+            if (!toJson) {
+                curr.node = this.component.settings.root;
+            }
+            if (children.length) {
+                edits = edits.filter(child => children.indexOf(child) === -1);
+                curr.children = this.collect(children, toJson, onNode);
+            }
+
+            if (onNode) {
+                const onres = onNode.call(this.component, curr, this.component.settings.root);
+                if (onres !== false) {
+                    result.push(curr);
+                }
+            } else {
+                result.push(curr);
+            }
+
+
+
+
+        return result;
+    }
 
     collect(edits, toJson, onNode) {
         const result = [];
         edits = edits || Array.from(this.component.settings.root.querySelectorAll(this.component.settings.editsSelector));
 
+
+
+        if(edits.length === 0) {
+            edits = [this.component.settings.root]
+        }
+
         while (edits.length > 0) {
             const edit = edits[0];
-
             edits.splice(0, 1);
-            const children = Array.from(edit.querySelectorAll(this.component.settings.editsSelector));
+            const children = Array.from(edit.querySelectorAll(this.component.settings.editsSelector))
+            .filter(node => node.classList.contains('module') || Helpers.isEditable(node));
+
+
+
 
             const curr = {
-
-                id: edit.id,
-                tag: edit.tagName,
-                rel: edit.getAttribute('rel'),
-                field: edit.getAttribute('field'),
                 content: this.#collectSingle(edit, toJson, onNode)
             }
             if (!toJson) {
@@ -455,6 +540,7 @@ class QuickEditService extends MicroweberBaseClass {
     collectTexts(edits, toJson) {
         return this.collect(edits, toJson, (curr, node) => {
             return node.nodeName !== 'IMG'
+            && !node.classList.contains('.module')
             && !node.classList.contains('mw-layout-background-node')
             && node.textContent.trim().length > 2;
         });
@@ -523,7 +609,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const defaults = {
             document: mw.top().app.canvas.getDocument(),
             root: mw.top().app.canvas.getDocument().body,
-            nodesSelector: '[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
+            nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
             editsSelector: '.edit[rel][field]:not(.module,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,
@@ -834,6 +920,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
             type = 'img'
         } else if (obj.node.classList.contains('mw-layout-background-node')) {
             type = 'layoutBackground';
+        } else if (obj.node.classList.contains('module')) {
+            type = 'module';
         }
 
         return type;
@@ -855,9 +943,14 @@ export class QuickEditComponent extends MicroweberBaseClass {
         // Group objects by their parent edit section
         const fieldGroups = {};
 
+
         this.api.collect(undefined, undefined, obj => {
+
             if (obj.node.matches(this.settings.nodesSelector)) {
                 const type = this.getType(obj);
+
+
+
                 const node = this.gui.build(obj, type);
                 enodes.push(node);
                 nodes.push(obj.node);
@@ -865,28 +958,35 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
                 // Get the parent section for grouping
                 let parentEdit = obj.node.closest('.edit');
-                let parentEditClosesIdElement = parentEdit.closest('id');
-                let parentEditClosesId = null;
-                if (parentEditClosesIdElement) {
-                    parentEditClosesId = parentEditClosesIdElement.id;
+                let sectionId, sectionTitle;
+                if(parentEdit) {
+                    let parentEditClosesIdElement = parentEdit.closest('id');
+                    let parentEditClosesId = null;
+                    if (parentEditClosesIdElement) {
+                        parentEditClosesId = parentEditClosesIdElement.id;
+                    }
+
+
+                    if (type === 'layoutBackground') {
+                        const parent = obj.node.closest('.module-background');
+                        parentEdit = parent.parentElement.querySelector('.edit');
+                    }
+
+                      sectionId = parentEdit ? parentEdit.getAttribute('field') + parentEdit.getAttribute('rel') + parentEditClosesId : 'default';
+
+                    sectionTitle = parentEdit ?
+                        (parentEdit.getAttribute('id')
+                            || parentEdit.getAttribute('field')
+                            || parentEdit.getAttribute('rel')
+                            || parentEdit.getAttribute('title')
+                            || 'Content Elements'
+                        ) :
+                        'Content Elements';
+                } else {
+                    sectionId = "default";
+                    sectionTitle = "Content Elements";
                 }
 
-                let sectionTitle;
-                if (type === 'layoutBackground') {
-                    const parent = obj.node.closest('.module-background');
-                    parentEdit = parent.parentElement.querySelector('.edit');
-                }
-
-                let sectionId = parentEdit ? parentEdit.getAttribute('field') + parentEdit.getAttribute('rel') + parentEditClosesId : 'default';
-
-                sectionTitle = parentEdit ?
-                    (parentEdit.getAttribute('id')
-                        || parentEdit.getAttribute('field')
-                        || parentEdit.getAttribute('rel')
-                        || parentEdit.getAttribute('title')
-                        || 'Content Elements'
-                    ) :
-                    'Content Elements';
 
                 // Create the group if it doesn't exist
                 if (!fieldGroups[sectionId]) {
@@ -996,9 +1096,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
             submitOnEnter: this.settings.submitOnEnter || false,
         });
 
-        if(typeof this.settings.chatOptions === 'function') {
-            console.log(aiChatForm);
-        }
+
 
         this.aiChatForm = aiChatForm;
 

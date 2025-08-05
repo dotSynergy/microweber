@@ -273,6 +273,7 @@ Log::info('Visiting: /template/preview-layout?module=' . $moduleName . '&skin=' 
                 if (strpos($layoutName, 'contacts') !== false) {
                     $browser->resize(1360, 1500);
                 }
+                Log::info('Visiting: template/preview-layout?module=layouts&skin=' . $layoutName);
 
                 try {
                     $browser->visit('template/preview-layout?module=layouts&skin=' . $layoutName);

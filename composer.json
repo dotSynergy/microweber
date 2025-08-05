@@ -263,7 +263,7 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "https://packages.microweberapi.com/packages.json"
+      "url": "https://modules.microweberapi.com/packages.json"
     },
     {
       "type": "vcs",

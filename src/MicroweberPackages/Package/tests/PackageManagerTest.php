@@ -52,7 +52,7 @@ class PackageManagerTest extends \MicroweberPackages\Core\tests\TestCase
     private function isOnline()
     {
 
-        $ch = curl_init('https://packages.microweberapi.com/packages.json');
+        $ch = curl_init('https://modules.microweberapi.com/packages.json');
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

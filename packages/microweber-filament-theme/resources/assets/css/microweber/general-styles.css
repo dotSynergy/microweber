@@ -1388,6 +1388,10 @@ select#activeLocale:not(:has(option:nth-of-type(2))) {
     }
 }
 
+.module-settings-button img,
+.module-settings-button svg {
+    width: 24px;
+}
 .module-settings-button {
     text-transform: capitalize;
     img {
@@ -1399,4 +1403,8 @@ select#activeLocale:not(:has(option:nth-of-type(2))) {
     li {
         @apply dark:text-white;
     }
+}
+
+.module-icon img{
+    @apply dark:invert;
 }

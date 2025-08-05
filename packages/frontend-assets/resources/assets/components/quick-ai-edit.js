@@ -377,8 +377,14 @@ class QuickEditService extends MicroweberBaseClass {
 
     #collectSingle(editNode, toJson, onNode) {
         const nestedEdits = Array.from(editNode.querySelectorAll(this.component.settings.editsSelector));
-        const skipTags = ['IFRAME'];
-        const skipClasses = ['module-layouts'];
+        const skipTags = [
+            'IFRAME'
+        ];
+        const skipClasses = [
+            'module-layouts',
+            'module-spacer',
+            'module-background',
+        ];
 
 
         return Array

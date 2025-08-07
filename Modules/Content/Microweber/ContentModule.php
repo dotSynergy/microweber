@@ -42,9 +42,58 @@ class ContentModule extends BaseModule
     }
 
 
+    /**
+     * Apply content filtering options to a query builder
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $optionsArray
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function applyQueryBuilderFiltersFromOptions($query, $optionsArray = [])
+    {
+        if (!empty($optionsArray)) {
+            $filterOptions = [];
+            
+            // Handle page filtering
+            if (isset($optionsArray['data-page-id']) && $optionsArray['data-page-id']) {
+                $filterOptions['page'] = $optionsArray['data-page-id'];
+            }
+            
+            // Handle category filtering  
+            if (isset($optionsArray['data-category-id']) && $optionsArray['data-category-id']) {
+                $filterOptions['category'] = $optionsArray['data-category-id'];
+            }
+            
+            // Handle tags filtering
+            if (isset($optionsArray['data-tags']) && $optionsArray['data-tags']) {
+                $filterOptions['tags'] = $optionsArray['data-tags'];
+            }
+            
+            // Handle ordering
+            if (isset($optionsArray['data-order-by']) && $optionsArray['data-order-by']) {
+                // Convert format from "column+direction" to "column,direction"
+                $orderBy = str_replace('+', ',', $optionsArray['data-order-by']);
+                $filterOptions['orderBy'] = $orderBy;
+            }
+            
+            // Handle limit
+            if (isset($optionsArray['data-limit']) && $optionsArray['data-limit']) {
+                $query->limit(intval($optionsArray['data-limit']));
+            }
+            
+            // Apply filters if any
+            if (!empty($filterOptions)) {
+                $query = $query->filter($filterOptions);
+            }
+        }
+        
+        return $query;
+    }
+
     public static function getQueryBuilderFromOptions($optionsArray = []): \Illuminate\Database\Eloquent\Builder
     {
-        return Content::query()->where('is_active', 1);
+        $query = Content::query()->where('is_active', 1);
+        return static::applyQueryBuilderFiltersFromOptions($query, $optionsArray);
     }
 
 

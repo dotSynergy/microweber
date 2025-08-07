@@ -19,6 +19,7 @@ class PageModule extends ContentModule
 
     public static function getQueryBuilderFromOptions($optionsArray = []): \Illuminate\Database\Eloquent\Builder
     {
-        return Page::query()->where('is_active', 1);
+        $query = Page::query()->where('is_active', 1);
+        return parent::applyQueryBuilderFiltersFromOptions($query, $optionsArray);
     }
 }

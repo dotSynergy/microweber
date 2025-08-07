@@ -19,6 +19,7 @@ class PostModule extends ContentModule
 
     public static function getQueryBuilderFromOptions($optionsArray = []): \Illuminate\Database\Eloquent\Builder
     {
-        return Post::query()->where('is_active', 1);
+        $query = Post::query()->where('is_active', 1);
+        return parent::applyQueryBuilderFiltersFromOptions($query, $optionsArray);
     }
 }

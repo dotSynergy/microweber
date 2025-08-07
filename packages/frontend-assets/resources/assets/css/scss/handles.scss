@@ -271,6 +271,7 @@ html.dark, html[data-mw-theme="dark"]{
     text-align: left;
     border: 1px solid #eee;
     padding: 7px 10px 7px 5px;
+        padding: 3px 10px 3px 5px;
     height: auto;
     margin: 8px 2px;
 
@@ -669,29 +670,63 @@ html:not(.mw-le--page-preview) [data-mw-live-edithover="true"] > * {
 
     }
 }
-
-#mw-handle-item-layout-root{
-    .mw-handle-item-menus-holder{
-        .mw-le-handle-menu-button ~ *{
-            height: 0;
-            opacity: 0;
-        }
-        &:not(:hover) {
+@media (min-width: 801px) {
+    #mw-handle-item-layout-root{
+        .mw-handle-item-menus-holder{
             .mw-le-handle-menu-button ~ *{
                 height: 0;
                 opacity: 0;
-                padding: 0 !important;
-                overflow: hidden;
-                margin: 0;
             }
-        }
+            &:not(:hover) {
+                .mw-le-handle-menu-button ~ *{
+                    height: 0;
+                    opacity: 0;
+                    padding: 0 !important;
+                    overflow: hidden;
+                    margin: 0;
+                }
+            }
 
-        &:hover{
-             .mw-le-handle-menu-button ~ *{
-                height: auto;
-                opacity: 1;
-                transition: .2s;
+            &:hover{
+                .mw-le-handle-menu-button ~ *{
+                    height: auto;
+                    opacity: 1;
+                    transition: .2s;
+                }
             }
         }
+    }
+}
+@media (max-width: 800px) {
+    #mw-handle-item-layout-root{
+        &:before{
+            content: '';
+            display: block;
+            height: calc(100% + 5px);
+            pointer-events: none;
+        }
+        position: absolute;
+        inset:0;
+        .mw-handle-item-menus-holder{
+            position:sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            transform: none !important;
+            border-radius: 0;
+            padding: 0 10px !important;
+            border-width: 0;
+        }
+         .mw-le-handle-menu-buttons{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+         }
+
+         .mw-le-handle-menu{
+            width: 100%;
+         }
+
     }
 }

@@ -47,12 +47,24 @@ description: Posts pro-blog
     }
 </style>
 
+
+
+
 <div class="row blog-posts-pro-blog">
     @if(empty($data))
        <p class="mw-pictures-clean">No posts added. Please add posts to the module.</p>
    @else
         @php
+
+
+            if(is_object($data)){
+            $item = $data->first();
+            } else {
             $item = reset($data);
+            }
+
+
+
             $categories = content_categories($item['id']);
         @endphp
         <div class="d-flex align-items-center justify-content-between">
@@ -70,6 +82,10 @@ description: Posts pro-blog
 
         @foreach($data as $item)
             @php
+
+
+
+
                 $categories = content_categories($item['id']);
                 $itemCats = '';
                 if ($categories) {

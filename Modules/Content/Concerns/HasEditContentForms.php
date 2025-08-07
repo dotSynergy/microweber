@@ -26,7 +26,7 @@ trait HasEditContentForms
         $url = $this->record->link();
 
         if ($dispatchRedirectEvent) {
-            $this->dispatch('mw-redirect-to-url', data: ['url'=>$url]);
+            $this->dispatch('mw-redirect-to-url', data: ['url' => $url]);
         } else {
             return redirect($this->record->liveEditLink());
 
@@ -58,8 +58,17 @@ trait HasEditContentForms
         }
 
         if ($additionalData) {
-            $this->record->fill($additionalData);
-            $this->record->save();
+            //filter null values
+
+            $additionalData = array_filter($additionalData, function ($value) {
+                return !is_null($value);
+            });
+
+//            if ($additionalData) {
+//
+//                $this->record->fill($additionalData);
+//                $this->record->save();
+//            }
 
         }
         $this->hasUnsavedDataChangesAlert = false;

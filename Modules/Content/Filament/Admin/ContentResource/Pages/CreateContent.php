@@ -26,21 +26,47 @@ class CreateContent extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        if($this->activeLocale) {
+        if ($this->activeLocale) {
             $data['lang'] = $this->activeLocale;
         }
-        $record =  static::getModel()::create($data);
 
 
-        if (isset($data['is_home']) and $data['is_home']) {
-            //unset is_home from other records as there can be only one home
-            Content::where('is_home', 1)->where('id', '!=', $record->id)->update(['is_home' => 0]);
+        if (isset($data['content_type']) and ($data['content_type']) == 'page') {
+            // Check if there's no homepage set
+            $hasHomepage = Content::where('content_type', 'page')
+                ->where('is_home', 1)
+                ->exists();
+
+            if (!$hasHomepage) {
+                $data['is_home'] = 1; // Set this page as homepage
+
+            }
         }
 
+
+        $record = static::getModel()::create($data);
+
+
+
+        if (isset($data['content_type']) and ($data['content_type']) == 'page') {
+            if (isset($data['is_home']) and $data['is_home']) {
+                //unset is_home from other records as there can be only one home
+                Content::where('is_home', '=', 1)
+                    ->where('id', '!=', $record->id)
+                    ->update(['is_home' => 0]);
+
+                Content::where('id', '=', $record->id)
+                    ->update(['is_home' => 1]);
+
+                $record->is_home = 1;
+
+            }
+        }
 
         return $record;
 
     }
+
     protected function getForms(): array
     {
         return $this->getEditContentForms();
@@ -52,9 +78,9 @@ class CreateContent extends CreateRecord
 
         $actions = [];
 
-        $editAction =  Actions\EditAction::make()->action('saveContentAndGoLiveEdit');
+        $editAction = Actions\EditAction::make()->action('saveContentAndGoLiveEdit');
         if (request()->header('Sec-Fetch-Dest') === 'iframe') {
-            $editAction =  Actions\EditAction::make()->action('saveContentAndGoLiveEditIframe');
+            $editAction = Actions\EditAction::make()->action('saveContentAndGoLiveEditIframe');
         }
 
         $editAction->icon('heroicon-m-eye')
@@ -65,17 +91,17 @@ class CreateContent extends CreateRecord
         $actions[] = $editAction;
 
 
-        $actions[] =  Actions\EditAction::make()
-                ->action('saveContent')
-                ->icon('mw-save')
-                ->size('xl')
-                ->label('Save')
-                ->color('success');
+        $actions[] = Actions\EditAction::make()
+            ->action('saveContent')
+            ->icon('mw-save')
+            ->size('xl')
+            ->label('Save')
+            ->color('success');
 
 
         $isMultilanguageEnabled = true; // TODO
         if ($isMultilanguageEnabled) {
-            $actions[] =  Actions\LocaleSwitcher::make();
+            $actions[] = Actions\LocaleSwitcher::make();
         }
 
         return $actions;

@@ -1,5 +1,14 @@
 <div class="logo-module">
-    <a href="{{ site_url() }}" class="logo-link">
+    <a
+        @if(is_live_edit())
+            href="javascript:void(0);"
+        @else
+
+            href="{{ site_url() }}"
+        @endif
+
+
+        class="logo-link">
         @if(isset($logoimage) && !empty($logoimage))
             <img src="{{ $logoimage }}" alt="{{ isset($text) ? $text : '' }}" style="max-width: {{ isset($size) ? $size . 'px' : '200px' }};"/>
         @elseif(isset($text) && !empty($text))

@@ -12,7 +12,18 @@
 
 ?>
 
-<a href="{{ site_url() }}" class="module-logo module-logo-2rows" style="width: auto;">
+<a
+
+
+    @if(is_live_edit())
+        href="javascript:void(0);"
+    @else
+
+        href="{{ site_url() }}"
+    @endif
+
+
+    class="module-logo module-logo-2rows" style="width: auto;">
     @if ($logoimage == '' && $text == '')
         @if (is_live_edit())
             <span class="mw-logo-no-values">{{ __('Click to add logo') }}</span>

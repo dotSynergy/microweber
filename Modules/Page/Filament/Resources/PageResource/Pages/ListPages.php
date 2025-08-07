@@ -22,14 +22,18 @@ class ListPages extends \Modules\Content\Filament\Admin\ContentResource\Pages\Li
             ->where('is_home', 1)
             ->exists();
 
+        $hasPages = Content::where('content_type', 'page')
+            ->exists();
+
         if (!$hasHomepage) {
             $actions[] = Actions\Action::make('setup_homepage')
+                ->visible($hasPages)
                 ->label('Setup Homepage')
                 ->icon('heroicon-o-home')
                 ->color('warning')
                 ->modalHeading('Select a page to be your homepage')
                 ->modalDescription('Choose which page should be displayed as your website\'s homepage.')
-               ->slideOver()
+                ->slideOver()
                 ->form([
                     Forms\Components\Select::make('page_id')
                         ->label('Select Page')

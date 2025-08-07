@@ -35,7 +35,9 @@ class EditContent extends EditRecord
 
         if (isset($data['is_home']) and $data['is_home']) {
             //unset is_home from other records as there can be only one home
-            Content::where('is_home', 1)->where('id', '!=', $record->id)->update(['is_home' => 0]);
+            Content::where('is_home', '=',1)
+                ->where('id', '!=', $record->id)
+                ->update(['is_home' => 0]);
         }
 
         return $record;

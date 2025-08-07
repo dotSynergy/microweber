@@ -1061,7 +1061,7 @@ class ContentManagerCrud extends Crud
                 }
             }
         }
-        /* SQLITE FIX */
+         /* SQLITE FIX */
         if ($adm == true) {
 
 

@@ -210,14 +210,15 @@ Route::post('/csrf', function () {
 
 Route::group([
     'middleware' => [
+        'web',
         \MicroweberPackages\App\Http\Middleware\SameSiteRefererMiddleware::class
     ],
 ], function () {
-    Route::any('/module/', '\MicroweberPackages\App\Http\Controllers\ApiController@module');
-    Route::any('module/{all}', array('as' => 'module', 'uses' => '\MicroweberPackages\App\Http\Controllers\ApiController@module'))->where('all', '.*');
+    Route::any('/module/', '\MicroweberPackages\App\Http\Controllers\ApiController@module')->name('module');
+    Route::any('module/{all}', array('as' => 'module', 'uses' => '\MicroweberPackages\App\Http\Controllers\ApiController@module'))->where('all', '.*')->name('module.all');
 });
 
-Route::group(['middleware' => ['public.web'], 'namespace' => '\MicroweberPackages\App\Http\Controllers'], function () {
+Route::group(['middleware' => ['web'], 'namespace' => '\MicroweberPackages\App\Http\Controllers'], function () {
     Route::any('/api', 'ApiController@api');
     Route::any('/api/{slug}', 'ApiController@api');
 

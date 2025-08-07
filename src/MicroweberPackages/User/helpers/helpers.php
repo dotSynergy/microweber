@@ -224,9 +224,13 @@ function is_admin()
 
 function is_live_edit()
 {
+
+
     if (!is_admin()) {
         return false;
     }
+
+
 
 
     $editModeParam = app()->url_manager->param('editmode');

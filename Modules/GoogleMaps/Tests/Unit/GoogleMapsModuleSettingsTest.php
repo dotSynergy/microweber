@@ -31,7 +31,7 @@ class GoogleMapsModuleSettingsTest extends TestCase
             'options.data-zip' => '10001',
             'options.data-zoom' => '10',
             'options.data-width' => '600',
-            'options.data-height' => '400',
+            'options.data-height' => '600',
         ];
 
         Livewire::test(GoogleMapsModuleSettings::class)

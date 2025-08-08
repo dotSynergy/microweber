@@ -16,7 +16,7 @@ description: Default
     @if ($address != '')
         <iframe
             width="{{ $width ?? '100%' }}"
-            height="{{ $height ?? '400px' }}"
+            height="{{ $height ?? '600px' }}"
             frameborder="0"
             scrolling="no"
             marginheight="0"

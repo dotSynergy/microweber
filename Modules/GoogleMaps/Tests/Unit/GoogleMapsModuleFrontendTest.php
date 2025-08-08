@@ -20,7 +20,7 @@ class GoogleMapsModuleFrontendTest extends TestCase
             'data-zip' => '10001',
             'data-zoom' => '10',
             'data-width' => '600',
-            'data-height' => '400',
+            'data-height' => '600',
         ];
         $moduleId = $params['id'];
         $moduleType = 'google_maps';
@@ -49,7 +49,7 @@ class GoogleMapsModuleFrontendTest extends TestCase
         $this->assertStringContainsString(urlencode('5th Avenue'), $viewOutput);
         $this->assertStringContainsString(urlencode('10001'), $viewOutput);
         $this->assertStringContainsString('600', $viewOutput);
-        $this->assertStringContainsString('400', $viewOutput);
+        $this->assertStringContainsString('600', $viewOutput);
 
         ModuleOption::where('option_group', $moduleId)->where('module', $moduleType)->delete();
         $this->assertDatabaseMissing('options', ['option_group' => $moduleId, 'module' => $moduleType]);

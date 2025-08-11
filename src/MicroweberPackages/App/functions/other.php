@@ -210,7 +210,9 @@ function mw_reload_modules()
     $bootstrap_cached_folder = base_path('bootstrap/cache/');
     rmdir_recursive($bootstrap_cached_folder);
 
-    mw()->module_manager->scan(['reload_modules' => 1, 'scan' => 1]);
+  //  mw()->module_manager->scan(['reload_modules' => 1, 'scan' => 1]);
+    mw()->module_manager->reload_laravel_modules();
+    mw()->module_manager->reload_laravel_templates();
     mw_post_update();
     if (isset($_GET['redirect_to'])) {
         return app()->url_manager->redirect($_GET['redirect_to']);

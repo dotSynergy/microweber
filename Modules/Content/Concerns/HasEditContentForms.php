@@ -60,9 +60,9 @@ trait HasEditContentForms
         if ($additionalData) {
             //filter null values
 
-            $additionalData = array_filter($additionalData, function ($value) {
-                return !is_null($value);
-            });
+//            $additionalData = array_filter($additionalData, function ($value) {
+//                return !is_null($value);
+//            });
 
 //            if ($additionalData) {
 //

@@ -286,8 +286,8 @@ class UpdateManager
             scan_for_modules(['no_cache' => true, 'reload_modules' => true, 'cleanup_db' => true]);
             scan_for_elements(['no_cache' => true, 'reload_modules' => true, 'cleanup_db' => true]);
 
-
-
+            mw()->module_manager->reload_laravel_modules();
+            mw()->module_manager->reload_laravel_templates();
            // $this->log($output->fetch());
 
             mw()->layouts_manager->scan();

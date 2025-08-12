@@ -8,6 +8,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -128,7 +129,17 @@ class AccordionTableList extends Component implements HasForms, HasTable
                 EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
-                DeleteAction::make('delete')
+                Action::make('copy')
+                    ->label('Copy')
+                    ->icon('heroicon-s-document-duplicate')
+                    ->action(function (Accordion $record) {
+                        $newAccordion = $record->replicate();
+                        $newAccordion->push();
+
+                        $this->resetTable();
+                    }),
+                DeleteAction::make('delete'),
+
             ])
             ->reorderable('position')
             ->bulkActions([

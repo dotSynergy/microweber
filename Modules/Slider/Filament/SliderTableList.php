@@ -15,6 +15,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -345,7 +346,16 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
-                DeleteAction::make('delete')
+                DeleteAction::make('delete'),
+                Action::make('copy')
+                    ->label('Copy')
+                    ->icon('heroicon-s-document-duplicate')
+                    ->action(function (Slider $record) {
+                        $newSlider = $record->replicate();
+                        $newSlider->push();
+
+                        $this->resetTable();
+                    }),
             ])
             ->reorderable('position')
             ->bulkActions([

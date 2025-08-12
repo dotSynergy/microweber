@@ -12,6 +12,7 @@ use Filament\Forms\{
     Contracts\HasForms
 };
 use Filament\Tables\Actions\{
+    Action,
     CreateAction,
     DeleteAction,
     EditAction
@@ -109,7 +110,16 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
                     ->slideOver()
                     ->form($this->editFormArray()),
                 DeleteAction::make()
-                    ->requiresConfirmation()
+                    ->requiresConfirmation(),
+                Action::make('copy')
+                    ->label('Copy')
+                    ->icon('heroicon-s-document-duplicate')
+                    ->action(function (Teamcard $record) {
+                        $newTeamcard = $record->replicate();
+                        $newTeamcard->push();
+
+                        $this->resetTable();
+                    }),
             ])
             ->reorderable('position')
             ->bulkActions([])

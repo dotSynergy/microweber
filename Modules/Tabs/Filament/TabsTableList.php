@@ -8,6 +8,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -129,7 +130,16 @@ class TabsTableList extends Component implements HasForms, HasTable
                 EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
-                DeleteAction::make('delete')
+                DeleteAction::make('delete'),
+                Action::make('copy')
+                    ->label('Copy')
+                    ->icon('heroicon-s-document-duplicate')
+                    ->action(function (Tab $record) {
+                        $newTab = $record->replicate();
+                        $newTab->push();
+
+                        $this->resetTable();
+                    }),
             ])
             ->reorderable('position')
             ->bulkActions([

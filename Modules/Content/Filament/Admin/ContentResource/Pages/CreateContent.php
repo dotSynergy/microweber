@@ -43,7 +43,7 @@ class CreateContent extends CreateRecord
             }
         }
 
-       /* $the_active_site_template = app()->option_manager->get('current_template', 'template');
+      $the_active_site_template = template_name();
 
         //check if active_site_template is the default template and if so , unset the template to null
         if (isset($data['active_site_template']) and
@@ -53,7 +53,7 @@ class CreateContent extends CreateRecord
             )
         ) {
             unset($data['active_site_template']);
-        }*/
+        }
 
 
         $record = static::getModel()::create($data);

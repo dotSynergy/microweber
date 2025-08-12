@@ -264,8 +264,14 @@ export class LiveEdit {
         elementHandle.on('targetChange', target => {
             this.elementHandleContent.menu.setTarget(target);
 
+            const noResize = ['col-','no-resize'];
 
-            if (target.className.includes('col-') || target.className.includes('no-resize')) {
+
+            if (target.classList.contains('mw-col')) {
+                elementHandle.resizer.enable();
+
+            } else if ( DomService.hasAnyOfClasses(target, noResize)) {
+
                 elementHandle.resizer.disable()
             } else {
                 elementHandle.resizer.enable()
@@ -658,6 +664,8 @@ export class LiveEdit {
             const type = this.elementAnalyzer.getType(first);
 
 
+
+
             if (type !== 'layout') {
                 var parentLayout = DomService.firstParentOrCurrentWithClass(first, 'module-layouts');
                 if (parentLayout) {
@@ -780,12 +788,17 @@ export class LiveEdit {
                 }
             }
 
+
+
+
+
             if (!DomService.parentsOrCurrentOrderMatchOrOnlyFirstOrNone(target, ['allow-select', 'no-select'])) {
-                target = null;
+
+                target = target.closest('.allow-select');
+
+
             }
         }
-
-
         return target
     }
 

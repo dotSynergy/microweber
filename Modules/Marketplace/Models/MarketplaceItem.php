@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Marketplace\Models;
 
 
@@ -9,7 +10,8 @@ use MicroweberPackages\Package\MicroweberComposerClient;
 use MicroweberPackages\Package\MicroweberComposerPackage;
 use Sushi\Sushi;
 
-class MarketplaceItem extends Model {
+class MarketplaceItem extends Model
+{
 
     use Sushi;
 
@@ -32,7 +34,7 @@ class MarketplaceItem extends Model {
                 $allowedCategories[] = $this->category;
             }
         }
-        foreach ($packages as $packageName=>$package) {
+        foreach ($packages as $packageName => $package) {
 
             $latestVersionPackage = end($package);
             if (!isset($latestVersionPackage['target-dir'])) {
@@ -52,7 +54,7 @@ class MarketplaceItem extends Model {
                 $searchKeywords = array_merge($searchKeywords, $latestVersionPackage['extra']['categories']);
             }
 
-            array_walk($searchKeywords, function(&$value) {
+            array_walk($searchKeywords, function (&$value) {
                 $value = mb_strtolower($value);
             });
 
@@ -73,11 +75,11 @@ class MarketplaceItem extends Model {
                 }
             }
             $versions = [];
-            foreach ($package as $version=>$versionData) {
+            foreach ($package as $version => $versionData) {
                 $versions[] = $version;
             }
             // Sort versions by newest
-            usort($versions, function($a, $b) {
+            usort($versions, function ($a, $b) {
                 return version_compare($a, $b, '<');
             });
             $latestVersionPackage['versions'] = $versions;
@@ -102,8 +104,26 @@ class MarketplaceItem extends Model {
             if (isset($latestVersion['current_install']['local_type'])) {
                 $item['has_current_install'] = 1;
             }
+
+
+            $nameFromPackage = explode('/', $latestVersion['name']);
+            $nameFromPackageForNOrmalization = '';
+            if (isset($nameFromPackage[1]) && $nameFromPackage[1] != '') {
+                $nameFromPackageForNOrmalization = $nameFromPackage[1];
+            } else {
+                $nameFromPackageForNOrmalization = $latestVersion['name'];
+            }
+
+
+            $normalizedName = str_replace(['-', '_', '/'], ' ', $nameFromPackageForNOrmalization);
+
+            //remve digits fgrom end$normalizedName
+            $normalizedName = preg_replace('/\d+$/', '', $normalizedName);
+
+            $normalizedName = titlelize($normalizedName);
+
             $item['internal_name'] = $latestVersion['name'];
-            $item['name'] = $latestVersion['description'];
+            $item['name'] = $latestVersion['description'] ?? $normalizedName;
             $item['big_screenshot_link'] = $latestVersion['screenshot_link'];
             $item['version'] = $latestVersion['version'];
             $item['versions'] = json_encode($latestVersion['versions']);
@@ -128,7 +148,7 @@ class MarketplaceItem extends Model {
                 $item['license'] = $latestVersion['license'][0];
             }
 
-            $item['screenshot_link'] = site_url().'src/MicroweberPackages/Marketplace/resources/images/no-module-image.jpg';
+            $item['screenshot_link'] = site_url() . 'src/MicroweberPackages/Marketplace/resources/images/no-module-image.jpg';
             if (isset($latestVersion['extra']['_meta']['screenshot'])) {
                 $item['screenshot_link'] = $latestVersion['extra']['_meta']['screenshot'];
             }

@@ -77,15 +77,17 @@ class MicroweberComposerPackage
                 $currentInstall['local_type'] = $version['type'];
                 $currentInstall['module'] = $module['name'];
                 $currentInstall['module_details'] = $module;
+                if(isset($module['version'])){
+                    $v1 = trim($version['latest_version']['version']);
+                    $v2 = trim($module['version']);
 
-                $v1 = trim($version['latest_version']['version']);
-                $v2 = trim($module['version']);
-
-                if ($v1 != $v2) {
-                    if (Comparator::greaterThan($v1, $v2)) {
-                        $version['has_update'] = true;
+                    if ($v1 != $v2) {
+                        if (Comparator::greaterThan($v1, $v2)) {
+                            $version['has_update'] = true;
+                        }
                     }
                 }
+
 
                 if (isset($module['is_symlink']) && $module['is_symlink']) {
                     $version['has_update'] = false;

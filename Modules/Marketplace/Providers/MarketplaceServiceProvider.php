@@ -5,10 +5,13 @@ namespace Modules\Marketplace\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\Microweber\Facades\Microweber;
+use Modules\Marketplace\Filament\Admin\ListLicenses;
 use Modules\Marketplace\Filament\Admin\MarketplaceResource;
+use Modules\WhiteLabel\Filament\Admin\WhiteLabelLicenseManager;
 
 
 class MarketplaceServiceProvider extends BaseModuleServiceProvider
@@ -40,6 +43,11 @@ class MarketplaceServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerResource(MarketplaceResource::class);
         // Register filament page for Microweber module settings
         // FilamentRegistry::registerPage(MarketplaceModuleSettings::class);
+        Livewire::component('admin-list-licenses', ListLicenses::class);
+
+
+        //
+
 
         // Register Microweber module
         // Microweber::module(\Modules\Marketplace\Microweber\MarketplaceModule::class);

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdd22f83f086658090a0fe15a92db660",
+    "content-hash": "045c3b17efac629d3d46dffc0443fc45",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -9294,16 +9294,16 @@
         },
         {
             "name": "microweber-packages/composer-client",
-            "version": "2.2",
+            "version": "3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/microweber-packages/composer-client.git",
-                "reference": "5decacf13f65f7deb4f5214e90dbfcac3b638312"
+                "reference": "7c3f56892d3e60fbf08afbccb1ead868d28e6378"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/microweber-packages/composer-client/zipball/5decacf13f65f7deb4f5214e90dbfcac3b638312",
-                "reference": "5decacf13f65f7deb4f5214e90dbfcac3b638312",
+                "url": "https://api.github.com/repos/microweber-packages/composer-client/zipball/7c3f56892d3e60fbf08afbccb1ead868d28e6378",
+                "reference": "7c3f56892d3e60fbf08afbccb1ead868d28e6378",
                 "shasum": ""
             },
             "require": {
@@ -9335,9 +9335,9 @@
             "support": {
                 "email": "support@microweber.com",
                 "issues": "https://github.com/microweber-packages/composer-client/issues",
-                "source": "https://github.com/microweber-packages/composer-client/tree/2.2"
+                "source": "https://github.com/microweber-packages/composer-client/tree/3.0"
             },
-            "time": "2025-01-23T07:21:40+00:00"
+            "time": "2025-06-13T12:12:40+00:00"
         },
         {
             "name": "microweber-packages/frontend-assets",

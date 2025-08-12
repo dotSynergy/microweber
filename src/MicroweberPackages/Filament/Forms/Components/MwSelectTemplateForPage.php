@@ -37,14 +37,54 @@ class MwSelectTemplateForPage
 
         $selectTemplateInput = Forms\Components\Select::make($activeSiteTemplateInputName)
             ->label('Template')
-            ->default($active_site_template_default)
             ->live()
             ->reactive()
+            ->afterStateHydrated(
+                function (Forms\Get $get, Forms\Set $set) use ($activeSiteTemplateInputName, $layoutFileInputName) {
+                    $activeSiteTemplate = $get($activeSiteTemplateInputName);
+
+                    if (!$activeSiteTemplate) {
+                        $activeSiteTemplate = template_name();
+                        if ($activeSiteTemplate) {
+
+
+
+                            $set($activeSiteTemplateInputName, $activeSiteTemplate);
+                        }
+
+                    }
+
+                    $layoutFile = $get($layoutFileInputName);
+                    if (!$layoutFile) {
+                        $layoutFile = 'clean.blade.php';
+                        $set($layoutFileInputName, $layoutFile);
+                    }
+
+                }
+            )
+            ->default(function (Forms\Get $get) use ($activeSiteTemplateInputName) {
+
+                $activeSiteTemplate = $get($activeSiteTemplateInputName);
+
+
+                if (!$activeSiteTemplate) {
+                    $activeSiteTemplate = template_name();
+                }
+
+
+                if ($activeSiteTemplate) {
+                    return $activeSiteTemplate;
+                }
+
+            })
             ->options(function (Forms\Get $get, Forms\Set $set) use ($templates) {
                 return collect($templates)->mapWithKeys(function ($template) {
                     return [$template['dir_name'] => $template['name']];
                 });
             })
+
+
+//
 //            ->afterStateUpdated(fn(Forms\Components\Select $component) => $component
 //                ->getContainer()
 //                ->getComponent('dynamicSelectLayout')
@@ -86,9 +126,13 @@ class MwSelectTemplateForPage
         $selectLayoutInputInput = Forms\Components\Select::make($layoutFileInputName)
             ->label('Layout')
             ->live()
-            ->default(function (Forms\Get $get) use($activeSiteTemplateInputName) {
+            ->default(function (Forms\Get $get) use ($activeSiteTemplateInputName) {
 
                 $activeSiteTemplate = $get($activeSiteTemplateInputName);
+
+                if (!$activeSiteTemplate) {
+                    $activeSiteTemplate = template_name();
+                }
 
                 if (!$activeSiteTemplate) {
                     return [];
@@ -108,6 +152,10 @@ class MwSelectTemplateForPage
             ->reactive()
             ->options(function (Forms\Get $get, Forms\Set $set) use ($layoutFileInputName, $activeSiteTemplateInputName) {
                 $activeSiteTemplate = $get($activeSiteTemplateInputName);
+
+                if (!$activeSiteTemplate) {
+                    $activeSiteTemplate = template_name();
+                }
 
                 if (!$activeSiteTemplate) {
                     return [];
@@ -161,11 +209,11 @@ class MwSelectTemplateForPage
                         $set('subtype', $layout['content_type']);
                     }
                 }
-                if (isset($layout['is_shop']) and ($layout['is_shop'] == 1 or $layout['is_shop'] == 'y') ) {
+                if (isset($layout['is_shop']) and ($layout['is_shop'] == 1 or $layout['is_shop'] == 'y')) {
                     if (array_key_exists('is_shop', $data)) {
                         $set('is_shop', 1);
                     }
-                } else  if (array_key_exists('is_shop', $data)) {
+                } else if (array_key_exists('is_shop', $data)) {
                     $set('is_shop', 0);
                 }
 
@@ -182,6 +230,8 @@ class MwSelectTemplateForPage
                 'layoutFileInputName' => $layoutFileInputName,
                 'activeSiteTemplateInputName' => $activeSiteTemplateInputName
             ])
+
+
             ->live()
             ->key('dynamicPreviewLayout')
             ->columnSpanFull();

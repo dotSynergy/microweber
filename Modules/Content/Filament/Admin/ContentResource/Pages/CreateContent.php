@@ -43,9 +43,20 @@ class CreateContent extends CreateRecord
             }
         }
 
+       /* $the_active_site_template = app()->option_manager->get('current_template', 'template');
+
+        //check if active_site_template is the default template and if so , unset the template to null
+        if (isset($data['active_site_template']) and
+            (
+                $data['active_site_template'] == 'default'
+                or $data ['active_site_template'] == $the_active_site_template
+            )
+        ) {
+            unset($data['active_site_template']);
+        }*/
+
 
         $record = static::getModel()::create($data);
-
 
 
         if (isset($data['content_type']) and ($data['content_type']) == 'page') {

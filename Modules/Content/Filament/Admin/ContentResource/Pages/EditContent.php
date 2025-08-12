@@ -31,7 +31,22 @@ class EditContent extends EditRecord
             $data['lang'] = $this->activeLocale;
         }
 
-         $record->update($data);
+
+
+      /*
+           $the_active_site_template = app()->option_manager->get('current_template', 'template');
+      //check if active_site_template is the default template and if so , unset the template to null
+        if (isset($data['active_site_template']) and
+            (
+                $data['active_site_template'] == 'default'
+                or $data ['active_site_template'] == $the_active_site_template
+            )
+        ) {
+            unset($data['active_site_template']);
+        }*/
+
+
+        $record->update($data);
 
         if (isset($data['is_home']) and $data['is_home']) {
             //unset is_home from other records as there can be only one home

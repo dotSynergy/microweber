@@ -116,6 +116,7 @@ class ContentResource extends Resource
             $firstShopId = $allShops[0]['id'];
 
         }
+        $active_site_template_default = template_name();
 
 
         $mainForm = [
@@ -137,7 +138,10 @@ class ContentResource extends Resource
                             ->default($contentSubtype),
 
 
-                        Forms\Components\Hidden::make('active_site_template')->visible(function (Forms\Get $get) {
+                        Forms\Components\Hidden::make('active_site_template')
+
+                            ->default($active_site_template_default)
+                            ->visible(function (Forms\Get $get) {
                             return $get('content_type') == 'page';
                         }),
                         Forms\Components\Hidden::make('layout_file')->visible(function (Forms\Get $get) {
@@ -317,6 +321,7 @@ class ContentResource extends Resource
                                     MwSelectTemplateForPage::make(
                                         'active_site_template',
                                         'layout_file')
+                                        ->live()
                                         ->columnSpanFull(),
                                 ])
                             ->columnSpanFull()

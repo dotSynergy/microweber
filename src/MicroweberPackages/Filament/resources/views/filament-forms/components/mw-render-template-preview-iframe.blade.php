@@ -7,7 +7,7 @@
 
 
         $active_site_template = template_name();
-        $layout_file = 'clean.php';
+        $layout_file = 'clean.blade.php';
 
         $transformScale = 0.553;
 
@@ -55,11 +55,38 @@
             }
 
             $rand = md5($url);
+
+
+
+
+
     @endphp
 
 
-    <div>
+    <div x-data="{
+        tplPreview: null,
+        init() {
+            this.tplPreview = new mw.templatePreview({
+                element: '#preview_frame_container_holder'
+            });
 
+            Livewire.on('dynamicPreviewLayoutChange', (data) => {
+                if (data && data.iframePreviewUrl && this.tplPreview) {
+                    this.tplPreview.rend(data.iframePreviewUrl);
+                }
+            });
+
+            Livewire.on('reloadIframePreview', (data) => {
+                if (this.tplPreview) {
+                    this.tplPreview.rend('{!! $url !!}');
+                }
+            });
+
+            @if($url != '')
+            this.tplPreview.rend('{!! $url !!}');
+            @endif
+        }
+    }">
         <div class="preview_frame_wrapper preview_frame_wrapper_holder loading left" wire:ignore>
             <div class="preview_frame_container preview_frame_container_holder" id="preview_frame_container_holder">
                 Preview Frame Container
@@ -71,41 +98,8 @@
                     <div class="placeholder col-9 mb-3"></div>
                     <div class="placeholder placeholder-xs col-10"></div>
                     <div class="placeholder placeholder-xs col-11"></div>
-
                 </div>
             </div>
-
         </div>
-
-
     </div>
-
-
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-
-            let tplPreview = new mw.templatePreview({
-                element: '#preview_frame_container_holder'
-            });
-            Livewire.on('dynamicPreviewLayoutChange', (data) => {
-                if (data && data.iframePreviewUrl) {
-                    tplPreview.rend(data.iframePreviewUrl)
-                }
-
-            });
-            Livewire.on('reloadIframePreview', (data) => {
-                tplPreview.rend('{!! $url !!}')
-            });
-
-
-            @if($url != '')
-
-            tplPreview.rend('{!! $url !!}')
-
-            @endif
-
-        });
-    </script>
-
-
 </div>

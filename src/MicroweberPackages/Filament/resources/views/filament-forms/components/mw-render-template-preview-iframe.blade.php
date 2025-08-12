@@ -65,10 +65,26 @@
 
     <div x-data="{
         tplPreview: null,
+        currentUrlHash: '{!! md5($url) !!}',
+        lastInitializedHash: '',
         init() {
-            this.tplPreview = new mw.templatePreview({
-                element: '#preview_frame_container_holder'
-            });
+            // Only initialize if URL hash has changed or never initialized
+            if (this.currentUrlHash !== this.lastInitializedHash) {
+                if (this.tplPreview) {
+                    // Cleanup existing instance if it exists
+                    this.tplPreview = null;
+                }
+
+                this.tplPreview = new mw.templatePreview({
+                    element: '#preview_frame_container_holder'
+                });
+
+                this.lastInitializedHash = this.currentUrlHash;
+
+                @if($url != '')
+                this.tplPreview.rend('{!! $url !!}');
+                @endif
+            }
 
             Livewire.on('dynamicPreviewLayoutChange', (data) => {
                 if (data && data.iframePreviewUrl && this.tplPreview) {
@@ -81,25 +97,29 @@
                     this.tplPreview.rend('{!! $url !!}');
                 }
             });
-
-            @if($url != '')
-            this.tplPreview.rend('{!! $url !!}');
-            @endif
         }
     }">
-        <div class="preview_frame_wrapper preview_frame_wrapper_holder loading left" wire:ignore>
-            <div class="preview_frame_container preview_frame_container_holder" id="preview_frame_container_holder">
-                Preview Frame Container
-            </div>
 
-            <div class="card placeholder-glow mw-add-post-placeholder-loading">
-                <div class="ratio ratio-21x9 card-img-top placeholder"></div>
-                <div class="card-body">
-                    <div class="placeholder col-9 mb-3"></div>
-                    <div class="placeholder placeholder-xs col-10"></div>
-                    <div class="placeholder placeholder-xs col-11"></div>
-                </div>
-            </div>
-        </div>
+
+
+
+      <div>
+
+          <div class="preview_frame_wrapper preview_frame_wrapper_holder loading left">
+              <div class="preview_frame_container preview_frame_container_holder" id="preview_frame_container_holder">
+                  Preview Frame Container
+              </div>
+
+              <div class="card placeholder-glow mw-add-post-placeholder-loading">
+                  <div class="ratio ratio-21x9 card-img-top placeholder"></div>
+                  <div class="card-body">
+                      <div class="placeholder col-9 mb-3"></div>
+                      <div class="placeholder placeholder-xs col-10"></div>
+                      <div class="placeholder placeholder-xs col-11"></div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
     </div>
 </div>

@@ -37,8 +37,8 @@ class MwSelectTemplateForPage
 
         $selectTemplateInput = Forms\Components\Select::make($activeSiteTemplateInputName)
             ->label('Template')
-            ->live()
             ->reactive()
+            ->live()
             ->afterStateHydrated(
                 function (Forms\Get $get, Forms\Set $set) use ($activeSiteTemplateInputName, $layoutFileInputName) {
                     $activeSiteTemplate = $get($activeSiteTemplateInputName);
@@ -82,50 +82,34 @@ class MwSelectTemplateForPage
                     return [$template['dir_name'] => $template['name']];
                 });
             })
+            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state, Component $livewire) use ($layoutFileInputName, $activeSiteTemplateInputName) {
 
+                // Only trigger preview update when template changes
+                $activeSiteTemplate = $state;
+                $layoutFile = $get($layoutFileInputName);
 
-//
-//            ->afterStateUpdated(fn(Forms\Components\Select $component) => $component
-//                ->getContainer()
-//                ->getComponent('dynamicSelectLayout')
-//                ->getChildComponentContainer()
-//                ->fill())
-//            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) use ($layoutFileInputName, $activeSiteTemplateInputName) {
-//
-//
-//                $active_site_template = $get($activeSiteTemplateInputName);
-//                if (!$active_site_template) {
-//                    $active_site_template = template_name();
-//                }
-//
-//                $layout_file = $get($layoutFileInputName);
-//                if (!$layout_file) {
-//                    $layout_file = 'clean.php';
-//                }
-//
-//                $layout_options = array();
-//                $layout_options['layout_file'] = $layout_file;
-//                $layout_options['no_cache'] = true;
-//                $layout_options['no_folder_sort'] = true;
-//                $layout_options['active_site_template'] = $active_site_template;
-//                $layout = mw()->layouts_manager->get_layout_details($layout_options);
-//                $url = '';
-//
-//
-//                if (isset($layout['layout_file_preview_url'])) {
-//                    $url = $layout['layout_file_preview_url'];
-//                }
-//
-//             //   $livewire->dispatch('dynamicPreviewLayoutChange', data: $data, iframePreviewUrl: $url);
-//
-//
-//            })
+                if ($activeSiteTemplate && $layoutFile) {
+                    $layoutOptions = array();
+                    $layoutOptions['layout_file'] = $layoutFile;
+                    $layoutOptions['no_cache'] = true;
+                    $layoutOptions['no_folder_sort'] = true;
+                    $layoutOptions['active_site_template'] = $activeSiteTemplate;
+
+                    $layout = mw()->layouts_manager->get_layout_details($layoutOptions);
+                    $url = '';
+
+                    if (isset($layout['layout_file_preview_url'])) {
+                        $url = $layout['layout_file_preview_url'];
+                    }
+
+                    $livewire->dispatch('dynamicPreviewLayoutChange', data: $livewire->data ?? [], iframePreviewUrl: $url);
+                }
+            })
             ->columnSpanFull();
 
 
         $selectLayoutInputInput = Forms\Components\Select::make($layoutFileInputName)
             ->label('Layout')
-            ->live()
             ->default(function (Forms\Get $get) use ($activeSiteTemplateInputName) {
 
                 $activeSiteTemplate = $get($activeSiteTemplateInputName);
@@ -150,6 +134,7 @@ class MwSelectTemplateForPage
 
             })
             ->reactive()
+            ->live()
             ->options(function (Forms\Get $get, Forms\Set $set) use ($layoutFileInputName, $activeSiteTemplateInputName) {
                 $activeSiteTemplate = $get($activeSiteTemplateInputName);
 
@@ -232,7 +217,6 @@ class MwSelectTemplateForPage
             ])
 
 
-            ->live()
             ->key('dynamicPreviewLayout')
             ->columnSpanFull();
 

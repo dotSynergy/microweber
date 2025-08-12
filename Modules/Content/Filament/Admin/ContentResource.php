@@ -315,19 +315,6 @@ class ContentResource extends Resource
                             ])->columnSpanFull()->visible(function (Forms\Get $get) {
                                 return $get('content_type') == 'product';
                             }),
-                        Forms\Components\Section::make('Select Template')
-                            ->schema(
-                                [
-                                    MwSelectTemplateForPage::make(
-                                        'active_site_template',
-                                        'layout_file')
-                                        ->live()
-                                        ->columnSpanFull(),
-                                ])
-                            ->columnSpanFull()
-                            ->visible(function (Forms\Get $get) {
-                                return $get('content_type') == 'page';
-                            }),
 
                     ])->columnSpan(['lg' => 2]),
 
@@ -446,6 +433,20 @@ class ContentResource extends Resource
                         ->schema(
                             $mainForm
                         ),
+                    Tabs\Tab::make('Template')
+                        ->schema([
+                            Forms\Components\Section::make('Select Template')
+                                ->schema([
+                                    MwSelectTemplateForPage::make(
+                                        'active_site_template',
+                                        'layout_file')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columnSpanFull()
+                        ])
+                        ->visible(function (Forms\Get $get) {
+                            return $get('content_type') == 'page';
+                        }),
                     Tabs\Tab::make('Product Details')
                         ->schema(
                             self::productDetailsFormArray()

@@ -115,12 +115,13 @@
 
                             scope.refresh(true);
                         },
-                        progress: function (val) {
+                        totalProgress: function (val) {
                             scope.progress(val.percent);
                         },
                         fileUploadError: function () {
                             scope.progress(false);
-                        }
+                        },
+
                     }
                 });
 

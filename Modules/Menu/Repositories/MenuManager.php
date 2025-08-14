@@ -607,6 +607,19 @@ class MenuManager
 
 
                 if (isset($item['url_target']) and trim($item['url_target']) != '') {
+
+                    if($item['url_target'] == 1){
+                        $item['url_target'] = '_blank';
+                    } elseif ($item['url_target'] == 2) {
+                        $item['url_target'] = '_self';
+                    } elseif ($item['url_target'] == 3) {
+                        $item['url_target'] = '_parent';
+                    } elseif ($item['url_target'] == 4) {
+                        $item['url_target'] = '_top';
+                    } else {
+                        $item['url_target'] = '';
+                    }
+
                     $url_target = $item['url_target'];
                     $url_target_attr_string = ' target="' . $url_target . '" ';
 

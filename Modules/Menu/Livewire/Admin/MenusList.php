@@ -7,6 +7,7 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Actions\CreateAction;
+use Filament\Forms\Components\Toggle;
 use Filament\Support\Enums\ActionSize;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
@@ -119,7 +120,7 @@ class MenusList extends Component implements HasForms, HasActions
             ->form([
                 TextInput::make('title')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(200),
             ])
             ->action(function (array $data, Component $livewire) {
 
@@ -185,7 +186,7 @@ class MenusList extends Component implements HasForms, HasActions
                     $categoriesId = '';
                     $contentId = '';
                     $title = $get('title');
-                    $displayTitle = $get('display_title');
+                 //   $displayTitle = $get('display_title');
 
                     if (isset($state['data']['id']) && $state['data']['id'] > 0) {
                         if ($state['data']['type'] == 'category') {
@@ -193,10 +194,7 @@ class MenusList extends Component implements HasForms, HasActions
                         } else {
                             $contentId = $state['data']['id'];
                         }
-                        if (isset($state['text'])) {
-                            $displayTitle = $state['text'];
-                            $set('use_custom_title', false);
-                        }
+
                     } else if (isset($state['url'])) {
                         $url = $state['url'];
                         if (isset($state['target']) && $state['target']) {
@@ -204,12 +202,16 @@ class MenusList extends Component implements HasForms, HasActions
                         }
                         if (isset($state['text'])) {
                             $title = $state['text'];
-                            $set('use_custom_title', true);
+                         //   $set('use_custom_title', true);
                         }
                     }
-
-                    $set('display_title', $displayTitle);
-                    $set('title', $title);
+                    if (isset($state['text'])) {
+                        $displayTitle = $state['text'];
+                        $set('title', $displayTitle);
+                        // $set('use_custom_title', false);
+                    }
+                //    $set('display_title', $displayTitle);
+                 //   $set('title', $title);
                     $set('url', $url);
                     $set('url_target', $urlTarget);
                     $set('categories_id', $categoriesId);
@@ -217,50 +219,62 @@ class MenusList extends Component implements HasForms, HasActions
                 }),
 
 
-            TextInput::make('display_title') // This is the title that will be displayed in the menu
+          /*  TextInput::make('display_title') // This is the title that will be displayed in the menu
             ->label('Display title')
                 ->required()
                 ->live()
                 ->maxLength(255)
-                ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),
+                ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),*/
 
 
             TextInput::make('title')
-                ->hidden(function (Get $get) {
-                    return $get('use_custom_title') === false;
-                })
+//                ->hidden(function (Get $get) {
+//                    return $get('use_custom_title') === false;
+//                })
                 ->helperText('Title will be auto-filled from the selected content')
-                ->maxLength(255),
+                ->maxLength(1255),
 
-            Checkbox::make('use_custom_title')
-                ->label('Use custom title')
-                ->live()
-                ->afterStateUpdated(function (Menu|null $record, Set $set, $state) {
-                    if ($state) {
-                        if ($record) {
-                            $set('title', $record->displayTitle);
-                        }
-                    }
-                })
-                ->default(false),
+//            Checkbox::make('use_custom_title')
+//                ->label('Use custom title')
+//                ->live()
+//                ->afterStateUpdated(function (Menu|null $record, Set $set, $state) {
+//                    if ($state) {
+//                        if ($record) {
+//                          //  $set('title', $record->displayTitle);
+//                        }
+//                    }
+//                })
+//                ->default(false),
 
 
             Checkbox::make('advanced')
                 ->label('Advanced')
                 ->live(),
 
-            Select::make('url_target')
-                ->label('Target attribute')
-                ->helperText('Open the link in New window, Current window, Parent window or Top window')
-                ->options([
-                    '_self' => 'Current window',
-                    '_blank' => 'New window',
-                    '_parent' => 'Parent window',
-                    '_top' => 'Top window',
-                ])
+
+            Toggle::make('url_target')
+                ->helperText('Enable to open the link in a new window.')
+                ->live()
+
+                ->label('Open link in new window')
+                ->default(false)
                 ->hidden(function (Get $get) {
                     return $get('advanced') === false;
-                }),
+                })
+                ->columnSpanFull(),
+
+//            Select::make('url_target')
+//                ->label('Target attribute')
+//                ->helperText('Open the link in New window, Current window, Parent window or Top window')
+//                ->options([
+//                    '_self' => 'Current window',
+//                    '_blank' => 'New window',
+//                    '_parent' => 'Parent window',
+//                    '_top' => 'Top window',
+//                ])
+//                ->hidden(function (Get $get) {
+//                    return $get('advanced') === false;
+//                }),
 
             Group::make([
                 MwFileUpload::make('default_image')
@@ -314,7 +328,9 @@ class MenusList extends Component implements HasForms, HasActions
                     Checkbox::make('enable_mega_menu')
                         ->label('Enable Mega Menu')
                         ->live()
+                        ->hidden(true) //todo remove this when mega menu is ready
                         ->default(false),
+
                     Select::make('menu_item_template')
                         ->hidden(function (Get $get) {
                             return $get('enable_mega_menu') === false;

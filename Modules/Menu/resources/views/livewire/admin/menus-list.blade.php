@@ -32,7 +32,7 @@
         <h4 class="text-xl">
             Select the Menu you want to edit
         </h4>
-        {{ ($this->createAction) }}
+
     </div>
 
     @if($menu)
@@ -42,7 +42,15 @@
     @if($menu)
 
         <div class="mt-4">
+
             {{ ($this->addMenuItemAction)(['parent_id' => $menu->id]) }}
+
+
+
+
+
+
+
         </div>
 
 
@@ -89,7 +97,8 @@
                                 </p>
 
                                 <div class="mt-4">
-                                    {{ ($this->addMenuItemAction)(['parent_id' => $menu->id]) }}
+                                    <!-- Removed: {{ ($this->addMenuItemAction)(['parent_id' => $menu->id]) }} -->
+                                    {{ $this->menuActionsGroup() }}
                                 </div>
 
                             </div>
@@ -105,14 +114,12 @@
                 {{ $menu->title }}  selected
             </div>
 
-            <div class="d-none">
-                {{ ($this->editAction)(['id' => $menu->id]) }}
-            </div>
-            <div>
-
-                {{ ($this->deleteAction)(['id' => $menu->id]) }}
-            </div>
+            {{ $this->menuActionsGroup() }}
         </div>
+
+
+
+
 
     @endif
 

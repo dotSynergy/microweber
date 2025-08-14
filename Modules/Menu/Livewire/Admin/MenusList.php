@@ -3,9 +3,11 @@
 namespace Modules\Menu\Livewire\Admin;
 
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Actions\CreateAction;
+use Filament\Support\Enums\ActionSize;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
@@ -35,19 +37,16 @@ class MenusList extends Component implements HasForms, HasActions
     {
 
 
-
-
         return $form->schema([
             Select::make('menu_id')
                 ->live()
                 ->native(true)
                 ->selectablePlaceholder(false)
-                ->default(function (Component $component, Get $get)  {
+                ->default(function (Component $component, Get $get) {
 
                     // return $menu_id;
                     return $get('menu_id');
                 })
-
                 ->options(Menu::where('item_type', 'menu')->get()->pluck('title', 'id'))
                 ->preload()
                 ->label(' '),
@@ -100,6 +99,7 @@ class MenusList extends Component implements HasForms, HasActions
         'newMenuAdded' => '$refresh',
         'menuOrderUpdated' => 'onMenuOrderUpdated',
     ];
+
     public function onMenuOrderUpdated($menuId)
     {
         if ($this->option_group != '' and $this->option_key != '') {
@@ -110,10 +110,11 @@ class MenusList extends Component implements HasForms, HasActions
             );
         }
     }
+
     public function createAction(): Action
     {
         return CreateAction::make('create')
-            ->label('Add menu')
+            ->label('Create new main menu')
             ->createAnother(false)
             ->form([
                 TextInput::make('title')
@@ -217,13 +218,11 @@ class MenusList extends Component implements HasForms, HasActions
 
 
             TextInput::make('display_title') // This is the title that will be displayed in the menu
-                ->label('Display title')
+            ->label('Display title')
                 ->required()
                 ->live()
                 ->maxLength(255)
                 ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),
-
-
 
 
             TextInput::make('title')
@@ -385,6 +384,20 @@ class MenusList extends Component implements HasForms, HasActions
             );
         }
 
+    }
+
+    public function menuActionsGroup(): ActionGroup
+    {
+        return ActionGroup::make([
+            $this->addMenuItemAction()->arguments(['parent_id' => $this->menu_id]),
+            // $this->editAction()->arguments(['id' => $this->menu_id]),
+            $this->createAction(),
+            $this->deleteAction()->arguments(['id' => $this->menu_id]),
+        ])
+            ->label('Settings')
+            ->icon('heroicon-m-ellipsis-vertical')
+            ->size(ActionSize::Small)
+            ->color('gray');
     }
 
     public function render(): View

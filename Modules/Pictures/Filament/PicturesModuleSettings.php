@@ -32,6 +32,7 @@ class PicturesModuleSettings extends LiveEditModuleSettings
         }
 
 
+
          return $form
             ->schema([
                 Tabs::make('Pictures')

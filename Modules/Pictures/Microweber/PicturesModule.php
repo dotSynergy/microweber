@@ -31,9 +31,13 @@ class PicturesModule extends BaseModule
         $relationData = $this->determineRelationData();
 
         $pictures = $this->fetchPictures($relationData);
-
-        if (empty($pictures)) {
-            $pictures = $this->getDefaultPictures($relationData['type'], $relationData['id']);
+        $defaultPicturesCreated = $this->getOption('default_pictures_created', 'n') === 'y';
+        if (!$defaultPicturesCreated and empty($pictures)) {
+            $this->saveOption('default_pictures_created', 'y');
+            $pictures = $this->makeDefaultPictures($relationData['type'], $relationData['id']);
+        }
+        if (!$defaultPicturesCreated) {
+            $this->saveOption('default_pictures_created', 'y');
         }
 
         return $this->buildView($viewData, $pictures);
@@ -65,19 +69,17 @@ class PicturesModule extends BaseModule
         $moduleId = $params['module_id'] ?? $params['data-module-id'] ?? $params['module_id'] ?? $this->getModuleId();
 
 
-
-        if($relType == 'content') {
+        if ($relType == 'content') {
             $relType = morph_name(Content::class);
-            if(!$relId){
+            if (!$relId) {
                 $relId = content_id();
             }
 
         } else {
-            if(!$relId) {
+            if (!$relId) {
                 $relId = $moduleId;
             }
         }
-
 
 
         return [
@@ -146,23 +148,26 @@ class PicturesModule extends BaseModule
     /**
      * Build default pictures for the module
      *
-     * @param  string  $relType
+     * @param string $relType
      * @param $relId
      *
      * @return array
      */
-    private function getDefaultPictures(string $relType, $relId): array
+    private function makeDefaultPictures(string $relType, $relId): array
     {
         $defaults = [];
         for ($i = 1; $i <= 3; $i++) {
-            $defaults[] = new Media([
-                'id' => $i,
+            $media = new Media([
+
                 'filename' => asset("modules/pictures/default-images/gallery-1-{$i}.jpg"),
                 'media_type' => 'picture',
                 'rel_type' => $relType,
                 'rel_id' => $relId,
                 'position' => $i - 1,
             ]);
+            $media->save();
+
+            $defaults[] = $media;
         }
         return $defaults;
     }

@@ -118,30 +118,30 @@ class ModuleResource extends Resource
 
             ]);
     }
-
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['name'];
-    }
-
-    public static function getGlobalSearchResultDetails(Model $record): array
-    {
-        /** @var SystemModulesSushi $record */
-
-        return [
-            'Module' => $record->name,
-        ];
-    }
-    public static function getGlobalSearchResultUrl(Model $record): string
-    {
-        $url  = ($record->adminUrl());
-
-        if(!$url){
-            $url = '#';
-        }
-
-        return $url;
-    }
+//
+//    public static function getGloballySearchableAttributes(): array
+//    {
+//        return ['name'];
+//    }
+//
+//    public static function getGlobalSearchResultDetails(Model $record): array
+//    {
+//        /** @var SystemModulesSushi $record */
+//
+//        return [
+//            'Module' => $record->name,
+//        ];
+//    }
+//    public static function getGlobalSearchResultUrl(Model $record): string
+//    {
+//        $url  = ($record->adminUrl());
+//
+//        if(!$url){
+//            $url = '#';
+//        }
+//
+//        return $url;
+//    }
 //    public static function getGlobalSearchResultActions(Model $record): array
 //    {
 //
@@ -156,10 +156,10 @@ class ModuleResource extends Resource
 //    }
 
     /** @return Builder<SystemModulesSushi> */
-    public static function getGlobalSearchEloquentQuery(): Builder
-    {
-        return parent::getGlobalSearchEloquentQuery();
-    }
+//    public static function getGlobalSearchEloquentQuery(): Builder
+//    {
+//        return parent::getGlobalSearchEloquentQuery();
+//    }
 
     public static function getRelations(): array
     {

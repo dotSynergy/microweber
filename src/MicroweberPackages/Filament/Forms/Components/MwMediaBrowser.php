@@ -258,13 +258,13 @@ class MwMediaBrowser extends Field
         }
 
         $itemsQuery = Media::query();
-
-       if (!empty(trim($this->sessionId))) {
-            $itemsQuery->where('session_id', $this->sessionId);
-        } else if ($this->createdBy) {
-            $itemsQuery->where('created_by', $this->createdBy);
+        if (empty(trim($this->relId))) {
+            if (!empty(trim($this->sessionId))) {
+                $itemsQuery->where('session_id', $this->sessionId);
+            } else if ($this->createdBy) {
+                $itemsQuery->where('created_by', $this->createdBy);
+            }
         }
-
         if (!empty(trim($this->relId))) {
             $itemsQuery->where('rel_id', $this->relId);
         } else {

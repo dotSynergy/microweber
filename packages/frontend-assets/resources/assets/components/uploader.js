@@ -276,24 +276,24 @@
                                 dataProgress = {
                                     percent: ((100 * _i) / _all).toFixed()
                                 };
-                                $(scope).trigger('progress', [dataProgress, res]);
+                                $(scope).trigger('progress', [dataProgress, res, file]);
                                 if(scope.settings.on.progress) {
-                                    scope.settings.on.progress(dataProgress, res);
+                                    scope.settings.on.progress(dataProgress, res, file);
                                 }
 
                             } else {
                                 dataProgress = {
                                     percent: '100'
                                 };
-                                $(scope).trigger('progress', [dataProgress, res]);
+                                $(scope).trigger('progress', [dataProgress, res, file]);
                                 if(scope.settings.on.progress) {
-                                    scope.settings.on.progress(dataProgress, res);
+                                    scope.settings.on.progress(dataProgress, res, file);
                                 }
-                                $(scope).trigger('FileUploaded', [res]);
+                                $(scope).trigger('FileUploaded', [res, file]);
                                 scope.dispatch('fileUploaded', res);
 
                                 if(scope.settings.on.fileUploaded) {
-                                    scope.settings.on.fileUploaded(res);
+                                    scope.settings.on.fileUploaded(res, file);
                                 }
                                 if (done) {
                                     done.call(file, res);
@@ -315,7 +315,7 @@
                                 msg = req.responseJSON.error || req.responseJSON.error.message;
                             }
 
-                            console.log(msg)
+
 
                             if (msg) {
                                 mw.notification.warning(msg, 10000);
@@ -341,15 +341,46 @@
             return chunks;
         };
 
-        this.uploadFiles = function () {
+        this.uploadFiles = function (_asyncCall) {
+            if(!_asyncCall) {
+                this.__total = this.files.length;
+                this.__res = {
+                    total: this.__total,
+                    percent: 0,
+                    uploaded: 0
+                };
+
+
+
+                scope.dispatch('totalProgress', this.__res);
+                if(scope.settings.on.totalProgress) {
+                    scope.settings.on.totalProgress(this.__res);
+                }
+            }
+
+            const total = this.__total;
+
+
             if (this.settings.async) {
                  if (this.files.length) {
                     this.uploading(true);
                     var file = this.files[0]
-                    scope.uploadFile(file)
-                        .then(function (){
+                    scope
+                    .uploadFile(file)
+                    .then(function (){
+                        const uploaded = total - scope.files.length;
+                        const res = {
+                            total,
+                            percent: Math.round((uploaded/total) * 100),
+                            uploaded,
+
+                        }
+                        scope.dispatch('totalProgress', res);
+                        if(scope.settings.on.totalProgress) {
+                            scope.settings.on.totalProgress(res);
+                        }
                         scope.files.shift();
-                        scope.uploadFiles();
+                        scope.uploadFiles(true);
                     }, function (xhr){
                             scope.removeFile(file);
                             if(scope.settings.on.fileUploadError) {
@@ -363,6 +394,17 @@
                     if(scope.settings.on.filesUploaded) {
                         scope.settings.on.filesUploaded();
                     }
+                    const uploaded = total - scope.files.length;
+                        const res = {
+                            total,
+                            percent: 100,
+                            uploaded,
+
+                        }
+                        scope.dispatch('totalProgress', res);
+                        if(scope.settings.on.totalProgress) {
+                            scope.settings.on.totalProgress(res);
+                        }
                     this.dispatch('filesUploaded')
                     $(scope).trigger('FilesUploaded');
 
@@ -376,6 +418,16 @@
                         .then(function (file){
                             count++;
                             scope.uploading(false);
+                            const uploaded = total - scope.files.length;
+                        const res = {
+                            total,
+                            percent: Math.round((uploaded/total) * 100),
+                            uploaded
+                        }
+                        scope.dispatch('totalProgress', res);
+                        if(scope.settings.on.totalProgress) {
+                            scope.settings.on.totalProgress(res);
+                        }
                             if(all === count) {
                                 scope.input.value = '';
                                 if(scope.settings.on.filesUploaded) {

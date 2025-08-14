@@ -115,12 +115,13 @@
 
                             scope.refresh(true);
                         },
-                        progress: function (val) {
+                        totalProgress: function (val) {
                             scope.progress(val.percent);
                         },
                         fileUploadError: function () {
                             scope.progress(false);
-                        }
+                        },
+
                     }
                 });
 
@@ -858,10 +859,10 @@
             }
 
             const accept = this.settings.accept.split(',');
-            const extension = `.${item.name.split('.').pop()}`;
+            const extension = `.${item.name.split('.').pop().toLowerCase()}`;
             return accept.indexOf(extension) !== -1 || accept.indexOf(item.mimeType) !== -1
 
-            return true;
+
         }
 
         this.singleListView = function (item) {

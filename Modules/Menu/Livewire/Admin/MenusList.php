@@ -207,7 +207,10 @@ class MenusList extends Component implements HasForms, HasActions
                     }
                     if (isset($state['text'])) {
                         $displayTitle = $state['text'];
-                        $set('title', $displayTitle);
+
+                        if(!$title) {
+                            $set('title', $displayTitle);
+                        }
                         // $set('use_custom_title', false);
                     }
                 //    $set('display_title', $displayTitle);
@@ -231,7 +234,8 @@ class MenusList extends Component implements HasForms, HasActions
 //                ->hidden(function (Get $get) {
 //                    return $get('use_custom_title') === false;
 //                })
-                ->helperText('Title will be auto-filled from the selected content')
+                ->helperText('Set the title of the menu item.')
+                ->required()
                 ->maxLength(1255),
 
 //            Checkbox::make('use_custom_title')

@@ -245,7 +245,7 @@ export default {
 
 
                 liveEditIframeData.multiLanguageEnabledLanguages.forEach((item, index) => {
-                    this.languages[item.locale] = item.language;
+                    this.languages[item.locale] = item.display_name ?? item.language;
                     this.languagesIcons[item.locale] = item.icon;
                 })
                 this.currentLanguage = liveEditIframeData.multiLanguageCurrentLanguage;

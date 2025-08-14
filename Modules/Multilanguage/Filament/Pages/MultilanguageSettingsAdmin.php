@@ -58,9 +58,14 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
     public function form(Form $form): Form
     {
         $langs = ['none' => 'None'];
+        $availableLanguages= [];
         foreach (get_supported_languages(1) as $supported_language) {
-            $langs[$supported_language['locale']] = $supported_language['language'] . ' [' . $supported_language['locale'] . ']';
+             $langs[$supported_language['locale']] = $supported_language['display_name'] . ' [' . $supported_language['locale'] . ']';
+            $availableLanguages[$supported_language['locale']] = $supported_language['display_name'] . ' [' . $supported_language['locale'] . ']';
         }
+
+
+
 
         return $form
             ->schema([
@@ -75,6 +80,30 @@ class MultilanguageSettingsAdmin extends AdminSettingsPage
                                     ->label('Activate multilanguage')
                                     ->helperText('Enable or disable multilanguage functionality for your website')
                                     ->live(),
+
+
+                                Section::make('Default Language Settings')
+                                    ->description('Set the default language for your website')
+                                    ->visible(fn(Get $get) => $get('options.multilanguage_settings.is_active') === true)
+                                    ->schema([
+                                        Select::make('options.website.language')
+                                            ->label('Default Language')
+                                            ->options($availableLanguages)
+                                            ->searchable()
+                                            ->helperText('This will be the default language for your website')
+                                            ->live()
+                                            ->afterStateUpdated(function ($state) {
+                                                if ($state) {
+                                                     // Apply language change logic
+                                                    Notification::make()
+                                                        ->title('Language settings updated')
+                                                        ->success()
+                                                        ->send();
+                                                }
+                                            }),
+                                    ]),
+
+
 
                                 Section::make('Manage Languages')
                                     ->visible(fn(Get $get) => $get('options.multilanguage_settings.is_active') === true)

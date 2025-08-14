@@ -23,7 +23,7 @@ description: Default language switcher template
     <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownMenuButton" style="min-width: 56px;">
         @if(!empty($supported_languages))
             @foreach($supported_languages as $language)
-                @if($language['is_active'] == 'y')
+                @if($language['is_active'])
                     <a class="dropdown-item d-flex align-items-center justify-content-center lang-flag-link p-1 @if($language['locale'] == $current_language['locale']) active @endif"
                        href="?lang={{ $language['locale'] }}"
                        title="{{ $language['display_name'] ?: $language['language'] }}">

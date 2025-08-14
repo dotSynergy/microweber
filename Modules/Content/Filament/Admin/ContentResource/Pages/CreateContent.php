@@ -6,6 +6,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use MicroweberPackages\Filament\Concerns\ModifyComponentData;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Content\Concerns\HasEditContentForms;
 use Modules\Content\Filament\Admin\ContentResource;
 use Modules\Content\Models\Content;
@@ -110,7 +111,7 @@ class CreateContent extends CreateRecord
             ->color('success');
 
 
-        $isMultilanguageEnabled = true; // TODO
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
         if ($isMultilanguageEnabled) {
             $actions[] = Actions\LocaleSwitcher::make();
         }

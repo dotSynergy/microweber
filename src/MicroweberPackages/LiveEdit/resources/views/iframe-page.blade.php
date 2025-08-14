@@ -141,6 +141,19 @@
         <?php event_trigger('mw.live_edit.footer'); ?>
 
 
+        @if(\MicroweberPackages\Multilanguage\MultilanguageHelpers::multilanguageIsEnabled())
+            <script>
+
+                window.addEventListener('load', function () {
+
+                    mw.lib.require('flag_icons');
+                });
+
+
+            </script>
+        @endif
+
+
     </div>
 
 

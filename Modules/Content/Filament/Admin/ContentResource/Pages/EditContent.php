@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use MicroweberPackages\Filament\Actions\DeleteAction;
 use MicroweberPackages\Filament\Actions\DeleteActionOnlyIcon;
 use MicroweberPackages\Filament\Concerns\ModifyComponentData;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Content\Concerns\HasEditContentForms;
 use Modules\Content\Filament\Admin\ContentResource;
 use Modules\Content\Models\Content;
@@ -96,7 +97,7 @@ class EditContent extends EditRecord
             ->label('Save')
             ->color('success');
 
-        $isMultilanguageEnabled = true; // TODO
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
         if ($isMultilanguageEnabled) {
             $actions[] =  Actions\LocaleSwitcher::make();
         }

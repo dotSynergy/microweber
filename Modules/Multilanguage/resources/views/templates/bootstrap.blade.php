@@ -21,7 +21,7 @@ description: Bootstrap language switcher template
         @if(!empty($supported_languages))
             <ul class="dropdown-menu" aria-labelledby="languageSwitcher">
                 @foreach($supported_languages as $language)
-                    @if($language['is_active'] == 'y')
+                    @if($language['is_active'])
                         <li>
                             <a class="dropdown-item d-flex align-items-center @if($language['locale'] == $current_language['locale']) active @endif" href="?lang={{ $language['locale'] }}">
                                 @if($language['display_icon'])

@@ -10,7 +10,7 @@ description: Minimal language switcher template
     @if(!empty($supported_languages))
         <div class="language-links d-flex">
             @foreach($supported_languages as $language)
-                @if($language['is_active'] == 'y')
+                @if($language['is_active'])
                     <a href="?lang={{ $language['locale'] }}" class="language-link mx-1 @if($language['locale'] == $current_language['locale']) active @endif">
                         @if($language['display_icon'])
                             <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" style="max-width: 20px; max-height: 20px;">

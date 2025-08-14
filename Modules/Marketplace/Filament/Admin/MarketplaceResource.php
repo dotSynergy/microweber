@@ -31,7 +31,7 @@ class MarketplaceResource extends Resource
     protected static ?string $pluralLabel = 'Marketplaces';
 
     protected static ?string $slug = 'marketplace';
-    public static string $description = 'Extend your website with modules, themes, and more from the Marketplace';
+    public static string $description = 'Extend your website with modules and themes';
     public function getDescription(): string
     {
 

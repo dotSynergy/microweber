@@ -5,6 +5,7 @@ namespace Modules\Category\Filament\Admin\Resources\CategoryResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use MicroweberPackages\Multilanguage\Filament\Pages\ListRecords\Concerns\TranslatableRecordsList;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Category\Filament\Admin\Resources\CategoryResource;
 use Modules\Multilanguage\Filament\Pages\Multilanguage;
 
@@ -29,8 +30,8 @@ class ListCategories extends ListRecords
 
         $actions[] = Actions\CreateAction::make();
 
-        $multilanguageIsEnabled = \MicroweberPackages\Multilanguage\MultilanguageHelpers::multilanguageIsEnabled();
-        if ($multilanguageIsEnabled) {
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
+        if ($isMultilanguageEnabled) {
             $actions[] = Actions\LocaleSwitcher::make();
         }
 

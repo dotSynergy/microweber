@@ -18,6 +18,7 @@ use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 use MicroweberPackages\Filament\Forms\Components\MwRangeSlider;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use MicroweberPackages\Option\Models\Option;
 use Rupadana\FilamentSlider\Components\Concerns\InputSliderBehaviour;
 use Rupadana\FilamentSlider\Components\InputSlider;
@@ -56,7 +57,7 @@ abstract class LiveEditModuleSettings extends Page
             'templatesForm',
         ];
     }
-
+  
 
     public function mount()
     {

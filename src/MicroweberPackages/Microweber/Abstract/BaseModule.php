@@ -63,6 +63,9 @@ abstract class BaseModule
         }
         $viewData = $this->getViewData();
         $template = $viewData['template'] ?? 'default';
+
+
+
         return view(static::$templatesNamespace . '.' . $template, $viewData);
     }
 
@@ -74,9 +77,13 @@ abstract class BaseModule
         }
         $moduleTemplatesNamespace = static::$templatesNamespace;
         $viewName = $moduleTemplatesNamespace . '.' . 'default';
+
+
         if ($template) {
+            $template = str_replace('.php', '.blade.php', $template);
+            $template = str_replace('.blade.blade.php', '.blade.php', $template);
+
             $template = str_replace('.blade.php', '', $template);
-            $template = str_replace('.php', '', $template);
             $template = str_replace('/', '.', $template);
             $template = str_replace('\\', '.', $template);
             $viewSettings = static::$templatesNamespace . '.' . $template;
@@ -86,11 +93,15 @@ abstract class BaseModule
         }
 
         $activeTemplate = template_name();
+        if($activeTemplate == 'default'){
+            $activeTemplate = app()->option_manager->get('current_template', 'template');
+        }
 
         $templateParent = template_parent($activeTemplate);
         if ($templateParent and $templateParent != $activeTemplate) {
             $activeTemplate = $templateParent;
         }
+
 
         if ($activeTemplate) {
             $activeTemplate = str_replace(' ', '_', $activeTemplate);
@@ -104,7 +115,6 @@ abstract class BaseModule
                 $checkIfActiveSiteTemplateLowerName = $checkIfActiveSiteTemplate->getLowerName();
                 $templatesNamespaceInActiveSiteTemplate = str_replace('::', '.', $moduleTemplatesNamespace);
                 $templatesNamespaceInActiveSiteTemplate = 'templates.' . $checkIfActiveSiteTemplateLowerName . '::' . $templatesNamespaceInActiveSiteTemplate . '.' . $template;
-
                 if (view()->exists($templatesNamespaceInActiveSiteTemplate)) {
                     $viewName = $templatesNamespaceInActiveSiteTemplate;
                 }

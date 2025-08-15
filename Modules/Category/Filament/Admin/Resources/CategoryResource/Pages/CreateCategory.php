@@ -5,6 +5,7 @@ namespace Modules\Category\Filament\Admin\Resources\CategoryResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Category\Filament\Admin\Resources\CategoryResource;
 
 class CreateCategory extends CreateRecord
@@ -30,8 +31,8 @@ class CreateCategory extends CreateRecord
     {
         $actions = [];
 
-        $multilanguageIsEnabled = true; // TODO
-        if ($multilanguageIsEnabled) {
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
+        if ($isMultilanguageEnabled) {
             $actions[] = Actions\LocaleSwitcher::make();
         }
 

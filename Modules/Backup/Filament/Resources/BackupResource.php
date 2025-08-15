@@ -77,8 +77,9 @@ class BackupResource extends Resource
             ->actions([
                 Tables\Actions\Action::make('restore')
                     ->label('Restore')
-                    ->modalCancelAction(false)
+                  //  ->modalCancelAction(false)
                     ->modalSubmitAction(false)
+                    ->closeModalByClickingAway(false)
                     ->form([
                         Wizard::make([
                             Wizard\Step::make('Restore type')

@@ -7,7 +7,6 @@ use Filament\Forms;
 use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Form;
-use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\GlobalSearch\Actions\Action;
 use Filament\Support\Colors\Color;
@@ -17,18 +16,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
-use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 use MicroweberPackages\Filament\Forms\Components\MwMediaBrowser;
 use MicroweberPackages\Filament\Forms\Components\MwSelectTemplateForPage;
 use MicroweberPackages\Filament\Forms\Components\MwTitleWithSlugInput;
 use MicroweberPackages\Filament\Tables\Columns\ImageUrlColumn;
 use MicroweberPackages\Multilanguage\Filament\Resources\Concerns\TranslatableResource;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use MicroweberPackages\User\Models\User;
 use Modules\Content\Models\Content;
 use Modules\Media\Models\Media;
 use Modules\Page\Models\Page;
 use Modules\Post\Models\Post;
+use SolutionForest\FilamentTranslateField\Facades\FilamentTranslateField;
 
 class ContentResource extends Resource
 {
@@ -49,6 +48,7 @@ class ContentResource extends Resource
         if (isset($params['id'])) {
             $id = $params['id'];
         }
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
 
         $relType = \Modules\Content\Models\Content::class;
         $relId = $id;
@@ -118,6 +118,20 @@ class ContentResource extends Resource
         }
         $active_site_template_default = template_name();
 
+        $localesWithLabels = [];
+
+
+        $isMultilanguageActive = MultilanguageHelpers::multilanguageIsEnabled();
+        if ($isMultilanguageActive) {
+            $translatableLocales = static::getTranslatableLocales();
+        } else {
+            $translatableLocales = [];
+        }
+        if ($translatableLocales) {
+            foreach ($translatableLocales as $locale) {
+                $localesWithLabels[$locale] = FilamentTranslateField::getLocaleLabel($locale, $locale);
+            }
+        }
 
         $mainForm = [
 
@@ -139,11 +153,10 @@ class ContentResource extends Resource
 
 
                         Forms\Components\Hidden::make('active_site_template')
-
                             ->default($active_site_template_default)
                             ->visible(function (Forms\Get $get) {
-                            return $get('content_type') == 'page';
-                        }),
+                                return $get('content_type') == 'page';
+                            }),
                         Forms\Components\Hidden::make('layout_file')->visible(function (Forms\Get $get) {
                             return $get('content_type') == 'page';
                         }),
@@ -321,6 +334,35 @@ class ContentResource extends Resource
 
                 Forms\Components\Group::make()
                     ->schema([
+
+
+
+
+
+
+
+
+
+
+
+                        Forms\Components\Select::make('activeLocale')
+                            ->label('Language')
+
+                            ->visible($isMultilanguageActive)
+                            ->live()
+                            ->options($localesWithLabels)
+                            ->default(function (Forms\Get $get) {
+                                return $get('activeLocale') ?: app()->getLocale();
+                            })
+                            ->afterStateUpdated( function (Forms\Get $get, Forms\Set $set,$state, $livewire) {
+                                // If the component is a Filament form, set the active locale
+                                if(method_exists($livewire,'setActiveLocale')) {
+
+                                     $livewire->setActiveLocale($state);
+                                }
+                            }),
+
+
                         Forms\Components\Section::make('Published')
                             ->schema([
                                 Forms\Components\Toggle::make('is_active')
@@ -330,6 +372,12 @@ class ContentResource extends Resource
                                     })
 
                             ]),
+
+
+
+
+
+
 
 
                         Forms\Components\Section::make('Parent page')

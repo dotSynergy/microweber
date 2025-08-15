@@ -19,9 +19,13 @@ class SetupWizardController extends AdminController
 
 
             'OnlineLearning2',
-            'Big2',
-            'Freelancer2',
+
+            'ProteinStore2',
+            'Fitpower2',
             'Yoga2',
+
+            'Freelancer2',
+
             'CarServices',
             'Burger',
 
@@ -29,23 +33,27 @@ class SetupWizardController extends AdminController
             'Photographer2',
             'Barbershop2',
             'Biolinks',
-            'ProteinStore2',
-            'Fitpower2',
+
             'Coffeeshop2',
             'Homerestoration2',
+
+            'Yummy2',
+            'Conference2',
+            'Events2' ,
+
             'Resume2',
             'Simple2',
             'HumanResources',
             'Tattoo2',
             'Office2',
+            'School',
             'Nomad2',
 
             'Pricing',
             'NotaryServices2',
 
-            'Yummy2',
-            'Conference2',
-            'Events2' ,
+
+            'Big2',
             'MobileApp2'
 
         ];

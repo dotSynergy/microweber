@@ -5,6 +5,7 @@ namespace MicroweberPackages\LiveEdit\Filament\Admin\Pages;
 
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\LocaleSwitcher;
 use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -15,6 +16,7 @@ use Illuminate\Contracts\View\View;
 use MicroweberPackages\LiveEdit\Filament\Actions\CustomViewAction;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
 use MicroweberPackages\Modules\Logo\Http\Livewire\LogoModuleSettings;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Category\Filament\Admin\Resources\CategoryResource;
 use Modules\Content\Filament\Admin\ContentResource;
 use Modules\Content\Models\Content;
@@ -34,6 +36,8 @@ class AdminLiveEditPage extends Page
 
     use InteractsWithActions;
     use InteractsWithForms;
+
+
 
     public function render(): View
     {
@@ -225,6 +229,21 @@ class AdminLiveEditPage extends Page
         return Action::make($actionName)
             ->label('Create ' . $contentType)
             ->modalHeading('Create ' . $contentType)
+
+
+//            ->extraModalFooterActions(function (Action $action) use ($contentType) {
+//                $actions = [];
+//
+//                $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
+//                if ($isMultilanguageEnabled) {
+//                    $actions[] = LocaleSwitcher::make();
+//                }
+//
+//                return $actions;
+//
+//            })
+
+
 //            ->modalContent(view('microweber-live-edit::modal.generate-action', [
 //                'contentType' => $contentType
 //            ]))

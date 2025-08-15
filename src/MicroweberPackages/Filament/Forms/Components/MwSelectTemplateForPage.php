@@ -38,8 +38,7 @@ class MwSelectTemplateForPage
         $selectTemplateInput = Forms\Components\Select::make($activeSiteTemplateInputName)
             ->label('Template')
             ->reactive()
-            ->live()
-            ->afterStateHydrated(
+             ->afterStateHydrated(
                 function (Forms\Get $get, Forms\Set $set) use ($activeSiteTemplateInputName, $layoutFileInputName) {
                     $activeSiteTemplate = $get($activeSiteTemplateInputName);
 
@@ -134,8 +133,7 @@ class MwSelectTemplateForPage
 
             })
             ->reactive()
-            ->live()
-            ->options(function (Forms\Get $get, Forms\Set $set) use ($layoutFileInputName, $activeSiteTemplateInputName) {
+             ->options(function (Forms\Get $get, Forms\Set $set) use ($layoutFileInputName, $activeSiteTemplateInputName) {
                 $activeSiteTemplate = $get($activeSiteTemplateInputName);
 
                 if (!$activeSiteTemplate) {

@@ -100,12 +100,14 @@ class ZipReader extends DefaultReader
 
             $backupLocationStorage = $backupLocation . DS . 'storage';
 
+            $repalceStorageFoldertInContent = false;
             if (is_dir($backupLocationStorage)) {
                 $copy = $this->mergePublicStorageDirectories($backupLocationStorage, public_path('storage') . DS);
             } else {
+                $repalceStorageFoldertInContent = true;
+
                 $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
             }
-
             //  $copy = $this->_cloneDirectory($backupLocation, userfiles_path());
 
 
@@ -219,6 +221,8 @@ class ZipReader extends DefaultReader
 
             $readerClass = 'Modules\\Restore\\Formats\\' . ucfirst($file['reader']) . 'Reader';
             $reader = new $readerClass($file['file']);
+
+
             $data = $reader->readData();
 
             if (strpos($importToTable, 'backup_export') !== false) {
@@ -236,6 +240,33 @@ class ZipReader extends DefaultReader
                     }
                 }
             }
+
+        }
+
+
+        if ($repalceStorageFoldertInContent) {
+
+            //relace userfiles/ with storage/userfiles
+
+            foreach ($readedData as $table => $data) {
+
+                if (is_array($data)) {
+                    foreach ($data as $valueKey => $valueData) {
+                        if (is_array($valueData)) {
+                            foreach ($valueData as $key => $value) {
+
+                                if (is_string($value) && strpos($value, 'userfiles/') !== false
+                                    && strpos($value, 'storage/userfiles/') === false
+                                ) {
+                                    $value = str_replace('userfiles/', 'storage/userfiles/', $value);
+                                    $readedData[$table][$valueKey][$key] = $value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 
         }
 

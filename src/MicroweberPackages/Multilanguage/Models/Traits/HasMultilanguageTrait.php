@@ -58,7 +58,11 @@ trait HasMultilanguageTrait
         self::$__getLocale = mw()->lang_helper->current_lang();
         return self::$__getLocale;
     }
-
+//    public function setMultilanguageAttribute($value)
+//    {
+//        dd($value);
+//        // to Disable multilanguage
+//    }
     public static function bootHasMultilanguageTrait()
     {
 
@@ -88,10 +92,8 @@ trait HasMultilanguageTrait
                 }
 
 
-
-
                 if ($isModuleOptions and !isset($model->attributes['multilanguage']) and isset($model->attributes['lang'])) {
-                // When receive a save_option
+                    // When receive a save_option
                     // legacy save_option will not have multilanguage attribute, it will have lang attribute instead
                     if (isset($model->attributes['lang']) && isset($model->attributes['module']) and $model->attributes['lang'] != $defaultLocale) {
                         $translatableModuleOptions = self::getTranslatableModuleOptions();
@@ -124,12 +126,14 @@ trait HasMultilanguageTrait
                 if (isset($model->attributes['lang'])) {
                     unset($model->attributes['lang']);
                 }
-                if (isset($model->attributes['multilanguage_translatons'])) {
-                    unset($model->attributes['multilanguage_translatons']);
+                if (isset($model->attributes['multilanguage_translations'])) {
+                    //old deprecated attribute
+                    // this is used in old models, where multilanguage_translations was used instead of multilanguage
+                    unset($model->attributes['multilanguage_translations']);
                 }
 
 
-                 /**
+                /**
                  * When you add multilanguage fields
                  *
                  * EXAMPLE:
@@ -185,6 +189,39 @@ trait HasMultilanguageTrait
                 $model->_saveMultilanguageTranslation();
             }
         });
+
+
+
+//        static::updating(function ($model) {
+//
+//            if(array_key_exists('multilanguage', $model->attributes) && empty($model->attributes['multilanguage'])) {
+//                unset($model->attributes['multilanguage']);
+//            }
+//
+//           // unset($model->attributes['multilanguage']);
+////            if (isset($model->attributes['multilanguage'])) {
+////                if (empty($model->attributes['multilanguage'])) {
+////
+////                } else {
+////                    $model->_addMultilanguage = $model->attributes['multilanguage'];
+////                    unset($model->attributes['multilanguage']);
+////                }
+////            }
+//
+//
+////
+////            if (isset($model->attributes['lang'])) {
+////                unset($model->attributes['lang']);
+////            }
+////            if (isset($model->attributes['multilanguage'])) {
+////                //seleteh jrp irpery fro model
+////                // this is used in old models, where multilanguage_translations was used instead of multilanguage
+////                // unset($model->attributes['multilanguage_translations']);
+////                unset($model->multilanguage);
+////                unset($model->attributes['multilanguage']);
+////            }
+//
+//        });
 
         static::deleted(function ($model) {
 
@@ -291,6 +328,7 @@ trait HasMultilanguageTrait
 
     // SPATIE
     public $translationLocale = null;
+
     public function setLocale(string $locale): self
     {
         $this->translationLocale = $locale;
@@ -305,10 +343,10 @@ trait HasMultilanguageTrait
 
     public function getAttributeValue($key): mixed
     {
-        if (! MultilanguageHelpers::multilanguageIsEnabled()) {
+        if (!MultilanguageHelpers::multilanguageIsEnabled()) {
             return parent::getAttributeValue($key);
         }
-        if (! $this->isTranslatableAttribute($key)) {
+        if (!$this->isTranslatableAttribute($key)) {
             return parent::getAttributeValue($key);
         }
 
@@ -339,11 +377,10 @@ trait HasMultilanguageTrait
 
     public function getTranslation(string $key, string $locale, bool $useFallbackLocale = true): mixed
     {
-      //  $translation = $this->getOriginal($key);
-      //  $translation = parent::getAttributeValue($key);
+        //  $translation = $this->getOriginal($key);
+        //  $translation = parent::getAttributeValue($key);
         $translation = $this->getOriginal($key);
 //@todo possible bug on multilanguage with $this->getOriginal($key);, chaged to parent::getAttributeValue($key);
-
 
 
         $getTranslation = MultilanguageTranslations::where('rel_id', $this->id)
@@ -360,27 +397,61 @@ trait HasMultilanguageTrait
             return $this->mutateAttribute($key, $translation);
         }
 
-        if($this->hasAttributeMutator($key)) {
+        if ($this->hasAttributeMutator($key)) {
             return $this->mutateAttributeMarkedAttribute($key, $translation);
         }
 
         return $translation;
     }
 
+//
     public function getTranslations(string $key = null, array $allowedLocales = null): array
+
     {
-        if ($key == null) {
-            return [
-                'title' => [
-                    'en_US' => 'testValue_en',
-                    'bg_BG' => 'testValue_bg',
-                ],
-            ];
+
+
+        $allTranslations = $this->translations()->get();
+
+
+        if (!MultilanguageHelpers::multilanguageIsEnabled() or empty($allTranslations)) {
+            return [];
         }
-        return [
-            'en_US' => 'testValue_en',
-            'bg_BG' => 'testValue_bg'
-        ];
+        if ($key !== null) {
+            $allTranslations = $allTranslations->where('field_name', $key);
+        }
+        if ($allowedLocales !== null) {
+            $allTranslations = $allTranslations->whereIn('locale', $allowedLocales);
+        }
+        if ($allTranslations->isEmpty()) {
+            return [];
+        }
+        $translations = [];
+        foreach ($allTranslations as $translation) {
+            if (!isset($translations[$translation->locale])) {
+                $translations[$translation->locale] = [];
+
+            }
+            if ($key !== null) {
+                $translations[$translation->locale][$key] = $translation->field_value;
+            } else {
+                $translations[$translation->locale][$translation->field_name] = $translation->field_value;
+            }
+        }
+
+        return $translations;
+
+//        if ($key == null) {
+//            return [
+//                'title' => [
+//                    'en_US' => 'testValue_en',
+//                    'bg_BG' => 'testValue_bg',
+//                ],
+//            ];
+//        }
+//        return [
+//            'en_US' => 'testValue_en',
+//            'bg_BG' => 'testValue_bg'
+//        ];
     }
 
     public function setTranslation(string $key, string $locale, $value): self
@@ -398,12 +469,12 @@ trait HasMultilanguageTrait
     {
         $this->guardAgainstNonTranslatableAttribute($key);
 
-        if (! empty($translations)) {
+        if (!empty($translations)) {
             foreach ($translations as $locale => $translation) {
                 $this->setTranslation($key, $locale, $translation);
             }
         } else {
-         //   $this->attributes[$key] = $this->asJson([]);
+            //   $this->attributes[$key] = $this->asJson([]);
         }
 
         return $this;
@@ -414,7 +485,7 @@ trait HasMultilanguageTrait
      */
     protected function guardAgainstNonTranslatableAttribute(string $key): void
     {
-        if (! $this->isTranslatableAttribute($key)) {
+        if (!$this->isTranslatableAttribute($key)) {
             throw AttributeIsNotTranslatable::make($key, $this);
         }
     }

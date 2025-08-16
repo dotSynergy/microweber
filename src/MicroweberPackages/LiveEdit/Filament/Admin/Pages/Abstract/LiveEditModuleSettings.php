@@ -57,7 +57,7 @@ abstract class LiveEditModuleSettings extends Page
             'templatesForm',
         ];
     }
-  
+
 
     public function mount()
     {
@@ -104,8 +104,8 @@ abstract class LiveEditModuleSettings extends Page
 //        $getTranslatableOptions = ModuleOption::whereIn('option_group', static::getOptionGroups())->get();
 //        if ($getTranslatableOptions) {
 //            foreach ($getTranslatableOptions as $option) {
-//                if (!empty($option->multilanguage_translatons)) {
-//                    foreach ($option->multilanguage_translatons as $translationLocale => $translationField) {
+//                if (!empty($option->multilanguage_translations)) {
+//                    foreach ($option->multilanguage_translations as $translationLocale => $translationField) {
 //                        $this->translatableOptions[$option->option_key][$translationLocale] = $translationField['option_value'];
 //                    }
 //                }

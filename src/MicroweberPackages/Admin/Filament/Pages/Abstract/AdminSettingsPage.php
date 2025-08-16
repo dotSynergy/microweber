@@ -83,8 +83,8 @@ abstract class AdminSettingsPage extends Page
         $getTranslatableOptions = ModuleOption::whereIn('option_group', $this->getOptionGroups())->get();
         if ($getTranslatableOptions) {
             foreach ($getTranslatableOptions as $option) {
-                if (!empty($option->multilanguage_translatons)) {
-                    foreach ($option->multilanguage_translatons as $translationLocale => $translationField) {
+                if (!empty($option->multilanguage_translations)) {
+                    foreach ($option->multilanguage_translations as $translationLocale => $translationField) {
                         $this->translatableOptions[$option->option_group][$option->option_key][$translationLocale] = $translationField['option_value'];
                     }
                 }

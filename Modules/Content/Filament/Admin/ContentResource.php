@@ -28,6 +28,7 @@ use Modules\Media\Models\Media;
 use Modules\Page\Models\Page;
 use Modules\Post\Models\Post;
 use SolutionForest\FilamentTranslateField\Facades\FilamentTranslateField;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
 
 class ContentResource extends Resource
 {
@@ -152,6 +153,11 @@ class ContentResource extends Resource
                             ->default($contentSubtype),
 
 
+                      Forms\Components\Hidden::make('multilanguage')
+                        ->visible($isMultilanguageEnabled)
+                      ,
+
+
                         Forms\Components\Hidden::make('active_site_template')
                             ->default($active_site_template_default)
                             ->visible(function (Forms\Get $get) {
@@ -258,19 +264,42 @@ class ContentResource extends Resource
                             })
                             ->schema([
 
-                                MwTitleWithSlugInput::make(
-                                    fieldTitle: 'title',
-                                    fieldSlug: 'url',
-                                    urlHost: $site_url,
-                                    titleLabel: 'Title',
-                                    slugLabel: 'Link:',
 
-                                )
-                                    ->columnSpanFull(),
+
+                                Forms\Components\TextInput::make('title')
+                                    ->maxLength(255)
+                                    ->suffixAction(
+                                        TranslateFieldAction::make('title')
+                                    ) ->columnSpanFull()
+                                ,
+
+                                Forms\Components\TextInput::make('url')
+                                    ->maxLength(255)
+                                    ->suffixAction(
+                                        TranslateFieldAction::make('url')
+                                    ) ->columnSpanFull()
+                                ,
+
+
+
+
+//
+//                                MwTitleWithSlugInput::make(
+//                                    fieldTitle: 'title',
+//                                    fieldSlug: 'url',
+//                                    urlHost: $site_url,
+//                                    titleLabel: 'Title',
+//                                    slugLabel: 'Link:',
+//
+//                                )
+//                                    ->columnSpanFull(),
 
 
                                 Forms\Components\RichEditor::make('content_body')
                                     ->columnSpan('full')
+//                                    ->suffixActions([
+//                                        TranslateFieldAction::make('content_body')
+//                                    ])
                                     ->visible(function (Forms\Get $get) {
                                         return $get('content_type') !== 'page';
                                     }),
@@ -340,27 +369,6 @@ class ContentResource extends Resource
 
 
 
-
-
-
-
-
-                        Forms\Components\Select::make('activeLocale')
-                            ->label('Language')
-
-                            ->visible($isMultilanguageActive)
-                            ->live()
-                            ->options($localesWithLabels)
-                            ->default(function (Forms\Get $get) {
-                                return $get('activeLocale') ?: app()->getLocale();
-                            })
-                            ->afterStateUpdated( function (Forms\Get $get, Forms\Set $set,$state, $livewire) {
-                                // If the component is a Filament form, set the active locale
-                                if(method_exists($livewire,'setActiveLocale')) {
-
-                                     $livewire->setActiveLocale($state);
-                                }
-                            }),
 
 
                         Forms\Components\Section::make('Published')
@@ -754,16 +762,25 @@ class ContentResource extends Resource
                     Forms\Components\TextInput::make('content_meta_title')
                         ->label('Meta Title')
                         ->helperText('Describe for what is this page about in short title')
+                        ->suffixAction(
+                            TranslateFieldAction::make('content_meta_title')
+                        )
                         ->columnSpanFull(),
 
                     Forms\Components\Textarea::make('description')
                         ->label('Meta Description')
                         ->helperText('Please provide a brief summary of this web page')
+//                        ->suffixActions([
+//                            TranslateFieldAction::make('description')
+//                        ])
                         ->columnSpanFull(),
 
                     Forms\Components\TextInput::make('content_meta_keywords')
                         ->label('Meta Keywords')
                         ->helperText('Separate keywords with a comma and space. Type keywords that describe your content - Example: Blog, Online News, Phones for sale')
+                        ->suffixAction(
+                            TranslateFieldAction::make('content_meta_keywords')
+                        )
                         ->columnSpanFull(),
                 ])
         ];

@@ -83,9 +83,9 @@
 
                         <div
 
-                            ax-load="visible"
+                            x-load="visible"
 
-                            ax-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js')}}"
+                            x-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js')}}"
 
                             x-data="mwMediaManagerComponent({
                                 mediaIds: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},

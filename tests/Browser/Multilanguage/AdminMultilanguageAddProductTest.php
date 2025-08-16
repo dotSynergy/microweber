@@ -192,7 +192,7 @@ class AdminMultilanguageAddProductTest extends DuskTestCaseMultilanguage
 
             foreach ($productDataMultilanguage as $locale => $productData) {
                 foreach ($productData as $dataKey => $dataValue) {
-                    // $this->assertEquals($dataValue, $findProduct->multilanguage_translatons[$locale][$dataKey]);
+                    // $this->assertEquals($dataValue, $findProduct->multilanguage_translations[$locale][$dataKey]);
                     $this->assertStringContainsString($dataValue, $translations[$locale][$dataKey]);
                 }
             }

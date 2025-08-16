@@ -681,7 +681,14 @@ class MenuManager
                 }
 
                 foreach ($item as $key => $value) {
+
+                    if(is_array($value)) {
+                        // maybe multi-language is messed up
+                        continue;
+                    }
+
                     if (!is_string($value)) {
+
                         $value = strval($value);
                     }
                     if (is_string($value) and is_string($key) and $value) {

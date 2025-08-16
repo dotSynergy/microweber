@@ -22,8 +22,9 @@ class MultilanguageObserver
 
     public function retrieved(Model $model)
     {
-        $multilanguage = [];
-
+        $multilanguageTranslations = [];
+        $defaultLocale = $this->getDefaultLocale();
+        $currentLocale = $this->getLocale();
         /**
          * Translatable module options
          *  This will append translatable fields in model option
@@ -49,8 +50,8 @@ class MultilanguageObserver
                     continue;
                 }
                 $found = false;
-                foreach ($modelAttributes as $attrCheckKey=>$attrCheck){
-                    if($attrCheckKey==$fieldName){
+                foreach ($modelAttributes as $attrCheckKey => $attrCheck) {
+                    if ($attrCheckKey == $fieldName) {
                         $found = true;
                     }
                 }
@@ -58,7 +59,7 @@ class MultilanguageObserver
                     continue;
                 }
 
-                $multilanguage[$this->getDefaultLocale()][$fieldName] = $model->getOriginal($fieldName);
+                $multilanguageTranslations[$defaultLocale][$fieldName] = $model->getOriginal($fieldName);
 
 
                 if ($findTranslations !== null) {
@@ -66,12 +67,12 @@ class MultilanguageObserver
                     foreach ($findTranslations as $findedTranslation) {
                         if ($findedTranslation['field_name'] == $fieldName) {
 
-                            $multilanguage[$findedTranslation['locale']][$fieldName] = $this->_decodeCastValue($model, $fieldName, $findedTranslation['field_value']);
+                            $multilanguageTranslations[$findedTranslation['locale']][$fieldName] = $this->_decodeCastValue($model, $fieldName, $findedTranslation['field_value']);
 
                             // Replace model fields if the default lang is different from current lang
-                            if ($this->getLocale() !== $this->getDefaultLocale()) {
-                                if (isset($multilanguage[$this->getLocale()][$fieldName])) {
-                                    $model->$fieldName = $multilanguage[$this->getLocale()][$fieldName];
+                            if ($currentLocale !== $defaultLocale) {
+                                if (isset($multilanguageTranslations[$currentLocale][$fieldName])) {
+                                    $model->$fieldName = $multilanguageTranslations[$currentLocale][$fieldName];
                                 }
                             }
                         }
@@ -84,16 +85,37 @@ class MultilanguageObserver
                 $model->multilanguage_translations_count = count($findTranslations);
             }*/
 
-       // $model->multilanguage = $multilanguage;
+        //  $model->multilanguage = $multilanguage;
 
-        $model->multilanguage_translatons = $multilanguage;
-        $model->makeHidden(['multilanguage', 'translatable','multilanguage_translatons']);
+        //make in format for mulilangiage
+        $multilanguiage = [];
+        if ($multilanguageTranslations) {
+            foreach ($multilanguageTranslations as $locale => $translations) {
+
+                //skip default $locale
+                if ($locale == $defaultLocale) {
+                    continue;
+                }
+
+
+                foreach ($translations as $fieldName => $fieldValue) {
+                    if ($fieldValue) {
+                        $multilanguiage[$fieldName][$locale] = $fieldValue;
+                    }
+                }
+            }
+        }
+
+        $model->multilanguage = $multilanguiage;
+
+        $model->multilanguage_translations = $multilanguageTranslations;
+        //  $model->makeHidden(['multilanguage', 'translatable', 'multilanguage_translations']);
     }
 
     /**
      * Handle the Page "saving" event.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function saved(Model $model)
@@ -155,7 +177,7 @@ class MultilanguageObserver
     /**
      * Handle the "deleted" event.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function deleted(Model $model)
@@ -170,7 +192,9 @@ class MultilanguageObserver
         }
 
     }
-    private function getTranslatableModuleOptions() {
+
+    private function getTranslatableModuleOptions()
+    {
 
         return MultilanguageHelpers::getTranslatableModuleOptions();
     }
@@ -192,7 +216,7 @@ class MultilanguageObserver
             $castType = $model->casts[$fieldName];
             if ($castType == 'json') {
                 if ($type == 'encode') {
-                    $fieldValue = json_encode($fieldValue );
+                    $fieldValue = json_encode($fieldValue);
                 } else {
                     $fieldValue = json_decode($fieldValue, true);
                 }
@@ -202,11 +226,13 @@ class MultilanguageObserver
         return $fieldValue;
     }
 
-    private function _encodeCastValue($model, $fieldName, $fieldValue) {
+    private function _encodeCastValue($model, $fieldName, $fieldValue)
+    {
         return $this->_catValue($model, $fieldName, $fieldValue, 'encode');
     }
 
-    private function _decodeCastValue($model, $fieldName, $fieldValue) {
+    private function _decodeCastValue($model, $fieldName, $fieldValue)
+    {
         return $this->_catValue($model, $fieldName, $fieldValue, 'decode');
     }
 }

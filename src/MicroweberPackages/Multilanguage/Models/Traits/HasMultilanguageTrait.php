@@ -190,38 +190,72 @@ trait HasMultilanguageTrait
             }
         });
 
+        static::creating(function ($model) {
 
+            if(!MultilanguageHelpers::multilanguageIsEnabled()) {
+                return;
+            }
+            if(isset($model->attributes['multilanguage']) && !empty($model->attributes['multilanguage'])) {
+                $this->_addMultilanguage =  $model->attributes['multilanguage'];
+                unset($model->attributes['multilanguage']);
+            }
+            if(isset($model->attributes['multilanguage']) && empty($model->attributes['multilanguage'])) {
+                $this->_addMultilanguage = [];
+                unset($model->attributes['multilanguage']);
+            }
 
-//        static::updating(function ($model) {
-//
-//            if(array_key_exists('multilanguage', $model->attributes) && empty($model->attributes['multilanguage'])) {
-//                unset($model->attributes['multilanguage']);
+//            if(isset($model->attributes['lang']) && empty($model->attributes['lang'])) {
+//                unset($model->attributes['lang']);
 //            }
+            if (isset($model->attributes['multilanguage_translations'])) {
+                //old deprecated attribute
+                // this is used in old models, where multilanguage_translations was used instead of multilanguage
+                unset($model->attributes['multilanguage_translations']);
+            }
+
+            if(array_key_exists('multilanguage', $model->attributes) && empty($model->attributes['multilanguage'])) {
+                unset($model->attributes['multilanguage']);
+            }
+
+
+//            if (MultilanguageHelpers::multilanguageIsEnabled()) {
+//                $model->_saveMultilanguageTranslation();
+//            }
+        });
+
+
 //
-//           // unset($model->attributes['multilanguage']);
-////            if (isset($model->attributes['multilanguage'])) {
-////                if (empty($model->attributes['multilanguage'])) {
+//     static::updating(function ($model) {
+//
+//
+//         if(array_key_exists('multilanguage', $model->attributes) && empty($model->attributes['multilanguage'])) {
+//             unset($model->attributes['multilanguage']);
+//         }
+//
+////        // unset($model->attributes['multilanguage']);
+////           if (isset($model->attributes['multilanguage'])) {
+////               if (empty($model->attributes['multilanguage'])) {
 ////
-////                } else {
-////                    $model->_addMultilanguage = $model->attributes['multilanguage'];
-////                    unset($model->attributes['multilanguage']);
-////                }
-////            }
-//
-//
+////               } else {
+////                   $model->_addMultilanguage = $model->attributes['multilanguage'];
+////                   unset($model->attributes['multilanguage']);
+////               }
+////           }
 ////
-////            if (isset($model->attributes['lang'])) {
-////                unset($model->attributes['lang']);
-////            }
-////            if (isset($model->attributes['multilanguage'])) {
-////                //seleteh jrp irpery fro model
-////                // this is used in old models, where multilanguage_translations was used instead of multilanguage
-////                // unset($model->attributes['multilanguage_translations']);
-////                unset($model->multilanguage);
-////                unset($model->attributes['multilanguage']);
-////            }
+////
+////
+////           if (isset($model->attributes['lang'])) {
+////               unset($model->attributes['lang']);
+////           }
+////           if (isset($model->attributes['multilanguage'])) {
+////               //seleteh jrp irpery fro model
+////               // this is used in old models, where multilanguage_translations was used instead of multilanguage
+////               // unset($model->attributes['multilanguage_translations']);
+////               unset($model->multilanguage);
+////               unset($model->attributes['multilanguage']);
+////           }
 //
-//        });
+//     });
 
         static::deleted(function ($model) {
 

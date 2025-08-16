@@ -42,6 +42,8 @@ class TranslateFieldAction
                     $locale = $language['locale'];
                     $label = $language['title'] ?? $locale;
 
+                    $label = FilamentTranslateField::getLocaleLabel($locale, $locale) . ' [' . $label . ']';
+
                     // Skip default locale as it's handled by the main field
                     if ($locale === $defaultLocale) {
                         continue;

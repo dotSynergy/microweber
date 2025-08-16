@@ -22,6 +22,9 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
         $jqueryUiNestedSortable = public_asset() . 'vendor/microweber-packages/frontend-assets-libs/jquery-nested-sortable/jquery.mjs.nestedSortable.js';
         $lib_tynymce = public_asset() . 'vendor/microweber-packages/frontend-assets-libs/tinymce/tinymce.js';
         $nouislider = public_asset() . 'vendor/microweber-packages/frontend-assets-libs/nouislider/nouislider.js';
+        $mwMediaBrowser = public_asset() . 'vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js';
+
+
 
       //   $fileRobotUrl = public_asset() . 'vendor/microweber-packages/frontend-assets/js/imageeditor.js';
 
@@ -51,6 +54,9 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
 
         $append_html .= '' . "\r\n";
         $append_html .= '<script src="' . $libs . '" type="module"  id="mw-filament-js-libs-scripts"></script>' . "\r\n";
+
+        $append_html .= '' . "\r\n";
+        $append_html .= '<script src="' . $mwMediaBrowser . '"  type="module"   id="mw-media-browser-alpine-scripts"></script>' . "\r\n";
 
 
 //        $append_html .= '' . "\r\n";

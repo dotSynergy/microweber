@@ -32,8 +32,6 @@
 }
 
 
-
-
 /* Allow titles to show in the tools panel popup - higher specificity */
 .advanced-popup .tools-panel .mw-live-edit-advanced-settings-popup svg + span {
     display: inline !important;
@@ -92,10 +90,9 @@
     backdrop-filter: blur(20px);
     border-radius: 16px;
     padding: 20px;
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
     z-index: 1000;
     min-width: 240px;
     border: 1px solid rgba(0, 0, 0, 0.08);
@@ -105,10 +102,9 @@
 .dark .advanced-popup {
     background: rgba(30, 30, 30, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .advanced-popup-grid {
@@ -319,12 +315,12 @@
 <template>
 
 
-    <div class="mw-live-edit-right-sidebar-wrapper me-2 " :class="'mw-live-edit-right-sidebar-template-' + template">
+    <div :class="'mw-live-edit-right-sidebar-template-' + template" class="mw-live-edit-right-sidebar-wrapper me-2 ">
 
 
-        <div v-on:click="handleInsertLayout()"
+        <div v-if="insertLayoutVisible"
              class="btn-icon live-edit-toolbar-buttons"
-             v-if="insertLayoutVisible">
+             v-on:click="handleInsertLayout()">
             <v-tooltip activator="parent" location="start">
                 <Lang>Insert layout</Lang>
             </v-tooltip>
@@ -332,49 +328,51 @@
         </div>
 
 
-        <span v-on:click="toggle('template-settings')"
+        <span v-if="canShowSettingsCustomize"
               :class="{'live-edit-right-sidebar-active': buttonIsActive && !buttonIsActiveStyleEditor }"
-              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle">
+              class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle"
+              v-on:click="toggle('template-settings')">
             <v-tooltip activator="parent" location="start"><Lang>Template settings</Lang></v-tooltip>
 
-            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="22" viewBox="96 96 960 960" width="22"><path
+            <svg fill="currentColor" height="22" viewBox="96 96 960 960" width="22" xmlns="http://www.w3.org/2000/svg"><path
                 d="M480 976q-82 0-155-31.5t-127.5-86Q143 804 111.5 731T80 576q0-83 32.5-156t88-127Q256 239 330 207.5T488 176q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880 538q0 115-70 176.5T640 776h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480 976Zm0-400Zm-220 40q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120-160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm200 0q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120 160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17ZM480 896q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800 538q0-121-92.5-201.5T488 256q-136 0-232 93t-96 227q0 133 93.5 226.5T480 896Z"/></svg>
         </span>
 
 
-        <div v-on:click="toggle('style-editor')"
+        <div v-if="canShowSettingsCustomize"
              :class="{'live-edit-right-sidebar-active': !buttonIsActive && buttonIsActiveStyleEditor }"
-             class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle">
+             class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-css-editor-toggle"
+             v-on:click="toggle('style-editor')">
             <v-tooltip activator="parent" location="start">
                 <Lang>Design</Lang>
             </v-tooltip>
             <svg fill="currentColor"
-                 xmlns="http://www.w3.org/2000/svg" height="22"
-                 viewBox="0 -960 960 960" width="22">
+                 height="22" viewBox="0 -960 960 960"
+                 width="22" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M480-120q-133 0-226.5-92T160-436q0-65 25-121.5T254-658l226-222 226 222q44 44 69 100.5T800-436q0 132-93.5 224T480-120ZM242-400h474q12-72-13.5-123T650-600L480-768 310-600q-27 26-53 77t-15 123Z"/>
             </svg>
         </div>
 
-        <div v-on:click="handleQuickEdit()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
-             class="btn-icon live-edit-toolbar-buttons">
+        <div v-if="canShowSettingsCustomize" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
+             class="btn-icon live-edit-toolbar-buttons"
+             v-on:click="handleQuickEdit()">
             <v-tooltip activator="parent" location="start">
                 <Lang>Quick AI edit</Lang>
             </v-tooltip>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22px" height="22px"
-                 shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
-                 image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 472.403">
-                <path fill-rule="nonzero"
-                      d="M144.317 85.269h223.368c15.381 0 29.391 6.325 39.567 16.494l.025-.024c10.163 10.164 16.477 24.193 16.477 39.599v189.728c0 15.401-6.326 29.425-16.485 39.584-10.159 10.159-24.183 16.484-39.584 16.484H144.317c-15.4 0-29.437-6.313-39.601-16.476-10.152-10.152-16.47-24.167-16.47-39.592V141.338c0-15.374 6.306-29.379 16.463-39.558l.078-.078c10.178-10.139 24.168-16.433 39.53-16.433zm59.98 204.329h-39.825l30.577-117.964h58.32l30.577 117.964h-39.825l-3.051-18.686h-33.725l-3.048 18.686zm15.645-81.726l-5.801 33.032h19.945l-5.61-33.032h-8.534zm74.007 81.726V171.634h37.749v117.964h-37.749zm161.348-35.797v30.763c0 3.165 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.586 5.752-5.751v-30.763c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zm0-70.639v30.762c0 3.163 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.589 5.752-5.752v-30.762c0-3.168-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.584-5.752 5.752zm0 141.278v30.763c0 3.165 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.587 5.752-5.752V324.44c0-3.165-2.587-5.751-5.752-5.751h-45.199c-3.165 0-5.752 2.586-5.752 5.751zm0-211.92v30.763c0 3.164 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.587 5.752-5.751V112.52c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zM56.703 253.801v30.763c0 3.165-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.586-5.752-5.751v-30.763c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zm0-70.639v30.762c0 3.163-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.589-5.752-5.752v-30.762c0-3.168 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.584 5.752 5.752zm0 141.278v30.763c0 3.165-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.587-5.752-5.752V324.44c0-3.165 2.587-5.751 5.752-5.751h45.199c3.165 0 5.752 2.586 5.752 5.751zm0-211.92v30.763c0 3.164-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.587-5.752-5.751V112.52c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zM346.579 415.7h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752v-45.199c0-3.165 2.586-5.752 5.751-5.752zM346.579 0h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752V5.752c0-3.165 2.586-5.752 5.751-5.752zm233.027 111.097H144.317a30.11 30.11 0 00-21.35 8.844l-.049.049a30.117 30.117 0 00-8.844 21.348v189.728c0 8.292 3.414 15.847 8.9 21.333 5.494 5.493 13.058 8.907 21.343 8.907h223.368c8.273 0 15.833-3.421 21.326-8.914s8.915-13.053 8.915-21.326V141.338c0-8.283-3.414-15.848-8.908-21.341v-.049c-5.454-5.456-13.006-8.851-21.333-8.851z"/>
+            <svg clip-rule="evenodd" fill="currentColor" fill-rule="evenodd" height="22px"
+                 image-rendering="optimizeQuality" shape-rendering="geometricPrecision"
+                 text-rendering="geometricPrecision" viewBox="0 0 512 472.403" width="22px" xmlns="http://www.w3.org/2000/svg">
+                <path d="M144.317 85.269h223.368c15.381 0 29.391 6.325 39.567 16.494l.025-.024c10.163 10.164 16.477 24.193 16.477 39.599v189.728c0 15.401-6.326 29.425-16.485 39.584-10.159 10.159-24.183 16.484-39.584 16.484H144.317c-15.4 0-29.437-6.313-39.601-16.476-10.152-10.152-16.47-24.167-16.47-39.592V141.338c0-15.374 6.306-29.379 16.463-39.558l.078-.078c10.178-10.139 24.168-16.433 39.53-16.433zm59.98 204.329h-39.825l30.577-117.964h58.32l30.577 117.964h-39.825l-3.051-18.686h-33.725l-3.048 18.686zm15.645-81.726l-5.801 33.032h19.945l-5.61-33.032h-8.534zm74.007 81.726V171.634h37.749v117.964h-37.749zm161.348-35.797v30.763c0 3.165 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.586 5.752-5.751v-30.763c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zm0-70.639v30.762c0 3.163 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.589 5.752-5.752v-30.762c0-3.168-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.584-5.752 5.752zm0 141.278v30.763c0 3.165 2.587 5.752 5.752 5.752h45.199c3.165 0 5.752-2.587 5.752-5.752V324.44c0-3.165-2.587-5.751-5.752-5.751h-45.199c-3.165 0-5.752 2.586-5.752 5.751zm0-211.92v30.763c0 3.164 2.587 5.751 5.752 5.751h45.199c3.165 0 5.752-2.587 5.752-5.751V112.52c0-3.165-2.587-5.752-5.752-5.752h-45.199c-3.165 0-5.752 2.587-5.752 5.752zM56.703 253.801v30.763c0 3.165-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.586-5.752-5.751v-30.763c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zm0-70.639v30.762c0 3.163-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.589-5.752-5.752v-30.762c0-3.168 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.584 5.752 5.752zm0 141.278v30.763c0 3.165-2.587 5.752-5.752 5.752H5.752c-3.165 0-5.752-2.587-5.752-5.752V324.44c0-3.165 2.587-5.751 5.752-5.751h45.199c3.165 0 5.752 2.586 5.752 5.751zm0-211.92v30.763c0 3.164-2.587 5.751-5.752 5.751H5.752c-3.165 0-5.752-2.587-5.752-5.751V112.52c0-3.165 2.587-5.752 5.752-5.752h45.199c3.165 0 5.752 2.587 5.752 5.752zM346.579 415.7h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752v-45.199c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752v-45.199c0-3.165 2.586-5.752 5.751-5.752zM346.579 0h30.763c3.162 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.589 5.752-5.751 5.752h-30.763c-3.167 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.585-5.752 5.752-5.752zm-70.642 0H306.7c3.165 0 5.751 2.587 5.751 5.752v45.199c0 3.165-2.586 5.752-5.751 5.752h-30.763c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.639 0h30.762c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.762c-3.165 0-5.752-2.587-5.752-5.752V5.752c0-3.165 2.587-5.752 5.752-5.752zm-70.64 0h30.763c3.165 0 5.752 2.587 5.752 5.752v45.199c0 3.165-2.587 5.752-5.752 5.752h-30.763c-3.165 0-5.751-2.587-5.751-5.752V5.752c0-3.165 2.586-5.752 5.751-5.752zm233.027 111.097H144.317a30.11 30.11 0 00-21.35 8.844l-.049.049a30.117 30.117 0 00-8.844 21.348v189.728c0 8.292 3.414 15.847 8.9 21.333 5.494 5.493 13.058 8.907 21.343 8.907h223.368c8.273 0 15.833-3.421 21.326-8.914s8.915-13.053 8.915-21.326V141.338c0-8.283-3.414-15.848-8.908-21.341v-.049c-5.454-5.456-13.006-8.851-21.333-8.851z"
+                      fill-rule="nonzero"/>
             </svg>
         </div>
 
 
-
         <div>
-<!--            <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
-            <CurrentNodeModuleEditButton></CurrentNodeModuleEditButton>
-            <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>-->
+            <!--            <CurrentNodeTextEditButton></CurrentNodeTextEditButton>
+                        <CurrentNodeModuleEditButton></CurrentNodeModuleEditButton>
+                        <CurrentLayoutSettingsButtons></CurrentLayoutSettingsButtons>-->
             <CurrentContextMenu></CurrentContextMenu>
         </div>
 
@@ -390,13 +388,13 @@
             </Transition>
 
 
-            <div v-on:click="handleAdvanced()" :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }"
-                 class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-advanced">
+            <div :class="{'live-edit-right-sidebar-active': buttonIsActiveQuickEdit }" class="btn-icon live-edit-toolbar-buttons live-edit-toolbar-button-advanced"
+                 v-on:click="handleAdvanced()">
                 <v-tooltip activator="parent" location="start">
                     <Lang>Advanced</Lang>
                 </v-tooltip>
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                     fill="#e8eaed">
+                <svg fill="#e8eaed" height="24px" viewBox="0 -960 960 960" width="24px"
+                     xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M480-320q17 0 28.5-11.5T520-360q0-17-11.5-28.5T480-400q-17 0-28.5 11.5T440-360q0 17 11.5 28.5T480-320Zm-40-120h80v-200h-80v200ZM370-80l-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm40-320Z"/>
                 </svg>
@@ -676,13 +674,21 @@ export default {
             mw.top().app.liveEditWidgets.on('closeQuickEditComponent', () => {
                 this.buttonIsActiveQuickEdit = false
             })
+
         });
 
+        mw.top().app.canvas.on('liveEditCanvasLoaded', () => {
+            this.canShowSettingsCustomize = !!mw.top().app.canvas.getLiveEditData()
+        });
         // Add click-outside handler for advanced popup
         document.addEventListener('click', this.handleClickOutside);
     },
     data() {
+
+        var canShowSettingsCustomize = !!mw.top().app.canvas.getLiveEditData();
+
         return {
+            canShowSettingsCustomize: canShowSettingsCustomize,
             buttonIsActive: false,
             buttonIsActiveStyleEditor: false,
             buttonIsActiveQuickEdit: false,
@@ -691,7 +697,7 @@ export default {
             iconInsertlayout: mw.top().app?.iconService?.icon('add-layout'),
 
         }
-    }
+    },
+
 }
 </script>
-

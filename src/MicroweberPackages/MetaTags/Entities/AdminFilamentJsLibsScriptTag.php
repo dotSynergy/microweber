@@ -49,8 +49,8 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
         $append_html .= '' . "\r\n";
         $append_html .= '<script src="' . $nouislider . '" id="mw-nouislider-js-libs-scripts"></script>' . "\r\n";
 
-        $append_html .= '' . "\r\n";
-        $append_html .= '<script src="' . $lib_tynymce . '" id="mw-tynymce-js-libs-scripts"></script>' . "\r\n";
+      //  $append_html .= '' . "\r\n";
+       // $append_html .= '<script src="' . $lib_tynymce . '" id="mw-tynymce-js-libs-scripts"></script>' . "\r\n";
 
         $append_html .= '' . "\r\n";
         $append_html .= '<script src="' . $libs . '" type="module"  id="mw-filament-js-libs-scripts"></script>' . "\r\n";

@@ -14,7 +14,6 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -200,16 +199,7 @@ class TestimonialsTableList extends LiveEditModuleTable
                 EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
-                DeleteAction::make('delete'),
-                Action::make('copy')
-                    ->label('Copy')
-                    ->icon('heroicon-s-document-duplicate')
-                    ->action(function (Testimonial $record) {
-                        $newTestimonial = $record->replicate();
-                        $newTestimonial->push();
-
-                        $this->resetTable();
-                    }),
+                DeleteAction::make('delete')
             ])
             ->reorderable('position')
             ->bulkActions([

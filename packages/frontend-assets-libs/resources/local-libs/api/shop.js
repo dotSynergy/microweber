@@ -5,12 +5,31 @@ mw.require('forms.js');
 mw.cart = {
 
     add_and_checkout: function (content_id, price, c) {
-        if (typeof(c) == 'undefined') {
+        if (typeof (c) == 'undefined') {
             var c = function () {
                 window.location.href = mw.settings.api_url + 'shop/redirect_to_checkout';
             }
         }
         return mw.cart.add_item(content_id, price, c);
+    },
+
+    add_and_show_modal: function (content_id, price, c) {
+
+        mw.cart.add_item(content_id, price, c);
+
+
+        var checkoutUrl = mw.settings.api_url + 'shop/redirect_to_checkout';
+
+        const dlg = mw.dialog({
+            content: mw.lang('Item added to cart'),
+            title: mw.lang('Item added to cart'),
+            template: "mw_modal_basic",
+            footer: [
+                mw.element(`<button type="button" class="btn btn-primary" data-action="checkout" onclick="window.location.href='${checkoutUrl}'">${mw.lang('Checkout')}</button>`).get(0),
+            ],
+        });
+
+
     },
 
     add_item: function (content_id, price, c) {
@@ -78,12 +97,12 @@ mw.cart = {
         }
 
         var formData = new FormData();
-        $.each(data, function (k,v) {
-            formData.append(k,v);
+        $.each(data, function (k, v) {
+            formData.append(k, v);
         });
 
         $.ajax({
-            url:mw.settings.api_url + 'update_cart',
+            url: mw.settings.api_url + 'update_cart',
             dataType: 'text',
             cache: false,
             contentType: false,
@@ -102,7 +121,7 @@ mw.cart = {
 
 
             }
-         });
+        });
     },
 
     remove: function ($id) {
@@ -138,8 +157,8 @@ mw.cart = {
                 // mw.reload_module('shop/shipping');
                 // mw.trigger('mw.cart.qty', [data]);
 
-                if(data && typeof(data.error) !== 'undefined'){
-                    if(typeof(data.message) !== 'undefined'){
+                if (data && typeof (data.error) !== 'undefined') {
+                    if (typeof (data.message) !== 'undefined') {
                         mw.notification.warning(data.message);
                     }
                 }
@@ -199,7 +218,7 @@ mw.cart = {
 
         if (!beforeRedirect) {
             beforeRedirect = function () {
-                return new Promise(function (){
+                return new Promise(function () {
                     resolve();
                 });
             };
@@ -226,7 +245,7 @@ mw.cart = {
                 url: mw.settings.api_url + 'checkout',
                 data: obj,
                 error: function (xhr, ajaxOptions, thrownError) {
-                     mw.errorsHandle(JSON.parse(xhr.responseText))
+                    mw.errorsHandle(JSON.parse(xhr.responseText))
                     form.attr("data-loading", 'false');
                     form.find('.mw-checkout-btn').removeAttr('disabled');
                     form.find('.mw-checkout-btn').show();
@@ -243,9 +262,9 @@ mw.cart = {
                         mw.$('[data-type="shop/cart"]').removeAttr('hide-cart');
 
 
-                        if (typeof(data2.error) != 'undefined') {
+                        if (typeof (data2.error) != 'undefined') {
                             mw.$(selector + ' .mw-cart-data-holder').show();
-                            if (typeof(data2.error.address_error) != 'undefined') {
+                            if (typeof (data2.error.address_error) != 'undefined') {
                                 var form_with_err = form;
                                 var isModalForm = $(form_with_err).attr('is-modal-form')
 
@@ -257,7 +276,7 @@ mw.cart = {
                             }
 
                             mw.response(selector, data2);
-                        } else if (typeof(data2.success) != 'undefined') {
+                        } else if (typeof (data2.success) != 'undefined') {
 
 
                             if (typeof callback === 'function') {
@@ -274,13 +293,10 @@ mw.cart = {
                             }
 
 
-
-
-
-                            if (typeof(data2.redirect) != 'undefined') {
+                            if (typeof (data2.redirect) != 'undefined') {
 
                                 setTimeout(function () {
-                                    beforeRedirect().then(function (){
+                                    beforeRedirect().then(function () {
                                         window.location.href = data2.redirect;
                                     });
                                 }, 100);
@@ -319,10 +335,10 @@ mw.cart = {
     }
 }
 
-if (typeof(mw.cart.modal) == 'undefined') {
+if (typeof (mw.cart.modal) == 'undefined') {
     mw.cart.modal = {};
 }
-if (typeof(mw.cart.modal.init) == 'undefined') {
+if (typeof (mw.cart.modal.init) == 'undefined') {
     mw.cart.modal.init = function (root_node) {
         mw.cart.modal.bindStepButtons(root_node);
 
@@ -336,7 +352,7 @@ if (typeof(mw.cart.modal.init) == 'undefined') {
         }
     };
 }
-if (typeof(mw.cart.modal.bindStepButtons) == 'undefined') {
+if (typeof (mw.cart.modal.bindStepButtons) == 'undefined') {
 
     mw.cart.modal.bindStepButtons = function (root_node) {
         if (typeof root_node === 'string') {

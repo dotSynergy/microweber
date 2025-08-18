@@ -134,16 +134,19 @@ class ModulesApiLiveEdit extends Controller
 
             $modulesFromRegistry = app()->microweber->getModulesDetails();
 
-            $modules = mw()->module_manager->get('installed=1&ui=1');
+       //     $modules = mw()->module_manager->get('installed=1&ui=1');
+
+            $modules = [];
+
             $module_layouts = mw()->module_manager->get('installed=1&module=layouts');
             $hide_from_display_list = array('layouts', 'template_settings');
             $sortout_el = array();
             $sortout_mod = array();
             if ($modules) {
-                foreach ($modules as $mkey => $mod) {
-                    $mod['icon'] = '';  // old modules do not have icons
-                    $modules[$mkey] = $mod;
-                }
+//                foreach ($modules as $mkey => $mod) {
+//                    $mod['icon'] = '';  // old modules do not have icons
+//                    $modules[$mkey] = $mod;
+//                }
             }
             if ($modulesFromRegistry) {
 

@@ -2,7 +2,11 @@
 
 namespace Modules\Cart\Providers;
 
+use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
+use MicroweberPackages\Microweber\Facades\Microweber;
+use Modules\Cart\Filament\CartAddModuleSettings;
+use Modules\Cart\Microweber\CartAddModule;
 use Modules\Cart\Repositories\CartManager;
 use Modules\Cart\Repositories\CartRepository;
 
@@ -35,22 +39,23 @@ class CartServiceProvider extends BaseModuleServiceProvider
         $this->app->register(CartEventServiceProvider::class);
 
         /**
-         * @property \Modules\Cart\Repositories\CartManager    $cart_manager
+         * @property \Modules\Cart\Repositories\CartManager $cart_manager
          */
         $this->app->singleton('cart_manager', function ($app) {
             return new CartManager();
         });
         /**
-         * @property \Modules\Cart\Repositories\CartRepository   $cart_repository
+         * @property \Modules\Cart\Repositories\CartRepository $cart_repository
          */
         $this->app->bind('cart_repository', function () {
-            return  new CartRepository();
+            return new CartRepository();
         });
         // Register filament page for Microweber module settings
-        // FilamentRegistry::registerPage(CartModuleSettings::class);
+        FilamentRegistry::registerPage(CartAddModuleSettings::class);
 
         // Register Microweber module
         // Microweber::module(\Modules\Cart\Microweber\CartModule::class);
+        Microweber::module(CartAddModule::class);
 
     }
 

@@ -4436,8 +4436,8 @@ html[dir="rtl"] .mw-gallery-prev {
     border-radius: 10px 10px 0 0;
     border-bottom: 1px solid #d9dadb;
     min-height: 43px;
-    background-color: #4592ff;
-    color: #fff;
+    background-color: #ffffff;
+    color: #020202;
 }
 .mw-dialog-skin-default .mw-dialog-header .mw-dialog-title {
     max-width: calc(100% - 55px);
@@ -4521,12 +4521,17 @@ html[dir="rtl"] .mw-gallery-prev {
     color: #4592ff;
 }
 .mw-dialog-skin-default .mw-dialog-close:after {
-    content: "\f2d7";
-    font-family: Microweber;
-    font-size: 12px;
+    content: "";
+    background-image: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960' fill='%23111'%3E%3Cpath d='m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 .mw-dialog-skin-default .mw-dialog-container {
-    padding: 10px 0 !important;
+    padding: 10px;
 }
 .mw-dialog-skin-default.mw-dialog-iframe-loading iframe {
     opacity: 0;

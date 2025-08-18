@@ -189,6 +189,21 @@ class CheckoutResource extends Resource
                                         Forms\Components\Livewire::make(CartItems::class)
                                             ->columnSpanFull(),
                                     ]),
+                                Section::make('Terms and Conditions')
+                                    ->visible(function (Forms\Get $get) {
+                                        return get_option('shop_require_terms', 'website') == 1;
+                                    })
+                                    ->schema([
+                                        Forms\Components\Checkbox::make('terms')
+                                            ->label('I agree to the terms and conditions')
+                                            ->required()
+                                            ->default(false)
+                                            ->afterStateUpdated(function ($state, Forms\Get $get, $livewire) {
+                                                checkout_set_user_info('terms', $state);
+                                                $livewire->dispatch('reload-cart');
+                                            })
+                                            ->default(fn() => checkout_get_user_info('terms')),
+                                    ]),
 
                                 Section::make('Apply Coupon')
                                     ->visible(function (Forms\Get $get) {

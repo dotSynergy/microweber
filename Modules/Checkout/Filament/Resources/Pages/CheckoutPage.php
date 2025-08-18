@@ -75,14 +75,21 @@ class CheckoutPage extends CreateRecord
             if (isset($order['success'])) {
                 $success = $order['success'] ?? false;
             }
+            $errorMessage = 'Error processing order';
+            if (isset($order['error']) and is_array($order['error'])) {
+                $errorMessage = implode(', ', $order['error']);
+            } elseif (isset($order['error']) and is_string($order['error'])) {
+                $errorMessage = $order['error'];
+            }
 
-            if (!$success) {
+
+             if (!$success) {
                 Notification::make()
                     ->title('Error processing order')
-                    ->body('Error processing order')
+                    ->body($errorMessage)
                     ->danger()
                     ->send();
-                return redirect()->route('filament.checkout.resources.checkout.failed')->with('error', 'Error processing order');
+                return redirect()->route('filament.checkout.resources.checkout.failed')->with('error', $errorMessage);
             }
 
 

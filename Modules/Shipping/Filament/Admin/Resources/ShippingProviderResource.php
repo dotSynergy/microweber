@@ -77,9 +77,9 @@ class ShippingProviderResource extends Resource
                             ->afterStateUpdated(function (Forms\Set $set, Forms\Get $get, string $state) use ($shippingProviders) {
                                 if ($state) {
 
-                                    if (!$get('name')) {
+                                  //  if (!$get('name')) {
                                         $set('name', $shippingProviders[$state] ?? null);
-                                    }
+                                 //   }
                                     if (!$get('is_active')) {
                                         $set('is_active', 1);
                                     }
@@ -93,7 +93,7 @@ class ShippingProviderResource extends Resource
                                                     'is_active' => true
                                                 ]
                                             ],
-                                            'shipping_instructions' => 'Please select your shipping country to calculate shipping costs.'
+                                            'shipping_instructions' => 'Please select your shipping country.'
                                         ]);
                                     }
                                 }

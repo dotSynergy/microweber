@@ -23,6 +23,7 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
 use Modules\Menu\Models\Menu;
 
 class MenusList extends Component implements HasForms, HasActions
@@ -236,6 +237,9 @@ class MenusList extends Component implements HasForms, HasActions
 //                })
                 ->helperText('Set the title of the menu item.')
                 ->required()
+                ->hintAction(
+                    TranslateFieldAction::make('title')->label('')
+                )
                 ->maxLength(1255),
 
 //            Checkbox::make('use_custom_title')

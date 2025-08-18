@@ -21,7 +21,7 @@ description: Bootstrap button
 
 @php
     $hasIcon = !empty($icon);
-    $iconHtml = $hasIcon ? "<i class=\"{$icon}\"></i>" : '';
+    $iconHtml = $hasIcon ? icon_html($icon) : '';
     $iconPosition = $iconPosition ?? 'left';
 @endphp
 

@@ -28,6 +28,53 @@ function template_config($templateName = false)
     return app()->template_manager->get_config($templateName);
 }
 
+function icon_html($icon)
+{
+
+    if (!is_string($icon) || empty($icon)) {
+        return '';
+    }
+    if (str_starts_with($icon, '<i class="')) {
+        return $icon;
+    }
+    if (str_starts_with($icon, '<svg')) {
+        return $icon;
+    }
+    if (str_starts_with($icon, '<img')) {
+        return $icon;
+    }
+    if (str_starts_with($icon, '<span class="')) {
+        return $icon;
+    }
+    if (str_starts_with($icon, '<')) {
+        return $icon;
+    }
+    if (str_starts_with($icon, 'mdi-')) {
+        return '<i class="mdi ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'mw-')) {
+        return '<i class="mw-icon ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'icon-')) {
+        return '<i class="icon ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'fa-')) {
+        return '<i class="fa ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'glyphicon-')) {
+        return '<i class="glyphicon ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'mdi-')) {
+        return '<i class="mdi ' . $icon . '"></i>';
+    }
+    if (str_starts_with($icon, 'icon-')) {
+        return '<i class="icon ' . $icon . '"></i>';
+    }
+
+
+    return '';
+}
+
 function current_template()
 {
     return template_name();

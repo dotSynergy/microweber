@@ -7,7 +7,7 @@ use Modules\Pdf\Filament\PdfModuleSettings;
 
 class PdfModule extends BaseModule
 {
-    public static string $name = 'PDF Module';
+    public static string $name = 'PDF';
     public static string $module = 'pdf';
     public static string $icon = 'heroicon-o-document';
     public static string $categories = 'documents, pdf';

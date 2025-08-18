@@ -72,7 +72,7 @@ class TemplateLiveEditCss
             $the_active_site_template = template_name();
         }
 
- 
+
         $custom_live_edit_css_path = $this->getLiveEditCssPath($the_active_site_template);
 
 

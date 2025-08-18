@@ -119,20 +119,20 @@ class ContentResource extends Resource
         }
         $active_site_template_default = template_name();
 
-        $localesWithLabels = [];
+        /*  $localesWithLabels = [];
 
 
-        $isMultilanguageActive = MultilanguageHelpers::multilanguageIsEnabled();
-        if ($isMultilanguageActive) {
-            $translatableLocales = static::getTranslatableLocales();
-        } else {
-            $translatableLocales = [];
-        }
-        if ($translatableLocales) {
-            foreach ($translatableLocales as $locale) {
-                $localesWithLabels[$locale] = FilamentTranslateField::getLocaleLabel($locale, $locale);
-            }
-        }
+          $isMultilanguageActive = MultilanguageHelpers::multilanguageIsEnabled();
+          if ($isMultilanguageActive) {
+              $translatableLocales = static::getTranslatableLocales();
+          } else {
+              $translatableLocales = [];
+          }
+          if ($translatableLocales) {
+              foreach ($translatableLocales as $locale) {
+                  $localesWithLabels[$locale] = FilamentTranslateField::getLocaleLabel($locale, $locale);
+              }
+          }*/
 
         $mainForm = [
 
@@ -153,9 +153,9 @@ class ContentResource extends Resource
                             ->default($contentSubtype),
 
 
-                      Forms\Components\Hidden::make('multilanguage')
-                        ->visible($isMultilanguageEnabled)
-                      ,
+                        Forms\Components\Hidden::make('multilanguage')
+                            ->visible($isMultilanguageEnabled)
+                        ,
 
 
                         Forms\Components\Hidden::make('active_site_template')
@@ -265,22 +265,19 @@ class ContentResource extends Resource
                             ->schema([
 
 
-
                                 Forms\Components\TextInput::make('title')
                                     ->maxLength(255)
                                     ->suffixAction(
                                         TranslateFieldAction::make('title')
-                                    ) ->columnSpanFull()
+                                    )->columnSpanFull()
                                 ,
 
                                 Forms\Components\TextInput::make('url')
                                     ->maxLength(255)
                                     ->suffixAction(
                                         TranslateFieldAction::make('url')
-                                    ) ->columnSpanFull()
+                                    )->columnSpanFull()
                                 ,
-
-
 
 
 //
@@ -297,9 +294,9 @@ class ContentResource extends Resource
 
                                 Forms\Components\RichEditor::make('content_body')
                                     ->columnSpan('full')
-//                                    ->suffixActions([
-//                                        TranslateFieldAction::make('content_body')
-//                                    ])
+                                    ->hintAction(
+                                        TranslateFieldAction::make('content_body')->label('')
+                                    )
                                     ->visible(function (Forms\Get $get) {
                                         return $get('content_type') !== 'page';
                                     }),
@@ -365,12 +362,6 @@ class ContentResource extends Resource
                     ->schema([
 
 
-
-
-
-
-
-
                         Forms\Components\Section::make('Published')
                             ->schema([
                                 Forms\Components\Toggle::make('is_active')
@@ -380,12 +371,6 @@ class ContentResource extends Resource
                                     })
 
                             ]),
-
-
-
-
-
-
 
 
                         Forms\Components\Section::make('Parent page')
@@ -770,9 +755,9 @@ class ContentResource extends Resource
                     Forms\Components\Textarea::make('description')
                         ->label('Meta Description')
                         ->helperText('Please provide a brief summary of this web page')
-//                        ->suffixActions([
-//                            TranslateFieldAction::make('description')
-//                        ])
+                        ->hintAction(
+                            TranslateFieldAction::make('description')->label('')
+                        )
                         ->columnSpanFull(),
 
                     Forms\Components\TextInput::make('content_meta_keywords')

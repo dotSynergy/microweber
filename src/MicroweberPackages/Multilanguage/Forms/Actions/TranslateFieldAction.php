@@ -20,7 +20,7 @@ class TranslateFieldAction
     public static function make(string $fieldName): Action
     {
         return Action::make('translate_' . $fieldName)
-             ->icon('heroicon-o-language')
+            ->icon('heroicon-o-language')
             ->tooltip('Translate this field')
             ->modalHeading('Translate: ' . ucfirst(str_replace('_', ' ', $fieldName)))
             ->visible(fn() => MultilanguageHelpers::multilanguageIsEnabled())
@@ -95,22 +95,29 @@ class TranslateFieldAction
                    ->columnSpanFull();
            }*/
 
+        $input = TextInput::make($translationFieldName);
+        if (str_contains($fieldName, 'body')) {
+            $input = RichEditor::make($translationFieldName);
+        } else if (str_contains($fieldName, 'description')) {
+            $input = Textarea::make($translationFieldName);
+        }
+
+
         // Default to TextInput
-        return TextInput::make($translationFieldName)
+        return $input
             ->label(false)
             //  ->live()
             ->placeholder('Enter translation...')
-            ->formatStateUsing(function (Get $get, Set $set, $state,$livewire,$component) use ($translationFieldName, $locale, $fieldName) {
+            ->formatStateUsing(function (Get $get, Set $set, $state, $livewire, $component) use ($translationFieldName, $locale, $fieldName) {
 
 
-          //      dd($get('./', true));
+                //      dd($get('./', true));
 
-              $translations = $get('../../data.multilanguage', false);
+                $translations = $get('../../data.multilanguage', false);
 
-              if(empty($translations)){
-                  $translations =$get('mountedTableActionsData.0.multilanguage', true);
-              }
-
+                if (empty($translations)) {
+                    $translations = $get('mountedTableActionsData.0.multilanguage', true);
+                }
 
 
 //                $parentComponent = $component->getContainer() ->  getParentComponent()->getLivewire() ;
@@ -126,8 +133,7 @@ class TranslateFieldAction
 //
 //                dd( $get($statePath.'.title', true),$statePath.'.title');
 
-             //   dd( $statePath,$get('mountedTableActionsData.0.title', true));
-
+                //   dd( $statePath,$get('mountedTableActionsData.0.title', true));
 
 
 //             //   dd($parentComponent);
@@ -159,21 +165,18 @@ class TranslateFieldAction
 
                 $translations = $get('../../data.multilanguage', false);
 
-                if(empty($translations)){
-                    $translations =$get('mountedTableActionsData.0.multilanguage', true);
+                if (empty($translations)) {
+                    $translations = $get('mountedTableActionsData.0.multilanguage', true);
                 }
 
 
-
-
-
-              //  $translations = $get('../../data.multilanguage', false);
+                //  $translations = $get('../../data.multilanguage', false);
 
                 $translations[$fieldName][$locale] = $state;
 
 
-                if(!$hasData){
-                    $set('mountedTableActionsData.0.multilanguage', $translations,isAbsolute: true);
+                if (!$hasData) {
+                    $set('mountedTableActionsData.0.multilanguage', $translations, isAbsolute: true);
                 } else {
                     $set('../../data.multilanguage', $translations);
                 }

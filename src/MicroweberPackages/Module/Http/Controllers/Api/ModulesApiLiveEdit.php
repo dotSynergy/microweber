@@ -26,12 +26,26 @@ class ModulesApiLiveEdit extends Controller
             $active_site_template = $request->get('active_site_template');
         }
 
+        if (isset($params['active_site_template'])) {
+            $filter_template_dir = templates_dir() . $params['active_site_template'] . DS;
+            $filter_template_dir = normalize_path($filter_template_dir, true);
+            if (is_dir($filter_template_dir)) {
+                $template_dir = $filter_template_dir;
+            }
+            $active_site_template = $params['active_site_template'];
+        }
+
+        if($active_site_template == 'default'){
+            $active_site_template = template_name();
+        }
+
+
+
         $template_config = app()->template_manager->get_config($active_site_template);
         $params = $request->all();
         if (isset($template_config['elements_mode']) and $template_config['elements_mode'] == 'disabled') {
             $disable_elements = true;
         }
-
         $template_composer = [];
         $template_composer_file = template_dir() . '/composer.json';
         if (is_file($template_composer_file)) {
@@ -91,15 +105,16 @@ class ModulesApiLiveEdit extends Controller
             }
 
             $template_dir = template_dir();
-            $active_site_template = false;
-            if (isset($params['active_site_template'])) {
-                $filter_template_dir = templates_dir() . $params['active_site_template'] . DS;
-                $filter_template_dir = normalize_path($filter_template_dir, true);
-                if (is_dir($filter_template_dir)) {
-                    $template_dir = $filter_template_dir;
-                }
-                $active_site_template = $params['active_site_template'];
-            }
+//            $active_site_template = false;
+//            if (isset($params['active_site_template'])) {
+//                $filter_template_dir = templates_dir() . $params['active_site_template'] . DS;
+//                $filter_template_dir = normalize_path($filter_template_dir, true);
+//                if (is_dir($filter_template_dir)) {
+//                    $template_dir = $filter_template_dir;
+//                }
+//                $active_site_template = $params['active_site_template'];
+//            }
+
 
             $module_layouts_skins = app()->microweber->getTemplates('layouts', $active_site_template);
 

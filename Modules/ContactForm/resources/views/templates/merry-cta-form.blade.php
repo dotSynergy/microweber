@@ -8,9 +8,9 @@
 <link href="{{ asset('modules/contact_form/css/app.css') }}" rel="stylesheet" type="text/css"/>
 
 <div
-    x-load="visible"
-    x-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
-    x-data="contactForm('{{ $params['id'] }}')">
+    ax-load="visible"
+    ax-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
+    ax-data="contactForm('{{ $params['id'] }}')">
     <div class="contact-form-container col-xl-10 mw_form d-flex flex-wrap align-items-center justify-content-center mx-auto merry-cta-div-form">
         <form
               data-form-id="{{ $form_id }}" name="{{ $form_id }}" method="post"

@@ -7,9 +7,9 @@
 @endphp
 <link href="{{ asset('modules/contact_form/css/app.css') }}" rel="stylesheet" type="text/css"/>
 <div
-    x-load="visible"
-    x-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
-    x-data="contactForm('{{ $params['id'] }}')">
+    ax-load="visible"
+    ax-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
+    ax-data="contactForm('{{ $params['id'] }}')">
     <div class="contact-form-container position-relative">
         <form data-form-id="{{ $form_id }}" name="{{ $form_id }}" method="post"
               x-on:submit="submitForm">

@@ -53,6 +53,19 @@
         ></span>
             Pick icon
         </x-filament::button>
+
+        <x-filament::button
+            x-show="state"
+            x-on:click="state = ''"
+            color="gray"
+            style="margin-left: 1px;"
+        >
+
+
+            @svg('heroicon-o-x-circle', ['class' => 'h-4 w-4'])
+
+
+        </x-filament::button>
     </div>
 
 </div>

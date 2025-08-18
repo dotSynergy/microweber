@@ -16,6 +16,7 @@ use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
 use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
 use MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract\LiveEditModuleSettings;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
 use Modules\Menu\Models\Menu;
 
 class BtnModuleSettings extends LiveEditModuleSettings

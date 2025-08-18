@@ -82,7 +82,7 @@ class CheckoutResource extends Resource
                                     ->schema([
                                         Select::make('country')
                                             ->required()
-                                            // ->searchable()
+                                             ->searchable()
                                             ->native()
                                             ->live()
                                             ->afterStateUpdated(function ($state, Forms\Get $get, $component) {

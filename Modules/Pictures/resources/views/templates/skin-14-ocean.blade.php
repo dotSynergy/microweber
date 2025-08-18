@@ -66,10 +66,15 @@ description: Skin 14 - ocean
             })
         }
 
-        var gallery = {!! isset($data) ? json_encode($data) : '[]' !!};
+        document.addEventListener('DOMContentLoaded', function() {
+            var gallery = {!! isset($data) ? json_encode($data) : '[]' !!};
 
-        document.getElementById('{{ $pictureElementId }}').addEventListener('click', function(){
-            mw.gallery(gallery, Number(this.dataset.index || 0));
+            var elGallery = document.getElementById('{{ $pictureElementId }}');
+            if(elGallery) {
+                elGallery.addEventListener('click', function () {
+                    mw.gallery(gallery, Number(this.dataset.index || 0));
+                });
+            }
         });
     </script>
 @endif

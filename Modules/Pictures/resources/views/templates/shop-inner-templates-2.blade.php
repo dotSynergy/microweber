@@ -109,11 +109,22 @@ description: Default skin for shop inner of the templates 2
             })
         }
 
-        var gallery = {!! isset($data) ? json_encode($data) : '[]' !!};
 
-        document.getElementById('{{ $pictureElementId }}').addEventListener('click', function(){
-            mw.gallery(gallery, Number(this.dataset.index || 0));
+
+         document.addEventListener('DOMContentLoaded', function() {
+                var gallery = {!! isset($data) ? json_encode($data) : '[]' !!};
+
+                var elGallery = document.getElementById('{{ $pictureElementId }}');
+                if(elGallery) {
+                    elGallery.addEventListener('click', function () {
+                        mw.gallery(gallery, Number(this.dataset.index || 0));
+                    });
+                }
         });
+
+
+
+
     </script>
 @else
     @include('modules.pictures::partials.no-pictures')

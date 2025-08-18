@@ -9,6 +9,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -199,7 +200,19 @@ class TestimonialsTableList extends LiveEditModuleTable
                 EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
+
+                Action::make('copy')
+                    ->label('Copy')
+                    ->icon('heroicon-s-document-duplicate')
+                    ->action(function (Testimonial $record) {
+                        $newTestimonial = $record->replicate();
+                        $newTestimonial->push();
+
+                        $this->resetTable();
+                    }),
                 DeleteAction::make('delete')
+
+
             ])
             ->reorderable('position')
             ->bulkActions([

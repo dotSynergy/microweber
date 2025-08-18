@@ -132,12 +132,16 @@ class FileManagerApiController extends Controller {
                     continue;
                 }
 
-//                $ext = strtolower(get_file_extension($file));
-//                if ($ext == 'jpg' or $ext == 'png' or $ext == 'gif' or $ext == 'jpeg' or $ext == 'bmp' or $ext == 'webp' or $ext == 'svg') {
-//                    $thumbnail = thumbnail(mw()->url_manager->link_to_file($file), $thumbnailSize, $thumbnailSize, false);
-//                }
+                $ext = strtolower(get_file_extension($file['path']));
+                if (
+                    $ext == 'jpg' or $ext == 'png' or $ext == 'gif' or $ext == 'jpeg' or $ext == 'bmp' or $ext == 'webp' or $ext == 'svg') {
+                   // $thumbnail = thumbnail(mw()->url_manager->link_to_file($file), $thumbnailSize, $thumbnailSize, false);
+                    $thumbnail = $file['url'];
+                } else {
+                    $thumbnail ='';
+                }
 
-                $thumbnail = $file['url'];
+              //  $thumbnail = $file['url'];
 
 
                 $created = date('Y-m-d H:i:s', $file['filemtime']);

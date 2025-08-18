@@ -28,8 +28,6 @@ description: Bootstrap button
 
 
 
-
-
 @if($action == 'submit')
 <button type="submit" id="{{ $btnId }}" class="btn {{ $style . ' ' . $size . ' ' . $class}}" {!! $attributes !!}>
     @if($hasIcon && $iconPosition == 'left'){!! $iconHtml !!}@endif

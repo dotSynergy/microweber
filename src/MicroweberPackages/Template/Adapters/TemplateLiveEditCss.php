@@ -67,7 +67,15 @@ class TemplateLiveEditCss
             $the_active_site_template = app()->template_manager->templateAdapter->getTemplateFolderName();
         }
 
+
+        if($the_active_site_template == 'default'){
+            $the_active_site_template = template_name();
+        }
+
+ 
         $custom_live_edit_css_path = $this->getLiveEditCssPath($the_active_site_template);
+
+
         $liv_ed_css = '';
         if (is_file($custom_live_edit_css_path)) {
             $custom_live_editmtime = filemtime($custom_live_edit_css_path);

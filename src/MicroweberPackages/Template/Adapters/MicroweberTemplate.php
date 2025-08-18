@@ -149,7 +149,9 @@ class MicroweberTemplate
      */
     public function getTemplateFolderName(): string
     {
-        if (!isset($this->templateFolderName) or !$this->templateFolderName) {
+        if (!isset($this->templateFolderName) or !$this->templateFolderName
+            or (isset($this->templateFolderName) and $this->templateFolderName == 'default')
+        ) {
             $option = app()->option_manager->get('current_template', 'template');
             if ($option) {
                 $this->templateFolderName = $option;
@@ -256,7 +258,7 @@ class MicroweberTemplate
     {
         $install_default_template = config('microweber.install_default_template');
 
-        if($install_default_template) {
+        if ($install_default_template) {
             $this->fallbackTempleteFolderName = $install_default_template;
         } else {
             $this->fallbackTempleteFolderName = 'Bootstrap';
@@ -1409,7 +1411,6 @@ class MicroweberTemplate
         $templateDir = normalize_path($templateDir, true);
         $styleSettingReader = new TemplateStylesSettingsReader($templateDir);
         $getStyleSettings = $styleSettingReader->getStyleSettings();
-
 
 
         return $getStyleSettings;

@@ -7,6 +7,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\View;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
@@ -82,7 +83,7 @@ class CheckoutResource extends Resource
                                     ->schema([
                                         Select::make('country')
                                             ->required()
-                                             ->searchable()
+                                            ->searchable()
                                             ->native()
                                             ->live()
                                             ->afterStateUpdated(function ($state, Forms\Get $get, $component) {
@@ -195,12 +196,12 @@ class CheckoutResource extends Resource
                                     })
                                     ->schema([
                                         Forms\Components\Placeholder::make('coupon_code')
-                                            ->hidden(fn() => !coupons_get_session())
+                                            ->hidden(fn() => !coupon_get_applied())
                                             ->label('Coupon Code')
                                             ->content(function () {
-                                                $coupon = coupons_get_session();
+                                                $coupon = coupon_get_applied();
                                                 if ($coupon) {
-                                                    return 'Active coupon: ' . $coupon['coupon_code'];
+                                                    return 'Active coupon: ' . $coupon;
                                                 }
                                                 return '';
                                             }),
@@ -209,7 +210,7 @@ class CheckoutResource extends Resource
                                             Action::make('apply_coupon')
                                                 ->label('Apply Coupon')
                                                 ->button()
-                                                ->hidden(fn() => coupons_get_session())
+                                                ->hidden(fn() => coupon_get_applied())
                                                 ->modalHeading('Apply Coupon')
                                                 ->modalDescription('Enter your coupon code to get a discount')
                                                 ->modalSubmitActionLabel('Apply Coupon')
@@ -230,8 +231,15 @@ class CheckoutResource extends Resource
                                                         'coupon_code' => $data['coupon_code']
                                                     ]);
 
+
                                                     if (isset($result['error'])) {
                                                         $livewire->addError('coupon_code', $result['message'] ?? 'Invalid coupon code');
+                                                        Notification::make()
+                                                            ->title('Error applying coupon')
+                                                            ->body($result['message'] ?? 'Invalid coupon code')
+                                                            ->danger()
+                                                            ->send();
+
                                                         return;
                                                     }
 
@@ -240,7 +248,7 @@ class CheckoutResource extends Resource
 
                                             Action::make('remove_coupon')
                                                 ->label('Remove Coupon')
-                                                ->visible(fn() => coupons_get_session())
+                                                ->visible(fn(Forms\Get $get) => coupon_get_applied())
                                                 ->button()
                                                 ->color('danger')
                                                 ->action(function ($state, $livewire) {

@@ -110,6 +110,15 @@ if (!function_exists('coupons_get_session')) {
         return app()->coupon_service->getCouponSession();
     }
 }
+if (!function_exists('coupon_get_applied')) {
+    function coupon_get_applied()
+    {
+        $session = app()->coupon_service->getCouponSession();
+        if (isset($session['coupon_code']) && ($session['coupon_code'])) {
+            return $session['coupon_code'];
+        }
+    }
+}
 
 if (!function_exists('coupons_save_coupon')) {
     function coupons_save_coupon(array $data): array

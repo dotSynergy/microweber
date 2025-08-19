@@ -23,13 +23,18 @@ use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwLinkPicker;
+use MicroweberPackages\Multilanguage\Filament\Resources\Concerns\TranslatableResource;
 use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Menu\Models\Menu;
 
 class MenusList extends Component implements HasForms, HasActions
 {
     use InteractsWithActions;
     use InteractsWithForms;
+
+    use TranslatableResource;
+
 
     public int $menu_id = 0;
     public string $option_group = ''; //if this is set it will save as module option on change
@@ -140,6 +145,9 @@ class MenusList extends Component implements HasForms, HasActions
 
     public static function menuItemEditFormArray(): array
     {
+
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
+
         return [
 
 
@@ -147,6 +155,11 @@ class MenusList extends Component implements HasForms, HasActions
             Hidden::make('categories_id'),
             Hidden::make('url'),
             Hidden::make('url_target'),
+
+            Hidden::make('multilanguage')
+                ->visible($isMultilanguageEnabled)
+            ,
+
 
             MwLinkPicker::make('mw_link_picker')
                 ->label('Link')
@@ -187,7 +200,7 @@ class MenusList extends Component implements HasForms, HasActions
                     $categoriesId = '';
                     $contentId = '';
                     $title = $get('title');
-                 //   $displayTitle = $get('display_title');
+                    //   $displayTitle = $get('display_title');
 
                     if (isset($state['data']['id']) && $state['data']['id'] > 0) {
                         if ($state['data']['type'] == 'category') {
@@ -203,19 +216,19 @@ class MenusList extends Component implements HasForms, HasActions
                         }
                         if (isset($state['text'])) {
                             $title = $state['text'];
-                         //   $set('use_custom_title', true);
+                            //   $set('use_custom_title', true);
                         }
                     }
                     if (isset($state['text'])) {
                         $displayTitle = $state['text'];
 
-                        if(!$title) {
+                        if (!$title) {
                             $set('title', $displayTitle);
                         }
                         // $set('use_custom_title', false);
                     }
-                //    $set('display_title', $displayTitle);
-                 //   $set('title', $title);
+                    //    $set('display_title', $displayTitle);
+                    //   $set('title', $title);
                     $set('url', $url);
                     $set('url_target', $urlTarget);
                     $set('categories_id', $categoriesId);
@@ -223,12 +236,12 @@ class MenusList extends Component implements HasForms, HasActions
                 }),
 
 
-          /*  TextInput::make('display_title') // This is the title that will be displayed in the menu
-            ->label('Display title')
-                ->required()
-                ->live()
-                ->maxLength(255)
-                ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),*/
+            /*  TextInput::make('display_title') // This is the title that will be displayed in the menu
+              ->label('Display title')
+                  ->required()
+                  ->live()
+                  ->maxLength(255)
+                  ->helperText('This is the title that will be displayed in the menu. If you want to use a custom title, check the "Use custom title" option below.'),*/
 
 
             TextInput::make('title')
@@ -263,7 +276,6 @@ class MenusList extends Component implements HasForms, HasActions
             Toggle::make('url_target')
                 ->helperText('Enable to open the link in a new window.')
                 ->live()
-
                 ->label('Open link in new window')
                 ->default(false)
                 ->hidden(function (Get $get) {
@@ -316,6 +328,8 @@ class MenusList extends Component implements HasForms, HasActions
             ->icon('heroicon-m-pencil')
             ->mountUsing(function (Form $form, array $arguments) {
                 $record = Menu::find($arguments['id']);
+
+
                 $recordArray = $record->toArray();
                 $recordArray['display_title'] = $record->displayTitle;
 
@@ -353,6 +367,8 @@ class MenusList extends Component implements HasForms, HasActions
                 return $record;
             })
             ->action(function (Menu $record, array $data) {
+
+
                 if (isset($data['use_custom_title']) && $data['use_custom_title'] == false) {
                     $data['title'] = '';
                 }

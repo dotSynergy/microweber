@@ -118,6 +118,9 @@ class TranslateFieldAction
                 if (empty($translations)) {
                     $translations = $get('mountedTableActionsData.0.multilanguage', true);
                 }
+                if (empty($translations)) {
+                    $translations = $get('mountedActionsData.0.multilanguage', true);
+                }
 
 
 //                $parentComponent = $component->getContainer() ->  getParentComponent()->getLivewire() ;
@@ -160,7 +163,7 @@ class TranslateFieldAction
 
 
             })
-            ->afterStateUpdated(function (Get $get, Set $set, $state, $record) use ($translationFieldName, $locale, $fieldName) {
+            ->afterStateUpdated(function (Get $get, Set $set, $state, $record,$component) use ($translationFieldName, $locale, $fieldName) {
                 $hasData = $get('../../data', false);
 
                 $translations = $get('../../data.multilanguage', false);
@@ -168,15 +171,21 @@ class TranslateFieldAction
                 if (empty($translations)) {
                     $translations = $get('mountedTableActionsData.0.multilanguage', true);
                 }
+                if (empty($translations)) {
+                    $translations = $get('mountedActionsData.0.multilanguage', true);
+                }
 
-
+//dd($component,$get('mountedTableActionsData.0', true),$get('../../data.multilanguage', false));
                 //  $translations = $get('../../data.multilanguage', false);
 
                 $translations[$fieldName][$locale] = $state;
 
 
+
                 if (!$hasData) {
                     $set('mountedTableActionsData.0.multilanguage', $translations, isAbsolute: true);
+                    $set('mountedActionsData.0.multilanguage', $translations, isAbsolute: true);
+                  //  $set('mountedFormComponentActionsData.0.multilanguage', $translations, isAbsolute: true);
                 } else {
                     $set('../../data.multilanguage', $translations);
                 }

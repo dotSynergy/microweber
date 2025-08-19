@@ -16,6 +16,7 @@ use Jenssegers\Agent\Agent;
 use MicroweberPackages\App\Console\Commands\ServeCodeCoverageTestCommand;
 use MicroweberPackages\App\Console\Commands\ServeTestCommand;
 use MicroweberPackages\App\Http\Middleware\AuthenticateSessionForUser;
+use MicroweberPackages\App\Http\Middleware\LocaleRedirectMiddleware;
 use MicroweberPackages\App\Http\Middleware\TrimStrings;
 use MicroweberPackages\App\Utils\Parser;
 use MicroweberPackages\Console\Commands\AddLicenseKeyCommand;
@@ -216,7 +217,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
 
-       //$this->app->register(ConfigExtendedServiceProvider::class);
+        //$this->app->register(ConfigExtendedServiceProvider::class);
 
         //$this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         if (app()->bound('debugbar')) {
@@ -248,12 +249,11 @@ class AppServiceProvider extends ServiceProvider
 
 
 //        $this->app->instance('config', new ConfigSave($this->app));
-      //  $this->app->register(ConfigExtendedServiceProvider::class);
+        //  $this->app->register(ConfigExtendedServiceProvider::class);
 
         if (!defined('ADMIN_PREFIX')) {
             define('ADMIN_PREFIX', mw_admin_prefix_url_legacy());
         }
-
 
 
         //  URL::forceRootUrl( site_url());
@@ -281,7 +281,6 @@ class AppServiceProvider extends ServiceProvider
             //load_all_service_providers_for_modules();
         }
         $this->app->register(MicroweberFilamentServiceProvider::class);
-
 
 
     }
@@ -422,7 +421,7 @@ class AppServiceProvider extends ServiceProvider
             'cache_manager' => 'CacheManager',
             'config_manager' => 'ConfigurationManager',
             'notifications_manager' => 'NotificationsManager',
-        //    'log_manager' => 'LogManager',
+            //    'log_manager' => 'LogManager',
             'permalink_manager' => 'PermalinkManager',
             //    'layouts_manager' => 'LayoutsManager',
             'lang_helper' => 'Helpers\\Lang'
@@ -465,7 +464,7 @@ class AppServiceProvider extends ServiceProvider
         //   \Illuminate\Support\Facades\Vite::useBuildDirectory('build');
 
         if (defined('MW_SERVED_FROM_BASE_PATH')) {
-             app()->usePublicPath(base_path().'/public');
+            app()->usePublicPath(base_path() . '/public');
             \Illuminate\Support\Facades\Vite::useBuildDirectory('public/build');
         }
 
@@ -531,7 +530,7 @@ class AppServiceProvider extends ServiceProvider
             //load_service_providers_for_template();
             //load_functions_files_for_template();
 
-            if(function_exists('is_lang_correct')) {
+            if (function_exists('is_lang_correct')) {
                 $this->setupAppLocale();
             }
             if (is_cli()) {
@@ -550,7 +549,7 @@ class AppServiceProvider extends ServiceProvider
             $this->commands(InstallCommand::class);
         }
 
-    //    $this->app->register(AdminRouteServiceProvider::class);
+        //    $this->app->register(AdminRouteServiceProvider::class);
 
 //        if (class_exists(\App\Providers\AppServiceProvider::class)) {
 //            app()->register(\App\Providers\AppServiceProvider::class);
@@ -565,23 +564,25 @@ class AppServiceProvider extends ServiceProvider
         // >>> MW Kernel add
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\MicroweberPackages\App\Http\Middleware\TrustProxies::class);
         //    $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware( \Illuminate\Http\Middleware\TrustProxies::class);
-     //   $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Fruitcake\Cors\HandleCors::class);
+        //   $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Fruitcake\Cors\HandleCors::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\MicroweberPackages\App\Http\Middleware\CheckForMaintenanceMode::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Foundation\Http\Middleware\ValidatePostSize::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\MicroweberPackages\App\Http\Middleware\TrimStrings::class);
-       // $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Session\Middleware\StartSession::class);
+        // $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Session\Middleware\StartSession::class);
         //   $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\MicroweberPackages\App\Http\Middleware\StartSessionExtended::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class);
-      $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class);
-
-      //  $router->pushMiddlewareToGroup('web', AuthenticateSessionForUser::class);
+        $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class);
+        $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(LocaleRedirectMiddleware::class);
+/*
+        //  $router->pushMiddlewareToGroup('web', AuthenticateSessionForUser::class);
         $router->pushMiddlewareToGroup('web', \Illuminate\Session\Middleware\StartSession::class);
         $router->pushMiddlewareToGroup('web', \Illuminate\Cookie\Middleware\EncryptCookies::class);
         $router->pushMiddlewareToGroup('web', \Illuminate\View\Middleware\ShareErrorsFromSession::class);
         $router->pushMiddlewareToGroup('web', AuthenticateSession::class);
         // $router->pushMiddlewareToGroup('web', \MicroweberPackages\App\Http\Middleware\VerifyCsrfToken::class);
         $router->pushMiddlewareToGroup('web', \Illuminate\Routing\Middleware\SubstituteBindings::class);
-       // AddQueuedCookiesToResponse::class,
+       // $router->pushMiddlewareToGroup('web',  LocaleRedirectMiddleware::class);
+        // AddQueuedCookiesToResponse::class,*/
 
         $router->aliasMiddleware('auth', \MicroweberPackages\App\Http\Middleware\Authenticate::class);
         $router->aliasMiddleware('auth.basic', \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class);
@@ -595,7 +596,7 @@ class AppServiceProvider extends ServiceProvider
         $router->aliasMiddleware('verified', \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class);
         $router->aliasMiddleware('xss', \MicroweberPackages\App\Http\Middleware\XSS::class);
         $router->aliasMiddleware('remove_html', \MicroweberPackages\App\Http\Middleware\RemoveHtml::class);
-    //    $router->aliasMiddleware('admin', \MicroweberPackages\Admin\Http\Middleware\Admin::class);
+        //    $router->aliasMiddleware('admin', \MicroweberPackages\Admin\Http\Middleware\Admin::class);
         $router->aliasMiddleware('api_auth', \MicroweberPackages\App\Http\Middleware\ApiAuth::class);
         $router->aliasMiddleware('allowed_ips', \MicroweberPackages\App\Http\Middleware\AllowedIps::class);
 
@@ -645,9 +646,6 @@ class AppServiceProvider extends ServiceProvider
             \MicroweberPackages\App\Http\Middleware\SessionlessMiddleware::class,
             \Illuminate\Http\Middleware\CheckResponseForModifications::class
         ]);
-
-
-
 
 
         // <<< MW Kernel add
@@ -731,6 +729,11 @@ class AppServiceProvider extends ServiceProvider
 
         $currentUri = request()->path();
         $langCookie = request()->cookie('lang');
+        $skip_items = ['api', 'token', '_token'];
+        $localeRedirect = request()->get('localeRedirect');
+        if($localeRedirect){
+            return;
+        }
 
         //  Change language if user request language with LINK has lang abr
         if (MultilanguageHelpers::multilanguageIsEnabled()) {
@@ -743,10 +746,34 @@ class AppServiceProvider extends ServiceProvider
                 // $localeSettings = app()->multilanguage_repository->getSupportedLocaleByLocale($locale);
                 $localeSettings = app()->multilanguage_repository->getSupportedLocale($locale);
                 if (!empty($localeSettings) && isset($localeSettings['is_active']) && $localeSettings['is_active'] == 'y') {
-
                     change_language_by_locale($locale, true);
                 }
+
+
+//                if ($locale and $localeIsChangedFromGetRequest) {
+//                    $localeRedirect = request()->get('localeRedirect');
+//                    if ($localeRedirect) {
+//                        $linkSegments = url_segment(-1, $currentUri);
+//                        $linkSegments = array_filter($linkSegments, 'trim');
+//
+//                        if (!in_array($linkSegments[0], $skip_items)) {
+//                            $localeSettings = app()->multilanguage_repository->getSupportedLocale($linkSegments[0]);
+//                            $localeSettingsNew = app()->multilanguage_repository->getSupportedLocale($locale);
+//                            if ($localeSettings and isset($localeSettings['locale']) && isset($localeSettings['is_active'])) {
+//                                if ($localeSettingsNew and isset($localeSettingsNew['locale']) && isset($localeSettingsNew['is_active'])) {
+//                                    if ($localeSettings['locale'] !== $localeSettingsNew['locale']) {
+//                                        $request = request();
+//                                        $link = $request->fullUrlWithoutQuery(['localeRedirect', 'locale']);
+//                                        print redirect($link);
+//                                        exit;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
             }
+
 
             // if locale is not changed from get request we must to chek URL SLUGS
             if (!$localeIsChangedFromGetRequest) {
@@ -755,7 +782,6 @@ class AppServiceProvider extends ServiceProvider
 
                 if (!empty($linkSegments)) {
                     if (isset($linkSegments[0]) and $linkSegments[0]) {
-                        $skip_items = ['api', 'token', '_token'];
 
                         if (!in_array($linkSegments[0], $skip_items)) {
                             $localeSettings = app()->multilanguage_repository->getSupportedLocale($linkSegments[0]);

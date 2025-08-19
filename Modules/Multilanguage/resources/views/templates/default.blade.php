@@ -33,7 +33,7 @@
                         @if($language['is_active'])
                             <li>
                                 <a class="dropdown-item d-flex align-items-center justify-content-center lang-flag-link p-1 @if($language['locale'] == $current_language['locale']) active @endif"
-                                   href="?locale={{ $language['locale'] }}"
+                                   href="?localeRedirect={{ $language['locale'] }}"
                                    title="{{ $language['display_name'] ?: $language['language'] }}">
                                     @if($language['display_icon'])
                                         <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}"

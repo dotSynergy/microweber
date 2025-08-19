@@ -21,7 +21,7 @@ description: Admin language switcher template
         @if(!empty($supported_languages))
             @foreach($supported_languages as $language)
                 @if($language['is_active'])
-                    <a class="dropdown-item d-flex align-items-center @if($language['locale'] == $current_language['locale']) active @endif" href="?locale={{ $language['locale'] }}">
+                    <a class="dropdown-item d-flex align-items-center @if($language['locale'] == $current_language['locale']) active @endif" href="?localeRedirect={{ $language['locale'] }}">
                         @if($language['display_icon'])
                             <img src="{{ $language['display_icon'] }}" alt="{{ $language['display_name'] }}" class="me-2" style="max-width: 20px; max-height: 20px;">
                         @else

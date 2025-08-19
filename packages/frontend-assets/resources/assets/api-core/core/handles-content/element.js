@@ -399,8 +399,8 @@ export class ElementHandleContent {
 
                     let dialogContent = `
                         <nav id="${id}-nav" class="d-flex flex-wrap gap-md-4 gap-3 mb-4">
-                            <a class="btn btn-link text-decoration-none mw-admin-action-links js-custom-fields-card-tab">Style</a>
-                            <a class="btn btn-link text-decoration-none mw-admin-action-links js-custom-fields-card-tab">Options</a>
+                            <a class="btn-link text-decoration-none mw-admin-action-links js-custom-fields-card-tab">Style</a>
+                            <a class="btn-link text-decoration-none mw-admin-action-links js-custom-fields-card-tab">Options</a>
                         </nav>
 
                         <div class="${id}-tab active">

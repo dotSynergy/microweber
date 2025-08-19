@@ -3,6 +3,7 @@
 namespace Modules\Menu\Repositories;
 
 use Illuminate\Support\Facades\DB;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 
 /**
  * Content class is used to get and save content in the database.
@@ -238,6 +239,10 @@ class MenuManager
         // $menu_params['order_by'] = 'position ASC';
 
         $q = app()->menu_repository->getMenusByParentId($menu_id);
+
+        $multilangiageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
+        $defaultLocale = mw()->lang_helper->default_lang();
+        $currentLocale = mw()->lang_helper->current_lang();
 
         //   dd($menu_params,$q);
         $has_items = false;
@@ -550,8 +555,24 @@ class MenuManager
                     }
                 }
             }
+
             if (isset($item['title']) and ($item['title']) != false) {
                 $title = $item['title'] = strip_tags(html_entity_decode($item['title']));
+
+                if($multilangiageEnabled){
+                  //  dd($currentLocale, $defaultLocale, $item['multilanguage']);
+                    if($currentLocale != $defaultLocale){
+                        //check if translated
+
+                        $translation =  $item['multilanguage']['title'][$currentLocale] ?? '';
+                        if($translation){
+                            $title = $translation;
+                        }
+
+                    }
+                }
+
+
             }
 
             if ($title != '') {
@@ -683,6 +704,7 @@ class MenuManager
                 foreach ($item as $key => $value) {
 
                     if(is_array($value)) {
+
                         // maybe multi-language is messed up
                         continue;
                     }

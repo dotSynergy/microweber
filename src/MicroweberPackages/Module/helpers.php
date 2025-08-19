@@ -98,6 +98,8 @@ function module_admin_url($module_name = false)
                     'filament.admin.resources.' . $moduleNameLower,
                     'filament.admin.resources.' . $moduleNameLower . '.index',
                     'filament.admin.pages.' . $moduleNameLower,
+
+
                     'admin.' . $moduleNameLower . '.index',
                     'admin.' . $moduleNameLower,
 
@@ -106,11 +108,16 @@ function module_admin_url($module_name = false)
                     'filament.admin.pages.' . $pluralModuleNameLower,
                     'admin.' . $pluralModuleNameLower . '.index',
                     'admin.' . $pluralModuleNameLower,
+
+
+                    'filament.admin.pages.' . $moduleNameLower . '-settings-admin',
+                    'filament.admin.pages.' . $moduleNameLower . '-settings',
+                    'filament.admin.pages.admin-' . $moduleNameLower . '-page',
                 ];
 
 
-//            $routeCollection = Illuminate\Support\Facades\Route::getRoutes();
-////
+         //   $routeCollection = Illuminate\Support\Facades\Route::getRoutes();
+//
 //            foreach ($routeCollection as $value) {
 //                dump($value->getName());
 //            }

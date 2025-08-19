@@ -29,6 +29,7 @@ class ModuleResource extends Resource
     protected static ?int $navigationSort = 120;
 
     public static string $description = 'Manage system modules';
+
     public function getDescription(): string
     {
 
@@ -118,48 +119,50 @@ class ModuleResource extends Resource
 
             ]);
     }
-//
-//    public static function getGloballySearchableAttributes(): array
-//    {
-//        return ['name'];
-//    }
-//
-//    public static function getGlobalSearchResultDetails(Model $record): array
-//    {
-//        /** @var SystemModulesSushi $record */
-//
-//        return [
-//            'Module' => $record->name,
-//        ];
-//    }
-//    public static function getGlobalSearchResultUrl(Model $record): string
-//    {
-//        $url  = ($record->adminUrl());
-//
-//        if(!$url){
-//            $url = '#';
-//        }
-//
-//        return $url;
-//    }
-//    public static function getGlobalSearchResultActions(Model $record): array
-//    {
-//
-//        $url  = ($record->adminUrl());
-//
-//        return [
-//            Action::make('view')
-//                ->openUrlInNewTab()
-//                ->url($url),
-//                //->url(static::getUrl('view', ['record' => $record])),
-//        ];
-//    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name','description'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        /** @var SystemModulesSushi $record */
+
+        return [
+            'Module' => $record->name,
+        ];
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        $url = ($record->adminUrl());
+
+        if (!$url) {
+            $url = '#';
+        }
+
+        return $url;
+    }
+
+    public static function getGlobalSearchResultActions(Model $record): array
+    {
+
+        $url = ($record->adminUrl());
+
+        return [
+            Action::make('view')
+                ->openUrlInNewTab()
+                ->url($url),
+            //->url(static::getUrl('view', ['record' => $record])),
+        ];
+    }
 
     /** @return Builder<SystemModulesSushi> */
-//    public static function getGlobalSearchEloquentQuery(): Builder
-//    {
-//        return parent::getGlobalSearchEloquentQuery();
-//    }
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery();
+    }
 
     public static function getRelations(): array
     {

@@ -45,9 +45,9 @@ mw.extradataForm = function (options, data, func) {
             closeButton: true,
             closeOnEscape: true
         });
-        mw.$('script', form).each(function() {
-            eval($(this).text());
-        });
+        // mw.$('script', form).each(function() {
+        //     eval($(this).text());
+        // });
 
         $(form.__modal).on('closedByUser', function () {
             if(options.onExternalDataDialogClose) {

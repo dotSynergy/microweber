@@ -24,6 +24,12 @@ document.addEventListener('alpine:init', () => {
             this.loading = true;
             this.success = false;
 
+
+            setTimeout(() => {
+                this.loading = false;
+            }, 5000); // Fallback loading timeout
+
+
             try {
                 const form = event.target;
                 const formData = new FormData(form);
@@ -63,6 +69,7 @@ document.addEventListener('alpine:init', () => {
                         },
 
                         error: function(xhr, status, error) {
+
                             reject(new Error(error || 'Ajax request failed'));
                         }
                     });

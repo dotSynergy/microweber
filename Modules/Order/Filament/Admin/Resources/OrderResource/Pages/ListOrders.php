@@ -7,6 +7,10 @@ use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Modules\Order\Filament\Admin\Resources\OrderResource;
+use Modules\Payment\Filament\Admin\Resources\PaymentProviderResource;
+use Modules\Payment\Filament\Admin\Resources\PaymentResource;
+use Modules\Settings\Filament\Pages\AdminShopGeneralPage;
+use Modules\Shipping\Filament\Admin\Resources\ShippingProviderResource;
 
 
 class ListOrders extends ListRecords
@@ -18,7 +22,32 @@ class ListOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->icon('heroicon-o-plus')->label('Create Order'),
+
+            Actions\ActionGroup::make([
+
+                Actions\Action::make('payments_list')
+                    ->label('Payment transactions')
+                    ->url(PaymentResource::getUrl('index'))
+                    ->icon('heroicon-o-cog-6-tooth'),
+
+                Actions\Action::make('payment_provider_settings')
+                    ->label('Payment Settings')
+                    ->url(PaymentProviderResource::getUrl('index'))
+                    ->icon('heroicon-o-cog-6-tooth'),
+
+
+                Actions\Action::make('shipping_provider_settings')
+                    ->label('Shipping Settings')
+                    ->url(ShippingProviderResource::getUrl('index'))
+                    ->icon('heroicon-o-cog-6-tooth'),
+
+
+                Actions\Action::make('shop_general_settings')
+                    ->label('Shop Settings')
+                    ->url(AdminShopGeneralPage::getUrl())
+                    ->icon('heroicon-o-cog-6-tooth'),
+            ])
         ];
     }
 
@@ -31,12 +60,12 @@ class ListOrders extends ListRecords
     {
         return [
             null => Tab::make('All'),
-            'new' => Tab::make()->query(fn ($query) => $query->where('order_status', 'new')),
-            'processing' => Tab::make()->query(fn ($query) => $query->where('order_status', 'processing')),
-            'shipped' => Tab::make()->query(fn ($query) => $query->where('order_status', 'shipped')),
-            'delivered' => Tab::make()->query(fn ($query) => $query->where('order_status', 'delivered')),
-            'cancelled' => Tab::make()->query(fn ($query) => $query->where('order_status', 'cancelled')),
-            'refunded' => Tab::make()->query(fn ($query) => $query->where('order_status', 'refunded')),
+            'new' => Tab::make()->query(fn($query) => $query->where('order_status', 'new')),
+            'processing' => Tab::make()->query(fn($query) => $query->where('order_status', 'processing')),
+            'shipped' => Tab::make()->query(fn($query) => $query->where('order_status', 'shipped')),
+            'delivered' => Tab::make()->query(fn($query) => $query->where('order_status', 'delivered')),
+            'cancelled' => Tab::make()->query(fn($query) => $query->where('order_status', 'cancelled')),
+            'refunded' => Tab::make()->query(fn($query) => $query->where('order_status', 'refunded')),
         ];
     }
 }

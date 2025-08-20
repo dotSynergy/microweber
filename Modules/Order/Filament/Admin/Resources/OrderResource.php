@@ -2,6 +2,7 @@
 
 namespace Modules\Order\Filament\Admin\Resources;
 
+use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Repeater;
@@ -11,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use MicroweberPackages\Filament\Tables\Columns\ImageUrlColumn;
-use MicroweberPackages\Order\Filament\Admin\Resources\OrderResource\Pages;
 use Modules\Content\Models\Content;
 use Modules\CustomFields\Models\CustomField;
 use Modules\Order\Enums\OrderStatus;
@@ -212,6 +212,9 @@ class OrderResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+//            ->headerActions([
+//                Tables\Actions\CreateAction::make()->label('Create order')
+//            ])
             ->defaultSort('id', 'desc')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -553,4 +556,8 @@ class OrderResource extends Resource
                 ->url(static::getUrl('edit', ['record' => $record])),
         ];
     }
+
+
+
+
 }

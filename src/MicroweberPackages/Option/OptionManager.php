@@ -353,6 +353,7 @@ class OptionManager
             if (is_array($data['option_key'])) {
                 //$data['option_key'] = dot($data['option_key']);
                 //dd($data['option_key']);
+                //$data = $data['option_key'];
             }
 
             if (isset($data['option_key']) and strval($data['option_key']) != '') {

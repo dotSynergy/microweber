@@ -91,8 +91,8 @@ trait HasMultilanguageTrait
 
                 }
 
+                if ($isModuleOptions and  isset($model->attributes['lang'])) {
 
-                if ($isModuleOptions and !isset($model->attributes['multilanguage']) and isset($model->attributes['lang'])) {
                     // When receive a save_option
                     // legacy save_option will not have multilanguage attribute, it will have lang attribute instead
                     if (isset($model->attributes['lang']) && isset($model->attributes['module']) and $model->attributes['lang'] != $defaultLocale) {

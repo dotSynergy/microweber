@@ -19,6 +19,7 @@ use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 use MicroweberPackages\Filament\Forms\Components\MwRangeSlider;
 use MicroweberPackages\Multilanguage\MultilanguageHelpers;
+use MicroweberPackages\Option\Models\ModuleOption;
 use MicroweberPackages\Option\Models\Option;
 use Rupadana\FilamentSlider\Components\Concerns\InputSliderBehaviour;
 use Rupadana\FilamentSlider\Components\InputSlider;
@@ -92,16 +93,38 @@ abstract class LiveEditModuleSettings extends Page
                 }
             }
         }
+        $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
 
-        $getOptions = Option::where('option_group', $this->getOptionGroup())->get();
+        // $getOptions = Option::where('option_group', $this->getOptionGroup())->get();
+        $getOptions = ModuleOption::where('option_group', $this->getOptionGroup())->get();
+        $defaultLocale = mw()->lang_helper->default_lang();
 
         if ($getOptions) {
             foreach ($getOptions as $option) {
                 $this->options[$option->option_key] = $option->option_value;
+
+                if ($isMultilanguageEnabled) {
+
+
+                     $this->translatableOptions[$option->option_key][$defaultLocale] = $option->option_value;
+
+                    if (isset($option->multilanguage) and !empty($option->multilanguage)) {
+                        foreach ($option->multilanguage as $tanslations) {
+                            if (is_array($tanslations)) {
+                                foreach ($tanslations as $locale => $value) {
+                                    $this->translatableOptions[$option->option_key][$locale] = $value;
+                                }
+                            }
+                        }
+                    }
+
+
+                 }
             }
         }
 
-//        $getTranslatableOptions = ModuleOption::whereIn('option_group', static::getOptionGroups())->get();
+        //       $getTranslatableOptions = ModuleOption::whereIn('option_group', $this->getOptionGroup())->get();
+//
 //        if ($getTranslatableOptions) {
 //            foreach ($getTranslatableOptions as $option) {
 //                if (!empty($option->multilanguage_translations)) {
@@ -120,6 +143,52 @@ abstract class LiveEditModuleSettings extends Page
 
         $option = array_undot_str($propertyName);
         $optionGroup = $this->getOptionGroup();
+
+        /*  "translatableOptions" => array:1 [▼
+    "$fielName" => "en_US" = $value
+  ]*/
+
+        if (MultilanguageHelpers::multilanguageIsEnabled()) {
+
+            if (isset($option['translatableOptions'])) {
+                $defaultLocale = mw()->lang_helper->default_lang();
+
+                $translateOptions = [];
+                if (is_array($option['translatableOptions'])) {
+                    $translateOptions = $option['translatableOptions'];
+                }
+
+
+                foreach ($translateOptions as $optionKey => $locale) {
+                    $optionKeyForTranslaton = str_replace('translatableOptions.', '', $optionKey);
+                    $valForOption = $value[$locale] ?? $value;
+
+                    if ($defaultLocale == $locale) {
+                        // Save the default locale option
+                        save_module_option([
+                            'option_key' => $optionKey,
+                            'option_value' => $valForOption,
+                            'option_group' => $optionGroup,
+                            'module' => $this->module
+                        ]);
+                    } else {
+                        // Save the translatable option
+                       // dump($optionKeyForTranslaton,$valForOption,$locale,$optionGroup);
+                        save_module_option([
+                            'option_key' => $optionKeyForTranslaton,
+                            'option_value' => $valForOption,
+                            'option_group' => $optionGroup,
+                            'lang' => $locale,
+                            'module' => $this->module
+                        ]);
+                    }
+
+
+                }
+
+
+            }
+        }
 
         if (isset($option['options'])) {
             save_option([
@@ -313,7 +382,6 @@ abstract class LiveEditModuleSettings extends Page
         $template_filter = $this->params['template-filter'] ?? $this->params['template_filter'] ?? null;
 
 
-
         $moduleTemplates = module_templates($this->module);
         $moduleTemplates = $moduleTemplates ?? [];
 
@@ -322,7 +390,7 @@ abstract class LiveEditModuleSettings extends Page
             if ($moduleTemplatesFromSite) {
                 $moduleTemplates = array_merge($moduleTemplates, $moduleTemplatesFromSite);
             }
-            if($moduleTemplates) {
+            if ($moduleTemplates) {
                 $moduleTemplates = array_unique($moduleTemplates, SORT_REGULAR);
             }
         }
@@ -345,7 +413,7 @@ abstract class LiveEditModuleSettings extends Page
 
         }
 
-        if(!$selectedSkin){
+        if (!$selectedSkin) {
             $selectedSkin = 'default';
         }
 
@@ -378,7 +446,6 @@ abstract class LiveEditModuleSettings extends Page
         if ($moduleTemplates) {
 
             foreach ($moduleTemplates as $moduleTemplate) {
-
 
 
                 $layoutFile = str_replace('/', '.', $moduleTemplate['layout_file']);

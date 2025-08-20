@@ -794,7 +794,8 @@ if (!function_exists('ascii')) {
      */
     function ascii($value)
     {
-        foreach (charsArray() as $key => $val) {
+        $charsArray = charsArray();
+        foreach ($charsArray as $key => $val) {
             $value = str_replace($val, $key, $value);
         }
 

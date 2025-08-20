@@ -12,13 +12,18 @@ function get_module_option($optionKey, $optionGroup = false, $returnFull = false
 function save_module_option($optionKey, $value = false, $group = false, $module = false, $lang = null)
 {
     $option = array();
-    $option['option_value'] = $value;
-    $option['option_key'] = $optionKey;
-    $option['option_group'] = $group;
-    $option['module'] = $module;
-    if ($lang) {
-        $option['lang'] = $lang;
+    if(is_array($optionKey)) {
+        $option = $optionKey;
+    } else {
+        $option['option_value'] = $value;
+        $option['option_key'] = $optionKey;
+        $option['option_group'] = $group;
+        $option['module'] = $module;
+        if ($lang) {
+            $option['lang'] = $lang;
+        }
     }
+
 
     return save_option($option);
 }
@@ -92,6 +97,7 @@ function save_option($optionKey, $value = false, $group = false, $lang = false)
         return app()->option_manager->save($optionKey);
     }
 }
+
 
 function delete_option($key, $group = false, $module_id = false)
 {

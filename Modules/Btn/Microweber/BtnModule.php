@@ -15,6 +15,7 @@ class BtnModule extends BaseModule
     public static string $settingsComponent = BtnModuleSettings::class;
 
     public static string $templatesNamespace = 'modules.btn::templates';
+    public static array $translatableOptions = ['text'];
 
     public function getViewData(): array
     {

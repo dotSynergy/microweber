@@ -22,6 +22,8 @@ class MultilanguageObserver
 
     public function retrieved(Model $model)
     {
+
+
         $multilanguageTranslations = [];
         $defaultLocale = $this->getDefaultLocale();
         $currentLocale = $this->getLocale();
@@ -32,6 +34,7 @@ class MultilanguageObserver
         if (strpos($model->getMorphClass(), 'ModuleOption') !== false) {
             if (!empty($model->module)) {
                 $translatableModuleOptions = $this->getTranslatableModuleOptions();
+
                 if (isset($translatableModuleOptions[$model->module]) && in_array($model->option_key, $translatableModuleOptions[$model->module])) {
                     $model->translatable = ['option_value'];
                 }
@@ -65,6 +68,8 @@ class MultilanguageObserver
                 if ($findTranslations !== null) {
 
                     foreach ($findTranslations as $findedTranslation) {
+
+
                         if ($findedTranslation['field_name'] == $fieldName) {
 
                             $multilanguageTranslations[$findedTranslation['locale']][$fieldName] = $this->_decodeCastValue($model, $fieldName, $findedTranslation['field_value']);
@@ -72,7 +77,9 @@ class MultilanguageObserver
                             // Replace model fields if the default lang is different from current lang
                             if ($currentLocale !== $defaultLocale) {
                                 if (isset($multilanguageTranslations[$currentLocale][$fieldName])) {
+
                                     $model->$fieldName = $multilanguageTranslations[$currentLocale][$fieldName];
+
                                 }
                             }
                         }

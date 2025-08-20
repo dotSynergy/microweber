@@ -23,6 +23,7 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
         $lib_tynymce = public_asset() . 'vendor/microweber-packages/frontend-assets-libs/tinymce/tinymce.js';
         $nouislider = public_asset() . 'vendor/microweber-packages/frontend-assets-libs/nouislider/nouislider.js';
         $mwMediaBrowser = public_asset() . 'vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js';
+        $mwMediaFilamentTranslatable = public_asset() . 'vendor/microweber-packages/microweber-filament-theme/build/filament-translatable.js';
 
 
 
@@ -57,6 +58,10 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
 
         $append_html .= '' . "\r\n";
         $append_html .= '<script src="' . $mwMediaBrowser . '"  type="module"   id="mw-media-browser-alpine-scripts"></script>' . "\r\n";
+
+
+        $append_html .= '' . "\r\n";
+        $append_html .= '<script src="' . $mwMediaFilamentTranslatable . '"    id="mw-filament-translatable-apline-scripts"></script>' . "\r\n";
 
 
 //        $append_html .= '' . "\r\n";

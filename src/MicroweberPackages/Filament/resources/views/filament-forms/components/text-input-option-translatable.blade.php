@@ -80,7 +80,7 @@
         <x-slot:suffix>
             <x-filament::dropdown placement="bottom-end" size="xs">
                 <x-slot name="trigger">
-                    <button>
+                    <button type="button">
                         <div class="flex gap-2 items-center uppercase">
                             <img width="14px" :src="$store.translationLocale.flagUrl" />
                             <span x-text="$store.translationLocale.shortLocale"></span>

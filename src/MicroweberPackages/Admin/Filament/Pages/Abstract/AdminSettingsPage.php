@@ -139,6 +139,8 @@ abstract class AdminSettingsPage extends Page
             }
         }
         if (isset($changedField['translatableOptions'])) {
+
+
             foreach ($changedField['translatableOptions'] as $optionGroup => $optionValueLanguages) {
                 foreach ($optionValueLanguages as $optionKey => $optionValueLang) {
 

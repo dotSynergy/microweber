@@ -43,15 +43,15 @@ class MultilanguageHelpers
     {
         $translatableModuleOptions = [];
 
-        // legacy modules, will be removed in future
-        $modules = mw()->module_manager->get_modules('ui=any&installed=1');
-        if ($modules) {
-            foreach ($modules as $module) {
-                if (isset($module['settings']['translatable_options'])) {
-                    $translatableModuleOptions[$module['module']] = $module['settings']['translatable_options'];
-                }
-            }
-        }
+//        // legacy modules, will be removed in future
+//        $modules = mw()->module_manager->get_modules('ui=any&installed=1');
+//        if ($modules) {
+//            foreach ($modules as $module) {
+//                if (isset($module['settings']['translatable_options'])) {
+//                    $translatableModuleOptions[$module['module']] = $module['settings']['translatable_options'];
+//                }
+//            }
+//        }
 
 
         // new way to get translatable options from laravel modules

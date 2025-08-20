@@ -42,12 +42,12 @@ class TranslateManager
         $currentLocale = $this->getCurrentLocale();
         $defaultLocale = $this->getDefaultLocale();
 
-        $translatableModuleOptions = [];
-        foreach (get_modules_from_db() as $module) {
-            if (isset($module['settings']['translatable_options'])) {
-                $translatableModuleOptions[$module['module']] = $module['settings']['translatable_options'];
-            }
-        }
+        $translatableModuleOptions = MultilanguageHelpers::getTranslatableModuleOptions();
+//        foreach (get_modules_from_db() as $module) {
+//            if (isset($module['settings']['translatable_options'])) {
+//                $translatableModuleOptions[$module['module']] = $module['settings']['translatable_options'];
+//            }
+//        }
 
         if (!empty(self::$translateProviders)) {
             foreach (self::$translateProviders as $provider) {
@@ -58,20 +58,32 @@ class TranslateManager
                 if ($providerInstance->getRepositoryMethods()) {
                     foreach ($providerInstance->getRepositoryMethods() as $repositoryMethod) {
 
-                        //   dump($providerInstance->getRepositoryClass() . '\\' . $repositoryMethod);
+                       // dump($providerInstance->getRepositoryClass() . '\\' . $repositoryMethod);
 
                         event_bind($providerInstance->getRepositoryClass() . '\\' . $repositoryMethod, function ($data) use ($providerInstance) {
+
+
+                            if (!MultilanguageHelpers::multilanguageIsEnabled()) {
+                                return;
+                            }
+
+
 
                             if (isset($data['getEditField'])) {
                                 //  dump($data);
                             }
-
                             if (isset($data['data']) && !empty($data['data']) && isset($data['hook_overwrite_type'])) {
                                 if ($data['hook_overwrite_type'] == 'multiple') {
 
                                     foreach ($data['data'] as &$item) {
                                         $translate = $providerInstance->getTranslate($item);
+
+
+
                                         if (!empty($translate)) {
+
+
+
                                             $item = $translate;
                                         }
                                     }
@@ -148,6 +160,7 @@ class TranslateManager
                     if (is_array($get) && !empty($get)) {
 
 
+
                         //  $getHash = md5(serialize($get) . '_' . $currentLocale);
 
 //                        $getHash = $providerTable . crc32(json_encode($get) . '_' . $currentLocale);
@@ -171,7 +184,6 @@ class TranslateManager
                                     continue;
                                 }
                             }
-
                             $item = $providerInstance->getTranslate($item);
                         }
 

@@ -33,7 +33,7 @@ class EditCategory extends EditRecord
 
         $isMultilanguageEnabled = MultilanguageHelpers::multilanguageIsEnabled();
         if ($isMultilanguageEnabled) {
-            $actions[] = Actions\LocaleSwitcher::make();
+            // $actions[] = Actions\LocaleSwitcher::make();
         }
 
         return $actions;

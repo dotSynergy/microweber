@@ -37,7 +37,9 @@ class BtnModuleSettings extends LiveEditModuleSettings
                                     ->label('Text')
                                     ->helperText('Enter the text to display on the button.')
                                     ->live()
-                                    ->default('Button'),
+                                    ->default('Button')
+                                ->mwTranslatableOption()
+                                ,
 
 
                                 MwLinkPicker::make('options.url')

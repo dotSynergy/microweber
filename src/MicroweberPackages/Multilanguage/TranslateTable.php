@@ -95,12 +95,13 @@ class TranslateTable
         if (!isset($data[$this->relId])) {
             return $data;
         }
+        $currentLocale = $this->getCurrentLocale();
 
-        if (!empty(self::$_getTranslateTranslates[$this->relType][$this->getCurrentLocale()])) {
-            $translates = self::$_getTranslateTranslates[$this->relType][$this->getCurrentLocale()];
+        if (!empty(self::$_getTranslateTranslates[$this->relType][$currentLocale])) {
+            $translates = self::$_getTranslateTranslates[$this->relType][$currentLocale];
         } else {
-            $translates = app()->multilanguage_repository->getTranslationsByRelTypeAndLocale($this->relType, $this->getCurrentLocale());
-            self::$_getTranslateTranslates[$this->relType][$this->getCurrentLocale()] = $translates;
+            $translates = app()->multilanguage_repository->getTranslationsByRelTypeAndLocale($this->relType, $currentLocale);
+            self::$_getTranslateTranslates[$this->relType][$currentLocale] = $translates;
         }
 
         if ($translates) {
@@ -118,7 +119,7 @@ class TranslateTable
                         }
                     }
                 }
-                $data['item_lang'] = $this->getCurrentLocale();
+                $data['item_lang'] =$currentLocale;
             }
         }
 

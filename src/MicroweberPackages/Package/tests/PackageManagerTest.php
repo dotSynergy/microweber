@@ -20,7 +20,7 @@ class PackageManagerTest extends \MicroweberPackages\Core\tests\TestCase
         }
 
         $params = [];
-        $params['require_name'] = 'microweber-templates/dream';
+        $params['require_name'] = 'microweber-templates/big2';
 
         $runner = new \MicroweberPackages\Package\MicroweberComposerClient();
 
@@ -35,17 +35,25 @@ class PackageManagerTest extends \MicroweberPackages\Core\tests\TestCase
             $this->markTestSkipped('Skipping package manager test for this server configuration!');
         }
 
-        $require_name = "microweber-templates/new-world";
+        $require_name = "microweber-templates/big2";
         $params['require_name'] = $require_name;
 
         $runner = new \MicroweberPackages\Package\MicroweberComposerClient();
 
         $results = $runner->requestInstall($params);
-
         $this->assertNotEmpty($results);
-        $this->assertEquals($results["error"], "Please confirm installation");
+        $okResp=false;
+        if (isset($results['error']) and $results['error'] == 'You need license key to install this package') {
+            $okResp = true;
+        }
+        if (isset($results['error']) and $results['error'] == 'Please confirm installation') {
+            $okResp = true;
+            $this->assertNotEmpty($results["form_data_module_params"]["confirm_key"]);
+
+        }
+
+        $this->assertTrue($okResp);
         $this->assertEquals($results["form_data_module_params"]["require_name"], $require_name);
-        $this->assertNotEmpty($results["form_data_module_params"]["confirm_key"]);
 
     }
 

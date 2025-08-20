@@ -18,7 +18,7 @@ class ListPaymentProviders extends ListRecords
         $paymentProviders = $getAvailableToSetup['paymentProviders'];
         $actions = [];
         if (!empty($paymentProviders)) {
-            $actions [] = Actions\CreateAction::make()->label('Setup new Payment Provider');
+            $actions [] = Actions\CreateAction::make()->label('Add Payment Provider');
         }
         $actions [] = Action::make('Payments')
             ->label('Payments')

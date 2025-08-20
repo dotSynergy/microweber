@@ -9,7 +9,10 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
+use Modules\Coupons\Filament\Resources\CouponResource;
+use Modules\Offer\Filament\Admin\Resources\OfferResource;
 use Modules\Payment\Filament\Admin\Resources\PaymentProviderResource;
+use Modules\Payment\Filament\Admin\Resources\PaymentResource;
 use Modules\Shipping\Filament\Admin\Resources\ShippingProviderResource;
 
 class AdminShopGeneralPage extends AdminSettingsPage
@@ -93,9 +96,9 @@ class AdminShopGeneralPage extends AdminSettingsPage
 
                     ]),
 
-                Section::make('Other settings')
+                Section::make('Terms and conditions settings')
                     ->view('filament-forms::sections.section')
-                    ->description('Configure additional shop settings.')
+                    ->description('Configure TOS shop settings.')
                     ->schema([
 
                         Select::make('options.website.shop_require_terms')
@@ -110,18 +113,50 @@ class AdminShopGeneralPage extends AdminSettingsPage
                             ]),
 
 
+
+
+
+                    ]),
+
+
+
+                Section::make('Other settings')
+                    ->view('filament-forms::sections.section')
+                    ->description('Configure additional shop settings.')
+                    ->schema([
+
+
                         Actions::make([
 
+                            Actions\Action::make('payments_list')
+                                ->label('Payment transactions')
+                                ->url(PaymentResource::getUrl('index'))
+                                ->icon('mw-cash'),
+
                             Actions\Action::make('payment_provider_settings')
-                                ->label('Payment Provider Settings')
+                                ->label('Payment Settings')
                                 ->url(PaymentProviderResource::getUrl('index'))
-                                ->icon('heroicon-o-cog-6-tooth'),
+                                ->icon('mw-payments'),
 
 
                             Actions\Action::make('shipping_provider_settings')
-                                ->label('Shipping Provider Settings')
+                                ->label('Shipping Settings')
                                 ->url(ShippingProviderResource::getUrl('index'))
-                                ->icon('heroicon-o-cog-6-tooth'),
+                                ->icon('mw-shipping'),
+
+
+
+
+                            Actions\Action::make('coupons')
+                                ->label('Coupons')
+                                ->url(CouponResource::getUrl('index'))
+                                ->icon('mw-coupon'),
+
+
+                            Actions\Action::make('discount_prices')
+                                ->label('Discount Prices')
+                                ->url(OfferResource::getUrl('index'))
+                                ->icon('mw-offers'),
 
 
                         ]),

@@ -3991,20 +3991,6 @@ ul.mw-default-layout-un-ordered-t2 li:before {
     margin-inline-end: 7px;
 }
 
-/*DOTS LIST*/
-
-ul.mw-default-layout-un-ordered-t4 li {
-    list-style-type: disc;
-    list-style-position: inside;
-    margin-inline-start: 17px;
-    text-indent: -17px;
-    line-height: 25px;
-}
-
-ul.mw-default-layout-un-ordered-t4 li ul li {
-    list-style-type: circle;
-}
-
 /*PARAGRAPH*/
 .mw-default-layout-highlight-line {
     border-left: 4px solid black;
@@ -4688,6 +4674,6 @@ html[dir="rtl"] .mw-text-start {
     max-width: 100%;
 }
 
-.mw-layout-updater {
-    display: contents !important;
+.edit:has(.mw-layout-container.no-select) {
+    pointer-events: none;
 }

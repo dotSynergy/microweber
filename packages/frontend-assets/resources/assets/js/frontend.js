@@ -15,6 +15,7 @@ import "../tools/storage.js";
 import "../components/colorpicker.js";
 import "../components/gallery.js";
 import "../tools/tabs.js";
+import "../tools/extradata-form.js";
 import "../components/components.js";
 import "../components/dialog.js";
 import "../tools/common-extend.js";
@@ -84,6 +85,8 @@ if(!jQuery.fn.reload_module) {
     };
 
 }
+
+
 
 
 

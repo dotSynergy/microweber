@@ -1,12 +1,13 @@
-export default function contactForm(formId) {
-    return {
+document.addEventListener('alpine:init', () => {
+    Alpine.data('contactForm', (formId) => ({
         loading: false,
         success: false,
         formData: {},
+        formId: formId,
 
         init() {
             // Initialize form data from input fields
-            const form = document.querySelector(`form[data-form-id="${formId}"]`);
+            const form = document.querySelector(`form[data-form-id="${this.formId}"]`);
             if (form) {
                 const formElements = form.elements;
                 for (let i = 0; i < formElements.length; i++) {
@@ -26,28 +27,46 @@ export default function contactForm(formId) {
             try {
                 const form = event.target;
                 const formData = new FormData(form);
-                const action = route('api.contact_form_submit');
 
+                // Use Laravel's route helper if available, otherwise fallback to direct URL
+                let action;
+                try {
+                    action = typeof route !== 'undefined' ? route('api.contact_form_submit') : '/api/contact_form_submit';
+                } catch (e) {
+                    action = '/api/contact_form_submit';
+                }
 
                 // Get CSRF token from meta tag
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-                const headers = {
-                    'X-Requested-With': 'XMLHttpRequest'
+                const ajaxSettings = {
+                    url: action,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 };
 
                 // Add CSRF token to headers if found
                 if (csrfToken) {
-                    headers['X-CSRF-TOKEN'] = csrfToken;
+                    ajaxSettings.headers['X-CSRF-TOKEN'] = csrfToken;
                 }
 
-                const response = await fetch(action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: headers
-                });
+                const data = await new Promise((resolve, reject) => {
+                    $.ajax({
+                        ...ajaxSettings,
+                        success: function(response) {
+                            resolve(response);
+                        },
 
-                const data = await response.json();
+                        error: function(xhr, status, error) {
+                            reject(new Error(error || 'Ajax request failed'));
+                        }
+                    });
+                });
 
                 if (data.success) {
                     this.success = true;
@@ -62,5 +81,5 @@ export default function contactForm(formId) {
                 this.loading = false;
             }
         }
-    }
-}
+    }));
+});

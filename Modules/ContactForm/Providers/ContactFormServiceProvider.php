@@ -38,11 +38,19 @@ class ContactFormServiceProvider extends BaseModuleServiceProvider
         $this->loadRoutesFrom(module_path($this->moduleName, 'routes/web.php'));
 
 
+        template_head(function () {
+             $js = asset('modules/contact_form/js/contact-form-alpine.js');
+                        return <<<HTML
+             <script src="{$js}" id="mw-contact-form-alpine-js"></script>
+HTML;
+        });
+
+
         // Register filament page for Microweber module settings
         FilamentRegistry::registerPage(ContactFormModuleSettings::class);
 
         // Register Microweber module
-        Microweber::module( ContactFormModule::class);
+        Microweber::module(ContactFormModule::class);
 
     }
 

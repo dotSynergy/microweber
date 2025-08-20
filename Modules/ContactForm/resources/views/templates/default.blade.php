@@ -7,12 +7,13 @@
     */
 @endphp
 
-<link href="{{ asset('modules/contact_form/css/app.css') }}" rel="stylesheet" type="text/css"/>
+
 
 <div class="contact-form-container"
-     ax-load="visible"
-     ax-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
-     ax-data="contactForm('{{ $params['id'] }}')"
+
+
+     x-data="contactForm('{{ $params['id'] }}')"
+
 >
     <div class="contact-form">
         <div class="edit" field="contact_form_title" rel="contact_form_module" data-id="{{ $params['id'] }}">

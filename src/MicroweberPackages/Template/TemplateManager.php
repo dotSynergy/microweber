@@ -625,7 +625,9 @@ class TemplateManager
                 }
 
                 return $src;
-            } elseif (is_callable($script_src)) {
+            }
+
+            elseif (is_callable($script_src)) {
                 if (!in_array($script_src, $this->head_callable)) {
                     $this->head_callable[] = $script_src;
 

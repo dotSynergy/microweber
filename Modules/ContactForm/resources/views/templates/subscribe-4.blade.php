@@ -5,11 +5,11 @@
     description: Subscribe 4
     */
 @endphp
-<link href="{{ asset('modules/contact_form/css/app.css') }}" rel="stylesheet" type="text/css"/>
+
 <div
-    ax-load="visible"
-    ax-load-src="{{ asset('modules/contact_form/js/contact-form-alpine.js') }}"
-    ax-data="contactForm('{{ $params['id'] }}')">
+
+
+    x-data="contactForm('{{ $params['id'] }}')">
     <div class="contact-form-container">
         <form data-form-id="{{ $form_id }}" name="{{ $form_id }}" method="post"
               x-on:submit="submitForm">

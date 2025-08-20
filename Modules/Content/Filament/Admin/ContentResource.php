@@ -267,15 +267,16 @@ class ContentResource extends Resource
 
                                 Forms\Components\TextInput::make('title')
                                     ->maxLength(255)
-                                    ->suffixAction(
-                                        TranslateFieldAction::make('title')
+                                    ->required()
+                                    ->hintAction(
+                                        TranslateFieldAction::make('title')->label('')
                                     )->columnSpanFull()
                                 ,
 
                                 Forms\Components\TextInput::make('url')
                                     ->maxLength(255)
-                                    ->suffixAction(
-                                        TranslateFieldAction::make('url')
+                                    ->hintAction(
+                                        TranslateFieldAction::make('url')->label('')
                                     )->columnSpanFull()
                                 ,
 
@@ -747,8 +748,8 @@ class ContentResource extends Resource
                     Forms\Components\TextInput::make('content_meta_title')
                         ->label('Meta Title')
                         ->helperText('Describe for what is this page about in short title')
-                        ->suffixAction(
-                            TranslateFieldAction::make('content_meta_title')
+                        ->hintAction(
+                            TranslateFieldAction::make('content_meta_title')->label('')
                         )
                         ->columnSpanFull(),
 
@@ -763,8 +764,8 @@ class ContentResource extends Resource
                     Forms\Components\TextInput::make('content_meta_keywords')
                         ->label('Meta Keywords')
                         ->helperText('Separate keywords with a comma and space. Type keywords that describe your content - Example: Blog, Online News, Phones for sale')
-                        ->suffixAction(
-                            TranslateFieldAction::make('content_meta_keywords')
+                        ->hintAction(
+                            TranslateFieldAction::make('content_meta_keywords')->label('')
                         )
                         ->columnSpanFull(),
                 ])

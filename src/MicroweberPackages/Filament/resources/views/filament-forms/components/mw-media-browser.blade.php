@@ -83,9 +83,6 @@
 
                         <div
 
-                            x-load="visible"
-
-                            x-load-src="{{ public_asset('vendor/microweber-packages/microweber-filament-theme/build/mw-media-browser.js')}}"
 
                             x-data="mwMediaManagerComponent({
                                 mediaIds: $wire.{{ $applyStateBindingModifiers("\$entangle('{$statePath}')") }},
@@ -123,30 +120,7 @@
 
 
 
-                            <div class="mw-media-browser-delete-btn-wrapper">
 
-
-                                <div x-show="showBulkDeleteButton"
-
-                                     class="admin-thumbs-holder-bulk-actions">
-
-                                    <x-filament::button size="xs" icon="heroicon-m-check-circle" color="success" @click="selectAllMedia()">
-                                        Select All
-                                    </x-filament::button>
-
-                                    <x-filament::button size="xs" icon="heroicon-m-x-circle" color="warning" @click="deselectAllMedia()">
-                                        Deselect All
-                                    </x-filament::button>
-
-                                    <x-filament::button size="xs" icon="heroicon-m-trash" color="danger" @click="bulkDeleteSelectedMedia()">
-                                        Delete selected
-                                    </x-filament::button>
-
-                                </div>
-
-
-
-                            </div>
 
 
 
@@ -160,7 +134,30 @@
 
 
 
+                                <div class="mw-media-browser-delete-btn-wrapper">
 
+
+                                    <div x-show="showBulkDeleteButton"
+
+                                         class="admin-thumbs-holder-bulk-actions">
+
+                                        <x-filament::button size="xs" icon="heroicon-m-check-circle" color="success" @click="selectAllMedia()">
+                                            Select All
+                                        </x-filament::button>
+
+                                        <x-filament::button size="xs" icon="heroicon-m-x-circle" color="warning" @click="deselectAllMedia()">
+                                            Deselect All
+                                        </x-filament::button>
+
+                                        <x-filament::button size="xs" icon="heroicon-m-trash" color="danger" @click="bulkDeleteSelectedMedia()">
+                                            Delete selected
+                                        </x-filament::button>
+
+                                    </div>
+
+
+
+                                </div>
 
 
 

@@ -41,7 +41,7 @@ class ListContents extends ListRecords
 
         $multilanguageIsEnabled = true; // TODO
         if ($multilanguageIsEnabled) {
-            $actions[] =  Actions\LocaleSwitcher::make();
+            // $actions[] = Actions\LocaleSwitcher::make();
         }
 
         return $actions;

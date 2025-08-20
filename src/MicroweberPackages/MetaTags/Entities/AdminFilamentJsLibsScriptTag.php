@@ -54,14 +54,14 @@ class AdminFilamentJsLibsScriptTag implements TagInterface, \Stringable
        // $append_html .= '<script src="' . $lib_tynymce . '" id="mw-tynymce-js-libs-scripts"></script>' . "\r\n";
 
         $append_html .= '' . "\r\n";
-        $append_html .= '<script src="' . $libs . '" type="module"  id="mw-filament-js-libs-scripts"></script>' . "\r\n";
+        $append_html .= '<script src="' . $libs . '" type="module" id="mw-filament-js-libs-scripts"></script>' . "\r\n";
 
         $append_html .= '' . "\r\n";
-        $append_html .= '<script src="' . $mwMediaBrowser . '"  type="module"   id="mw-media-browser-alpine-scripts"></script>' . "\r\n";
+        $append_html .= '<script src="' . $mwMediaBrowser . '" id="mw-media-browser-alpine-scripts"></script>' . "\r\n";
 
 
         $append_html .= '' . "\r\n";
-        $append_html .= '<script src="' . $mwMediaFilamentTranslatable . '"    id="mw-filament-translatable-apline-scripts"></script>' . "\r\n";
+        $append_html .= '<script src="' . $mwMediaFilamentTranslatable . '" id="mw-filament-translatable-apline-scripts"></script>' . "\r\n";
 
 
 //        $append_html .= '' . "\r\n";

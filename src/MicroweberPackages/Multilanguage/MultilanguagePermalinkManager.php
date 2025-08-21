@@ -2,6 +2,11 @@
 
 namespace MicroweberPackages\Multilanguage;
 
+use Modules\Category\Models\Category;
+use Modules\Content\Models\Content;
+use Modules\Page\Models\Page;
+use Modules\Post\Models\Post;
+
 class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\PermalinkManager
 {
     public $language = false;
@@ -39,7 +44,7 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
         }
 
         $linkSegments = url_segment(-1, $link);
-        $linkSegments = array_filter($linkSegments, 'strlen');
+        $linkSegments = array_filter($linkSegments, 'trim');
 
         if (empty($linkSegments)) {
             return false;
@@ -61,14 +66,16 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
                     if ($relType == 'post' or $relType == 'page' or $relType == 'product') {
                         $relType = 'content';
                     }
-
                     if ($type == 'category') {
                         $findCategoryBySlug = app()->multilanguage_repository->getTranslationByFieldNameFieldValueAndRelType('url', $findSlugByType, $relType);
                         if ($findCategoryBySlug && isset($findCategoryBySlug['field_value'])) {
                             return $findCategoryBySlug['field_value'];
                         }
                         // Check original
-                        $findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        //$findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        $findCategoryBySlug = Category::where('url', $findSlugByType)
+                            ->where('is_active', 1)
+                            ->first();
                         if ($findCategoryBySlug) {
                             return $findCategoryBySlug['url'];
                         }
@@ -92,7 +99,12 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
                         }
 
                         // If page not fond & category not found we try to find post
-                        $findPostBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+                        //$findPostBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+                        $findPostBySlug = Post::where('url', $findSlugByType)
+                            ->where('content_type', 'post')
+                            ->where('is_active', 1)
+                            ->first();
+
                         if ($findPostBySlug && isset($findPostBySlug['parent']) && $findPostBySlug['parent'] != false) {
                             //  $findPostPageBySlug = get_pages('id=' . $findPostBySlug['parent'] . '&single=1');
                             $findPostPageBySlug = app()->content_repository->getById($findPostBySlug['parent']);
@@ -102,7 +114,10 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
                         }
 
                         // If page found return slug
-                        $findPageBySlug = get_pages('url=' . $findSlugByType . '&single=1');
+                        //$findPageBySlug = get_pages('url=' . $findSlugByType . '&single=1');
+                        $findPageBySlug = Page::where('url', $findSlugByType)
+                            ->where('is_active', 1)
+                            ->first();
                         if ($findPageBySlug) {
                             return $findPageBySlug['url'];
                         }
@@ -115,7 +130,12 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
                         }
 
                         // Check original
-                        $findPostsBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+                        //$findPostsBySlug = get_content('content_type=post&no_cache=1&url=' . $findSlugByType . '&single=1');
+                        $findPostsBySlug = Post::where('url', $findSlugByType)
+                            ->where('content_type', 'post')
+                            ->where('is_active', 1)
+                            ->first();
+
                         if ($findPostsBySlug) {
                             return $findPostsBySlug['url'];
                         }
@@ -133,7 +153,10 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
                         }
 
                         //Check original
-                        $findContentBySlug = get_content('url=' . $findSlugByType . '&single=1');
+                        //$findContentBySlug = get_content('url=' . $findSlugByType . '&single=1');
+                        $findContentBySlug = Content::where('url', $findSlugByType)
+                            ->where('is_active', 1)
+                            ->first();
                         if ($findContentBySlug) {
                             return $findContentBySlug['url'];
                         }
@@ -287,7 +310,7 @@ class MultilanguagePermalinkManager extends \MicroweberPackages\App\Managers\Per
     {
         $currentLang = $this->language;
 
-        if(!is_array(self::$__getLinkAfterLocaleSettings)){
+        if (!is_array(self::$__getLinkAfterLocaleSettings)) {
             self::$__getLinkAfterLocaleSettings = [];
         }
         // Display locale

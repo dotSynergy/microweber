@@ -2,6 +2,11 @@
 
 namespace MicroweberPackages\App\Managers;
 
+use Modules\Category\Models\Category;
+use Modules\Content\Models\Content;
+use Modules\Page\Models\Page;
+use Modules\Post\Models\Post;
+
 class PermalinkManager
 {
     /** @var \MicroweberPackages\App\LaravelApplication */
@@ -49,7 +54,9 @@ class PermalinkManager
                     $findSlugByType = $linkSegments[$structureMapIndex];
 
                     if ($type == 'category') {
-                        $findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        //$findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        $findCategoryBySlug = Category::where('url', $findSlugByType)->first();
+
                         if ($findCategoryBySlug) {
                             return $findCategoryBySlug['url'];
                         }
@@ -58,13 +65,17 @@ class PermalinkManager
                     if ($type == 'page') {
 
                         // If page found return slug
-                        $findPageBySlug = get_pages('url=' . $findSlugByType . '&single=1');
+                        //$findPageBySlug = get_pages('url=' . $findSlugByType . '&single=1');
+                        $findPageBySlug = Page::where('url', $findSlugByType)->first();
                         if ($findPageBySlug) {
                             return $findPageBySlug['url'];
                         }
 
                         // If page not found try to find page from category
-                        $findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        //$findCategoryBySlug = get_categories('url=' . $findSlugByType . '&single=1');
+                        $findCategoryBySlug = Category::where('url', $findSlugByType)->first();
+
+
                         if ($findCategoryBySlug) {
                             $findCategoryPage = get_page_for_category($findCategoryBySlug['id']);
                             if ($findCategoryPage && isset($findCategoryPage['url'])) {
@@ -73,10 +84,14 @@ class PermalinkManager
                         }
 
                         // If page not fond & category not found we try to find post
-                        $findPostBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+                        // $findPostBySlug = get_content('content_type=post&url=' . $findSlugByType . '&single=1');
+
+                        $findPostBySlug = Post::where('url', $findSlugByType)->first();
+
+
                         if ($findPostBySlug && isset($findPostBySlug['parent']) && $findPostBySlug['parent'] != false) {
-                          //  $findPostPageBySlug = get_pages('id=' . $findPostBySlug['parent'] . '&single=1');
-                            $findPostPageBySlug =  app()->content_repository->getById($findPostBySlug['parent']);
+                            //  $findPostPageBySlug = get_pages('id=' . $findPostBySlug['parent'] . '&single=1');
+                            $findPostPageBySlug = app()->content_repository->getById($findPostBySlug['parent']);
                             if ($findPostPageBySlug) {
                                 return $findPostPageBySlug['url'];
                             }
@@ -92,18 +107,23 @@ class PermalinkManager
                     }
 
                     if ($type == 'post') {
-                        $findPostsBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+                        // $findPostsBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
+
+                        $findPostsBySlug = Post::where('url', $findSlugByType)->first();
+
                         if ($findPostsBySlug) {
                             return $findPostsBySlug['url'];
                         }
-                        $findPostsBySlug = get_content('url=' . $findSlugByType . '&single=1');
-                        if ($findPostsBySlug && isset($findPostsBySlug['content_type']) && $findPostsBySlug['content_type'] != 'page') {
-                            return $findPostsBySlug['url'];
-                        }
+//                        $findPostsBySlug = get_content('url=' . $findSlugByType . '&single=1');
+//                        if ($findPostsBySlug && isset($findPostsBySlug['content_type']) && $findPostsBySlug['content_type'] != 'page') {
+//                            return $findPostsBySlug['url'];
+//                        }
                     }
 
                     if ($type == 'content') {
-                        $findPostsBySlug = get_content('url=' . $findSlugByType . '&single=1');
+                        // $findPostsBySlug = get_content('url=' . $findSlugByType . '&single=1');
+
+                        $findPostsBySlug = Content::where('url', $findSlugByType)->first();
 
                         if ($findPostsBySlug) {
                             return $findPostsBySlug['url'];
@@ -168,10 +188,10 @@ class PermalinkManager
             }
 
             return [
-                'url'=> $linkFull,
-                'slug_prefix'=>$slugPrefixReturn,
-                'slug_prefix_url'=>$slugPrefixUrlReturn,
-                'slug'=>$slug
+                'url' => $linkFull,
+                'slug_prefix' => $slugPrefixReturn,
+                'slug_prefix_url' => $slugPrefixUrlReturn,
+                'slug' => $slug
             ];
         }
 
@@ -183,7 +203,7 @@ class PermalinkManager
         $link = [];
 
         //$content = get_content('id=' . $contentId . '&single=1');
-        $content =  app()->content_repository->getById($contentId);
+        $content = app()->content_repository->getById($contentId);
 
         if ($content) {
 
@@ -195,7 +215,7 @@ class PermalinkManager
 
                 if ($this->structure == 'page_post') {
                     if (isset($content['parent']) && $content['parent'] != 0) {
-                     //   $postParentPage = get_pages('id=' . $content['parent'] . '&single=1');
+                        //   $postParentPage = get_pages('id=' . $content['parent'] . '&single=1');
                         $postParentPage = app()->content_repository->getById($content['parent']);
 
                         if ($postParentPage) {
@@ -213,7 +233,7 @@ class PermalinkManager
 
                 if ($this->structure == 'page_category_post') {
                     if (isset($content['parent']) && $content['parent'] != 0) {
-                      //  $postParentPage = get_pages('id=' . $content['parent'] . '&single=1');
+                        //  $postParentPage = get_pages('id=' . $content['parent'] . '&single=1');
                         $postParentPage = app()->content_repository->getById($content['parent']);
 
                         if ($postParentPage) {
@@ -240,9 +260,9 @@ class PermalinkManager
         $categories = get_categories_for_content($postId);
 
         if ($categories && isset($categories[0])) {
-            $main_cat  = $selected_cat = $categories[0];
-            foreach ($categories as $category){
-                if(isset($category['parent_id']) and isset($main_cat['id']) and $category['parent_id'] == $main_cat['id']){
+            $main_cat = $selected_cat = $categories[0];
+            foreach ($categories as $category) {
+                if (isset($category['parent_id']) and isset($main_cat['id']) and $category['parent_id'] == $main_cat['id']) {
                     $selected_cat = $category;
                 }
             }
@@ -268,7 +288,7 @@ class PermalinkManager
             switch ($this->structure) {
                 case 'page_post':
                 case 'post':
-                // case 'category_post':
+                    // case 'category_post':
                 case 'page_category_post':
                 case 'page_category_sub_categories_post':
                     $pageCategory = $this->app->category_manager->get_page($categoryId);
@@ -322,11 +342,12 @@ class PermalinkManager
             'post' => 'sample-post',
             'page_post' => 'page/sample-post',
             'category_post' => 'sample-category/sample-post',
-           // 'category_sub_categories_post' => 'sample-category/sub-category/sample-post',
+            // 'category_sub_categories_post' => 'sample-category/sub-category/sample-post',
             'page_category_post' => 'sample-page/sample-category/sample-post',
             //'page_category_sub_categories_post' => 'sample-page/sample-category/sub-category/sample-post'
         );
     }
+
     public function clearCache()
     {
         //...

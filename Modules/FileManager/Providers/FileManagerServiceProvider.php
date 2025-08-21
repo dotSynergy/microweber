@@ -8,13 +8,15 @@ use Illuminate\Support\Facades\Route;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\Microweber\Facades\Microweber;
+use Modules\FileManager\Filament\Pages\FileManagerPageAdmin;
+use Modules\Settings\Filament\Pages\Settings;
 
 
 class FileManagerServiceProvider extends BaseModuleServiceProvider
 {
     protected string $moduleName = 'FileManager';
 
-    protected string $moduleNameLower = 'filemanager';
+    protected string $moduleNameLower = 'file-manager';
 
     /**
      * Boot the application events.
@@ -35,6 +37,8 @@ class FileManagerServiceProvider extends BaseModuleServiceProvider
         $this->registerViews();
         $this->loadRoutesFrom(module_path($this->moduleName, 'routes/web.php'));
 
+        FilamentRegistry::registerPage(FileManagerPageAdmin::class);
+        FilamentRegistry::registerPage(FileManagerPageAdmin::class,Settings::class);
 
         // Register filament page for Microweber module settings
         // FilamentRegistry::registerPage(FileManagerModuleSettings::class);

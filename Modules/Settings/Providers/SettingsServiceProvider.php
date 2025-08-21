@@ -5,13 +5,11 @@ namespace Modules\Settings\Providers;
 
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
-use Modules\Invoice\Filament\Pages\AdminShopInvoicesPage;
-use Modules\Settings\Filament\Resources\TranslationResource;
+use Modules\FileManager\Filament\Pages\FileManagerPageAdmin;
 use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminCustomTagsPage,
     AdminEmailPage,
     AdminExperimentalPage,
-    AdminFilesPage,
     AdminGeneralPage,
     AdminLanguagePage,
     AdminLoginRegisterPage,
@@ -21,10 +19,9 @@ use Modules\Settings\Filament\Pages\{AdminAdvancedPage,
     AdminShopAutoRespondEmailPage,
     AdminShopGeneralPage,
     AdminShopOtherPage,
-     AdminTemplatePage,
-    AdminUpdatesPage,
-    Settings
-};
+    AdminTemplatePage,
+    Settings};
+use Modules\Settings\Filament\Resources\TranslationResource;
 
 class SettingsServiceProvider extends BaseModuleServiceProvider
 {
@@ -62,7 +59,6 @@ class SettingsServiceProvider extends BaseModuleServiceProvider
         FilamentRegistry::registerPage(AdminCustomTagsPage::class);
         FilamentRegistry::registerPage(AdminEmailPage::class);
         FilamentRegistry::registerPage(AdminExperimentalPage::class);
-        FilamentRegistry::registerPage(AdminFilesPage::class);
         FilamentRegistry::registerPage(AdminGeneralPage::class);
         FilamentRegistry::registerPage(AdminLanguagePage::class);
         FilamentRegistry::registerPage(AdminLoginRegisterPage::class);

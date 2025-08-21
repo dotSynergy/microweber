@@ -7,7 +7,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Page;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\Filament\Support\FilamentHelpers;
-use Modules\Invoice\Filament\Pages\AdminShopInvoicesPage;
+use Modules\FileManager\Filament\Pages\FileManagerPageAdmin;
 
 
 class Settings extends Page
@@ -40,7 +40,7 @@ class Settings extends Page
         $settingsPages[] = new AdminTemplatePage();
         $settingsPages[] = new AdminSeoPage();
         $settingsPages[] = new AdminAdvancedPage();
-        $settingsPages[] = new AdminFilesPage();
+       // $settingsPages[] = new FileManagerPageAdmin();
         $settingsPages[] = new AdminLoginRegisterPage();
         $settingsPages[] = new AdminLanguagePage();
         $settingsPages[] = new AdminPrivacyPolicyPage();

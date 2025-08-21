@@ -1,16 +1,10 @@
 <?php
 
-namespace Modules\Settings\Filament\Pages;
+namespace Modules\FileManager\Filament\Pages;
 
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Form;
 use MicroweberPackages\Admin\Filament\Pages\Abstract\AdminSettingsPage;
-use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 
-class AdminFilesPage extends AdminSettingsPage
+class FileManagerPageAdmin extends AdminSettingsPage
 {
     protected static ?string $navigationIcon = 'mw-files';
 

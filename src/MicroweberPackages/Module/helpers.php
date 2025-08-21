@@ -113,11 +113,12 @@ function module_admin_url($module_name = false)
                     'filament.admin.pages.' . $moduleNameLower . '-settings-admin',
                     'filament.admin.pages.' . $moduleNameLower . '-settings',
                     'filament.admin.pages.admin-' . $moduleNameLower . '-page',
+                    'filament.admin.pages.' . $moduleNameLower . '-page-admin',
                 ];
+            //
+            //  $routeCollection = Illuminate\Support\Facades\Route::getRoutes();
 
 
-         //   $routeCollection = Illuminate\Support\Facades\Route::getRoutes();
-//
 //            foreach ($routeCollection as $value) {
 //                dump($value->getName());
 //            }
@@ -132,7 +133,7 @@ function module_admin_url($module_name = false)
             }
 
 
-         }
+        }
 
         //filament.admin.resources.orders
 

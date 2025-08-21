@@ -106,7 +106,7 @@ abstract class LiveEditModuleSettings extends Page
                 if ($isMultilanguageEnabled) {
 
 
-                     $this->translatableOptions[$option->option_key][$defaultLocale] = $option->option_value;
+                    $this->translatableOptions[$option->option_key][$defaultLocale] = $option->option_value;
 
                     if (isset($option->multilanguage) and !empty($option->multilanguage)) {
                         foreach ($option->multilanguage as $tanslations) {
@@ -119,7 +119,7 @@ abstract class LiveEditModuleSettings extends Page
                     }
 
 
-                 }
+                }
             }
         }
 
@@ -148,47 +148,60 @@ abstract class LiveEditModuleSettings extends Page
     "$fielName" => "en_US" = $value
   ]*/
 
-        if (MultilanguageHelpers::multilanguageIsEnabled()) {
 
-            if (isset($option['translatableOptions'])) {
-                $defaultLocale = mw()->lang_helper->default_lang();
+        if (MultilanguageHelpers::multilanguageIsEnabled() and isset($option['translatableOptions'])) {
+            $defaultLocale = mw()->lang_helper->default_lang();
 
-                $translateOptions = [];
-                if (is_array($option['translatableOptions'])) {
-                    $translateOptions = $option['translatableOptions'];
-                }
-
-
-                foreach ($translateOptions as $optionKey => $locale) {
-                    $optionKeyForTranslaton = str_replace('translatableOptions.', '', $optionKey);
-                    $valForOption = $value[$locale] ?? $value;
-
-                    if ($defaultLocale == $locale) {
-                        // Save the default locale option
-                        save_module_option([
-                            'option_key' => $optionKey,
-                            'option_value' => $valForOption,
-                            'option_group' => $optionGroup,
-                            'module' => $this->module
-                        ]);
-                    } else {
-                        // Save the translatable option
-                       // dump($optionKeyForTranslaton,$valForOption,$locale,$optionGroup);
-                        save_module_option([
-                            'option_key' => $optionKeyForTranslaton,
-                            'option_value' => $valForOption,
-                            'option_group' => $optionGroup,
-                            'lang' => $locale,
-                            'module' => $this->module
-                        ]);
-                    }
+            $translateOptions = [];
+            if (is_array($option['translatableOptions'])) {
+                $translateOptions = $option['translatableOptions'];
+            }
 
 
+            foreach ($translateOptions as $optionKey => $locale) {
+                $optionKeyForTranslaton = str_replace('translatableOptions.', '', $optionKey);
+                $valForOption = $value[$locale] ?? $value;
+
+                if ($defaultLocale == $locale) {
+                    // Save the default locale option
+                    save_module_option([
+                        'option_key' => $optionKey,
+                        'option_value' => $valForOption,
+                        'option_group' => $optionGroup,
+                        'module' => $this->module
+                    ]);
+
+                    $this->dispatch('mw-option-saved',
+                        optionGroup: $valForOption,
+                        optionKey: $optionKey,
+                        optionValue: $value,
+                        module: $this->module
+                    );
+                } else {
+                    // Save the translatable option
+                    // dump($optionKeyForTranslaton,$valForOption,$locale,$optionGroup);
+                    save_module_option([
+                        'option_key' => $optionKeyForTranslaton,
+                        'option_value' => $valForOption,
+                        'option_group' => $optionGroup,
+                        'lang' => $locale,
+                        'module' => $this->module
+                    ]);
+
+                    $this->dispatch('mw-option-saved',
+                        optionGroup: $optionGroup,
+                        optionKey: $optionKeyForTranslaton,
+                        optionValue: $value,
+                        module: $this->module
+                    );
                 }
 
 
             }
+
+
         }
+
 
         if (isset($option['options'])) {
             save_option([

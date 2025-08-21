@@ -71,12 +71,16 @@ class Stripe extends AbstractPaymentMethod
                 throw new \Exception('Stripe is not configured properly');
             }
 
+
+
             // Set API key
             $this->gateway->setApiKey($model->settings['secret_key']);
 
             $stripe = new StripeClient($model->settings['secret_key']);
 
             $sessionData = [
+                'customer_email' => $data['email'] ?? null,
+
                 'line_items' => [
                     [
                         'price_data' => [
@@ -89,7 +93,6 @@ class Stripe extends AbstractPaymentMethod
                 ],
                 'metadata' => [
                     'order_reference_id' => $data['order_reference_id'] ?? null,
-                    'customer_email' => $data['email'] ?? null,
                 ],
                 'client_reference_id' =>  $data['order_reference_id'] ?? null,
                 'mode' => 'payment',

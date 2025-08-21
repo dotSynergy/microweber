@@ -275,7 +275,7 @@ class CheckoutResource extends Resource
 
                                 Section::make('Payment Method')
                                     ->visible(function (Forms\Get $get) {
-                                        $visible = app()->shipping_method_manager->getProviders() && app()->cart_manager->get();
+                                        $visible = app()->payment_method_manager->getProviders() && app()->cart_manager->get();
                                         return $visible;
                                     })
                                     ->schema(function (Forms\Get $get) {

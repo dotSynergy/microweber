@@ -36,10 +36,10 @@ class OrderResource extends Resource
         return 'New orders';
     }
 
-/*    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::where('order_status', OrderStatus::New)->count();
-    }*/
+    /*    public static function getNavigationBadge(): ?string
+        {
+            return static::getModel()::where('order_status', OrderStatus::New)->count();
+        }*/
 
     public static function form(Form $form): Form
     {
@@ -60,7 +60,6 @@ class OrderResource extends Resource
                                 Forms\Components\Section::make()
                                     ->heading('Shipping details')
                                     ->collapsible()
-                                    ->collapsed()
                                     ->schema([
 
                                         Forms\Components\Select::make('country')
@@ -161,9 +160,6 @@ class OrderResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at'),
 
-                Tables\Columns\TextColumn::make('order_status')
-                    ->label('Status')
-                    ->badge(),
                 ImageUrlColumn::make('firstProductThumbnail')
                     ->label('Product')
                     ->circular()
@@ -175,6 +171,11 @@ class OrderResource extends Resource
                     ->label('Number')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('order_status')
+                    ->label('Status')
+                    ->badge(),
+
 
                 Tables\Columns\TextColumn::make('customer.email')
                     ->label('Email')
@@ -556,8 +557,6 @@ class OrderResource extends Resource
                 ->url(static::getUrl('edit', ['record' => $record])),
         ];
     }
-
-
 
 
 }

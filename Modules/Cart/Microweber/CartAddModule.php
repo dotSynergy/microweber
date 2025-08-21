@@ -56,7 +56,7 @@ class CartAddModule extends BaseModule
         }
 
         // Get button text from module options or params
-        $button_text = $params['button_text'] ?? $this->getOption('button_text', '');
+        $button_text = $params['button_text'] ?? $this->getOption('button_text', 'Add to cart');
 
         // Get content data and check stock
         $content_data = content_data($for_id);

@@ -573,16 +573,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class);
         $this->app->make('Illuminate\Contracts\Http\Kernel')->prependMiddleware(LocaleRedirectMiddleware::class);
-/*
-        //  $router->pushMiddlewareToGroup('web', AuthenticateSessionForUser::class);
-        $router->pushMiddlewareToGroup('web', \Illuminate\Session\Middleware\StartSession::class);
-        $router->pushMiddlewareToGroup('web', \Illuminate\Cookie\Middleware\EncryptCookies::class);
-        $router->pushMiddlewareToGroup('web', \Illuminate\View\Middleware\ShareErrorsFromSession::class);
-        $router->pushMiddlewareToGroup('web', AuthenticateSession::class);
-        // $router->pushMiddlewareToGroup('web', \MicroweberPackages\App\Http\Middleware\VerifyCsrfToken::class);
-        $router->pushMiddlewareToGroup('web', \Illuminate\Routing\Middleware\SubstituteBindings::class);
-       // $router->pushMiddlewareToGroup('web',  LocaleRedirectMiddleware::class);
-        // AddQueuedCookiesToResponse::class,*/
+        /*
+                //  $router->pushMiddlewareToGroup('web', AuthenticateSessionForUser::class);
+                $router->pushMiddlewareToGroup('web', \Illuminate\Session\Middleware\StartSession::class);
+                $router->pushMiddlewareToGroup('web', \Illuminate\Cookie\Middleware\EncryptCookies::class);
+                $router->pushMiddlewareToGroup('web', \Illuminate\View\Middleware\ShareErrorsFromSession::class);
+                $router->pushMiddlewareToGroup('web', AuthenticateSession::class);
+                // $router->pushMiddlewareToGroup('web', \MicroweberPackages\App\Http\Middleware\VerifyCsrfToken::class);
+                $router->pushMiddlewareToGroup('web', \Illuminate\Routing\Middleware\SubstituteBindings::class);
+               // $router->pushMiddlewareToGroup('web',  LocaleRedirectMiddleware::class);
+                // AddQueuedCookiesToResponse::class,*/
 
         $router->aliasMiddleware('auth', \MicroweberPackages\App\Http\Middleware\Authenticate::class);
         $router->aliasMiddleware('auth.basic', \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class);
@@ -725,18 +725,26 @@ class AppServiceProvider extends ServiceProvider
 
     private function setupAppLocale()
     {
-        $isLocaleChangedFromMultilanguageLogics = false;
 
-        $currentUri = request()->path();
-        $langCookie = request()->cookie('lang');
-        $skip_items = ['api', 'token', '_token'];
-        $localeRedirect = request()->get('localeRedirect');
-        if($localeRedirect){
-            return;
-        }
+         if (MultilanguageHelpers::multilanguageIsEnabled()) {
 
-        //  Change language if user request language with LINK has lang abr
-        if (MultilanguageHelpers::multilanguageIsEnabled()) {
+
+
+            $isLocaleChangedFromMultilanguageLogics = false;
+
+            $currentUri = request()->path();
+            if (is_ajax()) {
+                $currentUri = url_current(true);
+            }
+
+
+            $langCookie = request()->cookie('lang');
+            $skip_items = ['api', 'token', '_token'];
+            $localeRedirect = request()->get('localeRedirect');
+            if ($localeRedirect) {
+                return;
+            }
+
 
             $localeIsChangedFromGetRequest = false;
             $locale = request()->get('locale');
@@ -748,7 +756,6 @@ class AppServiceProvider extends ServiceProvider
                 if (!empty($localeSettings) && isset($localeSettings['is_active']) && $localeSettings['is_active'] == 'y') {
                     change_language_by_locale($locale, true);
                 }
-
 
 //                if ($locale and $localeIsChangedFromGetRequest) {
 //                    $localeRedirect = request()->get('localeRedirect');
@@ -805,36 +812,41 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
             }
-        }
 
-        // If locale is not changed from link
-        if (!$isLocaleChangedFromMultilanguageLogics) {
 
-            // If we have a lang cookie read from theere
-            if (isset($langCookie) && ($langCookie)) {
-                $setCurrentLangTo = $langCookie;
-            } else {
-                if (MultilanguageHelpers::multilanguageIsEnabled()) {
-                    // Set from default homepage lang settings
-                    $setCurrentLangTo = get_option('homepage_language', 'website');
+
+
+            // If locale is not changed from link
+            if (!$isLocaleChangedFromMultilanguageLogics) {
+
+                // If we have a lang cookie read from theere
+                if (isset($langCookie) && ($langCookie)) {
+                    $setCurrentLangTo = $langCookie;
                 } else {
-                    // Set from default language language settings
-                    $setCurrentLangTo = get_option('language', 'website');
+                    if (MultilanguageHelpers::multilanguageIsEnabled()) {
+                        // Set from default homepage lang settings
+                        $setCurrentLangTo = get_option('homepage_language', 'website');
+                    } else {
+                        // Set from default language language settings
+                        $setCurrentLangTo = get_option('language', 'website');
+                    }
                 }
-            }
 
 
-            if ($setCurrentLangTo && is_lang_correct($setCurrentLangTo)) {
-                if (MultilanguageHelpers::multilanguageIsEnabled()) {
+                if ($setCurrentLangTo && is_lang_correct($setCurrentLangTo)) {
+                    if (MultilanguageHelpers::multilanguageIsEnabled()) {
 
-                    $localeSettings = app()->multilanguage_repository->getSupportedLocaleByLocale($setCurrentLangTo);
-                    if (!empty($localeSettings) && isset($localeSettings['is_active']) && $localeSettings['is_active'] == 'y') {
+                        $localeSettings = app()->multilanguage_repository->getSupportedLocaleByLocale($setCurrentLangTo);
+                        if (!empty($localeSettings) && isset($localeSettings['is_active']) && $localeSettings['is_active'] ) {
+                            set_current_lang($setCurrentLangTo);
+                        }
+                    } else {
                         set_current_lang($setCurrentLangTo);
                     }
-                } else {
-                    set_current_lang($setCurrentLangTo);
                 }
             }
         }
+
+
     }
 }

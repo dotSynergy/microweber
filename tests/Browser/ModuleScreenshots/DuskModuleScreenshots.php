@@ -137,9 +137,9 @@ abstract class DuskModuleScreenshots extends DuskTestCase
         ];
         $modules = array_merge($modules, $modulesDefault);
 
-        $modules = [
-            'layouts' => ''
-        ];
+//        $modules = [
+//            'layouts' => ''
+//        ];
 
         foreach ($modules as $moduleName => $moduleNamespace) {
 

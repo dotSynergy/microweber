@@ -28,8 +28,8 @@ class FaqModule extends BaseModule
             ->orderBy('position', 'asc')->get();
         $default = [
             [
-                'question' => 'Open settings and type your question',
-                'answer' => 'Open settings and type your answer'
+                'question' => 'Your question goes here',
+                'answer' => 'Your answer goes here'
             ]
         ];
 

@@ -7,7 +7,7 @@
 @endphp
 
 <nav class="navbar module-multilanguage lang-dropdown">
-    <ul class="dropdown-menu navbar-nav">
+    <ul class="dropdown-menu">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center lang-flag-btn modern-lang-btn"
                href="#"
@@ -59,7 +59,7 @@
 
 <style>
     .module-multilanguage {
-        .dropdown-menu.navbar-nav {
+        .dropdown-menu{
             border: none;
             background: none;
         }

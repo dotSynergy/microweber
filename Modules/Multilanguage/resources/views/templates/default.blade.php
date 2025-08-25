@@ -6,11 +6,10 @@
     */
 @endphp
 
-
 <nav class="navbar module-multilanguage lang-dropdown">
     <ul class="dropdown-menu navbar-nav">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center lang-flag-btn"
+            <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center lang-flag-btn modern-lang-btn"
                href="#"
                id="dropdownMenuButton"
                role="button"
@@ -26,13 +25,13 @@
                 @endif
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="dropdownMenuButton"
-                style="min-width: 56px;">
+            <ul class="dropdown-menu dropdown-menu-end p-2 modern-lang-dropdown" aria-labelledby="dropdownMenuButton"
+                style="min-width: 120px;">
                 @if(!empty($supported_languages))
                     @foreach($supported_languages as $language)
                         @if($language['is_active'])
                             <li>
-                                <a class="dropdown-item d-flex align-items-center justify-content-center lang-flag-link p-1 @if($language['locale'] == $current_language['locale']) active @endif"
+                                <a class="dropdown-item d-flex align-items-center lang-flag-link modern-lang-link p-2 @if($language['locale'] == $current_language['locale']) active @endif"
                                    href="?localeRedirect={{ $language['locale'] }}"
                                    title="{{ $language['display_name'] ?: $language['language'] }}">
                                     @if($language['display_icon'])
@@ -43,6 +42,11 @@
                                             class="mw-flag-icon mw-flag-icon-{{ get_flag_icon($language['locale']) }} lang-flag"></span>
                                     @endif
                                     <span class="ms-2">{{ $language['display_name'] ?: $language['language'] }}</span>
+                                    @if($language['locale'] == $current_language['locale'])
+                                        <svg class="ms-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="20,6 9,17 4,12"></polyline>
+                                        </svg>
+                                    @endif
                                 </a>
                             </li>
                         @endif
@@ -52,70 +56,104 @@
         </li>
     </ul>
 </nav>
+
 <style>
-    .lang-dropdown .lang-flag-btn {
-        background: none;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .module-multilanguage {
+        .dropdown-menu.navbar-nav {
+            border: none;
+            background: none;
+        }
     }
 
-    .lang-flag {
-        width: 32px;
-        height: 24px;
+    .modern-lang-btn {
+        border-radius: 12px;
+        padding: 6px 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: box-shadow 0.2s, transform 0.2s;
+        min-width: 44px;
+        min-height: 36px;
+        font-weight: 500;
+        gap: 6px;
+        border: none; /* removed border */
+    }
+    .modern-lang-btn:hover, .modern-lang-btn:focus {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+        transform: translateY(-1px) scale(1.03);
+        border: none; /* ensure no border on hover/focus */
+    }
+    .modern-lang-btn .lang-flag {
+        width: 22px;
+        height: 16px;
         border-radius: 6px;
         object-fit: cover;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-        background-color: #eee;
-        display: block;
-        transition: box-shadow 0.18s, transform 0.18s;
+        margin-right: 2px;
     }
-
-    .lang-flag-link {
-        padding: 0;
-        transition: background 0.15s, box-shadow 0.15s;
+    .chevron-icon {
+        vertical-align: middle;
+        transition: transform 0.2s;
+        opacity: 0.7;
+    }
+    .modern-lang-btn[aria-expanded="true"] .chevron-icon {
+        transform: rotate(180deg);
+        opacity: 1;
+    }
+    .modern-lang-dropdown {
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+        min-width: 120px !important;
+        padding: 8px 0;
+        animation: fadeInLangDropdown 0.18s;
+        border: none;
+        top: 100% !important;
+        left: 0 !important;
+        right: auto !important;
+        margin-top: 4px !important;
+        position: absolute !important;
+        /* Ensure dropdown is below the button */
+        transform: none !important;
+    }
+    @keyframes fadeInLangDropdown {
+        from { opacity: 0; transform: translateY(-8px) scale(0.98);}
+        to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .modern-lang-link {
+        border-radius: 8px;
+        transition: background 0.18s, color 0.18s, transform 0.18s;
+        font-size: 15px;
+        font-weight: 500;
+        gap: 8px;
+        min-height: 36px;
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
+        border: none; /* removed border */
     }
-
-    .lang-flag-link.active {
-        background-color: #e3f2fd;
-        box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10);
+    .modern-lang-link .lang-flag {
+        width: 20px;
+        height: 14px;
+        border-radius: 4px;
+        object-fit: cover;
     }
-
-    .lang-flag-link:hover,
-    .lang-flag-link:focus {
-        background-color: #f0f4fa;
-        box-shadow: 0 4px 16px rgba(25, 118, 210, 0.08);
+    .modern-lang-link:hover, .modern-lang-link.active {
+        background: var(--bs-light, #f8f9fa);
+        color: var(--mw-primary-color, inherit);
+        transform: scale(1.03);
+        border: none; /* ensure no border on hover/active */
     }
-
-    .dropdown-menu .lang-flag {
-        width: 28px;
-        height: 20px;
-        border-radius: 5px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    .modern-lang-link.active {
+        font-weight: 600;
+        border-left: 3px solid var(--mw-primary-color, #0d6efd);
     }
-
-    @media (max-width: 400px) {
-        .lang-dropdown .lang-flag-btn {
-            max-width: 44px;
-            padding: 4px 2px;
+    @media (max-width: 576px) {
+        .modern-lang-btn {
+            padding: 4px 8px;
+            font-size: 14px;
         }
-
-        .lang-flag {
-            width: 26px;
-            height: 18px;
+        .modern-lang-dropdown {
+            min-width: 100px !important;
         }
-
-        .dropdown-menu .lang-flag {
-            width: 22px;
-            height: 16px;
+        .modern-lang-link {
+            font-size: 14px;
+            min-height: 32px;
         }
     }
 </style>

@@ -618,6 +618,7 @@ class MwHtmlSanitizerReference
         'onwebkitanimationiteration',
         'onwebkitanimationstart',
         'onwebkittransitionend',
+        'oncontentvisibilityautostatechange',
         'onwheel',
     ];
 

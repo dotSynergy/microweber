@@ -716,6 +716,11 @@ class MenuManager
                     if (is_string($value) and is_string($key) and $value) {
                         $menu_link = str_replace('{' . $key . '}', $value, $menu_link);
                     }
+
+                    if(!$value){
+                        $menu_link = str_replace('{' . $key . '}', '', $menu_link);
+                    }
+
                 }
                 $menu_link = str_replace('{active_class}', $active_class, $menu_link);
                 $menu_link = str_replace('{a_class}', $a_class, $menu_link);

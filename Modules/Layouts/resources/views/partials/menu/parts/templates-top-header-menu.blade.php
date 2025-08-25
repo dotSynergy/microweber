@@ -1,13 +1,13 @@
 @php
-    $default_contact_us_link = $default_contact_us_link ?? 'yes';
-    $default_header_socials = $default_header_socials ?? 'no';
-    $default_phone_text =  $default_phone_text ?? 'Phone';
-    $default_phone_text_value =  $default_phone_text_value ?? '123 456 789';
-    $default_profile_link = $default_profile_link ?? 'no';
-    $default_search_bar = $default_search_bar ?? 'no';
-    $default_shopping_cart = $default_shopping_cart ?? 'no';
-    $default_multilanguage =  $default_multilanguage ?? 'no';
-    $default_is_sticky_nav = $default_is_sticky_nav ?? 'no';
+    $default_contact_us_link = $default_contact_us_link ?? 1;
+    $default_header_socials = $default_header_socials ?? 0;
+    $default_phone_text =  $default_phone_text ?? '';
+    $default_phone_text_value =  $default_phone_text_value ?? '';
+    $default_profile_link = $default_profile_link ?? 0;
+    $default_search_bar = $default_search_bar ?? 0;
+    $default_shopping_cart = $default_shopping_cart ?? 0;
+    $default_multilanguage =  $default_multilanguage ?? 0;
+    $default_is_sticky_nav = $default_is_sticky_nav ?? 0;
 
     /* Contact Us */
     $contact_us_link = get_option('contact_us_link', $params['id']);
@@ -71,15 +71,43 @@
     }
 </style>
 
+
 <div class="top-header-background header-top navbar">
     <div>
-        @include('modules.layouts::partials.menu.parts.socials')
+        @if($default_header_socials or $header_socials)
+            @include('modules.layouts::partials.menu.parts.socials')
+        @endif
     </div>
 
     <ul class="d-flex align-items-center flex-wrap gap-2 mb-0">
-        @include('modules.layouts::partials.menu.parts.multilanguage')
-        @include('modules.layouts::partials.menu.parts.phone')
-        @include('modules.layouts::partials.menu.parts.contact')
+
+        @if($default_multilanguage or $multilanguage)
+            @include('modules.layouts::partials.menu.parts.multilanguage')
+        @endif
+
+
+
+
+        @if( $phone_text_value)
+
+
+
+
+            @include('modules.layouts::partials.menu.parts.phone')
+        @endif
+
+
+        @if($default_contact_us_link or $contact_us_link)
+            @include('modules.layouts::partials.menu.parts.contact')
+        @endif
+
+
+
+
+
+
+
+
         @include('modules.layouts::partials.menu.parts.search_bar')
         @include('modules.layouts::partials.menu.parts.profile_link')
         @include('modules.layouts::partials.menu.parts.shopping_cart')

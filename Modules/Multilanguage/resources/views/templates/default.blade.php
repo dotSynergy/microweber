@@ -7,7 +7,7 @@
 @endphp
 
 <nav class="navbar module-multilanguage lang-dropdown">
-    <ul class="dropdown-menu">
+    <ul class="navbar-nav">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center lang-flag-btn modern-lang-btn"
                href="#"
@@ -61,7 +61,7 @@
     .module-multilanguage {
         .dropdown-menu{
             border: none;
-            background: none;
+            background: var(--bs-light, #f8f9fa); /* ensure dropdown is visible */
         }
     }
 
@@ -104,13 +104,7 @@
         padding: 8px 0;
         animation: fadeInLangDropdown 0.18s;
         border: none;
-        top: 100% !important;
-        left: 0 !important;
-        right: auto !important;
-        margin-top: 4px !important;
-        position: absolute !important;
-        /* Ensure dropdown is below the button */
-        transform: none !important;
+        /* Removed custom positioning so Bootstrap can handle dropdown placement */
     }
     @keyframes fadeInLangDropdown {
         from { opacity: 0; transform: translateY(-8px) scale(0.98);}
@@ -160,4 +154,11 @@
 
 <script>
     mw.lib.require('flag_icons')
+    // Ensure Bootstrap dropdown works if not already initialized
+    document.addEventListener('DOMContentLoaded', function () {
+        var dropdownBtn = document.getElementById('dropdownMenuButton');
+        if (dropdownBtn && typeof bootstrap !== 'undefined') {
+            new bootstrap.Dropdown(dropdownBtn);
+        }
+    });
 </script>

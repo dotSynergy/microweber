@@ -61,7 +61,7 @@
         .dropdown-menu{
             border: none;
             background: var(--bs-light, #f8f9fa);
-            min-width: 150px;
+            min-width: 150px !important;
             width: 100%;
             max-width: none;
             position: absolute !important; /* Make dropdown absolute */

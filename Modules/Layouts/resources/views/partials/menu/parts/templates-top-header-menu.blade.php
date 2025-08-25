@@ -88,11 +88,7 @@
 
 
 
-        @if( $phone_text_value)
-
-
-
-
+        @if($phone_text_value)
             @include('modules.layouts::partials.menu.parts.phone')
         @endif
 
@@ -103,13 +99,26 @@
 
 
 
+        @if($search_bar)
+            @include('modules.layouts::partials.menu.parts.search_bar')
+        @endif
 
 
 
+        @if($profile_link)
+            @include('modules.layouts::partials.menu.parts.profile_link')
+        @endif
 
 
-        @include('modules.layouts::partials.menu.parts.search_bar')
-        @include('modules.layouts::partials.menu.parts.profile_link')
-        @include('modules.layouts::partials.menu.parts.shopping_cart')
+        @if($profile_link)
+            @include('modules.layouts::partials.menu.parts.profile_link')
+        @endif
+
+
+        @if($shopping_cart)
+            @include('modules.layouts::partials.menu.parts.shopping_cart')
+        @endif
+
+
     </ul>
 </div>

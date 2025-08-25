@@ -117,11 +117,10 @@ class FilamentTranslatableFieldsPlugin implements Plugin
             if (class_basename($this) == 'TextInput') {
 
                 $textInput = TextInput::make($fieldName)
-                    ->reactive()
+                    ->live(debounce:300)
                     ->helperText($this->getHelperText())
                     ->placeholder($this->getPlaceholder())
-                     ->debounce(1000)
-                    ->view('filament-forms::components.text-input-option-translatable', [
+                     ->view('filament-forms::components.text-input-option-translatable', [
                         'supportedLanguages' => $supportedLanguages,
                     ]);
 
@@ -129,10 +128,9 @@ class FilamentTranslatableFieldsPlugin implements Plugin
             } else if (class_basename($this) == 'Textarea') {
 
                 $textarea = Textarea::make($fieldName)
-                    ->reactive()
                     ->helperText($this->getHelperText())
                     ->placeholder($this->getPlaceholder())
-                    ->debounce(1000)
+                    ->live(debounce:300)
                     ->view('filament-forms::components.textarea-option-translatable', [
                         'supportedLanguages' => $supportedLanguages
                     ]);

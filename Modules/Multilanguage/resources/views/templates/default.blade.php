@@ -25,8 +25,7 @@
                 @endif
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end p-2 modern-lang-dropdown" aria-labelledby="dropdownMenuButton"
-                style="min-width: 120px;">
+            <ul class="dropdown-menu dropdown-menu-end p-2 modern-lang-dropdown" aria-labelledby="dropdownMenuButton">
                 @if(!empty($supported_languages))
                     @foreach($supported_languages as $language)
                         @if($language['is_active'])
@@ -61,7 +60,14 @@
     .module-multilanguage {
         .dropdown-menu{
             border: none;
-            background: var(--bs-light, #f8f9fa); /* ensure dropdown is visible */
+            background: var(--bs-light, #f8f9fa);
+            min-width: 150px;
+            width: 100%;
+            max-width: none;
+            position: absolute !important; /* Make dropdown absolute */
+            left: 0 !important;
+            top: 100% !important;
+            z-index: 1050;
         }
     }
 
@@ -74,7 +80,9 @@
         min-height: 36px;
         font-weight: 500;
         gap: 6px;
-        border: none; /* removed border */
+        border: none;
+        width: 100%; /* button matches dropdown width */
+        box-sizing: border-box;
     }
     .modern-lang-btn:hover, .modern-lang-btn:focus {
         box-shadow: 0 4px 16px rgba(0,0,0,0.10);
@@ -100,11 +108,14 @@
     .modern-lang-dropdown {
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-        min-width: 120px !important;
         padding: 8px 0;
         animation: fadeInLangDropdown 0.18s;
         border: none;
-        /* Removed custom positioning so Bootstrap can handle dropdown placement */
+        min-width: 100% !important;
+        width: 100%;
+        max-width: none;
+        box-sizing: border-box;
+        position: static !important; /* Prevent double positioning */
     }
     @keyframes fadeInLangDropdown {
         from { opacity: 0; transform: translateY(-8px) scale(0.98);}

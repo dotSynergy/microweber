@@ -48,7 +48,6 @@
 
     background: rgba(33, 37, 41, 0.16);
     border-color: rgb(56, 54, 54);
-    color: #383636;
     box-shadow: 0 0 4px rgb(70, 73, 84);
 
 }

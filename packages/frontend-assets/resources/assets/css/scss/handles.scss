@@ -708,6 +708,7 @@ html:not(.mw-le--page-preview) [data-mw-live-edithover="true"] > * {
         }
         position: absolute;
         inset:0;
+        pointer-events: none;
         .mw-handle-item-menus-holder{
             position:sticky;
             bottom: 0;

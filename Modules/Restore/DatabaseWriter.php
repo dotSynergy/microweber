@@ -333,7 +333,7 @@ class DatabaseWriter
                 }
             }
 
-            $this->_finishUp('runWriterBottom');
+            $this->_finishUp('Content import finished');
             DB::commit(); // <= Commit the changes
         } catch (\Exception $e) {
             report($e);
@@ -357,8 +357,8 @@ class DatabaseWriter
         $this->log('Importing database batch: ' . $currentStep . '/' . $totalSteps);
 
         if (empty($this->content)) {
-            $this->_finishUp('runWriterWithBatchNothingToImport');
-            return array("success" => "Nothing to import.");
+            $this->_finishUp('Nothing to import in database on this step.');
+            return array("success" => "Nothing to import in database on this step.");
         }
 
         if (isset($this->content->__table_structures)) {

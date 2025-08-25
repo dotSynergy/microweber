@@ -1,12 +1,10 @@
 class MWSiteMobileMenuService {
-
-
     constructor(options = {}) {
         var defaults = {
-            popupTemplate: 'mw-vhmbgr-active-popup'
+            popupTemplate: "mw-vhmbgr-active-popup",
         };
         this.settings = Object.assign({}, defaults, options);
-        this.init()
+        this.init();
     }
 
     state = false;
@@ -14,124 +12,136 @@ class MWSiteMobileMenuService {
     currentMenu = null;
 
     buildSubMenus(ul) {
-        const holder = document.querySelector('.navigation-holder');
-        const cacltop =  `${(holder ? holder.offsetHeight : 0)}px`;
+        const holder = document.querySelector(".navigation-holder");
+        const cacltop = `${holder ? holder.offsetHeight : 0}px`;
         const maxHeight = `calc(100vh - ${cacltop})`;
 
-        ul.querySelectorAll('ul').forEach(function (node) {
+        ul.querySelectorAll("ul").forEach(function (node) {
             const li = node.parentNode;
             const btn = document.createElement("span");
-            btn.className = 'mw-vhmbgr-submenu-toggle-button';
+            btn.className = "mw-vhmbgr-submenu-toggle-button";
             btn.addEventListener("click", function (e) {
-                li.classList.toggle('mw-vhmbgr-submenu-active');
-                node.style.maxHeight = li.classList.contains('mw-vhmbgr-submenu-active') ? maxHeight : '';
+                li.classList.toggle("mw-vhmbgr-submenu-active");
+                node.style.maxHeight = li.classList.contains(
+                    "mw-vhmbgr-submenu-active"
+                )
+                    ? maxHeight
+                    : "";
                 e.preventDefault();
                 e.stopPropagation();
             });
-            li.prepend(btn);
+            const link = li.querySelector("a");
 
+            if (link) {
+                const href = (link.getAttribute("href") || "").trim();
+                if (!href) {
+                    link.addEventListener("click", function (e) {
+                        li.classList.toggle("mw-vhmbgr-submenu-active");
+                        node.style.maxHeight = li.classList.contains(
+                            "mw-vhmbgr-submenu-active"
+                        )
+                            ? maxHeight
+                            : "";
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                }
+            }
+            li.prepend(btn);
         });
     }
 
     buildMobileMenu(targetMenu) {
-        if(this.currentMenu) {
-            this.currentMenu.remove()
+        if (this.currentMenu) {
+            this.currentMenu.remove();
         }
-        var ul = document.createElement('ul');
-        if(ul && targetMenu.querySelector('ul')){
-            ul.innerHTML = targetMenu.querySelector('ul').innerHTML;
-            ul.querySelectorAll('[style],[class]').forEach(node => {
-                node.removeAttribute('style')
-                node.removeAttribute('class');
+        var ul = document.createElement("ul");
+        if (ul && targetMenu.querySelector("ul")) {
+            ul.innerHTML = targetMenu.querySelector("ul").innerHTML;
+            ul.querySelectorAll("[style],[class]").forEach((node) => {
+                node.removeAttribute("style");
+                node.removeAttribute("class");
             });
 
-            const block =  document.createElement('div');
+            const block = document.createElement("div");
             this.$block = block;
-            const ovl =  document.createElement('div');
-            ovl.className = 'mw-vhmbgr-active-overlay';
+            const ovl = document.createElement("div");
+            ovl.className = "mw-vhmbgr-active-overlay";
             block.className = this.settings.popupTemplate;
             this.currentMenu = block;
 
-            ovl.addEventListener('click', e => {
-                this.mobileMenu(undefined, false)
+            ovl.addEventListener("click", (e) => {
+                this.mobileMenu(undefined, false);
             });
 
-            this.buildSubMenus(ul)
+            this.buildSubMenus(ul);
 
-
-            block.append(ul)
-            document.body.append(ovl)
-            document.body.append(block)
+            block.append(ul);
+            document.body.append(ovl);
+            document.body.append(block);
         }
-
-
     }
 
-
-    mobileMenu (node, state)  {
-
-        if(!this.$block ) {
-            return
+    mobileMenu(node, state) {
+        if (!this.$block) {
+            return;
         }
 
-        var action = 'toggle';
-        if(state === true) {
-            action = 'add'
-        } else if(state === false) {
-            action = 'remove'
+        var action = "toggle";
+        if (state === true) {
+            action = "add";
+        } else if (state === false) {
+            action = "remove";
         }
 
-
-        if(node) {
-            node.classList[action]('mw-vhmbgr-active');
+        if (node) {
+            node.classList[action]("mw-vhmbgr-active");
         } else {
-            Array.from(document.querySelectorAll('.mw-vhmbgr')).forEach(node => {
-                node.classList[action]('mw-vhmbgr-active');
-            })
+            Array.from(document.querySelectorAll(".mw-vhmbgr")).forEach(
+                (node) => {
+                    node.classList[action]("mw-vhmbgr-active");
+                }
+            );
         }
 
-        const holder = document.querySelector('.navigation-holder');
-        this.$block.style.top =  `${(holder ? (holder.offsetHeight + (holder.getBoundingClientRect().top + scrollY)) : 0)}px`;
+        const holder = document.querySelector(".navigation-holder");
+        this.$block.style.top = `${
+            holder
+                ? holder.offsetHeight +
+                  (holder.getBoundingClientRect().top + scrollY)
+                : 0
+        }px`;
         this.$block.style.maxHeight = `calc(100vh - ${this.$block.style.top})`;
 
-        document.body.classList[action]('mw-vhmbgr-menu-active');
+        document.body.classList[action]("mw-vhmbgr-menu-active");
     }
 
     init() {
-
-
-
-        document.body.addEventListener('click', (e) => {
-            this.mobileMenu(undefined, false)
+        document.body.addEventListener("click", (e) => {
+            this.mobileMenu(undefined, false);
         });
 
-        const nav = document.querySelector('.mw-vhmbgr--navigation');
+        const nav = document.querySelector(".mw-vhmbgr--navigation");
 
-        if(nav) {
+        if (nav) {
             this.buildMobileMenu(nav);
         }
 
-
-        Array.from(document.querySelectorAll('.mw-vhmbgr')).forEach(node => {
-            node.addEventListener('click', e => {
+        Array.from(document.querySelectorAll(".mw-vhmbgr")).forEach((node) => {
+            node.addEventListener("click", (e) => {
                 this.mobileMenu(node);
                 e.preventDefault();
                 e.stopPropagation();
-            })
-        })
-
+            });
+        });
     }
-
 }
 
-
-
-const MWSiteMobileMenu = ( options, hamburger = 5) => {
+const MWSiteMobileMenu = (options, hamburger = 5) => {
     options.threshold = options.threshold || 800;
-    options.color = options.color || '#111';
-    options.size = options.size || '55px';
+    options.color = options.color || "#111";
+    options.size = options.size || "55px";
     const hamburgers = [
-
         `
         <svg class="mw-vhmbgr mw-vhmbgrRotate mw-vhmbgr1" viewBox="0 0 100 100"><path class="mw-vhmbgr--line mw-vhmbgr--top" d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"/><path class="mw-vhmbgr--line mw-vhmbgr--middle" d="m 30,50 h 40"/><path class="mw-vhmbgr--line mw-vhmbgr--bottom" d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40"/></svg>
         `,
@@ -155,15 +165,13 @@ const MWSiteMobileMenu = ( options, hamburger = 5) => {
         <svg class="mw-vhmbgr mw-vhmbgrRotate mw-vhmbgr8" viewBox="0 0 100 100"><path class="mw-vhmbgr--line mw-vhmbgr--top" d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"/><path class="mw-vhmbgr--line mw-vhmbgr--middle" d="m 30,50 h 40"/><path class="mw-vhmbgr--line mw-vhmbgr--bottom" d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"/></svg>
 
         `,
-
     ];
 
-
-    var  curr = document.getElementById('mw-vhmbgr--style');
-    if(curr) {
-        curr.remove()
+    var curr = document.getElementById("mw-vhmbgr--style");
+    if (curr) {
+        curr.remove();
     }
-    var  css = document.createElement('style');
+    var css = document.createElement("style");
     css.id = `mw-vhmbgr--style`;
     css.textContent = `
 
@@ -186,6 +194,7 @@ body.mw-vhmbgr-menu-active .mw-vhmbgr-active-overlay{
 
 .mw-vhmbgr-active-popup li{
     list-style: none;
+    overflow: hidden
   }
   .mw-vhmbgr-active-popup  > ul{
     max-height: calc(100vh - 200px);
@@ -407,16 +416,18 @@ body.mw-vhmbgr-menu-active .mw-vhmbgr-active-overlay{
 
    `;
     document.body.append(css);
-    document.querySelectorAll('.mw-vhmbgr--navigation').forEach(function(node){
-        var mobileMenu = document.createElement('span');
-        mobileMenu.className = 'mw-vhmbgr-wrapper';
-        mobileMenu.innerHTML = hamburgers[hamburger] || hamburgers[5];
-        node.after(mobileMenu);
-    });
+    document
+        .querySelectorAll(".mw-vhmbgr--navigation")
+        .forEach(function (node) {
+            var mobileMenu = document.createElement("span");
+            mobileMenu.className = "mw-vhmbgr-wrapper";
+            mobileMenu.innerHTML = hamburgers[hamburger] || hamburgers[5];
+            node.after(mobileMenu);
+        });
 
     new MWSiteMobileMenuService(options);
 };
 
-if(window.mw) {
-    window.mw.MWSiteMobileMenu = MWSiteMobileMenu
+if (window.mw) {
+    window.mw.MWSiteMobileMenu = MWSiteMobileMenu;
 }

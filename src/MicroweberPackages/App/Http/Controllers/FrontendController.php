@@ -503,7 +503,7 @@ class FrontendController extends Controller
 
                 $page_exact = false;
                 $slug_page = $this->app->permalink_manager->slug($page_url, 'page');
-                $slug_post = $this->app->permalink_manager->slug($page_url, 'post');
+                $slug_post = $this->app->permalink_manager->slug($page_url, 'content');
                 $slug_category = $this->app->permalink_manager->slug($page_url, 'category');
 
                 $found_mod = false;

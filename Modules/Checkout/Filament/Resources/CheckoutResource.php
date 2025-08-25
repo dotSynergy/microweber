@@ -31,6 +31,7 @@ class CheckoutResource extends Resource
 
     public static function form(Form $form): Form
     {
+        
         return $form
             ->schema([
                 Grid::make(2)

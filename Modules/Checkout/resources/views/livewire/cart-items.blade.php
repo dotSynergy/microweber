@@ -1,46 +1,41 @@
 <div class="space-y-4">
 
-
     @if(isset($cartItems) and $cartItems)
-
         @foreach($cartItems as $item)
-            <div class="grid grid-cols-6 gap-4 items-center bg-white p-4 rounded-lg shadow">
-                <div class="col-span-1">
+            <div class="flex items-center bg-white dark:bg-gray-800 p-4 rounded-lg shadow transition-colors space-x-4">
+                <div>
                     @if(isset($item['picture']) and $item['picture'])
                         <img src="{{ $item['picture'] }}" alt="{{ $item['title'] }}"
-                             class="w-20 h-20 object-cover rounded">
+                             class="w-20 h-20 object-cover rounded border border-gray-200 dark:border-gray-700 shadow-sm">
                     @else
-
-
-
-
+                        {{-- No image --}}
                     @endif
                 </div>
 
-                <div class="col-span-2">
-                    <h3 class="text-sm font-medium text-gray-900">{{ $item['title'] }}</h3>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate p-2">{{ $item['title'] }}</h3>
                 </div>
 
-                <div class="col-span-1">
-                    <p class="text-sm text-gray-600">{{ $item['price'] }}</p>
+                <div class="w-24 text-right">
+                    <p class="text-sm   p-2">{{ format_currency($item['price']) }}</p>
                 </div>
 
-                <div class="col-span-1">
+                <div class="w-24">
                     <input
                         type="number"
                         min="1"
                         wire:model.live.debounce.1500ms="cartItems.{{ $loop->index }}.qty"
-                        wire:change="updateQuantity('{{ $item['id'] }}', $event.target.value)"
+                        wire:input.debounce.300ms="updateQuantity('{{ $item['id'] }}', $event.target.value)"
                         value="{{ $item['qty'] }}"
-                        class="block w-20 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        class="block w-20 rounded-md border border-gray-300 dark:border-gray-700 py-1.5 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition-colors"
                     >
                 </div>
 
-                <div class="col-span-1">
+                <div>
                     <button
                         wire:click="removeItem('{{ $item['id'] }}')"
                         type="button"
-                        class="rounded-md bg-red-600 p-2 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                        class="rounded-md bg-red-600 dark:bg-red-700 p-2 text-white shadow-sm hover:bg-red-500 dark:hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 dark:focus-visible:outline-red-700 transition-colors"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                              stroke="currentColor" class="w-5 h-5">
@@ -52,18 +47,17 @@
             </div>
         @endforeach
 
-
         @if(isset($cartTotals) and $cartTotals)
             <!-- Cart Totals Section -->
-            <div class="mt-8 bg-white p-4 rounded-lg shadow">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Cart Totals</h3>
+            <div class="mt-8 bg-white dark:bg-gray-800 p-4 rounded-lg shadow transition-colors">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Cart Totals</h3>
                 <div class="space-y-2">
                     @foreach($cartTotals as $key => $total)
-                        <div class="flex justify-between {{ $key === 'total' ? 'pt-4 border-t border-gray-200' : '' }}">
-                        <span class="{{ $key === 'total' ? 'text-lg font-medium text-gray-900' : 'text-gray-600' }}">
+                        <div class="flex justify-between {{ $key === 'total' ? 'pt-4 border-t border-gray-200 dark:border-gray-700' : '' }}">
+                        <span class="{{ $key === 'total' ? 'text-lg font-medium text-gray-900 dark:text-gray-100' : 'text-gray-600 dark:text-gray-300' }}">
                             {{ $total['label'] }}:
                         </span>
-                            <span class="{{ $key === 'total' ? 'text-lg font-bold text-gray-900' : 'font-medium' }}">
+                            <span class="{{ $key === 'total' ? 'text-lg font-bold text-gray-900 dark:text-gray-100' : 'font-medium dark:text-gray-200' }}">
                             {{ $total['amount'] }}
                         </span>
                         </div>
@@ -81,11 +75,11 @@
                 color="primary"
                 tag="a"
                 href="{{ url('/') }}"
+                class="dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-800"
             >
                 Continue Shopping
             </x-filament::button>
         </div>
-
 
     @endif
 </div>

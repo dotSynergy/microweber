@@ -559,8 +559,17 @@ export class LiveEdit {
         }
 
         if (
-            this.handles.targetIsOrInsideHandle(target) ||
-            this.handles.targetIsSelected(target, this.interactionHandle)
+            this.handles.targetIsSelected(target, this.interactionHandle) &&
+            mw.top().app.liveEdit.elementHandle.getTarget() === target
+        ) {
+            mw.app.editor.dispatch("editNodeRequest", target);
+            return;
+        }
+
+        if (
+            this.handles.targetIsOrInsideHandle(
+                target
+            ) /*|| this.handles.targetIsSelected(target, this.interactionHandle)*/
         ) {
             return;
         }

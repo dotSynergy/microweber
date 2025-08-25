@@ -4,12 +4,14 @@
         @foreach($cartItems as $item)
             <div class="flex items-center bg-white dark:bg-gray-800 p-4 rounded-lg shadow transition-colors space-x-4">
                 <div>
-                    @if(isset($item['picture']) and $item['picture'])
-                        <img src="{{ $item['picture'] }}" alt="{{ $item['title'] }}"
-                             class="w-20 h-20 object-cover rounded border border-gray-200 dark:border-gray-700 shadow-sm">
-                    @else
-                        {{-- No image --}}
-                    @endif
+                    <a href="{{ $item['url'] ?? '#' }}" target="_blank" rel="noopener">
+                        @if(isset($item['picture']) and $item['picture'])
+                            <img src="{{ $item['picture'] }}" alt="{{ $item['title'] }}"
+                                 class="w-20 h-20 object-cover rounded border border-gray-200 dark:border-gray-700 shadow-sm">
+                        @else
+                            @svg('heroicon-o-cube', 'w-20 h-20 text-gray-300 dark:text-gray-600')
+                        @endif
+                    </a>
                 </div>
 
                 <div class="flex-1 min-w-0">
@@ -17,7 +19,9 @@
                 </div>
 
                 <div class="w-24 text-right">
-                    <p class="text-sm   p-2">{{ format_currency($item['price']) }}</p>
+                    <p class="text-sm  p-2">{{ format_currency($item['price']) }} </p>
+
+
                 </div>
 
                 <div class="w-24">
@@ -53,11 +57,14 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Cart Totals</h3>
                 <div class="space-y-2">
                     @foreach($cartTotals as $key => $total)
-                        <div class="flex justify-between {{ $key === 'total' ? 'pt-4 border-t border-gray-200 dark:border-gray-700' : '' }}">
-                        <span class="{{ $key === 'total' ? 'text-lg font-medium text-gray-900 dark:text-gray-100' : 'text-gray-600 dark:text-gray-300' }}">
+                        <div
+                            class="flex justify-between {{ $key === 'total' ? 'pt-4 border-t border-gray-200 dark:border-gray-700' : '' }}">
+                        <span
+                            class="{{ $key === 'total' ? 'text-lg font-medium text-gray-900 dark:text-gray-100' : 'text-gray-600 dark:text-gray-300' }}">
                             {{ $total['label'] }}:
                         </span>
-                            <span class="{{ $key === 'total' ? 'text-lg font-bold text-gray-900 dark:text-gray-100' : 'font-medium dark:text-gray-200' }}">
+                            <span
+                                class="{{ $key === 'total' ? 'text-lg font-bold text-gray-900 dark:text-gray-100' : 'font-medium dark:text-gray-200' }}">
                             {{ $total['amount'] }}
                         </span>
                         </div>

@@ -1142,6 +1142,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         this.#aiPending = true;
         this.dispatch('aiRequestStart');
 
+        const texts = JSON.stringify(this.collectTexts(undefined,true))
+        
         const message = `
         You are a website content writer, and you must write the text in a way that is relevant to the user's request,
 
@@ -1179,7 +1181,7 @@ You must respond ONLY with the JSON schema with the structure. Do not add any ad
                     "items": {
                  ......  please put the content here, with the new text in the content and children objects
 
-                 to this content object: \\n ${JSON.stringify(this.toJSON())}
+                 to this content object: \\n ${texts}
 
 
 

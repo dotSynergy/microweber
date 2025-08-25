@@ -151,7 +151,7 @@ const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
         optionsTpl = `
             <div class="mw-ai-chat-box-options" name="chatOptions">
 
-                ${options.map(o => `<button title="${o.content}" value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected active ' : ''}">${o.icon}</button>`).join('')}
+                ${options.map(o => `<button type="button" title="${o.content}" value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected active ' : ''}">${o.icon}</button>`).join('')}
             </div>
         `;
     }

@@ -544,9 +544,14 @@ class QuickEditService extends MicroweberBaseClass {
     }
 
     collectTexts(edits, toJson) {
+
+
         return this.collect(edits, toJson, (curr, node) => {
             return node.nodeName !== 'IMG'
-            && !node.classList.contains('.module')
+            && node.nodeName !== 'SCRIPT'
+      //      && node.nodeName !== 'DIV'
+            && node.nodeName !== 'STYLE'
+            && !node.classList.contains('module')
             && !node.classList.contains('mw-layout-background-node')
             && node.textContent.trim().length > 2;
         });
@@ -616,7 +621,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
             document: mw.top().app.canvas.getDocument(),
             root: mw.top().app.canvas.getDocument().body,
             nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
-            editsSelector: '.edit[rel][field]:not(.module,' + skipSelector + ')',
+            editsSelector: '.edit[rel][field]:not(.module,script,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,
             siteInfoAdapter: generateSiteInfoWithAI,
@@ -1143,7 +1148,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
         this.dispatch('aiRequestStart');
 
         const texts = JSON.stringify(this.collectTexts(undefined,true))
-        
+
+
         const message = `
         You are a website content writer, and you must write the text in a way that is relevant to the user's request,
 
@@ -1160,7 +1166,8 @@ export class QuickEditComponent extends MicroweberBaseClass {
 
 
         You must write the text for the website and fill the existing object IDs with the text,
-        Expand on the subject and try to fill and write relevant information in the existing text
+        Expand on the subject and try to fill and write relevant information in the existing text,
+        If the user ask for translation, the existing text must be translated in the new language,
 
 
 

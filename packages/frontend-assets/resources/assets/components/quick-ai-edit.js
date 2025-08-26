@@ -620,7 +620,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const defaults = {
             document: mw.top().app.canvas.getDocument(),
             root: mw.top().app.canvas.getDocument().body,
-            nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,li,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
+            nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,li,font,b,img,small,span,.mw-layout-background-node[style*="background-image"][style*="url("]',
             editsSelector: '.edit[rel][field]:not(.module,script,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,
@@ -1161,19 +1161,25 @@ export class QuickEditComponent extends MicroweberBaseClass {
         You must rewrite the text of the website to the new subject,
 
 
-        The website subject and user request is about: ${about}
+
 
 
 
         You must write the text for the website and fill the existing object IDs with the text,
-        Expand on the subject and try to fill and write relevant information in the existing text,
         If the user ask for translation, the existing text must be translated in the new language,
+        If the user mention a translation language, you must translate the existing text in that language,
+        If the user ask for a different subject, you must rewrite the existing text to be relevant to the new subject,
+        If the user ask for a different tone, you must rewrite the existing text to be relevant to the new tone,
+        If the user ask for a different style, you must rewrite the existing text to be relevant to the new style,
+        If the user ask for a different audience, you must rewrite the existing text to be relevant to the new audience,
+        If the user ask for a different purpose, you must rewrite the existing text to be relevant to the new purpose
+
+        Expand on the subject and try to fill and write relevant information in the existing text,
 
 
 
 
-
-
+        The website subject and user request is about: ${about}
 
 
 

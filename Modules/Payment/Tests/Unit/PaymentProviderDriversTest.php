@@ -58,7 +58,7 @@ class PaymentProviderDriversTest extends TestCase
             ->assertHasNoActionErrors()
             ->assertNotified()
             ->assertHasNoErrors();
- 
+
         $this->assertTrue(PaymentProvider::where('name', 'Pay on delivery')->exists());
 
 

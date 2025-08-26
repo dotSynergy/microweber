@@ -144,6 +144,7 @@ abstract class DuskModuleScreenshots extends DuskTestCase
         foreach ($modules as $moduleName => $moduleNamespace) {
 
             $layouts = module_templates($moduleName, $this->template_name);
+
             if (empty($layouts)) {
                 continue;
             }
@@ -186,11 +187,17 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                     // dump('/preview-skin?module='.$module['module'].'&skin=' . $layoutName . '&no_editmode=1');
                     $browser->visit('/template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
 
-Log::info('Visiting: /template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
+                    Log::info('Visiting: /template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
                     $browser->waitFor('#preview-skin-file', 30);
                     $browser->pause(1000);
 
-                    $previewLayoutContentElement = $browser->element('#preview-skin-file .module');
+                    if ($browser->element('#preview-skin-file .module')) {
+                        $previewLayoutContentElement = $browser->element('#preview-skin-file .module');
+
+                    } else {
+                        $previewLayoutContentElement = $browser->element('#preview-skin-file .element');
+
+                    }
 
 
                     $previewLayoutContentElement->takeElementScreenshot($screenshotFileNew);

@@ -183,6 +183,8 @@ trait ManagesModules
 
                             $scanTemplatesInActiveSiteTemplate = new \MicroweberPackages\Microweber\Support\ScanForBladeTemplates();
                             $templatesForModuleInActiveSiteTemplate = $scanTemplatesInActiveSiteTemplate->scan($templatesNamespaceInActiveSiteTemplate,$moduleType,$activeSiteTemplate, $checkIfActiveSiteTemplateLowerName);
+
+
                             if ($templatesForModuleInActiveSiteTemplate) {
                                 foreach ($templatesForModuleInActiveSiteTemplate as $templatesForModuleInActiveSiteTemplateKey => $templatesForModuleInActiveSiteTemplateValue) {
                                     if (!$templatesForModule) {
@@ -208,11 +210,17 @@ trait ManagesModules
                             }
                         }
                     } else {
-                        $ready = $templatesForModule;
+
+
                     }
                 }
             }
             if ($ready) {
+
+                $ready = array_intersect_key($ready, array_unique(array_map(function ($el) {
+                    return $el['layout_file'];
+                }, $ready)));
+
                 return $ready;
             }
         }

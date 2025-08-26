@@ -35,6 +35,7 @@
         x-effect="() => {
              if (state && state.length > 0) {
                   let getFileExtension = state.split('.').pop();
+                  getFileExtension = getFileExtension.toLowerCase();
              if (getFileExtension == 'webp' || getFileExtension == 'jpg' || getFileExtension == 'jpeg' || getFileExtension == 'png' || getFileExtension == 'gif') {
                 typeFile = 'image';
             } else if (getFileExtension == 'mp4' || getFileExtension == 'mov' || getFileExtension == 'avi' || getFileExtension == 'm4v' || getFileExtension == 'mkv') {

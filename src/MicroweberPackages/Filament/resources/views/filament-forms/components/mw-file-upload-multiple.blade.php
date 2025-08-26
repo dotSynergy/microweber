@@ -44,6 +44,7 @@
                     }
                     let urlFileType = '';
                     let getFileExtension = url.split('.').pop();
+                    getFileExtension = getFileExtension.toLowerCase();
                     if (getFileExtension == 'svg' || getFileExtension == 'webp' || getFileExtension == 'jpg' || getFileExtension == 'jpeg' || getFileExtension == 'png' || getFileExtension == 'gif') {
                         urlFileType = 'image';
                     } else {

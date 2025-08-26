@@ -18,7 +18,7 @@ class PaymentProviderDriversTest extends TestCase
         PaymentProvider::truncate();
 
         // Test PayPal driver
-        $data = ['name' => 'PayPal Provider', 'provider' => 'paypal', 'is_active' => 1];
+        $data = ['name' => 'PayPal', 'provider' => 'paypal', 'is_active' => 1];
         $test = Livewire::test(CreatePaymentProvider::class)
             ->fillForm($data)
             ->call('create')
@@ -26,12 +26,11 @@ class PaymentProviderDriversTest extends TestCase
             ->assertNotified()
             ->assertHasNoErrors();
 
-
-        $this->assertTrue(PaymentProvider::where('name', 'PayPal Provider')->exists());
+         $this->assertTrue(PaymentProvider::where('name', 'PayPal')->exists());
 
         // Test Stripe driver
         $data = [
-            'name' => 'Stripe Provider',
+            'name' => 'Stripe',
             'provider' => 'stripe',
             'settings.publishable_key' => 'stripe',
             'settings.secret_key' => 'stripe',
@@ -44,23 +43,23 @@ class PaymentProviderDriversTest extends TestCase
             ->assertNotified()
             ->assertHasNoErrors();
 
-        $this->assertTrue(PaymentProvider::where('name', 'Stripe Provider')->exists());
+        $this->assertTrue(PaymentProvider::where('name', 'Stripe')->exists());
         //tesit if seetings are seved
 
-        $get = PaymentProvider::where('name', 'Stripe Provider')->first();
+        $get = PaymentProvider::where('name', 'Stripe')->first();
         $this->assertEquals('stripe', $get->settings['publishable_key']);
         $this->assertEquals('stripe', $get->settings['secret_key']);
 
         // Test PayOnDelivery driver
-        $data = ['name' => 'PayOnDelivery Provider', 'provider' => 'pay_on_delivery', 'is_active' => 1];
+        $data = ['name' => 'PayOnDelivery', 'provider' => 'pay_on_delivery', 'is_active' => 1];
         Livewire::test(CreatePaymentProvider::class)
             ->fillForm($data)
             ->call('create')
             ->assertHasNoActionErrors()
             ->assertNotified()
             ->assertHasNoErrors();
-
-        $this->assertTrue(PaymentProvider::where('name', 'PayOnDelivery Provider')->exists());
+ 
+        $this->assertTrue(PaymentProvider::where('name', 'Pay on delivery')->exists());
 
 
         $all = PaymentProvider::all();

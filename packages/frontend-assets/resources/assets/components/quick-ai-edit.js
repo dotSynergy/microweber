@@ -620,7 +620,7 @@ export class QuickEditComponent extends MicroweberBaseClass {
         const defaults = {
             document: mw.top().app.canvas.getDocument(),
             root: mw.top().app.canvas.getDocument().body,
-            nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
+            nodesSelector: '.module,[data-quick-edit="true"],h1,h2,h3,h4,h5,h6,p,li,img,.mw-layout-background-node[style*="background-image"][style*="url("]',
             editsSelector: '.edit[rel][field]:not(.module,script,' + skipSelector + ')',
             aiTextAdapter: defaultAiTextAdapter,
             aiImagesAdapter: defaultAiImagesAdapter,

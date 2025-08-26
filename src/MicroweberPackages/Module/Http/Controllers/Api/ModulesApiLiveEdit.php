@@ -22,7 +22,7 @@ class ModulesApiLiveEdit extends Controller
         $disable_elements = false;
 
         $active_site_template = false;
-        if($request->get('active_site_template')){
+        if ($request->get('active_site_template')) {
             $active_site_template = $request->get('active_site_template');
         }
 
@@ -35,10 +35,9 @@ class ModulesApiLiveEdit extends Controller
             $active_site_template = $params['active_site_template'];
         }
 
-        if($active_site_template == 'default'){
+        if ($active_site_template == 'default') {
             $active_site_template = template_name();
         }
-
 
 
         $template_config = app()->template_manager->get_config($active_site_template);
@@ -134,11 +133,12 @@ class ModulesApiLiveEdit extends Controller
 
             $modulesFromRegistry = app()->microweber->getModulesDetails();
 
-       //     $modules = mw()->module_manager->get('installed=1&ui=1');
+            //     $modules = mw()->module_manager->get('installed=1&ui=1');
 
             $modules = [];
 
-            $module_layouts = mw()->module_manager->get('installed=1&module=layouts');
+           // $module_layouts = mw()->module_manager->get('installed=1&module=layouts');
+            $module_layouts = [];
             $hide_from_display_list = array('layouts', 'template_settings');
             $sortout_el = array();
             $sortout_mod = array();
@@ -154,14 +154,12 @@ class ModulesApiLiveEdit extends Controller
                 foreach ($modulesFromRegistry as $modkey => $mod) {
 
 
-                    if(isset($mod['registers_in_navigation'])){
-                        if(!$mod['registers_in_navigation']){
+                    if (isset($mod['registers_in_navigation'])) {
+                        if (!$mod['registers_in_navigation']) {
                             unset($modulesFromRegistry[$modkey]);
                             continue;
                         }
                     }
-
-
 
 
                     if (isset($mod['icon']) and ($mod['icon'])) {
@@ -188,7 +186,6 @@ class ModulesApiLiveEdit extends Controller
                         }
 
 
-
                     } else {
 
                     }
@@ -201,6 +198,7 @@ class ModulesApiLiveEdit extends Controller
 
 
             if (!empty($modules)) {
+                //
                 foreach ($modules as $mod) {
                     if (isset($mod['as_element']) and $mod['as_element']) {
                         $sortout_el[] = $mod;
@@ -213,23 +211,23 @@ class ModulesApiLiveEdit extends Controller
                     $modules = array_merge($modules, $module_layouts);
                 }
             }
-/*
-            $modules_from_template = mw()->module_manager->get_modules_from_current_site_template();
-            if (!empty($modules_from_template)) {
-                if (!is_array($modules)) {
-                    $modules = array();
-                }
-                foreach ($modules as $module) {
-                    foreach ($modules_from_template as $k => $module_from_template) {
-                        if (isset($module['name']) and isset($module_from_template['name'])) {
-                            if ($module['name'] == $module_from_template['name']) {
-                                unset($modules_from_template[$k]);
+            /*
+                        $modules_from_template = mw()->module_manager->get_modules_from_current_site_template();
+                        if (!empty($modules_from_template)) {
+                            if (!is_array($modules)) {
+                                $modules = array();
                             }
-                        }
-                    }
-                }
-                $modules = array_merge($modules, $modules_from_template);
-            }*/
+                            foreach ($modules as $module) {
+                                foreach ($modules_from_template as $k => $module_from_template) {
+                                    if (isset($module['name']) and isset($module_from_template['name'])) {
+                                        if ($module['name'] == $module_from_template['name']) {
+                                            unset($modules_from_template[$k]);
+                                        }
+                                    }
+                                }
+                            }
+                            $modules = array_merge($modules, $modules_from_template);
+                        }*/
 
             if ($modules) {
                 foreach ($modules as $modk => $module) {
@@ -242,7 +240,7 @@ class ModulesApiLiveEdit extends Controller
                 }
             }
 
-            $is_shop_disabled = get_option('shop_disabled', 'website') == "y";
+            $is_shop_disabled = get_option('shop_disabled', 'website') == "1";
 
             if ($modules) {
                 foreach ($modules as $mkey => $module) {
@@ -353,48 +351,48 @@ class ModulesApiLiveEdit extends Controller
         }
 
         $moduleListJson = [];
-/*
-        if (isset($dynamic_layouts) and is_array($dynamic_layouts)) {
+        /*
+                if (isset($dynamic_layouts) and is_array($dynamic_layouts)) {
 
 
-            $i = 0;
+                    $i = 0;
 
-            foreach ($dynamic_layouts as $dynamic_layout) {
+                    foreach ($dynamic_layouts as $dynamic_layout) {
 
-                if (isset($dynamic_layout['template_dir']) and isset($dynamic_layout['layout_file'])) {
+                        if (isset($dynamic_layout['template_dir']) and isset($dynamic_layout['layout_file'])) {
 
-                    $dynamic_layout['locked'] = false;
-                    if (isset($template_composer['extra']['premium_layouts'])
-                        && !empty($template_composer['extra']['premium_layouts'])) {
-                        foreach ($template_composer['extra']['premium_layouts'] as $composerPremiumLayout) {
-                            if (strpos($composerPremiumLayout, $dynamic_layout['layout_file']) !== false) {
-                                $dynamic_layout['icon'] = 'fa fa-lock';
-                                $dynamic_layout['locked'] = $lockedLayouts;
+                            $dynamic_layout['locked'] = false;
+                            if (isset($template_composer['extra']['premium_layouts'])
+                                && !empty($template_composer['extra']['premium_layouts'])) {
+                                foreach ($template_composer['extra']['premium_layouts'] as $composerPremiumLayout) {
+                                    if (strpos($composerPremiumLayout, $dynamic_layout['layout_file']) !== false) {
+                                        $dynamic_layout['icon'] = 'fa fa-lock';
+                                        $dynamic_layout['locked'] = $lockedLayouts;
+                                    }
+                                }
                             }
+
+                            $moduleListJson['layouts'][] = [
+                                //'group' => 'layouts',
+                                'locked' => $dynamic_layout['locked'],
+                                'template' => $dynamic_layout['layout_file'],
+                                'name' => $dynamic_layout['name'],
+                                'icon' => $dynamic_layout['icon'],
+                                'screenshot' => isset($dynamic_layout['screenshot']) ? $dynamic_layout['screenshot'] : '',
+                                'description_raw' => $dynamic_layout['description'],
+                                'description' => addslashes($dynamic_layout['description']),
+                                'title' => titlelize(_e($dynamic_layout['name'], true)),
+                            ];
                         }
+
                     }
 
-                    $moduleListJson['layouts'][] = [
-                        //'group' => 'layouts',
-                        'locked' => $dynamic_layout['locked'],
-                        'template' => $dynamic_layout['layout_file'],
-                        'name' => $dynamic_layout['name'],
-                        'icon' => $dynamic_layout['icon'],
-                        'screenshot' => isset($dynamic_layout['screenshot']) ? $dynamic_layout['screenshot'] : '',
-                        'description_raw' => $dynamic_layout['description'],
-                        'description' => addslashes($dynamic_layout['description']),
-                        'title' => titlelize(_e($dynamic_layout['name'], true)),
-                    ];
                 }
 
-            }
 
-        }
-
-
-        */
-       // $template_config = app()->template_manager->get_config($active_site_template);
-      //dd($templpate_config);
+                */
+        // $template_config = app()->template_manager->get_config($active_site_template);
+        //dd($templpate_config);
 
         if (isset($module_layouts_skins) and is_array($module_layouts_skins)) {
 
@@ -461,7 +459,7 @@ class ModulesApiLiveEdit extends Controller
             $module_layouts_skins_grouped_ordered = array_merge($module_layouts_skins_grouped_ordered, $module_layouts_skins_grouped);
             $module_layouts_skins_grouped = $module_layouts_skins_grouped_ordered;
             $unlocked_layouts_skins = false;
-            if(isset($template_config['unlocked_layouts_skins']) and is_array($template_config['unlocked_layouts_skins']) and !empty($template_config['unlocked_layouts_skins'])) {
+            if (isset($template_config['unlocked_layouts_skins']) and is_array($template_config['unlocked_layouts_skins']) and !empty($template_config['unlocked_layouts_skins'])) {
                 $unlocked_layouts_skins = $template_config['unlocked_layouts_skins'];
             }
 
@@ -490,14 +488,14 @@ class ModulesApiLiveEdit extends Controller
 
                         $dynamic_layout['locked'] = false;
 
-                        if($unlocked_layouts_skins){
+                        if ($unlocked_layouts_skins) {
                             $dynamic_layout['locked'] = true;
 
                             foreach ($unlocked_layouts_skins as $unlocked_layout) {
                                 $unlocked_layout = str_replace('.blade.php', '', $unlocked_layout);
                                 $unlocked_layout = str_replace('/', '.', $unlocked_layout);
                                 $dynamic_layout_file = str_replace('.blade.php', '', $dynamic_layout['layout_file']);
-                                $dynamic_layout_file = str_replace('/', '.',$dynamic_layout_file);
+                                $dynamic_layout_file = str_replace('/', '.', $dynamic_layout_file);
 
                                 if (strpos($unlocked_layout, $dynamic_layout_file) !== false) {
                                     $dynamic_layout['locked'] = false;
@@ -505,8 +503,6 @@ class ModulesApiLiveEdit extends Controller
                             }
 
                         }
-
-
 
 
                         if (isset($template_composer['extra']['premium_layouts'])
@@ -528,28 +524,23 @@ class ModulesApiLiveEdit extends Controller
                         //unlocked_layouts_skins
 
 
-
-
-
-
                         if (isset($dynamic_layout['hidden'])) {
                             if ($dynamic_layout['hidden'] == true || $dynamic_layout['hidden'] == 1) {
                                 continue;
                             }
                         }
 
-                       // if (!isset($dynamic_layout['screenshot'])) {
-                            if (isset($dynamic_layout['screenshot_public_url']) and ($dynamic_layout['screenshot_public_url'])) {
+                        // if (!isset($dynamic_layout['screenshot'])) {
+                        if (isset($dynamic_layout['screenshot_public_url']) and ($dynamic_layout['screenshot_public_url'])) {
 
 
 //
 //                                $dynamic_layout['screenshot'] = thumbnail($dynamic_layout['screenshot_file'], 1024);
-                                $dynamic_layout['screenshot'] = $dynamic_layout['screenshot_public_url'];
+                            $dynamic_layout['screenshot'] = $dynamic_layout['screenshot_public_url'];
 
 
-
-                            }
-                      //  }
+                        }
+                        //  }
                         $moduleListJson['layouts'][] = [
                             // 'group' => 'layouts',
                             'template' => $dynamic_layout['layout_file'],

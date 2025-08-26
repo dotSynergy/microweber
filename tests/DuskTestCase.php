@@ -118,7 +118,7 @@ abstract class DuskTestCase extends BaseTestCase
               //  $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
-            ), 9000, 9000
+            ), 19000, 19000
         );
     }
 
@@ -143,7 +143,7 @@ abstract class DuskTestCase extends BaseTestCase
         if (!mw_is_installed()) {
             // install
             $installController = new InstallController();
-            
+
             // Basic installation parameters
             $installParams = [
                 'make_install' => 1,
@@ -159,9 +159,9 @@ abstract class DuskTestCase extends BaseTestCase
                 'with_default_content' => 1,
                 'site_lang' => 'en_US'
             ];
-            
+
             $installResult = $installController->index($installParams);
-            
+
             if ($installResult !== 'done' && !is_array($installResult)) {
                 throw new \Exception('Installation failed: ' . $installResult);
             }

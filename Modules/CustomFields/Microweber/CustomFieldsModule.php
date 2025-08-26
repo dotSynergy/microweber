@@ -53,10 +53,15 @@ class CustomFieldsModule extends BaseModule
         $viewData['fields_groups'] = $fieldsGroups;
         $viewData['form_has_upload'] = $this->checkFormHasUpload($data);
 
+
+
         // Get template
         $template = $viewData['template'] ?? 'default';
         if (!view()->exists(static::$templatesNamespace . '.' . $template)) {
             $template = 'default';
+        }
+         if(empty($data)){
+            return  view(static::$templatesNamespace.'.no-field-data', $viewData);
         }
 
         return view(static::$templatesNamespace . '.' . $template, $viewData);

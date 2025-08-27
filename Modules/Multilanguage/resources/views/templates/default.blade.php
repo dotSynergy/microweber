@@ -68,6 +68,10 @@
             left: 0 !important;
             top: 100% !important;
             z-index: 1050;
+
+            ul > li > a:hover span:after, .mw-menu-skin-com ul > li.active span {
+                content: unset !important
+            }
         }
     }
 

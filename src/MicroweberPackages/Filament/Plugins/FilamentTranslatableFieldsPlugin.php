@@ -101,47 +101,7 @@ class FilamentTranslatableFieldsPlugin implements Plugin
 //            return $this;
 //        });
 
-        Field::macro('mwTranslatableOption', function () use ($supportedLanguages) {
 
-            if (empty($supportedLanguages)) {
-              return $this;
-            }
-            if (!MultilanguageHelpers::multilanguageIsEnabled()) {
-               return $this;
-            }
-
-
-            $fieldName = $this->getName();
-            $fieldName = str_replace('options.', 'translatableOptions.', $fieldName);
-
-            if (class_basename($this) == 'TextInput') {
-
-                $textInput = TextInput::make($fieldName)
-                    ->live(debounce:300)
-                    ->helperText($this->getHelperText())
-                    ->placeholder($this->getPlaceholder())
-                     ->view('filament-forms::components.text-input-option-translatable', [
-                        'supportedLanguages' => $supportedLanguages,
-                    ]);
-
-                return $textInput;
-            } else if (class_basename($this) == 'Textarea') {
-
-                $textarea = Textarea::make($fieldName)
-                    ->helperText($this->getHelperText())
-                    ->placeholder($this->getPlaceholder())
-                    ->live(debounce:300)
-                    ->view('filament-forms::components.textarea-option-translatable', [
-                        'supportedLanguages' => $supportedLanguages
-                    ]);
-
-                return $textarea;
-            }
-
-            throw new \Exception('Unsupported field type: ' . class_basename($this));
-
-            return $this;
-        });
 
     }
 }

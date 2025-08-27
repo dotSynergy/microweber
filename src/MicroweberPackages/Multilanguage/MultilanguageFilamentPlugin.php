@@ -4,6 +4,9 @@ namespace MicroweberPackages\Multilanguage;
 
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\Contracts\Plugin;
+use Filament\Forms\Components\Field;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Panel;
 use Filament\SpatieLaravelTranslatablePlugin;
 use Filament\Support\Assets\Js;
@@ -57,8 +60,60 @@ class MultilanguageFilamentPlugin implements Plugin
         $panel->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($defaultLocales));
         $panel->plugin(FilamentTranslateFieldPlugin::make()->defaultLocales($defaultLocales));
 
+
+
+
         if (mw_is_installed() and function_exists('get_supported_languages')) {
-            $panel->plugin(FilamentTranslatableFieldsPlugin::make()->supportedLanguages(get_supported_languages()));
+
+            $supportedLanguages = get_supported_languages();
+
+            Field::macro('mwTranslatableOption', function () use ($supportedLanguages) {
+
+                if (empty($supportedLanguages)) {
+                    return $this;
+                }
+                if (!MultilanguageHelpers::multilanguageIsEnabled()) {
+                    return $this;
+                }
+
+
+                $fieldName = $this->getName();
+                $fieldName = str_replace('options.', 'translatableOptions.', $fieldName);
+
+                if (class_basename($this) == 'TextInput') {
+
+                    $textInput = TextInput::make($fieldName)
+                        ->live(debounce:300)
+                        ->helperText($this->getHelperText())
+                        ->placeholder($this->getPlaceholder())
+                        ->view('filament-forms::components.text-input-option-translatable', [
+                            'supportedLanguages' => $supportedLanguages,
+                        ]);
+
+                    return $textInput;
+                } else if (class_basename($this) == 'Textarea') {
+
+                    $textarea = Textarea::make($fieldName)
+                        ->helperText($this->getHelperText())
+                        ->placeholder($this->getPlaceholder())
+                        ->live(debounce:300)
+                        ->view('filament-forms::components.textarea-option-translatable', [
+                            'supportedLanguages' => $supportedLanguages
+                        ]);
+
+                    return $textarea;
+                }
+
+                throw new \Exception('Unsupported field type: ' . class_basename($this));
+
+                return $this;
+            });
+
+            $panel->plugin(FilamentTranslatableFieldsPlugin::make()->supportedLanguages($supportedLanguages));
+
+
+
+
              // TODO
            // MultilanguageHelpers::setMultilanguageEnabled(true);
 

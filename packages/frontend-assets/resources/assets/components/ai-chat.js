@@ -1,6 +1,6 @@
 import MicroweberBaseClass from "../containers/base-class.js";
 
-const AIChatFormCSS= `
+const AIChatFormCSS = `
      .mw-ai-chat-box-footer{
 
         width: 100%;
@@ -140,220 +140,211 @@ const AIChatFormCSS= `
 
 `;
 
-
-
-
 const AIChatFormTpl = (multiLine, placeholder, options, speech, hasChat) => {
+    let optionsTpl = "";
 
-    let optionsTpl = '';
-
-    if(Array.isArray(options)) {
+    if (Array.isArray(options)) {
         optionsTpl = `
-            <div class="mw-ai-chat-box-options" name="chatOptions">
+            <div class="mw-ai-chat-box-options">
 
-                ${options.map(o => `<button type="button" title="${o.content}" value="${o.id}" class="mw-ai-chat-box-options ${o.selected ? ' selected active ' : ''}">${o.icon}</button>`).join('')}
             </div>
         `;
     }
 
-
-
     const tpl = `
-    <div class="mw-ai-chat-box" style="display:${hasChat ? '' : 'none'}">
+    <div class="mw-ai-chat-box" style="display:${hasChat ? "" : "none"}">
         <div class="mw-ai-chat-box-area">
-            <${multiLine ? 'textarea' : 'input' } class="mw-ai-chat-box-area-field" placeholder="${placeholder || mw.lang('Enter topic')}">${multiLine ? '</textarea>' : ''}
+            <${
+                multiLine ? "textarea" : "input"
+            } class="mw-ai-chat-box-area-field" placeholder="${
+        placeholder || mw.lang("Enter topic")
+    }">${multiLine ? "</textarea>" : ""}
             <div class="mw-ai-chat-box-footer">
                 <div class="mw-ai-chat-box-options">
                 ${optionsTpl}
                 </div>
                 <div class="mw-ai-chat-box-actions d-flex align-items-center gap-1">
-                    <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${speech ? '' :'none'}">${mw.top().app.iconService.icon('mic')}</button>
+                    <button type="button" class="mw-ai-chat-box-action-voice" style="display: ${
+                        speech ? "" : "none"
+                    }">${mw.top().app.iconService.icon("mic")}</button>
 
 
                     </div>
             </div>
 
-            <button type="button" class="mw-ai-chat-box-action-send "> ${mw.lang('Submit')} ${mw.top().app.iconService.icon('send')} </button>
+            <button type="button" class="mw-ai-chat-box-action-send "> ${mw.lang(
+                "Submit"
+            )} ${mw.top().app.iconService.icon("send")} </button>
         </div>
      </div>
 
      <style>${AIChatFormCSS}</style>
-`
-return tpl;
+`;
+    return tpl;
 };
-
-
-
 
 export class MWSpeechRecognition extends MicroweberBaseClass {
     constructor() {
         super();
         this.init();
-
     }
 
     #status = false;
-    #recognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition;
+    #recognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition ||
+        window.mozSpeechRecognition;
 
     isSupported() {
         return !!this.#recognition;
     }
 
     init() {
-        if(this.#recognition) {
-            this.recognition = new (this.#recognition)();
+        if (this.#recognition) {
+            this.recognition = new this.#recognition();
             this.events();
         }
-
     }
 
-    events () {
+    events() {
         this.recognition.onstart = () => {
-            this.dispatch('start');
+            this.dispatch("start");
         };
         this.recognition.onend = () => {
-            this.dispatch('end')
+            this.dispatch("end");
             this.#status = false;
-
         };
         this.recognition.onerror = (err) => {
-
-            this.dispatch('error', err)
+            this.dispatch("error", err);
         };
 
         this.recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            this.dispatch('result', transcript);
-
+            this.dispatch("result", transcript);
         };
     }
 
     start() {
-        if(this.#recognition) {
+        if (this.#recognition) {
             this.recognition.start();
             this.#status = true;
         }
     }
 
     stop() {
-        if(this.#recognition) {
+        if (this.#recognition) {
             this.recognition.stop();
             this.#status = false;
         }
     }
 
     toggle() {
-        this[this.#status ? 'stop' : 'start']();
+        this[this.#status ? "stop" : "start"]();
     }
-
 }
 export class AIChatForm extends MicroweberBaseClass {
     constructor(options = []) {
         super();
         const defaults = {
             multiLine: true,
-            submitOnEnter: false
-        }
+            submitOnEnter: false,
+        };
         this.settings = Object.assign({}, defaults, options);
         this.init();
-
-
     }
 
     rend() {
-        const frag = document.createElement('div');
+        const frag = document.createElement("div");
         const hasChat = !!mw.top().win.MwAi;
-        frag.innerHTML = AIChatFormTpl(this.settings.multiLine, this.settings.placeholder,  this.settings.chatOptions, this.speechRecognition.isSupported(), hasChat);
+        frag.innerHTML = AIChatFormTpl(
+            this.settings.multiLine,
+            this.settings.placeholder,
+            this.settings.chatOptions,
+            this.speechRecognition.isSupported(),
+            hasChat
+        );
 
         const btn = frag.querySelector("button.mw-ai-chat-box-action-send");
         btn.disabled = true;
 
-        frag.querySelector(".mw-ai-chat-box-area-field").addEventListener('input', (event) => {
-            btn.disabled = !event.target.value.trim();
-        })
+        frag.querySelector(".mw-ai-chat-box-area-field").addEventListener(
+            "input",
+            (event) => {
+                btn.disabled = !event.target.value.trim();
+            }
+        );
 
-        frag.className = 'mw-ai-chat-form';
+        frag.className = "mw-ai-chat-form";
 
         this.form = frag;
-        const btnOptions =  this.form.querySelectorAll('[name="chatOptions"] button');
 
+        if (this.settings.chatOptions && this.settings.chatOptions.length) {
+            const btnOptionsBlock = this.form.querySelector(
+                ".mw-ai-chat-box-options"
+            );
 
-         btnOptions.forEach(node => {
-            node.addEventListener('click',  (e) => {
-                node.classList.toggle('active')
-                let value = 'text';
-                const active = frag.querySelectorAll('[name="chatOptions"] button.active');
-                if(btnOptions.length === active.length) {
-                    value = 'all'
-                } else if(active.length === 0) {
+            const dropdown = mw.select({
+                element: btnOptionsBlock,
+                data: this.settings.chatOptions,
+            });
 
-                    var el = frag.querySelector('[name="chatOptions"] [value="text"]');
-                    if(el) {
-                        el.classList.add("active")
-                    }
-                } else {
-                    value = active[0].value;
-                }
+            dropdown.on("change", (val) => {
+                const action = val[0] && val[0].id;
 
+                this.dispatch("chatOptionChange", action);
+            });
+        }
 
+        this.area = frag.querySelector(".mw-ai-chat-box-area-field");
+        this.micButton = frag.querySelector(".mw-ai-chat-box-action-voice");
+        this.sendButton = frag.querySelector(".mw-ai-chat-box-action-send");
 
-
-
-                this.dispatch('chatOptionChange',  value);
-            })
-         })
-
-        this.area = frag.querySelector('.mw-ai-chat-box-area-field');
-        this.micButton = frag.querySelector('.mw-ai-chat-box-action-voice');
-        this.sendButton = frag.querySelector('.mw-ai-chat-box-action-send');
-
-        return frag
+        return frag;
     }
 
     #speech() {
         this.speechRecognition = new MWSpeechRecognition();
-        this.speechRecognition.on('start', () => {
-            this.micButton.classList.add('speaking')
+        this.speechRecognition.on("start", () => {
+            this.micButton.classList.add("speaking");
         });
-        this.speechRecognition.on('end', () => {
-            this.micButton.classList.remove('speaking')
+        this.speechRecognition.on("end", () => {
+            this.micButton.classList.remove("speaking");
         });
-        this.speechRecognition.on('result', result => {
+        this.speechRecognition.on("result", (result) => {
             this.area.value = result;
             this.areaSize();
-            this.dispatch('areaValue',  this.area.value);
+            this.dispatch("areaValue", this.area.value);
         });
     }
 
     areaSize() {
-        this.area.style.height = 'auto';
-        this.area.style.height = this.area.scrollHeight+'px';
+        this.area.style.height = "auto";
+        this.area.style.height = this.area.scrollHeight + "px";
     }
     handleArea() {
-        this.area.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' || e.keyCode === 13) {
-                if(this.settings.submitOnEnter && !e.shiftKey) {
-                    this.dispatch('submit',  this.area.value);
+        this.area.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" || e.keyCode === 13) {
+                if (this.settings.submitOnEnter && !e.shiftKey) {
+                    this.dispatch("submit", this.area.value);
                     e.preventDefault();
                 }
             }
-        })
+        });
 
-        this.area.addEventListener('input', () => {
-
+        this.area.addEventListener("input", () => {
             this.areaSize();
-            this.dispatch('areaValue',  this.area.value);
+            this.dispatch("areaValue", this.area.value);
         });
     }
     handleMic() {
-        this.micButton.addEventListener('click', () => {
+        this.micButton.addEventListener("click", () => {
             this.speechRecognition.toggle();
         });
     }
 
     handleSubmit() {
-        this.sendButton.addEventListener('click', () => {
-            this.dispatch('submit',  this.area.value);
+        this.sendButton.addEventListener("click", () => {
+            this.dispatch("submit", this.area.value);
         });
     }
 
@@ -363,7 +354,6 @@ export class AIChatForm extends MicroweberBaseClass {
         this.area.disabled = true;
         this.micButton.disabled = true;
         this.sendButton.disabled = true;
-
     }
 
     enable() {
@@ -372,16 +362,15 @@ export class AIChatForm extends MicroweberBaseClass {
         this.area.disabled = false;
         this.micButton.disabled = false;
         this.sendButton.disabled = false;
-
     }
 
     init() {
-        this.#speech()
-        this.rend()
+        this.#speech();
+        this.rend();
 
-        this.handleArea()
-        this.handleMic()
-        this.handleSubmit()
-        this.enable()
+        this.handleArea();
+        this.handleMic();
+        this.handleSubmit();
+        this.enable();
     }
 }

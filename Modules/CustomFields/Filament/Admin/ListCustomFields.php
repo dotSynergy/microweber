@@ -30,6 +30,8 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use JaOcero\RadioDeck\Forms\Components\RadioDeck;
 use MicroweberPackages\Admin\Http\Livewire\AdminComponent;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\CustomFields\Enums\CustomFieldTypes;
 use Modules\CustomFields\Models\CustomField;
 
@@ -62,9 +64,16 @@ class ListCustomFields extends AdminComponent implements HasForms, HasTable
 
 
         $editForm = [];
+
+        $editForm[] = Hidden::make('multilanguage')
+            ->visible(MultilanguageHelpers::multilanguageIsEnabled());
+
         $editForm[] = TextInput::make('name')
             ->label('Name')
             ->placeholder('Name')
+            ->hintAction(
+                TranslateFieldAction::make('name')->label('')
+            )
             ->required();
         $editForm[] = Hidden::make('rel_type')
             ->default($this->relType);

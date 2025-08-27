@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use MicroweberPackages\Database\Traits\CacheableQueryBuilderTrait;
 use MicroweberPackages\Database\Traits\HasCreatedByFieldsTrait;
+use MicroweberPackages\Database\Traits\MaxPositionTrait;
+use MicroweberPackages\Multilanguage\Models\Traits\HasMultilanguageTrait;
 
 class CustomField extends Model
 {
-    //use MaxPositionTrait;
-    use CacheableQueryBuilderTrait;
+    use MaxPositionTrait;
+  //  use CacheableQueryBuilderTrait;
     use HasCreatedByFieldsTrait;
-
-    /// use HasMultilanguageTrait;
+    use HasMultilanguageTrait;
 
     protected $fillable = [
         'rel_id',
@@ -31,7 +32,7 @@ class CustomField extends Model
     protected $table = 'custom_fields';
     public $timestamps = true;
 
-    public $translatable = ['name', 'placeholder', 'error_text'];
+    public $translatable = ['name'];
 
     public $cacheTagsToClear = ['repositories', 'content'];
 
@@ -145,11 +146,9 @@ class CustomField extends Model
         $setBackMultileValuesAttrbuteAfterSave = null;
 
 
-
-
         $customFieldValueToSaveMultiple = $this->values ?? null;
 
-        if($customFieldValueToSaveMultiple){
+        if ($customFieldValueToSaveMultiple) {
             $customFieldValueToSaveMultiple = array_filter($customFieldValueToSaveMultiple, function ($value) {
                 return $value !== null && $value !== '' && $value != 0;
             });
@@ -163,7 +162,7 @@ class CustomField extends Model
 //
 //        }
 
-     if ( empty($customFieldValueToSaveMultiple)) {
+        if (empty($customFieldValueToSaveMultiple)) {
             // signel value
 
             if (isset($this->value)) {
@@ -178,14 +177,14 @@ class CustomField extends Model
                 } else {
                     $customFieldValueToSave = $this->value;
                 }
-                if( is_array($customFieldValueToSave) and isset($customFieldValueToSave[0]) ) {
+                if (is_array($customFieldValueToSave) and isset($customFieldValueToSave[0])) {
                     $customFieldValueToSave = array_pop($customFieldValueToSave);
                 }
 
                 unset($this->value);
             }
 
-      }
+        }
         if (isset($this->value)) {
 
             unset($this->value);

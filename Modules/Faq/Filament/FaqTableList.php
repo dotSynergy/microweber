@@ -19,6 +19,8 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Faq\Models\Faq;
 use NeuronAI\Chat\Messages\UserMessage;
 
@@ -34,11 +36,20 @@ class FaqTableList extends Component implements HasForms, HasTable
     public function editFormArray()
     {
         return [
+            Hidden::make('multilanguage')
+                ->visible(MultilanguageHelpers::multilanguageIsEnabled()),
+
             TextInput::make('question')
                 ->label('Question')
+                ->hintAction(
+                    TranslateFieldAction::make('question')->label('')
+                )
                 ->required(),
             Textarea::make('answer')
                 ->label('Answer')
+                ->hintAction(
+                    TranslateFieldAction::make('answer')->label('')
+                )
                 ->required(),
             \Filament\Forms\Components\Toggle::make('is_active')
                 ->label('Active')

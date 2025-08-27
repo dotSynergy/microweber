@@ -25,6 +25,8 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwIconPicker;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Tabs\Models\Tab;
 use NeuronAI\Chat\Messages\UserMessage;
 
@@ -41,13 +43,22 @@ class TabsTableList extends Component implements HasForms, HasTable
     public function editFormArray()
     {
         return [
+            Hidden::make('multilanguage')
+                ->visible(MultilanguageHelpers::multilanguageIsEnabled()),
+
             TextInput::make('title')
                 ->label('Title')
+                ->hintAction(
+                    TranslateFieldAction::make('title')->label('')
+                )
                 ->required(),
             MwIconPicker::make('icon')
                 ->label('Icon'),
             Textarea::make('content')
                 ->label('Content')
+                ->hintAction(
+                    TranslateFieldAction::make('content')->label('')
+                )
                 ->required(),
             Hidden::make('rel_id')
                 ->default($this->rel_id),

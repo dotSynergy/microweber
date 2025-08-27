@@ -23,7 +23,8 @@ class CustomFieldRepository extends AbstractRepository
     {
         return $this->cacheCallback(__FUNCTION__, func_get_args(), function () use ($params) {
 
-            $getCustomFields = DB::table('custom_fields');
+           // $getCustomFields = DB::table('custom_fields');
+            $getCustomFields = CustomField::query();
 
             if (!empty($params['id'])) {
                 $getCustomFields->where('id', $params['id']);
@@ -45,9 +46,8 @@ class CustomFieldRepository extends AbstractRepository
             $getCustomFields->orderBy('position', 'asc');
 
             $getCustomFields = $getCustomFields->get();
-            $getCustomFields = collect($getCustomFields)->map(function ($item) {
-                return (array)$item;
-            })->toArray();
+            $getCustomFields = $getCustomFields->toArray();
+
 
             $customFields = [];
 

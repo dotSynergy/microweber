@@ -60,7 +60,7 @@ trait HasMultilanguageTrait
     }
 //    public function setMultilanguageAttribute($value)
 //    {
-//        dd($value);
+//
 //        // to Disable multilanguage
 //    }
     public static function bootHasMultilanguageTrait()
@@ -95,7 +95,9 @@ trait HasMultilanguageTrait
 
                     // When receive a save_option
                     // legacy save_option will not have multilanguage attribute, it will have lang attribute instead
-                    if (isset($model->attributes['lang']) && isset($model->attributes['module']) and $model->attributes['lang'] != $defaultLocale) {
+                    if (isset($model->attributes['lang'])
+                        and isset($model->attributes['module'])
+                        and $model->attributes['lang'] != $defaultLocale) {
                         $translatableModuleOptions = self::getTranslatableModuleOptions();
 
                         if (isset($translatableModuleOptions[$model->attributes['module']])) {

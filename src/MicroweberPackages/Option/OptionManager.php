@@ -356,26 +356,28 @@ class OptionManager
                 //$data = $data['option_key'];
             }
 
-            if (isset($data['option_key']) and strval($data['option_key']) != '') {
+            if (!isset($data['lang'])) {
+                if (isset($data['option_key']) and strval($data['option_key']) != '') {
 
 
-                if (strstr($data['option_key'], '|for_module|')) {
-                    $option_key_1 = explode('|for_module|', $data['option_key']);
-                    if (isset($option_key_1[0])) {
-                        $data['option_key'] = $option_key_1[0];
-                    }
-                    if (isset($option_key_1[1])) {
-                        $data['module'] = $option_key_1[1];
-                        if (isset($data['id']) and intval($data['id']) > 0) {
-                            $chck = $this->get('limit=1&module=' . $data['module'] . '&option_key=' . $data['option_key']);
-                            if (isset($chck[0]) and isset($chck[0]['id'])) {
-                                $data['id'] = $chck[0]['id'];
-                            } else {
-                                $table = 'options';
-                                $copy = $this->app->database_manager->copy_row_by_id($table, $data['id']);
-                                $data['id'] = $copy;
-                                $this->clear_memory();
+                    if (strstr($data['option_key'], '|for_module|')) {
+                        $option_key_1 = explode('|for_module|', $data['option_key']);
+                        if (isset($option_key_1[0])) {
+                            $data['option_key'] = $option_key_1[0];
+                        }
+                        if (isset($option_key_1[1])) {
+                            $data['module'] = $option_key_1[1];
+                            if (isset($data['id']) and intval($data['id']) > 0) {
+                                $chck = $this->get('limit=1&module=' . $data['module'] . '&option_key=' . $data['option_key']);
+                                if (isset($chck[0]) and isset($chck[0]['id'])) {
+                                    $data['id'] = $chck[0]['id'];
+                                } else {
+                                    $table = 'options';
+                                    $copy = $this->app->database_manager->copy_row_by_id($table, $data['id']);
+                                    $data['id'] = $copy;
+                                    $this->clear_memory();
 
+                                }
                             }
                         }
                     }
@@ -383,17 +385,19 @@ class OptionManager
             }
 
             $delete_content_cache = false;
-            if (!isset($data['id']) or intval($data['id']) == 0) {
-                if (isset($data['option_key']) and isset($data['option_group']) and trim($data['option_group']) != '') {
-                    $option_group = $data['option_group'];
-                    $this->clear_memory();
+            if (!isset($data['lang'])) {
+                if (!isset($data['id']) or intval($data['id']) == 0) {
+                    if (isset($data['option_key']) and isset($data['option_group']) and trim($data['option_group']) != '') {
+                        $option_group = $data['option_group'];
+                        $this->clear_memory();
 
-                    $existing = $this->get($data['option_key'], $data['option_group'], $return_full = true);
+                        $existing = $this->get($data['option_key'], $data['option_group'], $return_full = true);
 
-                    if ($existing == false) {
-                        //
-                    } elseif (isset($existing['id'])) {
-                        $data['id'] = $existing['id'];
+                        if ($existing == false) {
+                            //
+                        } elseif (isset($existing['id'])) {
+                            $data['id'] = $existing['id'];
+                        }
                     }
                 }
             }
@@ -458,6 +462,8 @@ class OptionManager
                     if (!isset($data['option_value'])) {
                         $data['option_value'] = '';
                     }
+
+
                     $findModuleOption->option_value = $data['option_value'];
 
 

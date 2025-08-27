@@ -179,7 +179,6 @@ abstract class LiveEditModuleSettings extends Page
                     );
                 } else {
                     // Save the translatable option
-                    // dump($optionKeyForTranslaton,$valForOption,$locale,$optionGroup);
                     save_module_option([
                         'option_key' => $optionKeyForTranslaton,
                         'option_value' => $valForOption,

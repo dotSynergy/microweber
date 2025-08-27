@@ -77,9 +77,9 @@ class ShippingProviderResource extends Resource
                             ->afterStateUpdated(function (Forms\Set $set, Forms\Get $get, string $state) use ($shippingProviders) {
                                 if ($state) {
 
-                                  //  if (!$get('name')) {
+                                 if (!$get('id') and !$get('name')) {
                                         $set('name', $shippingProviders[$state] ?? null);
-                                 //   }
+                                  }
                                     if (!$get('is_active')) {
                                         $set('is_active', 1);
                                     }

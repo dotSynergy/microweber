@@ -17,6 +17,7 @@ class ContactFormModule extends BaseModule
     public static int $position = 57;
     public static string $settingsComponent = ContactFormModuleSettings::class;
     public static string $templatesNamespace = 'modules.contact_form::templates';
+    public static array $translatableOptions = ['button_text'];
 
     public function render()
     {
@@ -38,7 +39,7 @@ class ContactFormModule extends BaseModule
         $viewData['form'] = $findForm;
         $viewData['form_id'] = 'contact_form_id' . $findForm->id;
         $viewData['default_fields'] = implode(',', $default_fields);
-        $viewData['button_text'] = 'Send Message';
+        $viewData['button_text'] = $viewData['options']['button_text'] ?? 'Send Message';
 
         $template = $viewData['template'] ?? 'default';
         if (!view()->exists(static::$templatesNamespace . '.' . $template)) {

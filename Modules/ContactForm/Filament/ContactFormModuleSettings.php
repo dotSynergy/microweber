@@ -112,11 +112,13 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                             ->icon('heroicon-o-cog')
                                             ->label('Advanced')
                                             ->schema([
+                                                TextInput::make('options.button_text')
+                                                    ->label('Button text')
+                                                    ->helperText('Write your button text')
+                                                    ->live()
+                                                ->mwTranslatableOption()
+                                                ,
 
-                                                TextInput::make('options.form_name')
-                                                    ->label('Contact form name')
-                                                    ->helperText('What is the name of this contact form?')
-                                                    ->live(),
 
 
                                                 TextInput::make('options.thank_you_message')
@@ -141,6 +143,10 @@ class ContactFormModuleSettings extends LiveEditModuleSettings
                                                     ->helperText('Redirect to URL after submit for example for "Thank you" page')
                                                     ->url(),
 
+                                                TextInput::make('options.form_name')
+                                                    ->label('Contact form name')
+                                                    ->helperText('What is the name of this contact form?')
+                                                    ->live(),
 
 
                                                 Toggle::make('options.email_custom_receivers')

@@ -59,7 +59,7 @@ class PaymentProviderDriversTest extends TestCase
             ->assertNotified()
             ->assertHasNoErrors();
 
-        $this->assertTrue(PaymentProvider::where('name', 'Pay on delivery')->exists());
+        $this->assertTrue(PaymentProvider::where('name', 'PayOnDelivery')->exists());
 
 
         $all = PaymentProvider::all();

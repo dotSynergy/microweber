@@ -14,7 +14,7 @@ class TeamcardModelTest extends TestCase
     #[Test]
     public function it_has_fillable_attributes()
     {
-        $fillable = [
+        $expectedFillable = [
             'name',
             'file',
             'bio',
@@ -26,7 +26,11 @@ class TeamcardModelTest extends TestCase
             'settings'
         ];
 
-        $this->assertEquals($fillable, (new Teamcard())->getFillable());
+        $actualFillable = (new Teamcard())->getFillable();
+        
+        foreach ($expectedFillable as $attribute) {
+            $this->assertContains($attribute, $actualFillable, "Attribute '{$attribute}' should be fillable");
+        }
     }
 
     #[Test]

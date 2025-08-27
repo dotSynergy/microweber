@@ -5,9 +5,16 @@ namespace Modules\Accordion\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MicroweberPackages\Database\Casts\ReplaceSiteUrlCast;
+use MicroweberPackages\Database\Traits\CacheableQueryBuilderTrait;
+use MicroweberPackages\Database\Traits\MaxPositionTrait;
+use MicroweberPackages\Multilanguage\Models\Traits\HasMultilanguageTrait;
 
 class Accordion extends Model
 {
+    use HasMultilanguageTrait;
+    use CacheableQueryBuilderTrait;
+    use MaxPositionTrait;
+
     protected $table = 'accordion';
 
     /**
@@ -24,10 +31,11 @@ class Accordion extends Model
         'updated_at',
         'created_at',
     ];
+
+    public $translatable = ['title', 'content'];
+
     protected $casts = [
         'settings' => 'array',
         'content' => ReplaceSiteUrlCast::class, //Casts like that: http://lorempixel.com/400/200/ =>  {SITE_URL}400/200/
     ];
-
-
 }

@@ -31,7 +31,7 @@ class CheckoutResource extends Resource
 
     public static function form(Form $form): Form
     {
-        
+
         return $form
             ->schema([
                 Grid::make(2)
@@ -84,7 +84,7 @@ class CheckoutResource extends Resource
                                     ->schema([
                                         Select::make('country')
                                             ->required()
-                                            ->searchable()
+
                                             ->native()
                                             ->live()
                                             ->afterStateUpdated(function ($state, Forms\Get $get, $component) {

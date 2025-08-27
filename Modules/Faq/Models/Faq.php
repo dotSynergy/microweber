@@ -5,9 +5,16 @@ namespace Modules\Faq\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MicroweberPackages\Database\Casts\ReplaceSiteUrlCast;
+use MicroweberPackages\Database\Traits\CacheableQueryBuilderTrait;
+use MicroweberPackages\Database\Traits\MaxPositionTrait;
+use MicroweberPackages\Multilanguage\Models\Traits\HasMultilanguageTrait;
 
 class Faq extends Model
 {
+    use HasMultilanguageTrait;
+    use CacheableQueryBuilderTrait;
+    use MaxPositionTrait;
+
     protected $table = 'faqs';
 
     /**
@@ -23,6 +30,8 @@ class Faq extends Model
         'updated_at',
         'created_at',
     ];
+
+    public $translatable = ['question', 'answer'];
 
     protected $casts = [
         'answer' => ReplaceSiteUrlCast::class,

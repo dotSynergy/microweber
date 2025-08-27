@@ -109,11 +109,7 @@
             @include('modules.layouts::partials.menu.parts.profile_link')
         @endif
 
-
-        @if($profile_link)
-            @include('modules.layouts::partials.menu.parts.profile_link')
-        @endif
-
+ 
 
         @if($shopping_cart)
             @include('modules.layouts::partials.menu.parts.shopping_cart')

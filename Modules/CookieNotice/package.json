@@ -9,11 +9,11 @@
     },
     "private": true,
     "scripts": {
-        "build": "cpy resources/assets/js ../../public/modules/cookie_notice/js --flat && cpy resources/assets/css ../../public/modules/cookie_notice/css --flat",
-        "dev": "chokidar resources/assets/ -c \"npm run build\""
+        "build": "node build.cjs",
+        "dev": "node build.cjs --watch"
     },
     "devDependencies": {
-        "chokidar-cli": "^3.0.0",
-        "cpy-cli": "^5.0.0"
+    },
+    "dependencies": {
     }
 }

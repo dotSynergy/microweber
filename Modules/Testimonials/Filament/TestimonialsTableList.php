@@ -24,6 +24,8 @@ use Livewire\Component;
 
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Ai\Facades\AiImages;
 use Modules\Testimonials\Models\Testimonial;
 use NeuronAI\Chat\Messages\UserMessage;
@@ -34,18 +36,37 @@ class TestimonialsTableList extends LiveEditModuleTable
 
     public function editFormArray()
     {
+
+
         return [
+
+            Hidden::make('multilanguage')
+                ->visible(MultilanguageHelpers::multilanguageIsEnabled())
+            ,
+
             TextInput::make('name')
                 ->label('Name')
+                ->hintAction(
+                    TranslateFieldAction::make('name')->label('')
+                )
                 ->required(),
             Textarea::make('content')
+                ->hintAction(
+                    TranslateFieldAction::make('content')->label('')
+                )
                 ->label('Content')
                 ->required(),
             MwFileUpload::make('client_image')
                 ->label('Client Image'),
             TextInput::make('client_company')
+                ->hintAction(
+                    TranslateFieldAction::make('client_company')->label('')
+                )
                 ->label('Client Company'),
             TextInput::make('client_role')
+                ->hintAction(
+                    TranslateFieldAction::make('client_role')->label('')
+                )
                 ->label('Client Role'),
             TextInput::make('client_website')
                 ->label('Client Website'),
@@ -87,10 +108,10 @@ class TestimonialsTableList extends LiveEditModuleTable
 
                 ImageColumn::make('client_image')
                     ->label('Picture')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->label('Name'),
                 TextColumn::make('rel_id')
                     ->label('rel_id')
@@ -141,7 +162,7 @@ class TestimonialsTableList extends LiveEditModuleTable
                             public string $content;
 
 
-                            #[SchemaProperty(description:'The company of the client.', required: true)]
+                            #[SchemaProperty(description: 'The company of the client.', required: true)]
                             public string $client_company;
 
                             #[SchemaProperty(description: 'The role of the client.', required: true)]

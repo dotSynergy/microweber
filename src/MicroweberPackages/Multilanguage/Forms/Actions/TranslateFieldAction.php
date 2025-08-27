@@ -100,6 +100,8 @@ class TranslateFieldAction
             $input = RichEditor::make($translationFieldName);
         } else if (str_contains($fieldName, 'description')) {
             $input = Textarea::make($translationFieldName);
+        }else if (str_contains($fieldName, 'content')) {
+            $input = Textarea::make($translationFieldName);
         }
 
 

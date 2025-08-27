@@ -1,31 +1,38 @@
-import {ObjectService} from "./classes/object.service.js";
-import {Draggable} from "./draggable.js";
+import { ObjectService } from "./classes/object.service.js";
+import { Draggable } from "./draggable.js";
 
-import {ElementManager} from "./classes/element.js";
-import {DomService} from "./classes/dom.js";
-import {Resizable} from "./classes/resizable.js";
-
+import { ElementManager } from "./classes/element.js";
+import { DomService } from "./classes/dom.js";
+import { Resizable } from "./classes/resizable.js";
 
 export const Handle = function (options) {
-
     var defaults = {
         automaticMaxWidth: true,
-        setDraggableTarget: function(target) {
+        setDraggableTarget: function (target) {
             return true;
-        }
+        },
     };
 
     var scope = this;
 
     this.settings = ObjectService.extend({}, defaults, options);
 
-
-
-
     const _e = {};
-    this.on = (e, f) => { _e[e] ? _e[e].push(f) : (_e[e] = [f]) };
-    this.off = (e, f) => { _e[e] && _e[e].indexOf(f) !== -1 ?_e[e].splice(_e[e].indexOf(f), 1) :  '' };
-    this.dispatch = (e, f, g) => {  _e[e] ? _e[e].forEach( (c) => { c.call(this, f, g); }) : ''; };
+    this.on = (e, f) => {
+        _e[e] ? _e[e].push(f) : (_e[e] = [f]);
+    };
+    this.off = (e, f) => {
+        _e[e] && _e[e].indexOf(f) !== -1
+            ? _e[e].splice(_e[e].indexOf(f), 1)
+            : "";
+    };
+    this.dispatch = (e, f, g) => {
+        _e[e]
+            ? _e[e].forEach((c) => {
+                  c.call(this, f, g);
+              })
+            : "";
+    };
 
     var _visible = true;
     var _currentTarget = null;
@@ -33,10 +40,10 @@ export const Handle = function (options) {
 
     this.getPreviousTarget = function () {
         return _prevTarget;
-    }
+    };
     this.getTarget = function () {
-        return _currentTarget
-    }
+        return _currentTarget;
+    };
 
     this.isVisible = function () {
         return _visible;
@@ -44,370 +51,367 @@ export const Handle = function (options) {
 
     this.show = function () {
         _visible = true;
-        this.wrapper.removeClass('mw-handle-item-hidden');
-        this.dispatch('show')
+        this.wrapper.removeClass("mw-handle-item-hidden");
+        this.dispatch("show");
     };
     this.hide = function () {
         _visible = false;
 
-
-        this.wrapper.addClass('mw-handle-item-hidden');
-        this.wrapper.removeClass('mw-handle-active');
-        this.dispatch('hide')
+        this.wrapper.addClass("mw-handle-item-hidden");
+        this.wrapper.removeClass("mw-handle-active");
+        this.dispatch("hide");
     };
-
 
     let _content = null;
     this.setContent = function (content) {
-        if(_content){
-            _content.remove()
+        if (_content) {
+            _content.remove();
         }
         _content = content;
         this.wrapper.append(_content);
-    }
+    };
 
-    this.getContent = function() {
+    this.getContent = function () {
         return _content;
-    }
-
+    };
 
     this.initDraggable = function () {
+        this.draggable = new Draggable(
+            {
+                handle: this.settings.handle,
+                element: null,
+                helper: true,
+                dropIndicator: this.settings.dropIndicator,
+                document: this.settings.document,
+                target: this.settings.root,
+                stateManager: this.settings.stateManager,
+                type: this.settings.type,
+            },
+            options
+        );
 
-
-      this.draggable = new Draggable({
-          handle: this.settings.handle,
-          element: null,
-          helper: true,
-          dropIndicator: this.settings.dropIndicator,
-          document: this.settings.document,
-          target: this.settings.root,
-          stateManager: this.settings.stateManager,
-          type: this.settings.type
-
-      }, options);
-
-
-        this.draggable.on('dragStart', function () {
-
+        this.draggable.on("dragStart", function () {
             mw.top()._dragTarget = scope.getTarget();
 
             scope.wrapper
-            .addClass('mw-handle-item-dragging')
-            .get(0)
-            .ownerDocument.querySelectorAll('.mw-le-handle-menu-button.sub-menu-active')
-            .forEach(el => el.classList.remove('sub-menu-active'));
+                .addClass("mw-handle-item-dragging")
+                .get(0)
+                .ownerDocument.querySelectorAll(
+                    ".mw-le-handle-menu-button.sub-menu-active"
+                )
+                .forEach((el) => el.classList.remove("sub-menu-active"));
 
             mw.app.registerChange(mw.top()._dragTarget);
-
-        })
-        this.draggable.on('dragEnd', function () {
-
-            scope.wrapper.removeClass('mw-handle-item-dragging');
-            scope.position(scope.getTarget());
-
-
         });
-
+        this.draggable.on("dragEnd", function () {
+            scope.wrapper.removeClass("mw-handle-item-dragging");
+            scope.position(scope.getTarget());
+        });
     };
 
     const getScroll = () => {
         if (this.settings.document.defaultView.pageYOffset !== undefined) {
-            return {x: this.settings.document.defaultView.pageXOffset, y: this.settings.document.defaultView.pageYOffset};
+            return {
+                x: this.settings.document.defaultView.pageXOffset,
+                y: this.settings.document.defaultView.pageYOffset,
+            };
         } else {
-            let sx, sy, d = this.settings.document,
+            let sx,
+                sy,
+                d = this.settings.document,
                 r = d.documentElement,
                 b = d.body;
             sx = r.scrollLeft || b.scrollLeft || 0;
             sy = r.scrollTop || b.scrollTop || 0;
-            return {x: sx, y: sy};
+            return { x: sx, y: sy };
         }
-    }
+    };
 
-    this.reposition = function(target) {
-        this.set(this.getTarget())
-    }
+    this.reposition = function (target) {
+        this.set(this.getTarget());
+    };
 
-    this.position = function(target) {
-        if(!target){
-            return
+    this.position = function (target) {
+        if (!target) {
+            return;
         }
         const off = DomService.offset(target);
         const scroll = getScroll();
-        const menu = this.wrapper.get(0).querySelector('.mw-handle-item-menus-holder');
-        const insertabsmodulebutton = this.wrapper.get(0).querySelector('.insert-abs-module-button');
+        const menu = this.wrapper
+            .get(0)
+            .querySelector(".mw-handle-item-menus-holder");
+        const insertabsmodulebutton = this.wrapper
+            .get(0)
+            .querySelector(".insert-abs-module-button");
 
+        if (menu) {
+            let transform = 0;
 
-
-
-
-        if(menu) {
-
-            let transform = 0
-
-            if(this.settings.offsetMenuTransform) {
-                transform = this.settings.offsetMenuTransform(scroll, off, menu);
+            if (this.settings.offsetMenuTransform) {
+                transform = this.settings.offsetMenuTransform(
+                    scroll,
+                    off,
+                    menu
+                );
             }
 
-
             menu.style.transition = `none`;
-            menu.style.transform = transform ? `translateY(${transform}px)` : '';
+            menu.style.transform = transform
+                ? `translateY(${transform}px)`
+                : "";
 
-            if(insertabsmodulebutton) {
-                if(target.querySelector('[field*="free-element-container"]')) {
+            if (insertabsmodulebutton) {
+                if (target.querySelector('[field*="free-element-container"]')) {
                     insertabsmodulebutton.style.display = ``;
                     insertabsmodulebutton.style.transition = `none`;
-                    insertabsmodulebutton.style.transform = transform ? `translateY(${transform}px)` : '';
+                    insertabsmodulebutton.style.transform = transform
+                        ? `translateY(${transform}px)`
+                        : "";
                 } else {
                     insertabsmodulebutton.style.display = `none`;
                 }
-
             }
 
-
-            if(typeof this.settings.onPosition === 'function') {
-                this.settings.onPosition(menu, transform, off)
+            if (typeof this.settings.onPosition === "function") {
+                this.settings.onPosition(menu, transform, off);
             }
 
-            menu.style.marginLeft = 0
-
-
+            menu.style.marginLeft = 0;
 
             setTimeout(() => {
                 var offmenu = mw.element(menu).offset();
-                if(offmenu.offsetLeft + menu.offsetWidth > menu.ownerDocument.defaultView.innerWidth){
-                    menu.style.marginLeft = ( menu.ownerDocument.defaultView.innerWidth - (offmenu.offsetLeft + menu.offsetWidth + 12)) + 'px'
+                if (
+                    offmenu.offsetLeft + menu.offsetWidth >
+                    menu.ownerDocument.defaultView.innerWidth
+                ) {
+                    menu.style.marginLeft =
+                        menu.ownerDocument.defaultView.innerWidth -
+                        (offmenu.offsetLeft + menu.offsetWidth + 12) +
+                        "px";
                 }
-
-            }, 120)
-            setTimeout(() => menu.style.transition = ``, 100)
+            }, 120);
+            setTimeout(() => (menu.style.transition = ``), 100);
         }
 
-
         var height = off.height;
-        if(!height) {
+        if (!height) {
             height = target.scrollHeight;
         }
 
-         this.wrapper.css({
-            top:  off.top,
-            left:  off.left - ( this.wrapper.get(0).ownerDocument.documentElement.offsetLeft ),
+        this.wrapper.css({
+            top: off.top,
+            left:
+                off.left -
+                this.wrapper.get(0).ownerDocument.documentElement.offsetLeft,
             width: off.width,
-            height
+            height,
         });
-
-    }
-
+    };
 
     var _draggable;
 
-    this.setDraggable = function(valueOrTarget) {
-        if(typeof value === 'boolean') {
+    this.setDraggable = function (valueOrTarget) {
+        if (typeof value === "boolean") {
             _draggable = value;
             return this;
         }
-        if(typeof this.settings.setDraggableTarget === 'function') {
+        if (typeof this.settings.setDraggableTarget === "function") {
             _draggable = this.settings.setDraggableTarget(valueOrTarget);
         }
         this.wrapper.get(0).dataset.draggable = _draggable;
-    }
+    };
 
-    this.getDraggable = function() {
+    this.getDraggable = function () {
         return _draggable;
-    }
+    };
 
     this.set = function (target, forced, event) {
-
-
-        if( _currentTarget !== target) {
+        if (_currentTarget !== target) {
             _prevTarget = _currentTarget;
+        } else if (!!target && target === _currentTarget) {
+            target.$$ReselectCount += 1;
+
+            this.dispatch("targetReselect", target, event);
+            return;
         }
-
-
 
         if (!target) {
             _currentTarget = null;
-            this.setDraggable(false)
+            this.setDraggable(false);
             return;
         }
 
         this.position(target);
-        this.setDraggable(target)
+        this.setDraggable(target);
         this.show();
 
+        const templateFilter = target.getAttribute("template-filter");
+        const isheaderOrFooterLike = ["menus", "footers"].includes(
+            templateFilter
+        );
 
-        const templateFilter = target.getAttribute('template-filter');
-        const isheaderOrFooterLike = ['menus', 'footers'].includes(templateFilter);
-
-        this.wrapper.attr('template-filter', templateFilter);
-        this.wrapper.attr('data-header-footer', isheaderOrFooterLike);
-
+        this.wrapper.attr("template-filter", templateFilter);
+        this.wrapper.attr("data-header-footer", isheaderOrFooterLike);
 
         this.draggable.setElement(target);
-        if(_currentTarget !== target || forced) {
+        if (_currentTarget !== target || forced) {
             _currentTarget = target;
-            this.wrapper.get(0).dataset.hideResizer = _currentTarget.dataset.hideResizer === 'true' || _currentTarget.dataset.mwFreeElement === 'true';
-            this.wrapper.get(0).dataset.hideOutline = _currentTarget.dataset.hideOutline === 'true' || _currentTarget.dataset.mwFreeElement === 'true';
-
-
-
-            this.dispatch('targetChange', target, event);
+            this.wrapper.get(0).dataset.hideResizer =
+                _currentTarget.dataset.hideResizer === "true" ||
+                _currentTarget.dataset.mwFreeElement === "true";
+            this.wrapper.get(0).dataset.hideOutline =
+                _currentTarget.dataset.hideOutline === "true" ||
+                _currentTarget.dataset.mwFreeElement === "true";
+            target.$$ReselectCount = 0;
+            this.dispatch("targetChange", target, event);
         }
-        setTimeout(() => this.wrapper.addClass('mw-handle-active'), 1);
+        setTimeout(() => this.wrapper.addClass("mw-handle-active"), 1);
         return this;
     };
 
-
     var _draggablePaused = false;
 
-    this.draggablePaused = function(state) {
-        if (typeof state !== 'undefined') {
+    this.draggablePaused = function (state) {
+        if (typeof state !== "undefined") {
             _draggablePaused = state;
         }
         return _draggablePaused;
-    }
+    };
 
     this.createHandle = function () {
-        if (this.settings.handle === 'self') {
-
+        if (this.settings.handle === "self") {
             var elementhandle = ElementManager({
-                tag: 'div',
+                tag: "div",
                 props: {
-                    className: 'mw-handle-item-draggable-self',
-
-                }
+                    className: "mw-handle-item-draggable-self",
+                },
             });
 
             this.wrapper.append(elementhandle);
 
-            this.settings.document.addEventListener('mousedown', function(){
+            this.settings.document.addEventListener("mousedown", function () {
                 const draggablePaused = scope.draggablePaused();
 
-                if(draggablePaused !== true && draggablePaused !== scope.getTarget()) {
-                    elementhandle.addClass('active');
+                if (
+                    draggablePaused !== true &&
+                    draggablePaused !== scope.getTarget()
+                ) {
+                    elementhandle.addClass("active");
                 }
             });
 
-            this.settings.document.addEventListener('mouseup', function(){
-                elementhandle.removeClass('active');
+            this.settings.document.addEventListener("mouseup", function () {
+                elementhandle.removeClass("active");
             });
 
             this.settings.handle = elementhandle;
             this.handle = elementhandle;
 
-            this.wrapper.append(elementhandle)
-
+            this.wrapper.append(elementhandle);
 
             return;
-
         }
 
         if (this.settings.handle) {
-            if(typeof this.settings.handle === 'string') {
+            if (typeof this.settings.handle === "string") {
                 //this.settings.handle = (this.handle)
             }
             this.handle = this.settings.handle;
         } else {
             this.handle = ElementManager({
-                tag: 'div',
+                tag: "div",
                 props: {
-                    className: 'mw-handle-item-handle',
+                    className: "mw-handle-item-handle",
                     contentEditable: false,
                     draggable: true,
-                }
+                },
             });
             this.wrapper.append(this.handle);
         }
-
-    }
+    };
 
     var _resizableMaxWidth = this.settings.document.defaultView.innerWidth;
     var _resizableMaxHeight = this.settings.document.defaultView.innerHeight;
 
-    this.resizableMaxWidth = function(number) {
-        if(typeof number === 'undefined') {
+    this.resizableMaxWidth = function (number) {
+        if (typeof number === "undefined") {
             return _resizableMaxWidth;
         }
         _resizableMaxWidth = number;
-    }
+    };
 
-    this.resizableMaxHeight = function(number) {
-        if(typeof number === 'undefined') {
+    this.resizableMaxHeight = function (number) {
+        if (typeof number === "undefined") {
             return _resizableMaxHeight;
         }
         _resizableMaxHeight = number;
-    }
+    };
 
-    this.findClosestElementByClass = function(element, maxDistance = 200) {
+    this.findClosestElementByClass = function (element, maxDistance = 200) {
         let closestElements = [];
         let currentElement = element;
         let distance = 0;
 
-
         while (currentElement !== document) {
-          const elements = currentElement.parentNode.querySelectorAll('.element,.module');
+            const elements =
+                currentElement.parentNode.querySelectorAll(".element,.module");
 
-          if (elements.length > 0) {
-            closestElements = [...elements].filter(el => {
-              const elDistance = Math.abs(element.getBoundingClientRect().top - el.getBoundingClientRect().top);
-              return elDistance <= maxDistance;
-            });
+            if (elements.length > 0) {
+                closestElements = [...elements].filter((el) => {
+                    const elDistance = Math.abs(
+                        element.getBoundingClientRect().top -
+                            el.getBoundingClientRect().top
+                    );
+                    return elDistance <= maxDistance;
+                });
 
-            if (closestElements.length > 0) {
-              break;
+                if (closestElements.length > 0) {
+                    break;
+                }
             }
-          }
 
-          currentElement = currentElement.parentNode;
-          distance++;
+            currentElement = currentElement.parentNode;
+            distance++;
 
-          if (distance > maxDistance / 10) {
-            // Break out of the loop if we've exceeded the maximum distance threshold
-            break;
-          }
+            if (distance > maxDistance / 10) {
+                // Break out of the loop if we've exceeded the maximum distance threshold
+                break;
+            }
         }
 
         return closestElements;
-      }
+    };
 
-
-      function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
-
+    function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
         var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
 
-        return { width: srcWidth*ratio, height: srcHeight*ratio };
-     }
+        return { width: srcWidth * ratio, height: srcHeight * ratio };
+    }
 
+    var _resizerEnabled = this.settings.resizable === true;
 
-
-
-     var _resizerEnabled = this.settings.resizable === true;
-
-
-     this.resizerEnabled = function(state) {
+    this.resizerEnabled = function (state) {
         if (!this.settings.resizable) {
             return;
         }
 
-        if(typeof state === 'boolean') {
+        if (typeof state === "boolean") {
             _resizerEnabled = state;
         }
 
-        this.resizer.element.classList[_resizerEnabled ? 'remove' : 'add']('mw-le-resizable-disabled');
+        this.resizer.element.classList[_resizerEnabled ? "remove" : "add"](
+            "mw-le-resizable-disabled"
+        );
 
-        return _resizerEnabled
+        return _resizerEnabled;
+    };
 
-     }
-
-
-
-    this.resizable = function() {
-        if(!this.settings.resizable) {
+    this.resizable = function () {
+        if (!this.settings.resizable) {
             return;
         }
 
-
-
-       this.resizer = new Resizable({
+        this.resizer = new Resizable({
             element: this.wrapper.get(0),
             document: this.settings.document,
         });
@@ -416,7 +420,7 @@ export const Handle = function (options) {
 
         this.resizer.mount();
 
-        this.resizer.on('resizeStop', () => {
+        this.resizer.on("resizeStop", () => {
             const target = this.getTarget();
             if (!target) {
                 return;
@@ -424,111 +428,92 @@ export const Handle = function (options) {
 
             var isCol = false;
             if (target.classList) {
-                isCol = target.classList.contains('mw-col');
+                isCol = target.classList.contains("mw-col");
             }
             if (isCol) {
-                const row = DomService.firstParentOrCurrentWithClass(target, 'mw-row');
-                if (row) {
-                    // Array.from(row.children).forEach(col => col.style.width = ((100 / row.offsetWidth) * col.offsetWidth) + '%');
-                }
+                const row = DomService.firstParentOrCurrentWithClass(
+                    target,
+                    "mw-row"
+                );
             }
             if (target) {
-                target.classList.add('mw-resized');
+                target.classList.add("mw-resized");
             }
             mw.app.registerChange(target);
         });
 
-
-        this.resizer.on('resizeStart',  data => {
+        this.resizer.on("resizeStart", (data) => {
             const target = this.getTarget();
-            if(!target) {
+            if (!target) {
                 return;
             }
             target.draggable = false;
-        })
-        this.resizer.on('resize',  data => {
+        });
+        this.resizer.on("resize", (data) => {
             const target = this.getTarget();
-            if(!target) {
+            if (!target) {
                 return;
             }
 
             const prevData = target.$$prevData || data;
             if (this.settings.automaticMaxWidth) {
-                target.style.maxWidth = '100%';
+                target.style.maxWidth = "100%";
             }
 
-            if(target.nodeName === 'IMG') {
-                target.style.objectFit = target.dataset.objectFit || 'contain';
-                target.style.height = data.height + 'px';
-            }  else {
-                target.style.minHeight = data.height + 'px';
+            if (target.nodeName === "IMG") {
+                target.style.objectFit = target.dataset.objectFit || "contain";
+                target.style.height = data.height + "px";
+            } else {
+                target.style.minHeight = data.height + "px";
             }
 
-            target.style.width = data.width + 'px';
+            target.style.width = data.width + "px";
 
-
-
-            var isCol = target.classList.contains('mw-col');
-            if(isCol && false) {
-                const next = target.nextElementSibling;
-                const prev = target.previousElementSibling;
-                if(next) {
-                    // const nextWidth = parseFloat(next.ownerDocument.defaultView.getComputedStyle(next).width)
-                    const nextWidth = next.offsetWidth
-                    if(prevData.width > data.width) {
-                        next.style.width = (nextWidth + (prevData.width - data.width )) + 'px'
-                    } else {
-                        next.style.width = (nextWidth - (data.width - prevData.width )) + 'px'
-                    }
-                } else if(prev) {
-                    const prevWidth = prev.offsetWidth
-                    if(prevData.width > data.width) {
-                        prev.style.width = (prevWidth + (prevData.width - data.width )) + 'px'
-                    } else {
-                        prev.style.width = (prevWidth - (data.width - prevData.width )) + 'px'
-                    }
-                }
-            }
-            this.set(target)
+            this.set(target);
 
             target.$$prevData = data;
         });
-    }
+    };
 
-    this.createWrapper = function() {
+    this.createWrapper = function () {
         this.wrapper = ElementManager({
-            tag: 'div',
+            tag: "div",
             props: {
-                className: 'mw-handle-item ' + (this.settings.className || 'mw-handle-type-default'),
-                id: this.settings.id || ('mw-handle-' + new Date().getTime()),
-                contentEditable: false
-            }
+                className:
+                    "mw-handle-item " +
+                    (this.settings.className || "mw-handle-type-default"),
+                id: this.settings.id || "mw-handle-" + new Date().getTime(),
+                contentEditable: false,
+            },
         });
 
-
-        this.wrapper.on('mousedown', function () {
-            this.classList.remove('mw-handle-item-mouse-down')
+        this.wrapper.on("mousedown", function () {
+            this.classList.remove("mw-handle-item-mouse-down");
         });
 
-        ElementManager(document.body).on('mouseup touchend', function () {
-            scope.wrapper.removeClass('mw-handle-item-mouse-down')
+        ElementManager(document.body).on("mouseup touchend", function () {
+            scope.wrapper.removeClass("mw-handle-item-mouse-down");
         });
 
         this.settings.document.body.appendChild(this.wrapper.get(0));
-
-
     };
 
     this.createWrapper();
     this.createHandle();
     this.initDraggable();
-    if(this.settings.content) {
+    if (this.settings.content) {
         this.setContent(this.settings.content);
     }
-    this.hide()
-    this.resizable()
+    this.hide();
+    this.resizable();
 
-    this.settings.document.addEventListener('orientationChange', e => this.position(this.getTarget()))
-    this.settings.document.defaultView.addEventListener('resize', e => this.position(this.getTarget()))
-    this.settings.document.addEventListener('scroll', e => this.position(this.getTarget()))
+    this.settings.document.addEventListener("orientationChange", (e) =>
+        this.position(this.getTarget())
+    );
+    this.settings.document.defaultView.addEventListener("resize", (e) =>
+        this.position(this.getTarget())
+    );
+    this.settings.document.addEventListener("scroll", (e) =>
+        this.position(this.getTarget())
+    );
 };

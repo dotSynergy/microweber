@@ -66,6 +66,7 @@ class MultilanguageRepository extends AbstractRepository
                 $getSupportedLocalesQuery = DB::table('multilanguage_supported_locales');
                 if ($onlyActive) {
                     $getSupportedLocalesQuery->where('is_active', '1');
+                    $getSupportedLocalesQuery->orWhere('is_active', 'y');
                 }
                 $getSupportedLocalesQuery->orderBy('position', 'asc');
 

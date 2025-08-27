@@ -15,7 +15,7 @@ class PaymentProviderResourceTest extends TestCase
 
     public function testPaymentProviderResourcePaypal()
     {
-        PaymentProvider::where('name', 'Test Provider paypal')->delete();
+        PaymentProvider::where('name', 'Paypal')->delete();
         // Test form rendering
         Livewire::test(CreatePaymentProvider::class)
             ->assertFormFieldExists('name')
@@ -23,7 +23,7 @@ class PaymentProviderResourceTest extends TestCase
             ->assertFormFieldExists('is_active');
 
         // Test form submission
-        $data = ['name' => 'Test Provider paypal', 'provider' => 'paypal', 'is_active' => 1];
+        $data = ['name' => 'Paypal', 'provider' => 'paypal', 'is_active' => 1];
         Livewire::test(CreatePaymentProvider::class)
             ->fillForm($data)
             ->call('create')
@@ -32,15 +32,15 @@ class PaymentProviderResourceTest extends TestCase
             ->assertHasNoErrors();
 
 
-        $this->assertTrue(PaymentProvider::where('name', 'Test Provider paypal')->exists());
+        $this->assertTrue(PaymentProvider::where('name', 'Paypal')->exists());
 
         // Test deletion
-        $provider = PaymentProvider::where('name', 'Test Provider paypal')->first();
+        $provider = PaymentProvider::where('name', 'Paypal')->first();
         Livewire::test(ListPaymentProviders::class)
             ->callTableAction('delete', $provider)
             ->assertHasNoTableActionErrors();
 
-        $this->assertFalse(PaymentProvider::where('name', 'Test Provider paypal')->exists());
+        $this->assertFalse(PaymentProvider::where('name', 'Paypal')->exists());
     }
 
 
@@ -55,7 +55,7 @@ class PaymentProviderResourceTest extends TestCase
 
         // Test form submission
         $data = [
-            'name' => 'Stripe Provider',
+            'name' => 'Stripe',
             'provider' => 'stripe',
             'settings.publishable_key' => 'stripe',
             'settings.secret_key' => 'stripe',
@@ -68,7 +68,7 @@ class PaymentProviderResourceTest extends TestCase
             ->assertNotified()
             ->assertHasNoErrors();
 
-        $this->assertTrue(PaymentProvider::where('name', 'Stripe Provider')->exists());
+        $this->assertTrue(PaymentProvider::where('name', 'Stripe')->exists());
 
 
     }

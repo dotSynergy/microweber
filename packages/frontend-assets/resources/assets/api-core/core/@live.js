@@ -58,10 +58,30 @@ export class LiveEdit {
                 clientX,
                 clientY,
             };
+            var node = e.target ? e.target : e;
+            const element = node.closest(".element");
+            if (
+                element &&
+                mw.top().app.liveEdit.elementHandle.getTarget() === element &&
+                !element.isContentEditable
+            ) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                mw.app.editor.dispatch("editNodeRequest", element);
+            }
         });
 
         mw.top().app.canvas.on("canvasDocumentClick", (e) => {
             var node = e.target ? e.target : e;
+            const element = node.closest(".element");
+            if (
+                element &&
+                mw.top().app.liveEdit.elementHandle.getTarget() === element &&
+                !element.isContentEditable
+            ) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            }
             if (node && node.classList.contains("module-layouts")) {
                 this.clickedLayoutNode = node;
             } else if (node) {
@@ -557,10 +577,20 @@ export class LiveEdit {
         if (target.nodeName === "BODY") {
             return;
         }
+        const element = target && target?.closest(".element");
 
         if (
-            this.handles.targetIsOrInsideHandle(target) ||
-            this.handles.targetIsSelected(target, this.interactionHandle)
+            this.handles.targetIsSelected(target, this.interactionHandle) &&
+            mw.top().app.liveEdit.elementHandle.getTarget() === element
+        ) {
+            mw.app.editor.dispatch("editNodeRequest", element);
+            return;
+        }
+
+        if (
+            this.handles.targetIsOrInsideHandle(
+                target
+            ) /*|| this.handles.targetIsSelected(target, this.interactionHandle)*/
         ) {
             return;
         }

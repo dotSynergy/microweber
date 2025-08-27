@@ -356,19 +356,21 @@ class PluploadController extends Controller
 
 // Clean the fileName for security reasons
         $fileNameExtension = get_file_extension($fileName);
-        $fileName = \MicroweberPackages\Helper\URLify::filter($fileName);
-//$fileName = url_title($fileName);
-//$fileName = preg_replace('/[\p{P}\p{Zs}\w\._]+/u', "", $fileName);
-// $fileName = preg_replace('/[^\w\._]+/', '_', $fileName);
-        $fileName = preg_replace('/\s+\d+%|\)/', '', $fileName);
-        $fileName = preg_replace("/[\/\&%#\$]/", "_", $fileName);
-        $fileName = preg_replace("/[\"\']/", " ", $fileName);
-        $fileName = str_replace(array('(', ')', "'", "!", "`", "*", "#", "<", ">"), '-', $fileName);
-        $fileName = str_replace(' ', '-', $fileName);        $fileName = str_replace('..', '-', $fileName);
-        $fileName = strtolower($fileName);
-        $fileName = mw()->url_manager->clean_url_wrappers($fileName);
-        $fileName = pathinfo($fileName, PATHINFO_FILENAME);
-        $fileName = $fileName . '.' . $fileNameExtension;
+        $fileNameWithoutExtension = pathinfo($fileName, PATHINFO_FILENAME);
+
+// Clean only the filename without extension
+        $cleanFileName = \MicroweberPackages\Helper\URLify::filter($fileNameWithoutExtension);
+        $cleanFileName = preg_replace('/\s+\d+%|\)/', '', $cleanFileName);
+        $cleanFileName = preg_replace("/[\/\&%#\$]/", "_", $cleanFileName);
+        $cleanFileName = preg_replace("/[\"\']/", " ", $cleanFileName);
+        $cleanFileName = str_replace(array('(', ')', "'", "!", "`", "*", "#", "<", ">"), '-', $cleanFileName);
+        $cleanFileName = str_replace(' ', '-', $cleanFileName);
+        $cleanFileName = str_replace('..', '-', $cleanFileName);
+        $cleanFileName = strtolower($cleanFileName);
+        $cleanFileName = mw()->url_manager->clean_url_wrappers($cleanFileName);
+
+// Reconstruct filename with original extension
+        $fileName = $cleanFileName . '.' . $fileNameExtension;
 
 
 

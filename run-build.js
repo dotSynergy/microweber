@@ -38,6 +38,9 @@ const runNpmScript = (folder) => {
     });
 };
 
+// Add delay function
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // Function to find and execute npm in second-level directories
 const findAndRunNpmInSecondLevel = (dir) => {
     const promises = [];
@@ -63,21 +66,32 @@ const findAndRunNpmInSecondLevel = (dir) => {
 
 // Run the script in all specified second-level directories
 const run = async () => {
+    const allFolders = [];
 
+    for (const dir of directories) {
+        const dirPath = path.resolve(dir);
+        const files = fs.readdirSync(dirPath);
 
+        for (const file of files) {
+            const fullPath = path.join(dirPath, file);
+            const stat = fs.lstatSync(fullPath);
 
+            if (stat.isDirectory()) {
+                const packageJsonPath = path.join(fullPath, 'package.json');
+                console.log(packageJsonPath, fs.existsSync(packageJsonPath))
+                if(fs.existsSync(packageJsonPath)) {
+                    allFolders.push(fullPath);
+                }
+            }
+        }
+    }
 
-    const promises = [];
+    // Run npm scripts sequentially with 1-second delay
+    for (const folder of allFolders) {
+        await runNpmScript(folder);
+        await delay(100); // Wait between each install
+    }
 
-for (const dir of directories) {
-    const dirPath = path.resolve(dir);  // Resolve the path of the directory
-    const result =   findAndRunNpmInSecondLevel(dirPath);  // Only go one level deep
-    promises.push(...result);
-}
-
-
-
-    await Promise.all(promises);
     console.log('All npm build jobs are done!');
 
     console.log(`Running 'composer publish-assets'`);

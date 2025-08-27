@@ -15,8 +15,16 @@ class LocaleRedirectMiddleware
 
         $localeRedirect = request()->get('localeRedirect');
 
+
         if ($localeRedirect and mw_is_installed() and MultilanguageHelpers::multilanguageIsEnabled()) {
+
+
+
+
             $localeSettingsNew = app()->multilanguage_repository->getSupportedLocale($localeRedirect);
+
+
+
             if (isset($localeSettingsNew['locale'])
                 and $localeSettingsNew['locale']
                 and $localeRedirect != app()->getLocale()
@@ -34,9 +42,8 @@ class LocaleRedirectMiddleware
                     }
                 } else {
                     // maybe we are on homepage
-                    //dd($segment);
 
-                    change_language_by_locale($localeSettingsNew['locale']);
+                    change_language_by_locale($localeSettingsNew['locale'],true);
 
                 }
             }

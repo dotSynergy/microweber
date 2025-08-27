@@ -31,8 +31,8 @@ class AccordionModule extends BaseModule
 
         $viewData['defaults'] = [
             [
-                'title' => 'Open settings and type your title',
-                'content' => 'Open settings and type your content'
+                'title' => 'Your Title Here',
+                'content' => 'Your Content Here'
             ]
         ];
         $template = $viewData['template'] ?? 'default';

@@ -33,6 +33,8 @@ use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
 use Filament\Forms\Components\Grid;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 
 class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
 {
@@ -46,6 +48,9 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
     public function editFormArray()
     {
         return [
+            Hidden::make('multilanguage')
+                ->visible(MultilanguageHelpers::multilanguageIsEnabled()),
+
             Hidden::make('rel_id')
                 ->default($this->rel_id),
             Hidden::make('rel_type')
@@ -57,10 +62,16 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
                 ->helperText('Upload image for this slide.'),
             TextInput::make('name')
                 ->label('Slide Title')
-                ->helperText('Enter a title for this slide.'),
+                ->helperText('Enter a title for this slide.')
+                ->hintAction(
+                    TranslateFieldAction::make('name')->label('')
+                ),
             Textarea::make('description')
                 ->label('Slide Description')
-                ->helperText('Provide a description for this slide.'),
+                ->helperText('Provide a description for this slide.')
+                ->hintAction(
+                    TranslateFieldAction::make('description')->label('')
+                ),
             ToggleButtons::make('settings.alignItems')
                 ->helperText('Choose the alignment of the slide.')
                 ->live()
@@ -78,7 +89,10 @@ class SliderTableList extends LiveEditModuleTable implements HasForms, HasTable
 
             TextInput::make('button_text')
                 ->label('Button Text')
-                ->helperText('Enter text for the button'),
+                ->helperText('Enter text for the button')
+                ->hintAction(
+                    TranslateFieldAction::make('button_text')->label('')
+                ),
             MwLinkPicker::make('link')
                 ->label('Button URL')
                 ->setSimpleMode()

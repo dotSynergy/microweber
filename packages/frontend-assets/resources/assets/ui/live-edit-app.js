@@ -95,8 +95,15 @@ mw.app.canvas.on('liveEditCanvasLoaded', (data) => {
 });
 
 window.top.addEventListener('popstate', function () {
+    let url = decodeURIComponent(new URLSearchParams(window.top.location.search).get('url') || '/');
 
-    mw.app.canvas.setUrl(decodeURIComponent(new URLSearchParams(window.top.location.search).get('url') || '/'));
+    //check if url is from another domain
+    var domain = (new URL(url)).hostname;
+    if(domain !== window.location.hostname){
+        url = '/';
+    }
+
+    mw.app.canvas.setUrl(url);
 })
 
 

@@ -89,7 +89,7 @@ const run = async () => {
     // Run npm scripts sequentially with 1-second delay
     for (const folder of allFolders) {
         await runNpmScript(folder);
-        await delay(1000); // Wait 1 second between each install
+        await delay(100); // Wait between each install
     }
 
     console.log('All npm build jobs are done!');

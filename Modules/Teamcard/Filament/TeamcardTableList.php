@@ -29,6 +29,8 @@ use Filament\Tables\{
 use Illuminate\Contracts\View\View;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
+use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
+use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use Modules\Teamcard\Models\Teamcard;
 
 /**
@@ -51,6 +53,9 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
     protected function editFormArray(): array
     {
         return [
+            Hidden::make('multilanguage')
+                ->visible(MultilanguageHelpers::multilanguageIsEnabled()),
+
             Hidden::make('rel_id')
                 ->default($this->rel_id),
             Hidden::make('rel_type')
@@ -58,6 +63,9 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
             TextInput::make('name')
                 ->label('Team Member Name')
                 ->helperText('Enter the full name of the team member.')
+                ->hintAction(
+                    TranslateFieldAction::make('name')->label('')
+                )
                 ->required(),
             MwFileUpload::make('file')
                 ->label('Team Member Picture')
@@ -66,10 +74,16 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
             Textarea::make('bio')
                 ->label('Team Member Bio')
                 ->helperText('Provide a short biography of the team member.')
+                ->hintAction(
+                    TranslateFieldAction::make('bio')->label('')
+                )
                 ->required(),
             TextInput::make('role')
                 ->label('Team Member Role')
                 ->helperText('Specify the role of the team member in the team.')
+                ->hintAction(
+                    TranslateFieldAction::make('role')->label('')
+                )
                 ->required(),
             TextInput::make('website')
                 ->label('Team Member Website')

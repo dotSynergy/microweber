@@ -43,7 +43,7 @@
             @foreach ($accordion as $key => $slide)
                 <li class="nav-item">
                     <a class="nav-link {{ $key == 0 ? 'active' : '' }}" id="{{ $params['id'] . '-' . $key }}-tab" data-bs-toggle="tab" href="#tab-{{ $params['id'] . '-' . $key }}" role="tab" aria-controls="home" aria-selected="true">
-                        {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}{{ isset($slide['title']) ? $slide['title'] : '' }}
+                        {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}{{ isset($slide['title']) ? $slide['title'] : '' }}
                     </a>
                 </li>
             @endforeach

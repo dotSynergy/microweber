@@ -88,7 +88,7 @@
             <div class="card sk1 card-collapse mb-3 {{ $key == 0 ? 'active_sk1' : '' }}">
                 <div class="card-header p-0" id="header-item-{{ $edit_field_key }}">
                     <button class=" mw-accordion-module-button w-100 rounded-0 btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#collapse-accordion-item-{{ $edit_field_key . '-' . $key }}" aria-expanded="true" aria-controls="collapse-accordion-item-{{ $edit_field_key . '-' . $key }}">
-                        {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}
+                        {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}
                         <h4 class="mw-accordion-text-color"> {{ isset($slide['title']) ? $slide['title'] : '' }} </h4>
                         <i class="mdi arrow sk1 rounded-circle {{ $key == 0 ? 'mdi-chevron-down' : 'mdi-chevron-down' }}"></i>
                     </button>

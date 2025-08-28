@@ -47,7 +47,7 @@
             <div class="card-header" id="header-item-{{ $edit_field_key }}">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapse-accordion-item-{{ $edit_field_key . '-' . $key }}" aria-expanded="true" aria-controls="collapse-accordion-item-{{ $edit_field_key . '-' . $key }}">
-                        {{ isset($slide['icon']) ? $slide['icon'] . ' ' : '' }} <span class="mw-accordion-text-color"> {{ isset($slide['title']) ? $slide['title'] : '' }}</span>
+                        {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!} <span class="mw-accordion-text-color"> {{ isset($slide['title']) ? $slide['title'] : '' }}</span>
                     </button>
                 </h5>
             </div>

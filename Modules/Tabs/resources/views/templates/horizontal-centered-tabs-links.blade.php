@@ -93,7 +93,7 @@
                 <ul class="ps-0">
                     <li>
                         <a class="btn btn-link my-xl-0 my-3 {{ $count == 1 ? 'active' : '' }}" href="javascript:;">
-                            {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}<span>{{ $slide['title'] ?? '' }}</span>
+                            {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}<span>{{ $slide['title'] ?? '' }}</span>
                         </a>
                     </li>
                 </ul>

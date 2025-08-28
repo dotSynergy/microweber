@@ -56,7 +56,7 @@
         @foreach ($tabs as $slide)
             @php $count++; @endphp
             <a class="merry-tabs-button btn btn-outline-primary my-xl-0 my-3 @if ($count == 1) active @endif" href="javascript:;">
-                {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}{{ isset($slide['title']) ? $slide['title'] : '' }}
+                {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}{{ isset($slide['title']) ? $slide['title'] : '' }}
             </a>
         @endforeach
     </div>

@@ -13,7 +13,7 @@ use MicroweberPackages\Admin\Http\Controllers\AdminDefaultController;
 use Modules\Category\Http\Requests\CategoryRequest;
 use Modules\Category\Repositories\CategoryRepositoryApi;
 
-class CategoryApiController extends AdminDefaultController
+class  CategoryApiController extends AdminDefaultController
 {
     public $category;
 

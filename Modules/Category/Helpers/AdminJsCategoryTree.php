@@ -98,7 +98,7 @@ class AdminJsCategoryTree
 
         if (!empty($this->pages)) {
             foreach ($this->pages as $page) {
-
+                $page = xss_clean($page);
                 if ($filterByKeyword) {
                     if (!str_contains($page['title'], $filterByKeyword) !== false) {
                         continue;
@@ -167,6 +167,7 @@ class AdminJsCategoryTree
         $foundedCategories = [];
 
         foreach ($this->categories as $category) {
+            $category = xss_clean($category);
 
             if (isset($category['rel_type'])
                 and trim($category['rel_type']) == morph_name(\Modules\Content\Models\Content::class)

@@ -728,6 +728,10 @@ class AppServiceProvider extends ServiceProvider
 
          if (MultilanguageHelpers::multilanguageIsEnabled()) {
 
+             if(!app()->bound('multilanguage_repository')){
+                 return;
+             }
+
 
 
             $isLocaleChangedFromMultilanguageLogics = false;

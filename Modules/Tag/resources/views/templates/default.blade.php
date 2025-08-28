@@ -17,20 +17,20 @@ description: Default template for tags
             flex-wrap: wrap;
             gap: 8px;
         }
-        
+
         .tag {
             display: inline-block;
             padding: 5px 10px;
-            background-color: {{ $options['tag_color'] ?? '#f0f0f0' }};
+            background-color: {{ isset($options['tag_color']) ? $options['tag_color'] : '#f0f0f0' }};
             color: #333;
             border-radius: 4px;
             text-decoration: none;
-            font-size: {{ $options['tag_size'] == 'small' ? '12px' : ($options['tag_size'] == 'large' ? '16px' : '14px') }};
+            font-size: {{ isset($options['tag_size']) && $options['tag_size'] == 'small' ? '12px' : (isset($options['tag_size']) && $options['tag_size'] == 'large' ? '16px' : '14px') }};
             transition: background-color 0.3s;
         }
-        
+
         .tag:hover {
-            background-color: {{ $options['tag_hover_color'] ?? '#e0e0e0' }};
+            background-color: {{ isset($options['tag_hover_color']) ? $options['tag_hover_color'] : '#e0e0e0' }};
             color: #000;
         }
     </style>

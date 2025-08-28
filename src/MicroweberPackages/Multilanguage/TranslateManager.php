@@ -345,6 +345,13 @@ class TranslateManager
 
             // Debugbar::startMeasure('app.content.get_by_url','app.content.get_by_url');
 
+            if(!MultilanguageHelpers::multilanguageIsEnabled()){
+                return;
+            }
+            if(!app()->bound('multilanguage_repository')){
+                return;
+            }
+
             if (!empty($url)) {
 
                 $detect = detect_lang_from_url($url);

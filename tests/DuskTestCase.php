@@ -37,8 +37,8 @@ abstract class DuskTestCase extends BaseTestCase
             define('MW_UNIT_TEST', true);
         }
 
-      //  $_ENV['APP_ENV'] = 'testing';
-      //  putenv('APP_ENV=testing');
+        //  $_ENV['APP_ENV'] = 'testing';
+        //  putenv('APP_ENV=testing');
         if (!defined('MW_SITE_URL')) {
             define('MW_SITE_URL', $this->siteUrl);
         }
@@ -50,7 +50,7 @@ abstract class DuskTestCase extends BaseTestCase
             ]);
         }
 
- //       \Illuminate\Support\Env::getRepository()->set('APP_ENV', 'testing');
+        //       \Illuminate\Support\Env::getRepository()->set('APP_ENV', 'testing');
 
     }
 
@@ -114,8 +114,8 @@ abstract class DuskTestCase extends BaseTestCase
 
 
         return RemoteWebDriver::create(
-           $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
-              //  $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:4444/wd/hub',
+            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
+            //  $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:4444/wd/hub',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             ), 30000, 30000
@@ -127,7 +127,7 @@ abstract class DuskTestCase extends BaseTestCase
      *
      * @return bool
      */
-    protected function hasHeadlessDisabled() : bool
+    protected function hasHeadlessDisabled(): bool
     {
         return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
             isset($_ENV['DUSK_HEADLESS_DISABLED']);
@@ -168,13 +168,12 @@ abstract class DuskTestCase extends BaseTestCase
         }
 
 
-
         if (mw_is_installed()) {
-
             if ($this->template_name) {
 
                 save_option('current_template', $this->template_name, 'template');
             }
+
 
             save_option('dusk_test', 1, 'dusk');
 
@@ -184,28 +183,38 @@ abstract class DuskTestCase extends BaseTestCase
                 ->where('option_group', 'multilanguage_settings')
                 ->delete();
 
-            DB::table('multilanguage_translations')->truncate();
-            DB::table('multilanguage_supported_locales')->truncate();
 
 
-            $option = array();
-            $option['option_value'] = 'n';
-            $option['option_key'] = 'is_active';
-            $option['option_group'] = 'multilanguage_settings';
-            save_option($option);
-
-            change_language_by_locale('en_US');
-            save_option('language', 'en_US', 'website');
+            if (MultilanguageHelpers::multilanguageIsEnabled()) {
 
 
-            app()->multilanguage_repository->clearCache();
-            app()->option_repository->clearCache();
-            clearcache();
+                DB::table('multilanguage_translations')->truncate();
+                DB::table('multilanguage_supported_locales')->truncate();
 
-            $this->app->bind('permalink_manager', function () {
-                return new PermalinkManager();
-            });
 
+//                $option = array();
+//                $option['option_value'] = '0';
+//                $option['option_key'] = 'is_active';
+//                $option['option_group'] = 'multilanguage_settings';
+//                save_option($option);
+
+                change_language_by_locale('en_US');
+                save_option('language', 'en_US', 'website');
+
+                if (app()->bound('multilanguage_repository')) {
+                    app()->multilanguage_repository->clearCache();
+                }
+
+                if (app()->bound('option_repository')) {
+                    app()->option_repository->clearCache();
+                }
+
+                //clearcache();
+
+                $this->app->bind('permalink_manager', function () {
+                    return new PermalinkManager();
+                });
+            }
         }
 
     }

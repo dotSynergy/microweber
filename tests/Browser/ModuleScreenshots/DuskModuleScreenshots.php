@@ -9,7 +9,7 @@ use Tests\DuskTestCase;
 
 abstract class DuskModuleScreenshots extends DuskTestCase
 {
-    public $template_name = 'Bootstrap';
+    public $template_name = 'Big2';
 
     public function bootTemplate()
     {
@@ -141,7 +141,24 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 //            'layouts' => ''
 //        ];
 
+
+        $skipModules = [
+            'custom_fields',
+            'spacer',
+            'background',
+            'embed',
+            'empty',
+            'title',
+            'text',
+            'picture',
+        ];
+
         foreach ($modules as $moduleName => $moduleNamespace) {
+
+            if(in_array($moduleName, $skipModules)){
+                continue;
+            }
+            Log::info( 'Processing module: ' . $moduleName);
 
             $layouts = module_templates($moduleName, $this->template_name);
 
@@ -198,6 +215,16 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                         $previewLayoutContentElement = $browser->element('#preview-skin-file .element');
 
                     }
+
+                    //check if element has height more than 0 and width more than 0
+                    $elementSize = $previewLayoutContentElement->getSize();
+
+                    if ($elementSize->getHeight() == 0 || $elementSize->getWidth() == 0) {
+                        Log::info('Skipping screenshot for module: ' . $moduleName . ' layout: ' . $layoutName . ' because element has height or width 0');
+                        return;
+                    }
+
+
 
 
                     $previewLayoutContentElement->takeElementScreenshot($screenshotFileNew);
@@ -292,8 +319,19 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
 
                     try {
-                        $previewLayoutContentElement = $browser->element('#preview-layout-file');
+                        $previewLayoutContentElement = $browser->element('#preview-skin-file');
                         // $previewLayoutContentElement->takeElementScreenshot($layout['screenshot_file']);
+
+
+                        //check if element has height more than 0 and width more than 0
+                        $elementSize = $previewLayoutContentElement->getSize();
+                        if ($elementSize->getHeight() == 0 || $elementSize->getWidth() == 0) {
+                            Log::info('Skipping screenshot for module: ' . ' layout: ' . $layoutName . ' because element has height or width 0');
+                            return;
+                        }
+
+
+
 
                         $previewLayoutContentElement->takeElementScreenshot($screenshotFileNew);
                         if (is_file($screenshotFile)) {

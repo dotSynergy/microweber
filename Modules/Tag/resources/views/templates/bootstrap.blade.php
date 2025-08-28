@@ -21,19 +21,19 @@ description: Bootstrap template for tags
             display: flex;
             flex-wrap: wrap;
         }
-        
+
         .badge {
-            font-size: {{ $options['tag_size'] == 'small' ? '0.75rem' : ($options['tag_size'] == 'large' ? '1rem' : '0.875rem') }};
+            font-size: {{ isset($options['tag_size']) && $options['tag_size'] == 'small' ? '0.75rem' : (isset($options['tag_size']) && $options['tag_size'] == 'large' ? '1rem' : '0.875rem') }};
             padding: 0.5em 0.75em;
             transition: all 0.3s;
         }
-        
+
         .badge.bg-primary {
-            background-color: {{ $options['tag_color'] ?? '#0d6efd' }} !important;
+            background-color: {{ isset($options['tag_color']) ? $options['tag_color'] : '#0d6efd' }} !important;
         }
-        
+
         .badge.bg-primary:hover {
-            background-color: {{ $options['tag_hover_color'] ?? '#0a58ca' }} !important;
+            background-color: {{ isset($options['tag_hover_color']) ? $options['tag_hover_color'] : '#0a58ca' }} !important;
         }
     </style>
 @endif

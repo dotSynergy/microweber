@@ -123,7 +123,7 @@
                 @foreach ($tabs as $slide)
                     @php $count++; @endphp
                     <a class="nav-link {{ $count == 1 ? 'active' : '' }} col-lg-3 col-md-6 col-12" href="javascript:;">
-                        {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}
+                        {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}
                         <h4 class=" mb-0">{{ $slide['title'] ?? 'Tab title 1' }}</h4>
                     </a>
                 @endforeach

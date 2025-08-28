@@ -39,7 +39,7 @@
             @foreach ($tabs as $slide)
                 @php $count++; @endphp
                 <a class="btn btn-outline-primary px-5 {{ $count == 1 ? 'active' : '' }}" href="javascript:;">
-                    {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}{{ $slide['title'] ?? '' }}
+                    {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}{{ $slide['title'] ?? '' }}
                 </a>
             @endforeach
         @endif

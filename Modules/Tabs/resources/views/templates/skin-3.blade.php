@@ -39,7 +39,7 @@
             @foreach ($tabs as $slide)
                 @php $count++; @endphp
                 <a class="btn btn-primary df mb-3 {{ $count == 1 ? 'active' : '' }}" href="javascript:;">
-                    {!! isset($slide['icon']) ? $slide['icon'] . ' ' : '' !!}<span class="mb-0">{{ $slide['title'] ?? 'Tab title 1' }}</span>
+                    {!! isset($slide['icon']) ? icon_html($slide['icon']) . ' ' : '' !!}<span class="mb-0">{{ $slide['title'] ?? 'Tab title 1' }}</span>
                 </a>
             @endforeach
         @endif

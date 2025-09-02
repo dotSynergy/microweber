@@ -7,6 +7,7 @@ use Illuminate\View\View;
 use MicroweberPackages\Microweber\Abstract\BaseModule;
 use Modules\Teamcard\Filament\TeamcardModuleSettings;
 use Modules\Teamcard\Models\Teamcard;
+use Modules\Testimonials\Models\Testimonial;
 
 /**
  * Team Card Module
@@ -52,7 +53,15 @@ class TeamcardModule extends BaseModule
             ->get();
 
         if ($teamCards->isEmpty()) {
-            return collect($this->getDefaultTeamcard());
+
+            $getTestimonialsCreatedDefault = $this->getOption('getTeamcardCreatedDefault');
+
+            if (!$getTestimonialsCreatedDefault) {
+                $this->saveOption('getTeamcardCreatedDefault', '1');
+                return collect($this->getDefaultTeamcard());
+            }
+
+
         }
 
         return $teamCards;
@@ -70,10 +79,21 @@ class TeamcardModule extends BaseModule
             return [];
         }
 
-        return array_map(function($teamcard) {
+
+        return array_map(function ($teamcard) {
             $teamcard['file'] = app()->url_manager->replace_site_url_back($teamcard['file']);
-            return $teamcard;
+
+            $teamcardModel = new Teamcard();
+            $teamcardModel['rel_id'] = $this->getRelId();
+            $teamcardModel['rel_type'] = $this->getRelType();
+            $teamcardModel->fill($teamcard);
+            $teamcardModel->save();
+
+
+            return $teamcardModel;
         }, $defaultContent['teamcard']);
+
+
     }
 
     /**

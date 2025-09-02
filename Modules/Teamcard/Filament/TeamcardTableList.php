@@ -5,7 +5,8 @@ namespace Modules\Teamcard\Filament;
 use Filament\Forms\Components\{
     Hidden,
     Textarea,
-    TextInput
+    TextInput,
+    Toggle
 };
 use Filament\Forms\{
     Concerns\InteractsWithForms,
@@ -13,8 +14,10 @@ use Filament\Forms\{
 };
 use Filament\Tables\Actions\{
     Action,
+    BulkActionGroup,
     CreateAction,
     DeleteAction,
+    DeleteBulkAction,
     EditAction
 };
 use Filament\Tables\Columns\{
@@ -27,11 +30,15 @@ use Filament\Tables\{
     Table
 };
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\LiveEdit\Filament\Admin\Tables\LiveEditModuleTable;
 use MicroweberPackages\Multilanguage\Forms\Actions\TranslateFieldAction;
 use MicroweberPackages\Multilanguage\MultilanguageHelpers;
+use Modules\Ai\Facades\AiImages;
 use Modules\Teamcard\Models\Teamcard;
+use NeuronAI\Chat\Messages\UserMessage;
+use NeuronAI\StructuredOutput\SchemaProperty;
 
 /**
  * Team Card Table List Component
@@ -98,7 +105,7 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
     public function table(Table $table): Table
     {
         $query = $this->getTeamCardQuery();
-        $this->initializeDefaultTeamCards($query);
+        //$this->initializeDefaultTeamCards($query);
 
         return $table
             ->query($query)
@@ -113,9 +120,98 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
                     ->action( EditAction::make('edit'))
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('role')
+                    ->label('Role')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->headerActions([
-                CreateAction::make()
+                CreateAction::make('createTeamcardWithAi')
+                    ->visible(app()->has('ai'))
+                    ->createAnother(false)
+                    ->label('Create with AI')
+                    ->form([
+                        Textarea::make('createTeamcardWithAiSubject')
+                            ->label('Subject')
+                            ->placeholder('E.g., Create team members for a tech startup')
+                            ->required(),
+
+                        TextInput::make('createTeamcardWithAiContentNumber')
+                            ->numeric()
+                            ->default(1)
+                            ->label('Number of team members')
+                            ->required(),
+
+                        Toggle::make('createTeamcardWithAiContentImages')
+                            ->visible(app()->has('ai.images'))
+                            ->label('Also create images')
+                            ->default(false)
+                            ->onColor('success')
+                            ->inline()
+                        ,
+                    ])
+                    ->action(function (array $data) {
+
+                        $prompt = "Create team member profiles with the following details: " . $data['createTeamcardWithAiSubject'];
+
+                        $numberOfMembers = $data['createTeamcardWithAiContentNumber'] ?? 1;
+                        $createImages = $data['createTeamcardWithAiContentImages'] ?? false;
+
+                        $class = new class {
+                            #[SchemaProperty(description: 'The name of the team member.', required: true)]
+                            public string $name;
+
+                            #[SchemaProperty(description: 'The bio of the team member.', required: true)]
+                            public string $bio;
+
+                            #[SchemaProperty(description: 'The role of the team member.', required: true)]
+                            public string $role;
+
+                            #[SchemaProperty(description: 'The website URL of the team member.', required: false)]
+                            public string $website;
+                        };
+
+                        /*
+                         *  @var \Modules\Ai\Agents\BaseAgent $agent ;
+                         */
+                        $agent = app('ai.agents')->agent('base');
+
+                        for ($i = 0; $i < $numberOfMembers; $i++) {
+
+                            $resp = $agent->structured(
+                                new UserMessage($prompt)
+                                , $class::class,
+                                maxRetries: 3
+
+                            );
+                            $resp = json_decode(json_encode($resp), true);
+
+                            if ($resp) {
+                                $teamcard = new Teamcard();
+                                $teamcard->name = $resp['name'] ?? 'John Doe';
+                                $teamcard->bio = $resp['bio'] ?? 'This is a team member bio.';
+                                $teamcard->role = $resp['role'] ?? 'Team Member';
+                                $teamcard->website = $resp['website'] ?? '';
+                                $teamcard->rel_id = $this->rel_id;
+                                $teamcard->rel_type = $this->rel_type;
+                                $teamcard->save();
+
+                                if ($createImages) {
+                                    $messagesForImages = [];
+                                    $messagesForImages[] = ['role' => 'user', 'content' => 'Create a professional headshot image for a team member: ' . $resp['name'] . ', ' . $resp['role']];
+                                    $response = AiImages::generateImage($messagesForImages);
+                                    if ($response and isset($response['url']) and $response['url']) {
+                                        $teamcard->file = $response['url'];
+                                        $teamcard->save();
+                                    }
+                                }
+                            }
+                        }
+
+                        $this->resetTable();
+                    }),
+
+                CreateAction::make('create')
                     ->slideOver()
                     ->form($this->editFormArray())
             ])
@@ -123,8 +219,7 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
                 EditAction::make()
                     ->slideOver()
                     ->form($this->editFormArray()),
-                DeleteAction::make()
-                    ->requiresConfirmation(),
+
                 Action::make('copy')
                     ->label('Copy')
                     ->icon('heroicon-s-document-duplicate')
@@ -134,9 +229,15 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
 
                         $this->resetTable();
                     }),
+
+                DeleteAction::make('delete')
+                    ->requiresConfirmation(),
             ])
             ->reorderable('position')
-            ->bulkActions([])
+            ->bulkActions([
+                DeleteBulkAction::make()
+                    ->requiresConfirmation(),
+            ])
             ->emptyStateHeading('No team members yet')
             ->emptyStateDescription('Start by adding your first team member.');
     }

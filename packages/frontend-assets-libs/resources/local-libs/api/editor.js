@@ -1009,7 +1009,7 @@ var MWEditor = function (options) {
                 icon.prepend(ctrl.element);
                 mw.element(
                     icon.get(0).querySelector(".mw-editor-group-button-caret")
-                ).on("mousedown touchstart", function (e) {
+                ).on("click", function (e) {
                     const parent = this.parentNode.parentNode;
 
                     scope.document
@@ -1214,9 +1214,14 @@ var MWEditor = function (options) {
             },
         });
 
-        this.smallEditor.on("mousedown touchstart click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+        this.smallEditor.on("mousedown touchstart", function (e) {
+            const targetIsController = e.target.closest(
+                ".mw-editor-controller-component,.mw-bar-control-item"
+            );
+            if (!targetIsController) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
         });
 
         this.smallEditorBar = mw.bar();

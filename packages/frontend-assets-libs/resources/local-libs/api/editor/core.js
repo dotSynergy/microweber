@@ -93,7 +93,11 @@
                     defaults.props.className + " " + config.props.className;
             }
             var settings = $.extend(true, {}, defaults, config);
-            return mw.element(settings);
+            const el = mw.element(settings);
+            el.on("mousedown touchstart", (e) => {
+                e.stopPropagation();
+            });
+            return el;
         },
         colorPicker: function (config) {
             config = config || {};
@@ -320,7 +324,7 @@
             };
             var settings = $.extend(true, {}, defaults, config);
             var el = mw.element(settings);
-            el.on("mousedown touchstart", function (e) {
+            el.on("click", function (e) {
                 e.preventDefault();
             });
             return el;
@@ -410,6 +414,12 @@
                     },
                 });
                 displayValNode.append(displayValObj.frame);
+                displayValNode.off("mousedown");
+
+                displayValNode.off("touchstart");
+                displayValNode.on("mousedown touchstart", (e) => {
+                    e.preventDefault();
+                });
             } else {
                 var placeholder = options.placeholder || "";
                 displayValNode = MWEditor.core.button({
@@ -426,6 +436,12 @@
                             (!placeholder.includes("<") ? placeholder : "") ||
                             null,
                     },
+                });
+                displayValNode.off("mousedown");
+
+                displayValNode.off("touchstart");
+                displayValNode.on("mousedown touchstart", (e) => {
+                    e.preventDefault();
                 });
             }
 
@@ -510,6 +526,10 @@
                     innerHTML:
                         '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M7,10L12,15L17,10H7Z" /></svg>',
                 },
+            });
+
+            caret.on("mousedown touchstart", (e) => {
+                e.preventDefault();
             });
 
             displayValNode.append(caret);

@@ -36,7 +36,7 @@ class MicroweberTheme implements Plugin
     {
         static::configureColorShades();
         static::configureComponents();
-       static::configureAssets();
+        static::configureAssets();
     }
 
     public static function configure(): void
@@ -55,10 +55,10 @@ class MicroweberTheme implements Plugin
 
     public static function configureAssets(): void
     {
-       $head = new AdminFilamentMetaTagsRenderer();
+        $head = new AdminFilamentMetaTagsRenderer();
 
         $headTags = $head->getHeadMetaTags();
-       $footerTags = $head->getFooterMetaTags();
+        $footerTags = $head->getFooterMetaTags();
 
         Filament::serving(function () use ($headTags, $footerTags) {
             FilamentView::registerRenderHook(
@@ -92,7 +92,7 @@ class MicroweberTheme implements Plugin
 
     public static function configureComponents(): void
     {
-      //  Wizard::configureUsing(fn(Wizard $wizard): Wizard => $wizard->contained(false));
+        //  Wizard::configureUsing(fn(Wizard $wizard): Wizard => $wizard->contained(false));
     }
 
     public static function configureIcons(): void
@@ -102,14 +102,17 @@ class MicroweberTheme implements Plugin
 
     public static function getColors(): array
     {
-        return [
+        $all = Color::all();
+        $theme = [
             'danger' => Color::Rose,
             'gray' => Color::Zinc,
             'info' => Color::Blue,
             'primary' => Color::Blue,
             'success' => Color::Emerald,
             'warning' => Color::Yellow,
+
         ];
+        return array_merge($all, $theme);
     }
 
     public static function getIcons(): array

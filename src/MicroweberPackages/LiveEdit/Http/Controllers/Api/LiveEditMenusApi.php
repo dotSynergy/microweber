@@ -4,6 +4,7 @@ namespace MicroweberPackages\LiveEdit\Http\Controllers\Api;
 
 use MicroweberPackages\App\Http\Controllers\Controller;
 use MicroweberPackages\LiveEdit\Facades\LiveEditManager;
+
 /**
  * @deprecated
  */
@@ -29,7 +30,7 @@ class LiveEditMenusApi extends Controller
 
         $topRightMenu = LiveEditManager::getMenu('top_right_menu');
         if (!empty($topRightMenu)) {
-            foreach($topRightMenu as $menuItem) {
+            foreach ($topRightMenu as $menuItem) {
 
                 $href = '#';
                 $hasRoute = $menuItem->getAttribute('route');
@@ -44,8 +45,8 @@ class LiveEditMenusApi extends Controller
 
                 $item = [
                     'title' => $menuItem->getName(),
-                    'href'=> $href,
-                    'icon_html'=>$icon
+                    'href' => $href,
+                    'icon_html' => $icon
                 ];
 
                 $ref = $menuItem->getAttribute('ref');
@@ -56,6 +57,14 @@ class LiveEditMenusApi extends Controller
                 $onclick = $menuItem->getAttribute('onclick');
                 if ($onclick) {
                     $item['onclick'] = $onclick;
+                }
+                $target = $menuItem->getAttribute('target');
+                if ($target) {
+                    $item['target'] = $target;
+                }
+                $class = $menuItem->getAttribute('class');
+                if ($class) {
+                    $item['class'] = $class;
                 }
 
 

@@ -4,6 +4,7 @@ namespace Modules\Category\Tests\Unit;
 
 use MicroweberPackages\Core\tests\TestCase;
 use Modules\Category\Models\Category;
+use Modules\Category\Models\CategoryItem;
 use Modules\Content\Models\Content;
 use Modules\Page\Models\Page;
 use Modules\Product\Models\Product;
@@ -234,6 +235,7 @@ class CategoryManagerTest extends TestCase
 
         $clean = Content::truncate();
         $clean = Category::truncate();
+        $clean = CategoryItem::truncate();
 
         $newSimplePage = new Page();
         $newSimplePage->title = 'testCategoryJsonTreeAdminPageStatic0_' . uniqid();
@@ -276,6 +278,7 @@ class CategoryManagerTest extends TestCase
         $this->assertEquals($children_test[0]->id, $category3->id);
         $this->assertEquals($children_test[0]->title, $category3->title);
         $this->assertEquals($children_test[0]->parent_id, $category3->parent_id);
+
 
 
         $jsonTree = app()->category_manager->get_admin_js_tree_json(['from_content_id' => $newBlogPage->id]);

@@ -35,6 +35,7 @@ class CommentsModule extends BaseModule
         $relId = $viewData['rel_id'] ?? $viewData['content_id'] ?? content_id();
 
         if (!$relId) {
+            //return '';
             return '';
         }
 

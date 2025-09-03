@@ -119,6 +119,8 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
     public function testCreateModulesScreenshots()
     {
+
+
         $this->bootTemplate();
 //        $modules = get_modules('ui=1');
 
@@ -151,6 +153,8 @@ abstract class DuskModuleScreenshots extends DuskTestCase
             'title',
             'text',
             'picture',
+            'comments',
+            'shop/cart_add',
         ];
 
         foreach ($modules as $moduleName => $moduleNamespace) {
@@ -205,6 +209,9 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
 
                     // dump('/preview-skin?module='.$module['module'].'&skin=' . $layoutName . '&no_editmode=1');
+
+                    dump('template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
+
                     $browser->visit('/template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
 
                     Log::info('Visiting: /template/preview-layout?module=' . $moduleName . '&skin=' . $layoutName);
@@ -267,7 +274,7 @@ abstract class DuskModuleScreenshots extends DuskTestCase
     {
         $this->bootTemplate();
         $layouts = module_templates('layouts');
-
+return;
 
         foreach ($layouts as $layout) {
 
@@ -309,7 +316,6 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                     $browser->resize(1360, 1500);
                 }
                 Log::info('Visiting: template/preview-layout?module=layouts&skin=' . $layoutName);
-
                 try {
                     $browser->visit('template/preview-layout?module=layouts&skin=' . $layoutName);
                     $browser->waitFor('#preview-skin-file');

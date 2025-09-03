@@ -25,7 +25,7 @@ abstract class DuskTestCase extends BaseTestCase
 {
     public $siteUrl = 'http://127.0.0.1:8000/';
 
-    public $template_name = 'Bootstrap';
+    public $template_name = 'Big2';
 
     use CreatesApplication;
 
@@ -169,11 +169,11 @@ abstract class DuskTestCase extends BaseTestCase
 
 
         if (mw_is_installed()) {
+
             if ($this->template_name) {
 
                 save_option('current_template', $this->template_name, 'template');
             }
-
 
             save_option('dusk_test', 1, 'dusk');
 

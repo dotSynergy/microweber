@@ -2,13 +2,16 @@
 
 namespace MicroweberPackages\LiveEdit\Filament\Admin\Pages\Abstract;
 
+use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
+use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Filament\Support\Commands\Concerns\CanReadModelSchemas;
 use Illuminate\Support\Facades\Validator;
@@ -17,16 +20,18 @@ use MicroweberPackages\Filament\Forms\Components\MwColorPicker;
 use MicroweberPackages\Filament\Forms\Components\MwFileUpload;
 use MicroweberPackages\Filament\Forms\Components\MwInputSlider;
 use MicroweberPackages\Filament\Forms\Components\MwInputSliderGroup;
-use MicroweberPackages\Filament\Forms\Components\MwRangeSlider;
 use MicroweberPackages\Multilanguage\MultilanguageHelpers;
 use MicroweberPackages\Option\Models\ModuleOption;
 use MicroweberPackages\Option\Models\Option;
-use Rupadana\FilamentSlider\Components\Concerns\InputSliderBehaviour;
-use Rupadana\FilamentSlider\Components\InputSlider;
-use Rupadana\FilamentSlider\Components\InputSliderGroup;
+
 
 abstract class LiveEditModuleSettings extends Page
 {
+
+    use InteractsWithActions;
+    use InteractsWithForms;
+    use InteractsWithFormActions;
+
 
     public string $module;
     public string $optionGroup;

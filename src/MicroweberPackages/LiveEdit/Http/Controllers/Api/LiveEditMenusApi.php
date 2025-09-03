@@ -67,7 +67,6 @@ class LiveEditMenusApi extends Controller
                     $item['class'] = $class;
                 }
 
-
                 $id = $menuItem->getAttribute('id');
                 if ($id) {
                     $item['id'] = $id;

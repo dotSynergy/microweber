@@ -130,12 +130,12 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 //          ]
 //        ];
 
-        $modulesDefault = [
-            [
-                'module' => 'layouts'
-            ]
-        ];
-        $modules = array_merge($modules, $modulesDefault);
+//        $modulesDefault = [
+//            [
+//                'module' => 'layouts'
+//            ]
+//        ];
+//        $modules = array_merge($modules, $modulesDefault);
 
 //        $modules = [
 //            'layouts' => ''
@@ -155,10 +155,10 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
         foreach ($modules as $moduleName => $moduleNamespace) {
 
-            if(in_array($moduleName, $skipModules)){
+            if (in_array($moduleName, $skipModules)) {
                 continue;
             }
-            Log::info( 'Processing module: ' . $moduleName);
+            Log::info('Processing module: ' . $moduleName);
 
             $layouts = module_templates($moduleName, $this->template_name);
 
@@ -167,6 +167,9 @@ abstract class DuskModuleScreenshots extends DuskTestCase
             }
 
             foreach ($layouts as $layout) {
+
+
+                Log::info('Processing module: ' . $moduleName . ' layout: ' . $layout['layout_file']);
 
                 $this->browse(function (Browser $browser) use ($modules, $layouts, $moduleName, $layout) {
 
@@ -223,8 +226,6 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                         Log::info('Skipping screenshot for module: ' . $moduleName . ' layout: ' . $layoutName . ' because element has height or width 0');
                         return;
                     }
-
-
 
 
                     $previewLayoutContentElement->takeElementScreenshot($screenshotFileNew);
@@ -329,8 +330,6 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                             Log::info('Skipping screenshot for module: ' . ' layout: ' . $layoutName . ' because element has height or width 0');
                             return;
                         }
-
-
 
 
                         $previewLayoutContentElement->takeElementScreenshot($screenshotFileNew);

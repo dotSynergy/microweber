@@ -55,8 +55,12 @@ jobs:
           rm -f userfiles/templates/big/src/tests/Browser/BigScreenshotLayoutsTest.php
       - name: Clear bootstrap cache
         run: php artisan optimize:clear
-      - name: Copy .env.testing to .env
-        run: cp .env.testing .env
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+      - name: Set env to testing
+        run: |
+          sed -i 's/APP_ENV=local/APP_ENV=testing/g' .env
+          sed -i 's/APP_ENV=production/APP_ENV=testing/g' .env
       - name: Run Laravel Server
         #run: php artisan serve-test --env=testing > /dev/null 2>&1 &
         #run: APP_ENV=testing && php -d variables_order=EGPCS -S 127.0.0.1:8000 > /dev/null 2>&1 &

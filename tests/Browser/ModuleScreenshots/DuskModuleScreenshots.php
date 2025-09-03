@@ -159,6 +159,9 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
         foreach ($modules as $moduleName => $moduleNamespace) {
 
+            if ($moduleName != 'layouts') {
+                continue;
+            }
             if (in_array($moduleName, $skipModules)) {
                 continue;
             }
@@ -221,8 +224,11 @@ abstract class DuskModuleScreenshots extends DuskTestCase
                     if ($browser->element('#preview-skin-file .module')) {
                         $previewLayoutContentElement = $browser->element('#preview-skin-file .module');
 
-                    } else {
+                    } else if ($browser->element('#preview-skin-file .module')) {
                         $previewLayoutContentElement = $browser->element('#preview-skin-file .element');
+
+                    } else {
+                        $previewLayoutContentElement = $browser->element('#preview-skin-file');
 
                     }
 
@@ -274,7 +280,7 @@ abstract class DuskModuleScreenshots extends DuskTestCase
     {
         $this->bootTemplate();
         $layouts = module_templates('layouts');
-return;
+        return;
 
         foreach ($layouts as $layout) {
 

@@ -43,12 +43,12 @@ runs:
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
       shell: bash
-#    - name: Install Chrome Driver
-#      run: php artisan dusk:install
-#      shell: bash
-#    - name: Dusk update
-#      run: php artisan dusk:chrome-driver 117
-#      shell: bash
+    #    - name: Install Chrome Driver
+    #      run: php artisan dusk:install
+    #      shell: bash
+    #    - name: Dusk update
+    #      run: php artisan dusk:chrome-driver 117
+    #      shell: bash
     - name: Install Dusk
       run: |
         composer update "laravel/dusk" --prefer-dist --no-interaction --no-progress -W
@@ -63,11 +63,16 @@ runs:
       shell: bash
     - name: Copy env
       run: |
-        cp --force /home/runner/work/microweber/microweber/.env.testing /home/runner/work/microweber/microweber/.env
+        cp --force /home/runner/work/microweber/microweber/.env.example /home/runner/work/microweber/microweber/.env
         chmod 777 /home/runner/work/microweber/microweber/.env
         chmod 777 /home/runner/work/microweber/microweber/storage/
         sudo php artisan config:clear
         sudo php artisan optimize:clear
+      shell: bash
+    - name: Set env to testing
+      run: |
+        sed -i 's/APP_ENV=local/APP_ENV=testing/g' .env
+        sed -i 's/APP_ENV=production/APP_ENV=testing/g' .env
       shell: bash
     - name: Start Chrome Driver
       run: |

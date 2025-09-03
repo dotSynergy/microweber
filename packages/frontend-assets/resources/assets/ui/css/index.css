@@ -96,8 +96,7 @@ html.mw-live-edit-sidebar-start.live-edit-gui-editor-opened
     }
 }
 
-.live-edit-toolbar-buttons-view,
-.mw-live-edit-resolutions-wrapper {
+.live-edit-toolbar-buttons-view {
     display: none !important;
 }
 

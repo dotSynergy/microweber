@@ -28,7 +28,7 @@
                 },
                 { passive: true }
             );
-            this.bar.addEventListener("touchmove", () => {
+            this.bar.addEventListener("touchmove", (e) => {
                 const touch = e.touches[0];
                 const deltaX = touch.pageX - startX;
                 this.bar.scrollLeft -= deltaX;

@@ -159,9 +159,9 @@ abstract class DuskModuleScreenshots extends DuskTestCase
 
         foreach ($modules as $moduleName => $moduleNamespace) {
 
-            if ($moduleName != 'layouts') {
-                continue;
-            }
+//            if ($moduleName != 'layouts') {
+//                continue;
+//            }
             if (in_array($moduleName, $skipModules)) {
                 continue;
             }

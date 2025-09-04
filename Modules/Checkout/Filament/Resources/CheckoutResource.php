@@ -190,21 +190,7 @@ class CheckoutResource extends Resource
                                         Forms\Components\Livewire::make(CartItems::class)
                                             ->columnSpanFull(),
                                     ]),
-                                Section::make('Terms and Conditions')
-                                    ->visible(function (Forms\Get $get) {
-                                        return get_option('shop_require_terms', 'website') == 1;
-                                    })
-                                    ->schema([
-                                        Forms\Components\Checkbox::make('terms')
-                                            ->label('I agree to the terms and conditions')
-                                            ->required()
-                                            ->default(false)
-                                            ->afterStateUpdated(function ($state, Forms\Get $get, $livewire) {
-                                                checkout_set_user_info('terms', $state);
-                                                $livewire->dispatch('reload-cart');
-                                            })
-                                            ->default(fn() => checkout_get_user_info('terms')),
-                                    ]),
+
 
                                 Section::make('Apply Coupon')
                                     ->visible(function (Forms\Get $get) {
@@ -224,8 +210,9 @@ class CheckoutResource extends Resource
 
                                         Forms\Components\Actions::make([
                                             Action::make('apply_coupon')
-                                                ->label('Apply Coupon')
-                                                ->button()
+                                                ->label('Enter discount code')
+                                                ->tooltip('Apply Coupon to get discount')
+                                                ->link()
                                                 ->hidden(fn() => coupon_get_applied())
                                                 ->modalHeading('Apply Coupon')
                                                 ->modalDescription('Enter your coupon code to get a discount')
@@ -312,6 +299,25 @@ class CheckoutResource extends Resource
 
                                         return $formSchema;
                                     }),
+
+
+                                Section::make('Terms and Conditions')
+                                    ->visible(function (Forms\Get $get) {
+                                        return get_option('shop_require_terms', 'website') == 1;
+                                    })
+                                    ->schema([
+                                        Forms\Components\Checkbox::make('terms')
+                                            ->label('I agree to the terms and conditions')
+                                            ->required()
+                                            ->default(false)
+                                            ->afterStateUpdated(function ($state, Forms\Get $get, $livewire) {
+                                                checkout_set_user_info('terms', $state);
+                                                $livewire->dispatch('reload-cart');
+                                            })
+                                            ->default(fn() => checkout_get_user_info('terms')),
+                                    ]),
+
+
                             ])
                             ->columnSpan(1),
                     ]),

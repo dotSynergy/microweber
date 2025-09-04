@@ -24,6 +24,7 @@ import "../components/icon_selector.js";
 import "../api-core/core/core/forms.js";
 import "../api-core/core/core/files.js";
 import "../api-core/core/core/session.js";
+import "../api-core/core/core/shop.js";
 
 import "../core/_.js";
 import "./animations.js";

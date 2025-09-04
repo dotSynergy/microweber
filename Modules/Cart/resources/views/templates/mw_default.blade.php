@@ -6,8 +6,8 @@ Description: Styled cart add template with product image and custom fields
 --}}
 
 <script>
-    mw.require("shop.js", true);
-    mw.require("events.js", true);
+
+
 </script>
 
 <style>

@@ -6,8 +6,8 @@ Description: Template designed for use within shop product layouts
 --}}
 
 <script>
-    mw.require("shop.js", true);
-    mw.require("events.js", true);
+
+
 </script>
 
 <div class="product-info-layout-1">

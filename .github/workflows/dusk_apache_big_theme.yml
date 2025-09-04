@@ -51,7 +51,7 @@ jobs:
       - name: Setup Apache
         uses: thunder/apache-shiva-php-action@v1
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           site-directory: /home/runner/work/microweber/microweber/
           # Defaults to 8888
           http-port: 8000

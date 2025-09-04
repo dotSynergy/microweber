@@ -152,7 +152,7 @@ description: skin-9
                                         @if ($show_fields == false or ($show_fields != false and in_array('add_to_cart', $show_fields)))
                                             @if ($in_stock == true)
                                                 <a href="javascript:;"
-                                                   onclick="mw.cart.add('.shop-products .item-{{ $item['id'] }}');"
+                                                   onclick="mw.cart.add_and_show_modal('.shop-products .item-{{ $item['id'] }}');"
                                                    class="btn btn-primary px-4 btn-md"> @lang("BUY NOW")</a>
                                             @endif
                                         @endif

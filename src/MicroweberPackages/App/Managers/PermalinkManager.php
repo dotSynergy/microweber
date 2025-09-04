@@ -86,7 +86,7 @@ class PermalinkManager
                         // If page not fond & category not found we try to find post
                         // $findPostBySlug = get_content('content_type=post&url=' . $findSlugByType . '&single=1');
 
-                        $findPostBySlug = Post::where('url', $findSlugByType)->first();
+                        $findPostBySlug = Content::where('url', $findSlugByType)->first();
 
 
                         if ($findPostBySlug && isset($findPostBySlug['parent']) && $findPostBySlug['parent'] != false) {
@@ -109,7 +109,7 @@ class PermalinkManager
                     if ($type == 'post') {
                         // $findPostsBySlug = get_content('subtype=post&url=' . $findSlugByType . '&single=1');
 
-                        $findPostsBySlug = Post::where('url', $findSlugByType)->first();
+                        $findPostsBySlug = Content::where('url', $findSlugByType)->first();
 
                         if ($findPostsBySlug) {
                             return $findPostsBySlug['url'];

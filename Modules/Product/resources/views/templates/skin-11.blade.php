@@ -130,7 +130,7 @@ description: skin-11
                                     <div class="py-4">
                                         @if ($show_fields == false or ($show_fields != false and in_array('add_to_cart', $show_fields)))
                                             @if ($in_stock == true)
-                                                <a href="javascript:;" onclick="mw.cart.add('.shop-products .item-{{ $item['id'] }}');" class="btn btn-primary px-5 btn-lg"> @lang("Buy now")</a>
+                                                <a href="javascript:;" onclick="mw.cart.add_and_show_modal('.shop-products .item-{{ $item['id'] }}');" class="btn btn-primary px-5 btn-lg"> @lang("Buy now")</a>
                                             @endif
                                         @endif
                                     </div>

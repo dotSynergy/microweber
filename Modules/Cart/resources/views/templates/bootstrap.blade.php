@@ -6,8 +6,8 @@ Description: Bootstrap-styled cart add template with modern design
 --}}
 
 <script>
-    mw.require("shop.js", true);
-    mw.require("events.js", true);
+
+
 </script>
 
 <script>

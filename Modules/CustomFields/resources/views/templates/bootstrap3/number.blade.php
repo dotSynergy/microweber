@@ -1,4 +1,4 @@
-<script>mw.require('forms.js');</script>
+
 
 <div class="col-md-{{ $settings['field_size'] }}">
     <div class="form-group">

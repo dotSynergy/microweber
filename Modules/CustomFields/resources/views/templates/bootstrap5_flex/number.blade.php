@@ -1,4 +1,4 @@
-<script>mw.require('forms.js');</script>
+
 
 <div class="col-sm-{{ $settings['field_size_mobile'] }} col-md-{{ $settings['field_size_tablet'] }} col-lg-{{ $settings['field_size_desktop'] }}">
     <div class="mb-3 d-flex gap-3 flex-wrap">

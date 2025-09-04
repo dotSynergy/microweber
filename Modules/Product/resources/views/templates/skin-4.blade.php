@@ -119,7 +119,7 @@
                                 @if ($show_fields == false || ($show_fields != false && in_array('add_to_cart', $show_fields)))
                                     @if ($in_stock == true)
                                         <div class="d-flex justify-content-center">
-                                            <a href="javascript:;" onclick="mw.cart.add('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary">Add to cart</a>
+                                            <a href="javascript:;" onclick="mw.cart.add_and_show_modal('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary">Add to cart</a>
                                         </div>
                                     @endif
                                 @endif

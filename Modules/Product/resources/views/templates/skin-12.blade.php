@@ -152,7 +152,7 @@ description: skin-12
                                     <div class="col-lg-6 col-12 text-end text-right">
                                         <a href="{{ $item['link'] }}" class="flower-ecommerce-btn btn btn-primary">Join Now</a>
                                         @if ($show_fields == false or ($show_fields != false and in_array('add_to_cart', $show_fields)))
-                                            <!--<a href="javascript:;" onclick="mw.cart.add('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary"><i class="mw-micon-Shopping-Cart"></i> Add to cart</a>-->
+                                            <!--<a href="javascript:;" onclick="mw.cart.add_and_show_modal('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary"><i class="mw-micon-Shopping-Cart"></i> Add to cart</a>-->
                                         @endif
                                     </div>
                                 </div>

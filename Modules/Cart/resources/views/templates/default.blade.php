@@ -6,8 +6,8 @@ Description: Default cart add template with prices and add to cart button
 --}}
 
 <script>
-    mw.require("shop.js", true);
-    mw.require("events.js", true);
+
+
 </script>
 
 <script>

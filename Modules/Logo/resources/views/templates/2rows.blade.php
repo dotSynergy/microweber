@@ -16,7 +16,7 @@
 
 
     @if(is_live_edit())
-        href="javascript:void(0);"
+        href="{{ site_url() }}"
     @else
 
         href="{{ site_url() }}"

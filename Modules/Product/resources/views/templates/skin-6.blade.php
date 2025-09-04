@@ -142,7 +142,7 @@ description: Skin-6
                                         <div>
                                             @if ($show_fields == false or ($show_fields != false and in_array('add_to_cart', $show_fields)))
                                                 @if ($in_stock == true)
-                                                    <a href="javascript:;" onclick="mw.cart.add('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary btn-sm"> @lang("Buy")</a>
+                                                    <a href="javascript:;" onclick="mw.cart.add_and_show_modal('.shop-products .item-{{ $item['id'] }}');" class="btn btn-outline-primary btn-sm"> @lang("Buy")</a>
                                                 @endif
                                             @endif
                                         </div>

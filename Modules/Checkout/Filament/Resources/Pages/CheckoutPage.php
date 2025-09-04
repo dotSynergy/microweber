@@ -81,7 +81,7 @@ class CheckoutPage extends CreateRecord
             } elseif (isset($order['error']) and is_string($order['error'])) {
                 $errorMessage = $order['error'];
             }
-
+ 
 
              if (!$success) {
                 Notification::make()

@@ -16,7 +16,7 @@ class CheckoutCancelledPage extends Page
     }
     public function getTitle(): string
     {
-        return 'Cancelled';
+        return 'Order Cancelled';
     }
     public function mount(): void
     {

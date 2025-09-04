@@ -86,7 +86,7 @@ class CheckoutResource extends Resource
                                             ->required()
 
                                             ->native()
-                                            ->live()
+                                            ->reactive()
                                             ->afterStateUpdated(function ($state, Forms\Get $get, $component) {
                                                 /** @var Component $livewire */
                                                 $livewire = $component->getLivewire();
@@ -168,7 +168,7 @@ class CheckoutResource extends Resource
                                                     $livewire->dispatch('reload-cart');
                                                 })
                                                 ->default(fn() => checkout_get_user_info('shipping_provider_id'))
-                                                ->live()
+                                                ->reactive()
                                                 ->required()
                                                 ->reactive()
                                                 ->columnSpanFull(),
@@ -288,7 +288,7 @@ class CheckoutResource extends Resource
                                                     checkout_set_user_info('payment_provider_id', $state);
                                                 })
                                                 ->default(fn() => checkout_get_user_info('payment_provider_id'))
-                                                ->live()
+                                                ->reactive()
                                                 ->required()
                                                 ->reactive()
                                                 ->columnSpanFull(),

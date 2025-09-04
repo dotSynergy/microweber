@@ -16,7 +16,7 @@ class CheckoutFailedPage extends Page
     }
     public function getTitle(): string
     {
-        return 'Failed';
+        return 'Order failed';
     }
     public function mount(): void
     {

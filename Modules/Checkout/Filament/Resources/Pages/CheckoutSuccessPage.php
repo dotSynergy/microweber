@@ -16,7 +16,7 @@ class CheckoutSuccessPage extends Page
     }
     public function getTitle(): string
     {
-        return 'Success';
+        return 'Order Success';
     }
 
     public function mount(): void

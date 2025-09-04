@@ -13,6 +13,7 @@ mw.cart = {
     },
 
     add_and_show_modal: function (content_id, price, c) {
+
         mw.cart.add_item(content_id, price, c);
 
         var checkoutUrl = mw.settings.api_url + "shop/redirect_to_checkout";

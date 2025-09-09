@@ -124,6 +124,21 @@
             <!-- Wizard Navigation -->
             <div class="wizard-navigation d-flex justify-content-between p-3 border-top">
                 <button
+
+                    @click="completeWizard"
+                    class="btn btn-outline-success w-100"
+                >
+                    Complete Setup
+                </button>
+            </div>
+            <div class="wizard-navigation d-flex justify-content-between p-3 border-top">
+
+
+
+
+
+
+                <button
                     v-if="currentStep > 0"
                     @click="previousStep"
                     class="btn btn-outline-secondary"
@@ -131,6 +146,8 @@
                     Previous
                 </button>
                 <div v-else></div>
+
+
                 <button
                     v-if="currentStep < steps.length - 1"
                     @click="nextStep"
@@ -138,15 +155,9 @@
                     :disabled="isAIProcessing"
                 >
                     <span v-if="isAIProcessing">AI Processing...</span>
-                    <span v-else>{{ getNextButtonText() }}</span>
+                    <span v-else> {{ getNextButtonText() }}</span>
                 </button>
-                <button
-                    v-else
-                    @click="completeWizard"
-                    class="btn btn-success"
-                >
-                    Complete Setup
-                </button>
+
             </div>
         </div>
     </Transition>

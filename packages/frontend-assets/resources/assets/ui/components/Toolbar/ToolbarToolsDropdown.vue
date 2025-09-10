@@ -6,7 +6,9 @@
                 <svg fill="currentColor" height="20" viewBox="0 -960 960 960" width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
                 </svg>
-                Tools
+
+                <span class="hidden">Tools</span>
+
             </a>
 
             <ul class="dropdown-content" :class="{ 'show': dropdownOpen }"
@@ -175,13 +177,13 @@
     border: 1px solid #efefef;
     box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     transition: border 0.2s, box-shadow 0.2s;
-    min-width: 120px;
-    font-size: 15px;
     font-weight: 500;
     color: #222;
     outline: none;
     position: relative;
     max-height: 35px;
+    width: auto;
+    min-width: unset;
 }
 
 .dropdown-trigger:focus,

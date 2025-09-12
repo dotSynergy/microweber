@@ -517,10 +517,22 @@ export default {
             }
         },
 
-        handleInsertLayout() {
-            this.hideToolsDropdown();
+        handleInsertLayout: function () {
             let active = mw.top().app.liveEdit.layoutHandle.getTarget();
             const selector = '.edit[data-layout-container] .module-layouts';
+
+            if(!active) {
+
+                //get layout target from element
+                var activeElement = mw.top().app.liveEdit.elementHandle.getTarget();
+
+                if (activeElement) {
+                    var layoutTarget = mw.tools.firstParentOrCurrentWithAnyOfClasses(activeElement, ['module-layouts', 'edit']);
+                    if (layoutTarget) {
+                        active = layoutTarget;
+                    }
+                }
+            }
 
             if (!active || !active.matches(selector)) {
                 const doc = mw.top().app.canvas.getDocument();
@@ -540,20 +552,25 @@ export default {
                         };
                     })
                     .reduce(function (prev, curr, index) {
+
                         return (curr.visible && Math.abs(curr.top - scrollCenter) < Math.abs(prev - scrollCenter) ? index : prev);
                     }, -1);
 
                 if (activeIndex >= 0) {
                     mw.top().app.liveEdit.layoutHandle.set(arr[activeIndex])
                     active = mw.top().app.liveEdit.layoutHandle.getTarget();
+
                 }
+
             }
 
-            if (active && active.matches(selector)) {
+
+            if (active) {
                 active.scrollIntoView();
                 mw.top().app.editor.dispatch('insertLayoutRequestOnBottom', active)
             }
-        },
+
+        }, 
 
         handleTemplateSettings() {
             this.hideToolsDropdown();

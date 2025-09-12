@@ -281,7 +281,7 @@ export default {
     data() {
         return {
 
-            insertModulePosition: 'top',
+            insertModulePosition: 'bottom',
             filterKeyword: '',
             category: '',
             modulesList: [],

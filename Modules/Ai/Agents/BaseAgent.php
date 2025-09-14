@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Ai\Agents;
 
-
 use GuzzleHttp\Exception\RequestException;
-use Modules\Ai\Agents\Support\JsonSchemaReflection;
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\Message;
 use NeuronAI\Chat\Messages\ToolCallMessage;
@@ -21,16 +21,22 @@ use NeuronAI\Providers\Mistral;
 use NeuronAI\Providers\Ollama\Ollama;
 use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\StructuredOutput\JsonSchema;
+use NeuronAI\SystemPrompt;
+use NeuronAI\Tools\ToolInterface;
+use NeuronAI\Tools\Toolkits\ToolkitInterface;
+use NeuronAI\AgentInterface;
+use NeuronAI\Workflow\WorkflowState;
 
-class BaseAgent extends Agent
+abstract class BaseAgent extends Agent
 {
-
+    protected array $tools = [];
+    protected string $domain;
+    protected int $maxTries = 5;
     protected string $instructions = 'Your are a helpful and friendly AI that can help with anything that is asked.';
-
     protected $providerName = null;
     protected $model = null;
 
-    public function __construct(?string $providerName = null, ?string $model = null)
+    public function __construct(?string $providerName = null, ?string $model = null, protected array $dependencies = [])
     {
         if ($providerName) {
             $this->providerName = $providerName;
@@ -38,13 +44,47 @@ class BaseAgent extends Agent
             $this->providerName = config('modules.ai.default_driver');
         }
 
-
         if ($model) {
             $this->model = $model;
         } else {
             $this->model = config('modules.ai.drivers.' . $this->providerName . '.model');
         }
 
+        $this->setupTools();
+    }
+
+    abstract protected function setupTools(): void;
+
+    public function setState(WorkflowState $state): void
+    {
+        foreach ($this->tools as $tool) {
+            if (method_exists($tool, 'setState')) {
+                $tool->setState($state);
+            }
+        }
+    }
+
+    protected function tools(): array
+    {
+        return $this->tools;
+    }
+
+    public function addTool(ToolInterface|ToolkitInterface|array $tools): AgentInterface
+    {
+        if (is_array($tools)) {
+            foreach ($tools as $tool) {
+                $this->tools[] = $tool;
+            }
+        } else {
+            $this->tools[] = $tools;
+        }
+        
+        return $this;
+    }
+
+    public function getTools(): array
+    {
+        return $this->tools;
     }
 
     protected function provider(): AIProviderInterface

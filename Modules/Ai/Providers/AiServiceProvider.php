@@ -2,11 +2,14 @@
 
 namespace Modules\Ai\Providers;
 
+use Filament\Facades\Filament;
+use Filament\Navigation\NavigationItem;
 use Illuminate\Support\Facades\Config;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\LiveEdit\Facades\LiveEditManager;
-use Modules\Ai\Filament\Pages\AiSettingsPage;
+ use Modules\Ai\Filament\Pages\AiSettingsPage;
+use Modules\Ai\Filament\Resources\AgentChatResource;
 use Modules\Ai\Services\AiService;
 use Modules\Ai\Services\AiServiceImages;
 use Modules\Ai\Services\Drivers\AiServiceInterface;
@@ -20,6 +23,18 @@ class AiServiceProvider extends BaseModuleServiceProvider
 
     public function boot(): void
     {
+
+
+        Filament::serving(function () {
+            Filament::registerNavigationItems([
+                NavigationItem::make('AI Chat')
+                    ->url(AgentChatResource::getUrl())
+                    ->icon('heroicon-o-chat-bubble-left-right')
+                    ->group('AI Tools')
+                    ->sort(1),
+            ]);
+        });
+
         $this->setAiConfig();
 
         // Register the agent factory
@@ -60,10 +75,15 @@ class AiServiceProvider extends BaseModuleServiceProvider
         $this->registerViews();
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
+         FilamentRegistry::registerResource(AgentChatResource::class);
         FilamentRegistry::registerPage(AiSettingsPage::class);
 
         LiveEditManager::addScript('mw-ai', asset('modules/ai/js/mw-ai.js'));
+
+
+
     }
 
     public function provides(): array

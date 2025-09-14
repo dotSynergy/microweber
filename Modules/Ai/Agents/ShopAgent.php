@@ -1,35 +1,60 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Ai\Agents;
 
-use Modules\Ai\Agents\BaseAgent;
+use Modules\Ai\Tools\OrderSearchTool;
+use Modules\Ai\Tools\ProductListTool;
+use Modules\Ai\Tools\ProductSearchTool;
+use NeuronAI\SystemPrompt;
+use NeuronAI\Workflow\WorkflowState;
 
 class ShopAgent extends BaseAgent
 {
-    public function handle(array $input): array
-    {
-        return match($input['action'] ?? '') {
-            'recommend_products' => $this->recommendProducts($input),
-            'analyze_cart' => $this->analyzeCart($input),
-            default => ['error' => 'Invalid shop action']
-        };
+    protected string $domain = 'shop';
+
+    public function __construct(
+        ?string $providerName = null,
+        ?string $model = null,
+        protected array $dependencies = []
+    ) {
+        parent::__construct($providerName, $model, $dependencies);
     }
 
-    protected function recommendProducts(array $input): array
+    public function instructions(): string
     {
-        // Product recommendation logic
-        return [
-            'products' => [], // Array of recommended products
-            'reason' => 'Based on your preferences'
-        ];
+        return (string)new SystemPrompt(
+            background: [
+                'You are an AI Agent specialized in E-commerce and Shop Management for the Microweber CMS.',
+                'You can search for products, analyze inventory, help with product recommendations.',
+                'You assist with shop-related queries including product searches, pricing, and stock information.',
+            ],
+            steps: [
+                'When asked about products, use the product search tool with appropriate filters.',
+                'You can search by product name, SKU, price range, or category.',
+                'Provide detailed product information including prices, stock status, and categories.',
+                'Help users find products that match their specific criteria.',
+                'Suggest alternative search terms or filters if no results are found.',
+            ],
+            output: [
+                'Always respond with properly formatted HTML that displays product information clearly.',
+                'Use cards to show product details in an attractive grid layout.',
+                'Include product images (placeholder), prices, SKU, stock status, and categories.',
+                'Display search criteria and results count to help users understand their search.',
+            ],
+        );
     }
 
-    protected function analyzeCart(array $input): array
+    protected function setupTools(): void
     {
-        // Cart analysis logic
-        return [
-            'analysis' => [], // Cart analysis results
-            'suggestions' => [] // Suggested improvements
-        ];
+        // Add shop-specific tools
+        $this->addTool(new ProductListTool($this->dependencies));
+        $this->addTool(new ProductSearchTool($this->dependencies));
+        $this->addTool(new OrderSearchTool($this->dependencies));
+        
+        // Add RAG search for broader shop-related content discovery
+        $ragService = app(\Modules\Ai\Services\RagSearchService::class);
+        $this->addTool(new \Modules\Ai\Tools\RagSearchTool($ragService, $this->dependencies));
     }
 }

@@ -39,7 +39,7 @@ class ViewAgentChat extends ViewRecord
         return [
             Actions\EditAction::make()
                 ->label('Edit Chat Settings'),
-            
+
             Actions\Action::make('clearChat')
                 ->label('Clear Messages')
                 ->icon('heroicon-o-trash')
@@ -49,7 +49,7 @@ class ViewAgentChat extends ViewRecord
                     $this->record->messages()->delete();
                     $this->record->searches()->delete();
                     $this->loadChatMessages();
-                    
+
                     Notification::make()
                         ->title('Chat Cleared')
                         ->body('All messages have been deleted.')
@@ -89,7 +89,6 @@ class ViewAgentChat extends ViewRecord
 
             // Debug: Check if agent has tools
             $toolsCount = count($agent->getTools() ?? []);
-            \Log::info("Agent {$this->record->agent_type} has {$toolsCount} tools configured");
 
             // Set up workflow state with chat context
             $state = new \NeuronAI\Workflow\WorkflowState();
@@ -112,11 +111,7 @@ class ViewAgentChat extends ViewRecord
             $this->loadChatMessages();
 
         } catch (\Exception $e) {
-            \Log::error('Agent chat error: ' . $e->getMessage(), [
-                'chat_id' => $this->record->id,
-                'user_message' => $this->userMessage,
-                'trace' => $e->getTraceAsString()
-            ]);
+
 
             Notification::make()
                 ->title('Error')

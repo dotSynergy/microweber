@@ -274,6 +274,46 @@ class AiSettingsPage extends AdminSettingsPage
                             ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://replicate.com/account/api-tokens" target="_blank">Get your API token</a> from Replicate.</small>')),
 
                     ]),
+
+                Section::make('TAVILY Search Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
+                    ->view('filament-forms::sections.section')
+                    ->schema([
+                        Toggle::make('options.ai.tavily_enabled')
+                            ->label('Enable TAVILY Search')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark')
+                            ->helperText('Enable TAVILY for AI-powered web search capabilities'),
+
+                        TextInput::make('options.ai.tavily_api_key')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.tavily_enabled'))
+                            ->label('TAVILY API Key')
+                            ->placeholder('Enter your TAVILY API key')
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://tavily.com/" target="_blank">Sign up</a> for a TAVILY account to get your API key.</small>')),
+
+                        Select::make('options.ai.tavily_search_depth')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.tavily_enabled'))
+                            ->label('Search Depth')
+                            ->options([
+                                'basic' => 'Basic Search',
+                                'advanced' => 'Advanced Search'
+                            ])
+                            ->default('basic')
+                            ->helperText('Basic search is faster, Advanced search provides more comprehensive results'),
+
+                        TextInput::make('options.ai.tavily_max_results')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.tavily_enabled'))
+                            ->label('Max Results')
+                            ->numeric()
+                            ->minValue(1)
+                            ->maxValue(20)
+                            ->default(5)
+                            ->helperText('Maximum number of search results to return (1-20)'),
+                    ]),
             ]);
     }
 }

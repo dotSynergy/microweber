@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Agents;
 
+use Illuminate\Support\Facades\Config;
 use Modules\Ai\Tools\MediaSearchTool;
 use NeuronAI\SystemPrompt;
+use NeuronAI\Tools\Toolkits\Tavily\TavilySearchTool;
 use NeuronAI\Workflow\WorkflowState;
 
 class ContentAgent extends BaseAgent
@@ -13,10 +15,11 @@ class ContentAgent extends BaseAgent
     protected string $domain = 'content';
 
     public function __construct(
-        ?string $providerName = null,
-        ?string $model = null,
+        ?string         $providerName = null,
+        ?string         $model = null,
         protected array $dependencies = []
-    ) {
+    )
+    {
         parent::__construct($providerName, $model, $dependencies);
     }
 
@@ -27,18 +30,23 @@ class ContentAgent extends BaseAgent
                 'You are an AI Agent specialized in Content Management for the Microweber CMS.',
                 'You can help with content creation, editing, SEO optimization, and content analysis.',
                 'You assist with pages, posts, blog articles, and general content management tasks.',
+                'You have access to Google Trends data to help create trending, relevant content.',
+                'You can research trending topics and suggest content ideas based on real-time search trends.',
             ],
             steps: [
                 'When asked about content creation, provide structured and SEO-friendly content.',
                 'Help with writing compelling titles, descriptions, and meta information.',
                 'Suggest content improvements and optimization strategies.',
                 'Provide guidance on content structure and formatting.',
+                'Use Google Trends data to suggest trending topics and popular keywords for content.',
+                'Research trending queries to help create timely and relevant content.',
             ],
             output: [
                 'Always respond with well-formatted HTML content when creating or suggesting content.',
                 'Include proper heading structure (H1, H2, H3) for better SEO.',
                 'Provide actionable content recommendations with clear explanations.',
                 'Format responses using appropriate HTML elements for readability.',
+                'When suggesting trending content, include trend data and relevance scores.',
             ],
         );
     }
@@ -68,5 +76,15 @@ class ContentAgent extends BaseAgent
         // Add RAG search tool for broader content discovery
         $ragService = app(\Modules\Ai\Services\RagSearchService::class);
         $this->addTool(new \Modules\Ai\Tools\RagSearchTool($ragService, $this->dependencies));
+
+        // Add Google Trends tool for content research and trending topics
+        $this->addTool(new \Modules\Ai\Tools\GoogleTrendsTool($this->dependencies));
+
+
+        if (Config::get('modules.ai.drivers.tavily.enabled') and Config::get('modules.ai.drivers.tavily.api_key')) {
+            $tavily = TavilySearchTool::make(Config::get('modules.ai.drivers.tavily.api_key'));
+            $this->addTool($tavily);
+        }
+
     }
 }

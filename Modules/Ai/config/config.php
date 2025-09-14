@@ -158,6 +158,19 @@ return [
                 'claude-3-5-haiku-latest' => 'Claude Haiku 3.5',
             ],
         ],
+
+        'tavily' => [
+            'enabled' => env('TAVILY_ENABLED', false),
+            'api_key' => env('TAVILY_API_KEY'),
+            'api_endpoint' => env('TAVILY_API_ENDPOINT', 'https://api.tavily.com'),
+            'search_depth' => env('TAVILY_SEARCH_DEPTH', 'basic'), // basic or advanced
+            'include_answer' => env('TAVILY_INCLUDE_ANSWER', true),
+            'include_raw_content' => env('TAVILY_INCLUDE_RAW_CONTENT', false),
+            'max_results' => env('TAVILY_MAX_RESULTS', 5),
+            'include_images' => env('TAVILY_INCLUDE_IMAGES', false),
+            'include_domains' => env('TAVILY_INCLUDE_DOMAINS', []),
+            'exclude_domains' => env('TAVILY_EXCLUDE_DOMAINS', []),
+        ],
     ],
 
 

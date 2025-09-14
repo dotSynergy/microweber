@@ -32,6 +32,12 @@ class AiServiceProvider extends BaseModuleServiceProvider
                     ->icon('heroicon-o-chat-bubble-left-right')
                     ->group('AI Tools')
                     ->sort(1),
+
+                //   NavigationItem::make('AI Settings')
+                //     ->url(AiSettingsPage::getUrl())
+                //     ->icon('heroicon-o-chat-bubble-left-right')
+                //     ->group('AI Tools')
+                //     ->sort(1),
             ]);
         });
 
@@ -141,6 +147,11 @@ class AiServiceProvider extends BaseModuleServiceProvider
                 Config::set('modules.ai.drivers.replicate.enabled', (bool)$replicateEnabled);
             }
 
+            $tavilyEnabled = get_option('tavily_enabled', 'ai');
+            if ($tavilyEnabled !== null) {
+                Config::set('modules.ai.drivers.tavily.enabled', (bool)$tavilyEnabled);
+            }
+
             // Load driver-specific settings
             $openAiModel = get_option('openai_model', 'ai');
             $openAiApiKey = get_option('openai_api_key', 'ai');
@@ -152,6 +163,9 @@ class AiServiceProvider extends BaseModuleServiceProvider
             $geminiApiKey = get_option('gemini_api_key', 'ai');
             $replicateApiToken = get_option('replicate_api_key', 'ai');
             $replicateImageModel = get_option('replicate_model', 'ai');
+            $tavilyApiKey = get_option('tavily_api_key', 'ai');
+            $tavilySearchDepth = get_option('tavily_search_depth', 'ai');
+            $tavilyMaxResults = get_option('tavily_max_results', 'ai');
 
             if ($openAiModel) {
                 Config::set('modules.ai.drivers.openai.model', $openAiModel);
@@ -186,6 +200,16 @@ class AiServiceProvider extends BaseModuleServiceProvider
             }
             if ($replicateImageModel) {
                 Config::set('modules.ai.drivers.replicate.model', $replicateImageModel);
+            }
+
+            if ($tavilyApiKey) {
+                Config::set('modules.ai.drivers.tavily.api_key', $tavilyApiKey);
+            }
+            if ($tavilySearchDepth) {
+                Config::set('modules.ai.drivers.tavily.search_depth', $tavilySearchDepth);
+            }
+            if ($tavilyMaxResults) {
+                Config::set('modules.ai.drivers.tavily.max_results', (int)$tavilyMaxResults);
             }
         }
     }

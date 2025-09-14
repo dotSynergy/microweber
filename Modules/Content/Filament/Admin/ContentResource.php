@@ -833,6 +833,7 @@ class ContentResource extends Resource
                             'dynamic' => 'Dynamic',
                         ]),
 
+
                     Forms\Components\Toggle::make('is_shop')
                         ->label('Is Shop')
                         ->default(0)
@@ -879,6 +880,55 @@ class ContentResource extends Resource
                         })->visible(function (Forms\Get $get) {
                             return $get('id');
                         }),
+
+
+                    Forms\Components\Section::make('Access Settings')
+                        ->description('You can configure advanced settings for this content')
+                        ->collapsed(true)
+                        ->collapsible(true)
+                        ->compact()
+                        ->schema([
+
+                            Forms\Components\Select::make('content_data.custom_access')
+                                ->label('Custom Access')
+                                ->reactive()
+                                ->options([
+                                    null => 'Normal',
+                                    'require_product_purchase' => 'Require Product Purchase',
+                                    'require_subscription_plan_group' => 'Require Subscription plan',
+                                ]),
+
+
+                            Forms\Components\Select::make('content_data.custom_access_product_id')
+                                ->reactive()
+                                ->visible(function (Forms\Get $get) {
+                                    return $get('content_data.custom_access') === 'require_product_purchase';
+                                })
+                                ->label('Product ID')
+                                ->helperText('The user must purchase this product to access the content.')
+                                ->label('Product ID')
+                                ->options(function () {
+                                    return Content::where('content_type', 'product')->pluck('title', 'id');
+                                })
+                                ->searchable(),
+
+
+                            Forms\Components\Select::make('content_data.custom_access_require_subscription_plan_group_id')
+                                ->reactive()
+                                ->visible(function (Forms\Get $get) {
+                                    return $get('content_data.custom_access') === 'require_subscription_plan_group';
+                                })
+                                ->label('Subscription Plan ID')
+                                ->helperText('The user must be subscribed to this billing plan to access the content.')
+                                ->options(function () {
+                                    return \Modules\Billing\Models\SubscriptionPlanGroup::pluck('name', 'id');
+                                })
+                                ->searchable(),
+
+
+
+
+                        ])
 
 
                 ])

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Agents;
 
+use Modules\Ai\Tools\MediaSearchTool;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Workflow\WorkflowState;
 
@@ -49,8 +50,10 @@ class ContentAgent extends BaseAgent
         $this->addTool(new \Modules\Ai\Tools\GetContentTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\PageListTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\PostListTool($this->dependencies));
-        $this->addTool(new \Modules\Ai\Tools\PostListTool($this->dependencies));
+        $this->addTool(new \Modules\Ai\Tools\ProductListTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\ContentSearchTool($this->dependencies));
+        $this->addTool(new \Modules\Ai\Tools\MediaSearchTool($this->dependencies));
+
 
         // Add editing tools
         $this->addTool(new \Modules\Ai\Tools\ContentEditTool($this->dependencies));

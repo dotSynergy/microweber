@@ -27,6 +27,7 @@ use NeuronAI\StructuredOutput\JsonSchema;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Tools\ToolInterface;
 use NeuronAI\Tools\Toolkits\ToolkitInterface;
+use NeuronAI\Tools\ProviderToolInterface;
 use NeuronAI\AgentInterface;
 use NeuronAI\Workflow\WorkflowState;
 
@@ -73,7 +74,7 @@ abstract class BaseAgent extends Agent
         return $this->tools;
     }
 
-    public function addTool(ToolInterface|ToolkitInterface|array $tools): AgentInterface
+    public function addTool(ToolInterface|ToolkitInterface|ProviderToolInterface|array $tools): AgentInterface
     {
         if (is_array($tools)) {
             foreach ($tools as $tool) {

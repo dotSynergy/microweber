@@ -14,7 +14,7 @@ abstract class BaseTool extends Tool
     protected string $domain;
     protected array $requiredPermissions = [];
     protected WorkflowState $state;
-    protected int $maxTries = 5;
+    protected ?int $maxTries = 5;
     
     public function __construct(
         string $name,

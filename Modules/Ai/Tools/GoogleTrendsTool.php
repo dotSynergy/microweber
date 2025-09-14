@@ -73,7 +73,7 @@ class GoogleTrendsTool extends BaseTool
         $time_range = $args['time_range'] ?? 'today 12-m';
         $limit = $args['limit'] ?? 20;
         $product_categories = $args['product_categories'] ?? '';
- 
+
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to access Google Trends data.');
         }

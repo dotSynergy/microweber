@@ -7,16 +7,18 @@ namespace Modules\Ai\Agents;
 use Modules\Ai\Services\AgentFactory;
 use Modules\Ai\Services\RagSearchService;
 use Modules\Ai\Tools\RagSearchTool;
+use Modules\Ai\Workflows\GeneralAgentWorkflow;
 use NeuronAI\SystemPrompt;
 use NeuronAI\Workflow\WorkflowState;
+use Illuminate\Support\Facades\Log;
 
 class GeneralAgent extends BaseAgent
 {
     protected string $domain = 'general';
-    
+
     protected AgentFactory $agentFactory;
     protected RagSearchService $ragService;
-    
+
     public function __construct(
         AgentFactory $agentFactory,
         RagSearchService $ragService,
@@ -33,37 +35,145 @@ class GeneralAgent extends BaseAgent
     {
         return (string)new SystemPrompt(
             background: [
-                'You are a General AI Assistant for the Microweber CMS system with advanced search capabilities.',
-                'You have access to RAG (Retrieval-Augmented Generation) search that can find information across all system data.',
-                'You can search customers, products, content, orders, and previous conversations to provide comprehensive answers.',
-                'For any informational query, you MUST use the rag_search tool to find relevant information before responding.',
-                'You also have access to specialized agents for different domains when needed.',
+                'You are an intelligent routing agent for the Microweber CMS system.',
+                'Your primary job is to analyze user queries and route them to the appropriate specialized agent.',
+                'You have access to specialized agents for different domains: content, shop, customer, and general assistance.',
+                'You make routing decisions based on query analysis and intent detection.',
+                'When used as a routing agent, provide structured routing decisions.',
+                'When used for general assistance, provide helpful information about the system.',
             ],
             steps: [
-                'For ANY question that asks for information, facts, or data, you MUST call the rag_search tool first.',
-                'Use the exact search results provided by the tool as the main part of your response.',
-                'Preserve all formatting and information from the search results.',
-                'You can add context or explanation, but do not omit the search results.',
-                'For customer-related queries, include customer search in your RAG search.',
-                'For product-related queries, include product search in your RAG search.',
-                'For general questions, search across all content types.',
-                'Only respond directly without search for simple greetings or small talk.',
+                'Analyze the user query to understand the intent and domain.',
+                'Identify keywords and context that indicate which specialized agent should handle the request.',
+                'Make confident routing decisions when the domain is clear.',
+                'Use general assistance when the query doesn\'t fit specific domains.',
+                'Provide clear reasoning for routing decisions.',
             ],
             output: [
-                'Provide clear, helpful responses formatted with proper HTML.',
-                'When suggesting searches, explain what information the user can find.',
-                'Include examples of how to use different search options.',
-                'Use headings, lists, and formatting to make information easy to read.',
-                'If you can\'t help with something specific, explain what the system can do and suggest alternatives.',
+                'For routing: Provide structured routing decisions with confidence scores.',
+                'For general help: Provide clear, helpful responses formatted with proper HTML.',
+                'Include explanations and reasoning in routing decisions.',
+                'Format responses appropriately for the context and intended use.',
             ],
         );
     }
 
     protected function setupTools(): void
     {
-        $this->addTool(new RagSearchTool($this->ragService, $this->dependencies));
+    //    $this->addTool(new RagSearchTool($this->ragService, $this->dependencies));
     }
-    
+
+    /**
+     * Handle user query using workflow pattern
+     */
+    public function handle(string $message): string
+    {
+        try {
+            // Create routing agent (using a simple base agent for routing decisions)
+            $routingAgent = new class($this->providerName, $this->model) extends BaseAgent {
+                protected function setupTools(): void {
+                    // Routing agent doesn't need tools
+                }
+
+                public function instructions(): string {
+                    return (string)new SystemPrompt(
+                        background: [
+                            'You are an intelligent agent router for the Microweber CMS system.',
+                            'Your job is to analyze user queries and determine which specialized agent should handle them.',
+                        ],
+                        steps: [
+                            'Analyze the user query to understand intent and domain.',
+                            'Choose the most appropriate agent type based on keywords and context.',
+                            'Provide confidence score and clear reasoning.',
+                        ],
+                        output: [
+                            'Provide structured routing decisions with agent_type, confidence, reasoning, and context.',
+                        ],
+                    );
+                }
+            };
+
+            // Create and execute the workflow
+            $workflow = new GeneralAgentWorkflow(
+                userQuery: $message,
+                agentFactory: $this->agentFactory,
+                routingAgent: $routingAgent
+            );
+
+            $handler = $workflow->start();
+
+            // Collect progress events and final result
+            $progressMessages = [];
+            foreach ($handler->streamEvents() as $event) {
+                if (method_exists($event, 'message')) {
+                    $progressMessages[] = $event->message;
+                }
+            }
+
+            $result = $handler->getResult();
+            $response = $result->get('agent_response', '');
+
+            // If we have a response, return it
+            if (!empty($response)) {
+                return $response;
+            }
+
+            // Fallback to general help if no response
+            return $this->getGeneralHelp();
+
+        } catch (\Exception $e) {
+            Log::error('GeneralAgent workflow error', [
+                'message' => $message,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // Fallback to direct agent handling
+            return $this->handleDirectly($message);
+        }
+    }
+
+    /**
+     * Direct handling fallback (original method)
+     */
+    protected function handleDirectly(string $message): string
+    {
+        // Determine which agent to use based on simple keyword matching
+        $domain = $this->detectDomain($message);
+
+        if ($domain !== 'general') {
+            return $this->routeToSpecializedAgent($domain, $message);
+        }
+
+        // Handle as general query
+        return $this->getGeneralHelp();
+    }
+
+    /**
+     * Simple domain detection based on keywords
+     */
+    protected function detectDomain(string $message): string
+    {
+        $message = strtolower($message);
+
+        // Content domain keywords
+        if (preg_match('/\b(content|blog|post|page|write|seo|article|trending|trends|google trends)\b/', $message)) {
+            return 'content';
+        }
+
+        // Shop domain keywords
+        if (preg_match('/\b(product|shop|order|price|inventory|sku|buy|sell|cart|checkout)\b/', $message)) {
+            return 'shop';
+        }
+
+        // Customer domain keywords
+        if (preg_match('/\b(customer|user|account|address|email|phone|client)\b/', $message)) {
+            return 'customer';
+        }
+
+        return 'general';
+    }
+
     public function routeToSpecializedAgent(string $domain, string $message): string
     {
         try {
@@ -71,31 +181,36 @@ class GeneralAgent extends BaseAgent
                 case 'customer':
                     $agent = $this->agentFactory->agent('customer', $this->providerName, $this->model);
                     return $agent->handle($message);
-                    
+
                 case 'shop':
                 case 'product':
                     $agent = $this->agentFactory->agent('shop', $this->providerName, $this->model);
                     return $agent->handle($message);
-                    
+
                 case 'content':
                     $agent = $this->agentFactory->agent('content', $this->providerName, $this->model);
                     return $agent->handle($message);
-                    
+
                 default:
                     return $this->getGeneralHelp();
             }
         } catch (\Exception $e) {
+            Log::error('Agent routing error', [
+                'domain' => $domain,
+                'message' => $message,
+                'error' => $e->getMessage()
+            ]);
             return $this->getGeneralHelp();
         }
     }
-    
+
     public function getGeneralHelp(): string
     {
         return '
         <div class="general-help">
             <h3>Welcome to Microweber AI Assistant</h3>
             <p>I can help you with various tasks in your Microweber CMS. Here are some things you can ask me about:</p>
-            
+
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="card">
@@ -113,7 +228,7 @@ class GeneralAgent extends BaseAgent
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -130,7 +245,7 @@ class GeneralAgent extends BaseAgent
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -140,14 +255,15 @@ class GeneralAgent extends BaseAgent
                             <p>I can assist with content creation and management:</p>
                             <ul>
                                 <li>Help create SEO-friendly content</li>
+                                <li>Research trending topics with Google Trends</li>
                                 <li>Suggest content improvements</li>
                                 <li>Provide writing and formatting guidance</li>
                             </ul>
-                            <p><strong>Try asking:</strong> "Help me write a product description" or "SEO tips for blog posts"</p>
+                            <p><strong>Try asking:</strong> "What are trending topics about AI?" or "Help me write a product description"</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -165,13 +281,14 @@ class GeneralAgent extends BaseAgent
                     </div>
                 </div>
             </div>
-            
+
             <div class="alert alert-info">
                 <h6>💡 Tips for better results:</h6>
                 <ul class="mb-0">
                     <li>Be specific in your requests (include email addresses, product names, etc.)</li>
                     <li>Use natural language - ask questions as you would to a colleague</li>
                     <li>If you don\'t find what you\'re looking for, try different search terms</li>
+                    <li>Ask about trending topics to get data-driven content ideas</li>
                 </ul>
             </div>
         </div>';

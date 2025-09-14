@@ -72,4 +72,72 @@ class AgentChat extends Model
     {
         return $query->where('user_id', $userId);
     }
+
+    /**
+     * Get memory/history statistics for this chat
+     */
+    public function getMemoryStats(): array
+    {
+        $messages = $this->messages;
+        
+        $stats = [
+            'total_messages' => $messages->count(),
+            'user_messages' => $messages->where('role', 'user')->count(),
+            'assistant_messages' => $messages->where('role', 'assistant')->count(),
+            'system_messages' => $messages->where('role', 'system')->count(),
+            'estimated_tokens' => 0,
+            'conversation_length' => 0,
+            'first_message_at' => null,
+            'last_message_at' => null,
+            'avg_response_time' => null,
+        ];
+
+        if ($messages->count() > 0) {
+            // Calculate estimated tokens (rough approximation)
+            $totalContent = $messages->pluck('content')->implode(' ');
+            $stats['estimated_tokens'] = (int) ceil(strlen($totalContent) / 4);
+            
+            // Conversation timespan
+            $first = $messages->sortBy('created_at')->first();
+            $last = $messages->sortByDesc('created_at')->first();
+            
+            $stats['first_message_at'] = $first->created_at;
+            $stats['last_message_at'] = $last->created_at;
+            
+            if ($first->created_at && $last->created_at) {
+                $stats['conversation_length'] = $last->created_at->diffInMinutes($first->created_at);
+            }
+            
+            // Average response time for assistant messages
+            $assistantMessages = $messages->where('role', 'assistant')
+                ->whereNotNull('processed_at');
+            
+            if ($assistantMessages->count() > 0) {
+                $totalResponseTime = $assistantMessages->sum(function($message) {
+                    return $message->getProcessingTime() ?? 0;
+                });
+                $stats['avg_response_time'] = $totalResponseTime / $assistantMessages->count();
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Check if chat has reached memory limits
+     */
+    public function isNearMemoryLimit(int $contextWindow = 50000): array
+    {
+        $stats = $this->getMemoryStats();
+        $utilizationPercent = ($stats['estimated_tokens'] / $contextWindow) * 100;
+        
+        return [
+            'is_near_limit' => $utilizationPercent > 80,
+            'is_over_limit' => $utilizationPercent > 100,
+            'utilization_percent' => round($utilizationPercent, 2),
+            'estimated_tokens' => $stats['estimated_tokens'],
+            'context_window' => $contextWindow,
+            'remaining_tokens' => max(0, $contextWindow - $stats['estimated_tokens']),
+        ];
+    }
 }

@@ -72,8 +72,8 @@ class GetContentTool extends BaseTool
     protected function formatContentAsHtml($content, bool $includeMeta): string
     {
         $typeBadge = $this->getContentTypeBadge($content->content_type ?? 'content');
-        $statusBadge = $content->is_active ? 
-            "<span class='badge bg-success'>Published</span>" : 
+        $statusBadge = $content->is_active ?
+            "<span class='badge bg-success'>Published</span>" :
             "<span class='badge bg-warning'>Unpublished</span>";
 
         $specialBadges = [];
@@ -154,11 +154,11 @@ class GetContentTool extends BaseTool
         $metaSection = '';
         if ($includeMeta) {
             $metaInfo = [];
-            
+
             if ($content->position) {
                 $metaInfo[] = ['label' => 'Position', 'value' => $content->position];
             }
-            
+
             if ($content->original_link) {
                 $metaInfo[] = ['label' => 'Redirect URL', 'value' => $content->original_link];
             }
@@ -224,7 +224,7 @@ class GetContentTool extends BaseTool
 
     protected function getContentTypeBadge(string $contentType): string
     {
-        $badgeClass = match($contentType) {
+        $badgeClass = match ($contentType) {
             'page' => 'bg-primary',
             'post' => 'bg-info',
             'product' => 'bg-success',

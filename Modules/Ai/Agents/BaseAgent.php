@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Modules\Ai\Agents;
 
 use GuzzleHttp\Exception\RequestException;
+use Modules\Ai\Models\AgentChat;
+use Modules\Ai\Services\AgentChatHistory;
 use NeuronAI\Agent;
+use NeuronAI\Chat\History\ChatHistoryInterface;
 use NeuronAI\Chat\Messages\Message;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Chat\Messages\UserMessage;
@@ -35,6 +38,7 @@ abstract class BaseAgent extends Agent
     protected string $instructions = 'Your are a helpful and friendly AI that can help with anything that is asked.';
     protected $providerName = null;
     protected $model = null;
+    protected ?AgentChat $agentChat = null;
 
     public function __construct(?string $providerName = null, ?string $model = null, protected array $dependencies = [])
     {
@@ -85,6 +89,77 @@ abstract class BaseAgent extends Agent
     public function getTools(): array
     {
         return $this->tools;
+    }
+
+    /**
+     * Set the AgentChat instance for memory management
+     */
+    public function setAgentChat(AgentChat $agentChat): self
+    {
+        $this->agentChat = $agentChat;
+        return $this;
+    }
+
+    /**
+     * Get the current AgentChat instance
+     */
+    public function getAgentChat(): ?AgentChat
+    {
+        return $this->agentChat;
+    }
+
+    /**
+     * Override chatHistory to use our database-backed implementation
+     */
+    protected function chatHistory(): ChatHistoryInterface
+    {
+        if ($this->agentChat) {
+            return new AgentChatHistory(
+                chat: $this->agentChat,
+                contextWindow: $this->getContextWindow()
+            );
+        }
+
+        // Fallback to in-memory if no AgentChat is set
+        return new \NeuronAI\Chat\History\InMemoryChatHistory(
+            contextWindow: $this->getContextWindow()
+        );
+    }
+
+    /**
+     * Get the context window size for this agent
+     */
+    protected function getContextWindow(): int
+    {
+        $defaultContextWindow = 50000;
+        
+        // Get context window based on model
+        $contextWindows = [
+            // OpenAI models
+            'gpt-4' => 8192,
+            'gpt-4-32k' => 32768,
+            'gpt-4-turbo' => 128000,
+            'gpt-4o' => 128000,
+            'gpt-3.5-turbo' => 16385,
+            'gpt-3.5-turbo-16k' => 16385,
+            
+            // Anthropic models
+            'claude-3-opus-20240229' => 200000,
+            'claude-3-sonnet-20240229' => 200000,
+            'claude-3-haiku-20240307' => 200000,
+            'claude-3-5-sonnet-20241022' => 200000,
+            
+            // Gemini models
+            'gemini-pro' => 30720,
+            'gemini-1.5-pro' => 1000000,
+            'gemini-1.5-flash' => 1000000,
+            
+            // Other models
+            'deepseek-chat' => 32768,
+            'mistral-large-latest' => 32768,
+        ];
+
+        return $contextWindows[$this->model] ?? $defaultContextWindow;
     }
 
     protected function provider(): AIProviderInterface

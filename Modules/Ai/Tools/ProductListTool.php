@@ -4,159 +4,102 @@ declare(strict_types=1);
 
 namespace Modules\Ai\Tools;
 
-use Modules\Product\Models\Product;
 use NeuronAI\Tools\PropertyType;
 use NeuronAI\Tools\ToolProperty;
 
-class ProductListTool extends BaseTool
+class ProductListTool extends AbstractContentTool
 {
     protected string $domain = 'shop';
+    protected string $contentType = 'product';
     protected array $requiredPermissions = ['view products'];
 
     public function __construct(protected array $dependencies = [])
     {
         parent::__construct(
             'product_list',
-            'List products with comprehensive filtering options including price range, stock status, and categories.'
+            'List and filter products in Microweber CMS with advanced filtering by price, stock, custom fields, categories, and attributes.'
         );
     }
 
     protected function properties(): array
     {
-        return [
-            new ToolProperty(
-                name: 'is_active',
-                type: PropertyType::STRING,
-                description: 'Filter by publication status. Options: "1" for published, "0" for unpublished, or "all" for both.',
-                required: false,
-            ),
-            new ToolProperty(
-                name: 'shop_id',
-                type: PropertyType::INTEGER,
-                description: 'Filter products by parent shop page ID.',
-                required: false,
-            ),
-            new ToolProperty(
-                name: 'search_term',
-                type: PropertyType::STRING,
-                description: 'Search term to find in product title, description, or SKU.',
-                required: false,
-            ),
+        $baseProperties = $this->getBaseProperties();
+        
+        // Add product-specific properties
+        $productProperties = [
             new ToolProperty(
                 name: 'price_min',
                 type: PropertyType::STRING,
-                description: 'Minimum price filter (decimal number).',
+                description: 'Minimum price filter for products.',
                 required: false,
             ),
             new ToolProperty(
                 name: 'price_max',
                 type: PropertyType::STRING,
-                description: 'Maximum price filter (decimal number).',
+                description: 'Maximum price filter for products.',
                 required: false,
             ),
             new ToolProperty(
                 name: 'in_stock',
                 type: PropertyType::STRING,
-                description: 'Filter by stock status. Options: "yes" for in stock only, "no" for out of stock only, or "all" for both.',
-                required: false,
-            ),
-            new ToolProperty(
-                name: 'sort_by',
-                type: PropertyType::STRING,
-                description: 'Sort products by field. Options: "title", "price", "created_at", "position". Default is "position".',
-                required: false,
-            ),
-            new ToolProperty(
-                name: 'limit',
-                type: PropertyType::INTEGER,
-                description: 'Maximum number of results to return (1-50). Default is 20.',
+                description: 'Filter by stock status. Options: "1" for in stock, "0" for out of stock, or "all" for both.',
                 required: false,
             ),
         ];
+        
+        return array_merge($productProperties, $baseProperties);
     }
 
     public function __invoke(...$args): string
     {
         // Extract parameters from variadic args
-        $is_active = $args[0] ?? 'all';
-        $shop_id = $args[1] ?? null;
-        $search_term = $args[2] ?? '';
-        $price_min = $args[3] ?? '';
-        $price_max = $args[4] ?? '';
-        $in_stock = $args[5] ?? 'all';
-        $sort_by = $args[6] ?? 'position';
-        $limit = $args[7] ?? 20;
+        $price_min = $args[0] ?? '';
+        $price_max = $args[1] ?? '';
+        $in_stock = $args[2] ?? 'all';
+        $search_term = $args[3] ?? '';
+        $is_active = $args[4] ?? 'all';
+        $parent_id = $args[5] ?? null;
+        $category_id = $args[6] ?? null;
+        $custom_fields = $args[7] ?? '';
+        $limit = $args[8] ?? 20;
+        $sort_by = $args[9] ?? 'position';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to list products.');
         }
 
         // Validate limit
-        $limit = max(1, min(50, $limit));
+        $limit = max(1, min(100, $limit));
 
         try {
-            $query = Product::query()
-                ->where('is_deleted', 0);
+            $query = $this->buildContentQuery();
 
-            // Filter by active status
-            if ($is_active !== 'all') {
-                $query->where('is_active', (int)$is_active);
-            }
+            // Apply filters
+            $params = [
+                'search_term' => $search_term,
+                'is_active' => $is_active,
+                'parent_id' => $parent_id,
+                'category_id' => $category_id,
+                'custom_fields' => $custom_fields,
+                'sort_by' => $sort_by,
+            ];
 
-            // Filter by shop page
-            if ($shop_id !== null) {
-                $query->where('parent', $shop_id);
-            }
+            $query = $this->applyFilters($query, $params);
 
-            // Search in content
-            if (!empty($search_term)) {
-                $query->where(function ($q) use ($search_term) {
-                    $q->where('title', 'LIKE', '%' . $search_term . '%')
-                      ->orWhere('content_body', 'LIKE', '%' . $search_term . '%')
-                      ->orWhere('description', 'LIKE', '%' . $search_term . '%');
-                    
-                    // Search in content_data for SKU
-                    $q->orWhereHas('contentData', function ($subQ) use ($search_term) {
-                        $subQ->where('field_name', 'sku')
-                             ->where('field_value', 'LIKE', '%' . $search_term . '%');
-                    });
-                });
+            // Apply product-specific filters using the ProductFilter
+            $filterParams = [];
+            if (!empty($price_min)) {
+                $filterParams['priceFrom'] = $price_min;
             }
-
-            // Price filtering
-            if (!empty($price_min) && is_numeric($price_min)) {
-                $query->where('price', '>=', (float)$price_min);
+            if (!empty($price_max)) {
+                $filterParams['priceTo'] = $price_max;
             }
-            if (!empty($price_max) && is_numeric($price_max)) {
-                $query->where('price', '<=', (float)$price_max);
-            }
-
-            // Stock filtering - this would depend on how stock is tracked in your system
             if ($in_stock !== 'all') {
-                if ($in_stock === 'yes') {
-                    // Assuming products without quantity tracking are always in stock
-                    $query->where(function ($q) {
-                        $q->whereDoesntHave('contentData', function ($subQ) {
-                            $subQ->where('field_name', 'track_quantity');
-                        })->orWhereHas('contentData', function ($subQ) {
-                            $subQ->where('field_name', 'quantity')
-                                 ->where('field_value', '>', 0);
-                        });
-                    });
-                } elseif ($in_stock === 'no') {
-                    $query->whereHas('contentData', function ($subQ) {
-                        $subQ->where('field_name', 'quantity')
-                             ->where('field_value', '<=', 0);
-                    });
-                }
+                $filterParams['inStock'] = (int)$in_stock;
             }
 
-            // Sorting
-            $validSortFields = ['title', 'price', 'created_at', 'position'];
-            if (in_array($sort_by, $validSortFields)) {
-                $query->orderBy($sort_by, $sort_by === 'created_at' ? 'desc' : 'asc');
-            } else {
-                $query->orderBy('position', 'asc');
+            if (!empty($filterParams)) {
+                $query->filter($filterParams);
             }
 
             $products = $query->limit($limit)->get();
@@ -173,31 +116,32 @@ class ProductListTool extends BaseTool
                 
                 return $this->formatAsHtmlTable(
                     [],
-                    ['title' => 'Title', 'price' => 'Price', 'status' => 'Status'],
+                    ['title' => 'Product', 'price' => 'Price', 'status' => 'Status'],
                     "No products found{$statusInfo}{$searchInfo}{$priceInfo}.",
                     'product-list-empty'
                 );
             }
 
-            return $this->formatProductsAsHtml($products, $is_active, $sort_by, $limit);
+            return $this->formatProductsAsHtml($products, $params, $limit);
 
         } catch (\Exception $e) {
             return $this->handleError('Error listing products: ' . $e->getMessage());
         }
     }
 
-    protected function formatProductsAsHtml($products, string $is_active, string $sort_by, int $limit): string
+    protected function formatProductsAsHtml($products, array $params, int $limit): string
     {
         $totalFound = $products->count();
         
-        $statusInfo = $is_active !== 'all' ? "Status: " . ($is_active ? 'Published' : 'Unpublished') . " " : '';
-        $sortInfo = "Sorted by: " . ucfirst($sort_by) . " ";
+        $searchInfo = !empty($params['search_term']) ? "Search: \"{$params['search_term']}\" " : '';
+        $statusInfo = isset($params['is_active']) && $params['is_active'] !== 'all' ? 
+            "Status: " . ($params['is_active'] ? 'Published' : 'Unpublished') . " " : '';
         
         $header = "
         <div class='product-list-header mb-3'>
-            <h4><i class='fas fa-box text-primary me-2'></i>Product Catalog</h4>
+            <h4><i class='fas fa-shopping-bag text-primary me-2'></i>Product List</h4>
             <p class='mb-2'>
-                {$statusInfo}{$sortInfo}
+                {$searchInfo}{$statusInfo}
                 <strong>Found:</strong> {$totalFound} product(s)" . 
                 ($totalFound >= $limit ? " (showing first {$limit})" : '') . "
             </p>
@@ -206,79 +150,92 @@ class ProductListTool extends BaseTool
         $cards = "<div class='row'>";
         
         foreach ($products as $product) {
-            $statusBadge = $product->is_active ? 
-                "<span class='badge bg-success'>Published</span>" : 
-                "<span class='badge bg-warning'>Unpublished</span>";
-
-            $price = $product->price ?? 0;
-            $formattedPrice = "€" . number_format($price, 2);
-
-            // Get special price if exists
-            $specialPrice = '';
+            $statusBadge = $this->getContentStatusBadge($product->is_active ?? 0);
+            
+            $title = $product->title ?: 'Untitled Product';
+            $excerpt = $product->description ?: 'No description available';
+            
+            // Get price
+            $price = 'Price not set';
             try {
-                if (method_exists($product, 'getSpecialPriceAttribute')) {
-                    $special = $product->getSpecialPriceAttribute();
-                    if ($special && $special < $price) {
-                        $specialPrice = "<br><span class='text-danger'><s>€" . number_format($price, 2) . "</s></span>";
-                        $formattedPrice = "<strong class='text-success'>€" . number_format($special, 2) . "</strong>";
+                if (method_exists($product, 'getPrice')) {
+                    $priceValue = $product->getPrice();
+                    if ($priceValue) {
+                        $price = '€' . number_format($priceValue, 2);
                     }
+                } elseif (isset($product->price) && $product->price > 0) {
+                    $price = '€' . number_format($product->price, 2);
                 }
             } catch (\Exception $e) {
-                // Ignore if special price method doesn't exist
+                // Ignore price errors
             }
 
-            $excerpt = $product->description ?: 
-                       ($product->content_body ? \Str::limit(strip_tags($product->content_body), 100) : 'No description available');
-
-            // Get SKU if available
+            // Get SKU
             $sku = '';
             try {
-                $skuData = $product->contentData()->where('field_name', 'sku')->first();
-                $sku = $skuData ? 
-                    "<small class='text-muted'>SKU: {$skuData->field_value}</small><br>" : '';
-            } catch (\Exception $e) {
-                // Ignore if contentData relationship doesn't work
-            }
-
-            // Get stock information
-            $stockInfo = '';
-            try {
-                $quantityData = $product->contentData()->where('field_name', 'quantity')->first();
-                if ($quantityData) {
-                    $quantity = (int)$quantityData->field_value;
-                    if ($quantity > 0) {
-                        $stockInfo = "<small class='text-success'><i class='fas fa-check'></i> In Stock ({$quantity})</small>";
-                    } else {
-                        $stockInfo = "<small class='text-danger'><i class='fas fa-times'></i> Out of Stock</small>";
+                if (method_exists($product, 'getSku')) {
+                    $skuValue = $product->getSku();
+                    if ($skuValue) {
+                        $sku = "<small class='text-muted'>SKU: {$skuValue}</small><br>";
                     }
-                } else {
-                    $stockInfo = "<small class='text-info'><i class='fas fa-infinity'></i> Available</small>";
                 }
             } catch (\Exception $e) {
-                $stockInfo = "<small class='text-muted'>Stock info unavailable</small>";
+                // Ignore SKU errors
             }
 
-            $createdDate = $product->created_at ? 
+            // Get stock status
+            $stockBadge = '';
+            try {
+                if (method_exists($product, 'getQty')) {
+                    $qty = $product->getQty();
+                    if ($qty > 0) {
+                        $stockBadge = "<span class='badge bg-success'>In Stock ({$qty})</span>";
+                    } else {
+                        $stockBadge = "<span class='badge bg-danger'>Out of Stock</span>";
+                    }
+                } elseif (isset($product->qty)) {
+                    $qty = $product->qty ?? 0;
+                    if ($qty > 0) {
+                        $stockBadge = "<span class='badge bg-success'>In Stock ({$qty})</span>";
+                    } else {
+                        $stockBadge = "<span class='badge bg-danger'>Out of Stock</span>";
+                    }
+                } else {
+                    $stockBadge = "<span class='badge bg-info'>Available</span>";
+                }
+            } catch (\Exception $e) {
+                $stockBadge = "<span class='badge bg-secondary'>Stock Unknown</span>";
+            }
+
+            $categories = $product->categories->pluck('title')->implode(', ');
+            $categoryInfo = $categories ? 
+                "<small class='text-muted'>Categories: {$categories}</small><br>" : '';
+
+            $createdAt = $product->created_at ? 
                 $product->created_at->format('M j, Y') : 
-                'Unknown date';
+                'Unknown';
 
             $cards .= "
             <div class='col-md-6 col-lg-4 mb-3'>
                 <div class='card h-100 product-card'>
                     <div class='card-body'>
                         <div class='d-flex justify-content-between align-items-start mb-2'>
-                            <h6 class='card-title mb-0'>{$product->title}</h6>
+                            <h6 class='card-title mb-0'>{$title}</h6>
                             {$statusBadge}
                         </div>
-                        <div class='mb-2'>
-                            <span class='h6'>{$formattedPrice}</span>{$specialPrice}
+                        <p class='card-text small'>" . \Str::limit($excerpt, 100) . "</p>
+                        <div class='product-price mb-2'>
+                            <strong class='text-primary'>{$price}</strong>
                         </div>
-                        <p class='card-text small'>{$excerpt}</p>
+                        <div class='mb-2'>
+                            {$stockBadge}
+                        </div>
                     </div>
                     <div class='card-footer bg-transparent'>
                         {$sku}
-                        {$stockInfo}<br>
-                        <small class='text-muted'><i class='fas fa-calendar'></i> {$createdDate}</small>
+                        {$categoryInfo}
+                        <small class='text-muted'><i class='fas fa-calendar'></i> {$createdAt}</small><br>
+                        <small class='text-muted'>ID: #{$product->id}</small>
                     </div>
                 </div>
             </div>";

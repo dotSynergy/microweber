@@ -83,48 +83,48 @@ class ViewAgentChat extends ViewRecord
         $this->isProcessing = true;
 
         try {
-            // Save user message
-            $userMessage = AgentChatMessage::create([
-                'chat_id' => $this->record->id,
-                'role' => 'user',
-                'content' => $this->userMessage,
-                'metadata' => [
-                    'user_id' => auth()->id(),
-                    'timestamp' => now()->toISOString(),
-                ],
-            ]);
+            // Get the appropriate agent with chat history
+            $agentFactory = app(AgentFactory::class);
+            $agent = $agentFactory->agentWithChat($this->record);
 
-            // Reload messages to show user message immediately
-            $this->loadChatMessages();
+            // Debug: Check if agent has tools
+            $toolsCount = count($agent->getTools() ?? []);
+            \Log::info("Agent {$this->record->agent_type} has {$toolsCount} tools configured");
+
+            // Set up workflow state with chat context
+            $state = new \NeuronAI\Workflow\WorkflowState();
+            $state->set('chat_id', $this->record->id);
+            $state->set('user_id', auth()->id());
+
+            if (method_exists($agent, 'setState')) {
+                $agent->setState($state);
+            }
+
+            // Create user message for the agent and process it
+            // The agent's chat history will automatically save both user message and response
+            $message = new UserMessage($this->userMessage);
+            $response = $agent->chat($message);
+
+            // Clear the input
             $this->userMessage = '';
 
-            // Process with AI agent
-            $response = $this->processWithAgent($userMessage);
-
-            // Save AI response
-            AgentChatMessage::create([
-                'chat_id' => $this->record->id,
-                'role' => 'assistant',
-                'content' => $response,
-                'agent_type' => $this->record->agent_type,
-                'metadata' => [
-                    'processed_by' => $this->record->agent_type,
-                    'timestamp' => now()->toISOString(),
-                ],
-                'processed_at' => now(),
-            ]);
-
-            // Reload messages to show AI response
+            // Reload messages to show the conversation
             $this->loadChatMessages();
 
         } catch (\Exception $e) {
+            \Log::error('Agent chat error: ' . $e->getMessage(), [
+                'chat_id' => $this->record->id,
+                'user_message' => $this->userMessage,
+                'trace' => $e->getTraceAsString()
+            ]);
+
             Notification::make()
                 ->title('Error')
                 ->body('Sorry, there was an error processing your message: ' . $e->getMessage())
                 ->danger()
                 ->send();
 
-            // Add error message to chat
+            // Add error message to chat manually since agent failed
             AgentChatMessage::create([
                 'chat_id' => $this->record->id,
                 'role' => 'system',
@@ -138,60 +138,6 @@ class ViewAgentChat extends ViewRecord
             $this->loadChatMessages();
         } finally {
             $this->isProcessing = false;
-        }
-    }
-
-    protected function processWithAgent(AgentChatMessage $userMessage): string
-    {
-        try {
-            // Get the appropriate agent
-            $agentFactory = app(AgentFactory::class);
-            $agent = $agentFactory->agent($this->record->agent_type);
-
-            // Debug: Check if agent has tools
-            $toolsCount = count($agent->getTools() ?? []);
-            \Log::info("Agent {$this->record->agent_type} has {$toolsCount} tools configured");
-
-            // Set up workflow state with chat context
-            $state = new \NeuronAI\Workflow\WorkflowState();
-            $state->set('chat_id', $this->record->id);
-            $state->set('message_id', $userMessage->id);
-            $state->set('user_id', auth()->id());
-
-            if (method_exists($agent, 'setState')) {
-                $agent->setState($state);
-            }
-
-            // Create user message for the agent
-            $message = new UserMessage($userMessage->content);
-
-            // Process with agent - try different method names based on NeuronAI interface
-            $response = null;
-            if (method_exists($agent, 'run')) {
-                $response = $agent->run([$message]);
-            } elseif (method_exists($agent, 'chat')) {
-                $response = $agent->chat($message); // Pass message object, not string
-            } elseif (method_exists($agent, 'process')) {
-                $response = $agent->process($message);
-            } elseif (method_exists($agent, '__invoke')) {
-                $response = $agent($message);
-            } else {
-                throw new \Exception('No suitable method found to process message with agent');
-            }
-
-            // Extract response content
-            if ($response instanceof \NeuronAI\Chat\Messages\Message) {
-                return $response->getContent() ?? 'I processed your message but couldn\'t generate a proper response.';
-            } elseif (is_array($response) && isset($response['content'])) {
-                return $response['content'];
-            } elseif (is_string($response)) {
-                return $response;
-            } else {
-                return 'I processed your message but couldn\'t generate a proper response. Please try rephrasing your question.';
-            }
-
-        } catch (\Exception $e) {
-            return $this->getErrorResponse($e->getMessage());
         }
     }
 

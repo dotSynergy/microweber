@@ -9,6 +9,7 @@ use Modules\Ai\Agents\CustomerAgent;
 use Modules\Ai\Agents\GeneralAgent;
 use Modules\Ai\Agents\MediaAgent;
 use Modules\Ai\Agents\ShopAgent;
+use Modules\Ai\Models\AgentChat;
 use Modules\Ai\Services\RagSearchService;
 
 class AgentFactory
@@ -61,6 +62,56 @@ class AgentFactory
             'providerName' => $providerName,
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Create an agent with chat history from an AgentChat model
+     */
+    public function agentWithChat(AgentChat $agentChat, ?string $providerName = null, ?string $model = null): BaseAgent
+    {
+        $agent = $this->agent($agentChat->agent_type, $providerName, $model);
+        $agent->setAgentChat($agentChat);
+        return $agent;
+    }
+
+    /**
+     * Create or get an existing chat for an agent
+     */
+    public function createOrGetChat(
+        string $agentType,
+        string $title,
+        ?int $userId = null,
+        ?string $description = null,
+        array $metadata = []
+    ): AgentChat {
+        return AgentChat::firstOrCreate(
+            [
+                'agent_type' => $agentType,
+                'user_id' => $userId,
+                'title' => $title,
+            ],
+            [
+                'description' => $description,
+                'metadata' => $metadata,
+                'is_active' => true,
+            ]
+        );
+    }
+
+    /**
+     * Get an agent with a new or existing chat session
+     */
+    public function agentWithSession(
+        string $agentType,
+        string $title,
+        ?int $userId = null,
+        ?string $description = null,
+        array $metadata = [],
+        ?string $providerName = null,
+        ?string $model = null
+    ): BaseAgent {
+        $chat = $this->createOrGetChat($agentType, $title, $userId, $description, $metadata);
+        return $this->agentWithChat($chat, $providerName, $model);
     }
 
     public function getRegisteredAgents(): array

@@ -32,6 +32,7 @@ class ContentAgent extends BaseAgent
                 'You assist with pages, posts, blog articles, and general content management tasks.',
                 'You have access to Google Trends data to help create trending, relevant content.',
                 'You can research trending topics and suggest content ideas based on real-time search trends.',
+                'You have access to Amazon product data through scraping capabilities to research products, prices, and reviews for content creation.',
             ],
             steps: [
                 'When asked about content creation, provide structured and SEO-friendly content.',
@@ -40,6 +41,7 @@ class ContentAgent extends BaseAgent
                 'Provide guidance on content structure and formatting.',
                 'Use Google Trends data to suggest trending topics and popular keywords for content.',
                 'Research trending queries to help create timely and relevant content.',
+                'Use Amazon product data to research products, compare prices, and gather product information for reviews, comparisons, or product-focused content.',
             ],
             output: [
                 'Always respond with well-formatted HTML content when creating or suggesting content.',
@@ -80,6 +82,8 @@ class ContentAgent extends BaseAgent
         // Add Google Trends tool for content research and trending topics
         $this->addTool(new \Modules\Ai\Tools\GoogleTrendsTool($this->dependencies));
 
+        // Add Amazon scraper tool for product research and content creation
+        $this->addTool(new \Modules\Ai\Tools\AmazonScraperTool($this->dependencies));
 
         if (Config::get('modules.ai.drivers.tavily.enabled') and Config::get('modules.ai.drivers.tavily.api_key')) {
             $tavily = TavilySearchTool::make(Config::get('modules.ai.drivers.tavily.api_key'));

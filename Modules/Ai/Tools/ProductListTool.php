@@ -161,10 +161,10 @@ class ProductListTool extends AbstractContentTool
                 if (method_exists($product, 'getPrice')) {
                     $priceValue = $product->getPrice();
                     if ($priceValue) {
-                        $price = '€' . number_format($priceValue, 2);
+                        $price = $priceValue;
                     }
                 } elseif (isset($product->price) && $product->price > 0) {
-                    $price = '€' . number_format($product->price, 2);
+                    $price = $product->price;
                 }
             } catch (\Exception $e) {
                 // Ignore price errors

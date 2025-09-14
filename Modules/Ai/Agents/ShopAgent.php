@@ -56,6 +56,9 @@ class ShopAgent extends BaseAgent
         // Add editing tools
         $this->addTool(new \Modules\Ai\Tools\ProductEditTool($this->dependencies));
         
+        // Add creation tools - now with simple constructor
+        $this->addTool(new \Modules\Ai\Tools\CreateProductTool($this->dependencies));
+        
         // Add RAG search for broader shop-related content discovery
         $ragService = app(\Modules\Ai\Services\RagSearchService::class);
         $this->addTool(new \Modules\Ai\Tools\RagSearchTool($ragService, $this->dependencies));

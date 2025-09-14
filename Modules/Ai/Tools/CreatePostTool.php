@@ -1,0 +1,116 @@
+<?php
+
+namespace Modules\Ai\Tools;
+
+use NeuronAI\Tools\ToolProperty;
+use NeuronAI\Tools\PropertyType;
+use Modules\Post\Models\Post;
+
+class CreatePostTool extends CreateContentTool
+{
+    public function __construct(protected array $dependencies = [])
+    {
+        parent::__construct($dependencies);
+        $this->name = 'create_post';
+        $this->description = 'Create new blog post';
+    }
+
+    protected function properties(): array
+    {
+        return [
+            new ToolProperty(
+                name: 'title',
+                type: PropertyType::STRING,
+                description: 'The title of the blog post',
+                required: true
+            ),
+            new ToolProperty(
+                name: 'content_body',
+                type: PropertyType::STRING,
+                description: 'Full content body of the blog post',
+                required: true
+            ),
+            new ToolProperty(
+                name: 'description',
+                type: PropertyType::STRING,
+                description: 'Post excerpt/description',
+                required: false
+            ),
+            new ToolProperty(
+                name: 'url',
+                type: PropertyType::STRING,
+                description: 'URL slug for the post',
+                required: false
+            ),
+        ];
+    }
+
+    public function __invoke(...$args): string
+    {
+        // Extract parameters from args array using keys
+        $title = $args['title'] ?? null;
+        $content_body = $args['content_body'] ?? null;
+        $description = $args['description'] ?? null;
+        $url = $args['url'] ?? null;
+
+        // Validate required parameters
+        if (empty($title)) {
+            return $this->handleError('Title is required for post creation.');
+        }
+        if (empty($content_body)) {
+            return $this->handleError('Content body is required for post creation.');
+        }
+
+        // Generate URL if not provided
+        if (empty($url) && !empty($title)) {
+            $url = $this->generateSlug($title);
+        }
+
+        // Generate description if not provided
+        if (empty($description) && !empty($content_body)) {
+            $description = $this->generateExcerpt($content_body);
+        }
+
+        // Create the post data
+        $postData = [
+            'title' => $title,
+            'content_body' => $content_body,
+            'description' => $description,
+            'url' => $url,
+            'content_type' => 'post',
+            'subtype' => 'post',
+            'is_active' => 1,
+            'created_by' => user_id()
+        ];
+
+        $post = Post::create($postData);
+
+        return $this->handleSuccess("Blog post created successfully with ID: {$post->id}") .
+            $this->formatContentDetails($post);
+    }
+
+    /**
+     * Generate excerpt from content body
+     */
+    private function generateExcerpt(string $content, int $length = 200): string
+    {
+        // Strip HTML tags
+        $text = strip_tags($content);
+
+        // Trim whitespace
+        $text = trim($text);
+
+        // Truncate to specified length
+        if (strlen($text) > $length) {
+            $text = substr($text, 0, $length);
+            // Find last space to avoid cutting words
+            $lastSpace = strrpos($text, ' ');
+            if ($lastSpace !== false) {
+                $text = substr($text, 0, $lastSpace);
+            }
+            $text .= '...';
+        }
+
+        return $text;
+    }
+}

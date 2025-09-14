@@ -49,12 +49,19 @@ class ContentAgent extends BaseAgent
         $this->addTool(new \Modules\Ai\Tools\GetContentTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\PageListTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\PostListTool($this->dependencies));
+        $this->addTool(new \Modules\Ai\Tools\PostListTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\ContentSearchTool($this->dependencies));
-        
+
         // Add editing tools
         $this->addTool(new \Modules\Ai\Tools\ContentEditTool($this->dependencies));
         $this->addTool(new \Modules\Ai\Tools\PostEditTool($this->dependencies));
-        
+        $this->addTool(new \Modules\Ai\Tools\ProductEditTool($this->dependencies));
+
+        // Add creation tools - now with simple constructors
+        $this->addTool(new \Modules\Ai\Tools\CreateContentTool($this->dependencies));
+        $this->addTool(new \Modules\Ai\Tools\CreatePostTool($this->dependencies));
+        $this->addTool(new \Modules\Ai\Tools\CreateProductTool($this->dependencies));
+
         // Add RAG search tool for broader content discovery
         $ragService = app(\Modules\Ai\Services\RagSearchService::class);
         $this->addTool(new \Modules\Ai\Tools\RagSearchTool($ragService, $this->dependencies));

@@ -11,8 +11,6 @@ use Modules\Ai\Models\AgentChatMessage;
 use NeuronAI\Chat\Enums\MessageRole;
 use NeuronAI\Chat\History\ChatHistoryInterface;
 use NeuronAI\Chat\Messages\Message;
-use NeuronAI\Chat\Messages\AssistantMessage;
-use NeuronAI\Chat\Messages\SystemMessage;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Chat\Messages\ToolCallMessage;
 use NeuronAI\Chat\Messages\ToolCallResultMessage;
@@ -266,7 +264,7 @@ class AgentChatHistory implements ChatHistoryInterface, JsonSerializable
                             return $tool['name'] ?? 'Unknown tool';
                         }, $metadata['tool_calls']);
                         $enhancedContent = $content ?: ('Tool calls: ' . implode(', ', $toolNames));
-                        return new AssistantMessage($enhancedContent);
+                        return new Message(MessageRole::ASSISTANT, $enhancedContent);
                     }
                     break;
                 case 'tool_result':
@@ -284,9 +282,9 @@ class AgentChatHistory implements ChatHistoryInterface, JsonSerializable
             case MessageRole::USER:
                 return new UserMessage($content);
             case MessageRole::ASSISTANT:
-                return new AssistantMessage($content);
+                return new Message(MessageRole::ASSISTANT, $content);
             case MessageRole::SYSTEM:
-                return new SystemMessage($content);
+                return new Message(MessageRole::SYSTEM, $content);
             default:
                 return new Message($role, $content);
         }

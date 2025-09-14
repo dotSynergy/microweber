@@ -8,6 +8,7 @@ use Modules\Ai\Services\Drivers\GeminiAiDriver;
 use Modules\Ai\Services\Drivers\OllamaAiDriver;
 use Modules\Ai\Services\Drivers\OpenAiDriver;
 use Modules\Ai\Services\Drivers\OpenRouterAiDriver;
+use Modules\Ai\Services\Drivers\SupadataAiDriver;
 
 class AiService implements AiServiceInterface
 {

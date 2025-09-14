@@ -171,6 +171,20 @@ return [
             'include_domains' => env('TAVILY_INCLUDE_DOMAINS', []),
             'exclude_domains' => env('TAVILY_EXCLUDE_DOMAINS', []),
         ],
+
+        'supadata' => [
+            'enabled' => env('SUPADATA_ENABLED', false),
+            'api_key' => env('SUPADATA_API_KEY'),
+            'model' => env('SUPADATA_MODEL', 'supadata-default'),
+            'api_endpoint' => env('SUPADATA_API_ENDPOINT', 'https://api.supadata.com'),
+            'max_tokens' => env('SUPADATA_MAX_TOKENS', null),
+            'temperature' => env('SUPADATA_TEMPERATURE', 0.7),
+            'models' => [
+                'supadata-default' => 'Supadata Default',
+                'supadata-pro' => 'Supadata Pro',
+                'supadata-turbo' => 'Supadata Turbo',
+            ],
+        ],
     ],
 
 

@@ -152,6 +152,16 @@ class AiServiceProvider extends BaseModuleServiceProvider
                 Config::set('modules.ai.drivers.tavily.enabled', (bool)$tavilyEnabled);
             }
 
+            $supadataEnabled = get_option('supadata_enabled', 'ai');
+            if ($supadataEnabled !== null) {
+                Config::set('modules.ai.drivers.supadata.enabled', (bool)$supadataEnabled);
+            }
+
+            $anthropicEnabled = get_option('anthropic_enabled', 'ai');
+            if ($anthropicEnabled !== null) {
+                Config::set('modules.ai.drivers.anthropic.enabled', (bool)$anthropicEnabled);
+            }
+
             // Load driver-specific settings
             $openAiModel = get_option('openai_model', 'ai');
             $openAiApiKey = get_option('openai_api_key', 'ai');
@@ -166,6 +176,7 @@ class AiServiceProvider extends BaseModuleServiceProvider
             $tavilyApiKey = get_option('tavily_api_key', 'ai');
             $tavilySearchDepth = get_option('tavily_search_depth', 'ai');
             $tavilyMaxResults = get_option('tavily_max_results', 'ai');
+            $supadataApiKey = get_option('supadata_api_key', 'ai');
 
             if ($openAiModel) {
                 Config::set('modules.ai.drivers.openai.model', $openAiModel);
@@ -210,6 +221,10 @@ class AiServiceProvider extends BaseModuleServiceProvider
             }
             if ($tavilyMaxResults) {
                 Config::set('modules.ai.drivers.tavily.max_results', (int)$tavilyMaxResults);
+            }
+
+            if ($supadataApiKey) {
+                Config::set('modules.ai.drivers.supadata.api_key', $supadataApiKey);
             }
         }
     }

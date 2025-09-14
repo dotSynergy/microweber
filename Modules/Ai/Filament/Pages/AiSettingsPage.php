@@ -87,6 +87,7 @@ class AiSettingsPage extends AdminSettingsPage
                                 'gemini' => 'Google Gemini',
                                 'openrouter' => 'OpenRouter',
                                 'ollama' => 'Ollama',
+                                'supadata' => 'Supadata',
                             ])
                             ->helperText('Select the provider to use for AI text generation tasks'),
 
@@ -275,6 +276,35 @@ class AiSettingsPage extends AdminSettingsPage
 
                     ]),
 
+                Section::make('Supadata Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
+                    ->view('filament-forms::sections.section')
+                    ->schema([
+                        Toggle::make('options.ai.supadata_enabled')
+                            ->label('Enable Supadata')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark'),
+
+                        Select::make('options.ai.supadata_model')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Supadata Model')
+                            ->options(config('modules.ai.drivers.supadata.models', [
+                                'supadata-default' => 'Supadata Default',
+                                'supadata-pro' => 'Supadata Pro',
+                                'supadata-turbo' => 'Supadata Turbo',
+                            ]))
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://supadata.com/" target="_blank">Learn more</a> about the models.</small>')),
+
+                        TextInput::make('options.ai.supadata_api_key')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Supadata API Key')
+                            ->placeholder('Enter your Supadata API key')
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://supadata.com/dashboard/api-keys" target="_blank">Get your API key</a> from Supadata dashboard.</small>')),
+                    ]),
+
                 Section::make('TAVILY Search Settings')
                     ->visible(fn(callable $get) => $get('options.ai.enabled'))
                     ->view('filament-forms::sections.section')
@@ -313,6 +343,81 @@ class AiSettingsPage extends AdminSettingsPage
                             ->maxValue(20)
                             ->default(5)
                             ->helperText('Maximum number of search results to return (1-20)'),
+                    ]),
+
+                Section::make('Supadata Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
+                    ->view('filament-forms::sections.section')
+                    ->schema([
+                        Toggle::make('options.ai.supadata_enabled')
+                            ->label('Enable Supadata')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark')
+                            ->helperText('Enable Supadata for AI functionality'),
+
+                        TextInput::make('options.ai.supadata_api_key')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Supadata API Key')
+                            ->placeholder('Enter your Supadata API key')
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted">Enter your Supadata API key for authentication.</small>')),
+                    ]),
+
+                Section::make('Supadata Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
+                    ->view('filament-forms::sections.section')
+                    ->schema([
+                        Toggle::make('options.ai.supadata_enabled')
+                            ->label('Enable Supadata')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark')
+                            ->helperText('Enable Supadata AI service for text generation'),
+
+                        Select::make('options.ai.supadata_model')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Supadata Model')
+                            ->options(config('modules.ai.drivers.supadata.models', [
+                                'supadata-default' => 'Supadata Default',
+                                'supadata-pro' => 'Supadata Pro',
+                                'supadata-turbo' => 'Supadata Turbo',
+                            ]))
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://supadata.com/" target="_blank">Learn more</a> about available models.</small>')),
+
+                        TextInput::make('options.ai.supadata_api_key')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Supadata API Key')
+                            ->placeholder('Enter your Supadata API key')
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://supadata.com/api-keys" target="_blank">Get your API key</a> from Supadata dashboard.</small>')),
+
+                        TextInput::make('options.ai.supadata_api_endpoint')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('API Endpoint')
+                            ->placeholder('https://api.supadata.com')
+                            ->helperText('Enter the Supadata API endpoint URL'),
+
+                        TextInput::make('options.ai.supadata_max_tokens')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Max Tokens')
+                            ->numeric()
+                            ->placeholder('Leave empty for default')
+                            ->helperText('Maximum number of tokens to generate'),
+
+                        TextInput::make('options.ai.supadata_temperature')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.supadata_enabled'))
+                            ->label('Temperature')
+                            ->numeric()
+                            ->step(0.1)
+                            ->minValue(0)
+                            ->maxValue(2)
+                            ->placeholder('0.7')
+                            ->helperText('Controls randomness: 0 is deterministic, higher values are more random'),
                     ]),
             ]);
     }

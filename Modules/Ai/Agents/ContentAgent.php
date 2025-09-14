@@ -33,6 +33,7 @@ class ContentAgent extends BaseAgent
                 'You have access to Google Trends data to help create trending, relevant content.',
                 'You can research trending topics and suggest content ideas based on real-time search trends.',
                 'You have access to Amazon product data through scraping capabilities to research products, prices, and reviews for content creation.',
+                'You can transcribe YouTube videos using Supadata API to create content summaries, blog posts, and extract key insights from video content.',
             ],
             steps: [
                 'When asked about content creation, provide structured and SEO-friendly content.',
@@ -42,6 +43,8 @@ class ContentAgent extends BaseAgent
                 'Use Google Trends data to suggest trending topics and popular keywords for content.',
                 'Research trending queries to help create timely and relevant content.',
                 'Use Amazon product data to research products, compare prices, and gather product information for reviews, comparisons, or product-focused content.',
+                'When provided with YouTube video URLs, transcribe the videos and create summaries, blog posts, or extract key insights for content creation.',
+                'Transform video transcriptions into various content formats: blog posts, articles, social media content, or educational materials.',
             ],
             output: [
                 'Always respond with well-formatted HTML content when creating or suggesting content.',
@@ -49,6 +52,8 @@ class ContentAgent extends BaseAgent
                 'Provide actionable content recommendations with clear explanations.',
                 'Format responses using appropriate HTML elements for readability.',
                 'When suggesting trending content, include trend data and relevance scores.',
+                'When creating content from YouTube videos, provide comprehensive summaries with key takeaways and actionable insights.',
+                'Structure video-based content with clear sections: summary, key points, and practical applications.',
             ],
         );
     }
@@ -88,6 +93,13 @@ class ContentAgent extends BaseAgent
         if (Config::get('modules.ai.drivers.tavily.enabled') and Config::get('modules.ai.drivers.tavily.api_key')) {
             $tavily = TavilySearchTool::make(Config::get('modules.ai.drivers.tavily.api_key'));
             $this->addTool($tavily);
+        }
+
+        // Add Supadata tool if enabled and configured
+        if (Config::get('modules.ai.drivers.supadata.enabled') && Config::get('modules.ai.drivers.supadata.api_key')) {
+            $this->addTool(new \Modules\Ai\Tools\SupadataTool($this->dependencies));
+            // Add YouTube transcription tool with Supadata
+            $this->addTool(new \Modules\Ai\Tools\YouTubeTranscriptionTool($this->dependencies));
         }
 
     }

@@ -66,6 +66,12 @@ class ContentEditTool extends AbstractContentTool
                 description: 'Custom fields to update in format "field_name:value,field_name2:value2".',
                 required: false,
             ),
+            new ToolProperty(
+                name: 'media_urls',
+                type: PropertyType::STRING,
+                description: 'Comma-separated list of media URLs to attach to the content',
+                required: false
+            ),
         ];
     }
 
@@ -79,6 +85,16 @@ class ContentEditTool extends AbstractContentTool
         $url = $args['url'] ?? '';
         $is_active = $args['is_active'] ?? '';
         $custom_fields = $args['custom_fields'] ?? '';
+        $media_urls = $args['media_urls'] ?? '';
+        
+        // Convert comma-separated string to array
+        $media_urls_array = [];
+        if (!empty($media_urls)) {
+            $media_urls_array = array_map('trim', explode(',', $media_urls));
+            $media_urls_array = array_filter($media_urls_array, function($url) {
+                return !empty($url) && filter_var($url, FILTER_VALIDATE_URL);
+            });
+        }
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to edit content.');
@@ -113,6 +129,11 @@ class ContentEditTool extends AbstractContentTool
 
             if (!$success) {
                 return $this->handleError('Failed to update content.');
+            }
+
+            // Handle media URLs if provided
+            if (!empty($media_urls_array)) {
+                $this->attachMediaUrls($content->id, $media_urls_array);
             }
 
             // Reload to get updated data

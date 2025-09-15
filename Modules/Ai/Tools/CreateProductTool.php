@@ -31,6 +31,12 @@ class CreateProductTool extends CreateContentTool
                 required: true
             ),
             new ToolProperty(
+                name: 'content_body',
+                type: PropertyType::STRING,
+                description: 'New content/body text.',
+                required: false,
+            ),
+            new ToolProperty(
                 name: 'price',
                 type: PropertyType::NUMBER,
                 description: 'Product price',
@@ -48,6 +54,12 @@ class CreateProductTool extends CreateContentTool
                 description: 'Product original URL',
                 required: false
             ),
+            new ToolProperty(
+                name: 'media_urls',
+                type: PropertyType::STRING,
+                description: 'Comma-separated list of media URLs to attach to the product',
+                required: false
+            ),
         ];
     }
 
@@ -56,8 +68,19 @@ class CreateProductTool extends CreateContentTool
         // Extract parameters from args array using keys
         $title = $args['title'] ?? null;
         $description = $args['description'] ?? null;
+        $content_body = $args['content_body'] ?? null;
         $price = $args['price'] ?? null;
         $url = $args['url'] ?? null;
+        $media_urls = $args['media_urls'] ?? '';
+
+        // Convert comma-separated string to array
+        $media_urls_array = [];
+        if (!empty($media_urls)) {
+            $media_urls_array = array_map('trim', explode(',', $media_urls));
+            $media_urls_array = array_filter($media_urls_array, function($url) {
+                return !empty($url) && filter_var($url, FILTER_VALIDATE_URL);
+            });
+        }
 
 
         // Validate required parameters
@@ -76,7 +99,7 @@ class CreateProductTool extends CreateContentTool
         // Create the product data
         $productData = [
             'title' => $title,
-            'content' => $description,
+            'content_body' => $content_body,
             'description' => $description,
             'url' => $url,
             'content_type' => 'product',
@@ -97,6 +120,11 @@ class CreateProductTool extends CreateContentTool
                 'rel_id' => $product->id,
                 'type' => 'price'
             ]);
+        }
+
+        // Handle media URLs if provided
+        if (!empty($media_urls_array)) {
+            $this->attachMediaUrls($product->id, $media_urls_array);
         }
 
 

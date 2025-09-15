@@ -323,4 +323,29 @@ abstract class AbstractContentTool extends BaseTool
             return null;
         }
     }
+
+    /**
+     * Attach media URLs to content
+     */
+    protected function attachMediaUrls(int $contentId, array $mediaUrls): void
+    {
+        if (empty($mediaUrls)) {
+            return;
+        }
+
+        foreach ($mediaUrls as $mediaUrl) {
+            if (!empty($mediaUrl) && filter_var($mediaUrl, FILTER_VALIDATE_URL)) {
+                // Save media URL as custom field or use Microweber's media functionality
+                if (function_exists('save_custom_field')) {
+                    save_custom_field([
+                        'field' => 'media_url',
+                        'value' => $mediaUrl,
+                        'rel_type' => 'content',
+                        'rel_id' => $contentId,
+                        'type' => 'media'
+                    ]);
+                }
+            }
+        }
+    }
 }

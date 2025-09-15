@@ -48,6 +48,7 @@ class ContentAgent extends BaseAgent
                 'Transform video transcriptions into various content formats: blog posts, articles, social media content, or educational materials.',
                 'Generate AI images when visual content is needed for articles, posts, products, or any content that would benefit from custom imagery.',
                 'Create images that match the content style, brand, and target audience requirements.',
+                'If the user ask for images, but the images does not exists, generate them using the AI image generation tool.',
             ],
             output: [
                 'Always respond with well-formatted HTML content when creating or suggesting content.',

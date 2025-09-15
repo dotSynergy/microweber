@@ -11,6 +11,7 @@ use Modules\Content\Models\Content;
 class CreateContentTool extends BaseTool
 {
     protected ?int $maxTries = 5000;
+
     public function __construct(protected array $dependencies = [])
     {
         parent::__construct(
@@ -59,6 +60,12 @@ class CreateContentTool extends BaseTool
                 description: 'Whether the content is active',
                 required: false
             ),
+            new ToolProperty(
+                name: 'media_urls',
+                type: PropertyType::STRING,
+                description: 'Comma-separated list of media URLs to attach to the content',
+                required: false
+            ),
         ];
     }
 
@@ -71,6 +78,16 @@ class CreateContentTool extends BaseTool
         $url = $args['url'] ?? null;
         $content_type = $args['content_type'] ?? 'page';
         $is_active = $args['is_active'] ?? true;
+        $media_urls = $args['media_urls'] ?? '';
+
+        // Convert comma-separated string to array
+        $media_urls_array = [];
+        if (!empty($media_urls)) {
+            $media_urls_array = array_map('trim', explode(',', $media_urls));
+            $media_urls_array = array_filter($media_urls_array, function ($url) {
+                return !empty($url) && filter_var($url, FILTER_VALIDATE_URL);
+            });
+        }
 
         // Validate required parameters
         if (empty($title)) {
@@ -102,6 +119,11 @@ class CreateContentTool extends BaseTool
         $contentData['created_by'] = user_id();
 
         $newContent = Content::create($contentData);
+
+        // Handle media URLs if provided
+        if (!empty($media_urls_array)) {
+            $this->attachMediaUrls($newContent->id, $media_urls_array);
+        }
 
         return $this->handleSuccess("Content created successfully with ID: {$newContent->id}") .
             $this->formatContentDetails($newContent);
@@ -152,5 +174,26 @@ class CreateContentTool extends BaseTool
                 </div>
             </div>
         </div>';
+    }
+
+    /**
+     * Attach media URLs to content
+     */
+    protected function attachMediaUrls(int $contentId, array $mediaUrls): void
+    {
+        if (empty($mediaUrls)) {
+            return;
+        }
+
+
+        foreach ($mediaUrls as $mediaUrl) {
+            if (!empty($mediaUrl) && filter_var($mediaUrl, FILTER_VALIDATE_URL)) {
+                save_media(array(
+                    'rel_type' => morph_name('content'),
+                    'rel_id' => $contentId,
+                    'filename' => $mediaUrl,
+                ));
+            }
+        }
     }
 }

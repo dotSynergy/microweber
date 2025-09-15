@@ -42,6 +42,13 @@ class CreatePostTool extends CreateContentTool
                 description: 'URL slug for the post',
                 required: false
             ),
+
+            new ToolProperty(
+                name: 'media_urls',
+                type: PropertyType::STRING,
+                description: 'Comma-separated list of media URLs to attach to the post',
+                required: false
+            ),
         ];
     }
 
@@ -54,6 +61,16 @@ class CreatePostTool extends CreateContentTool
         $content_body = $args['content_body'] ?? null;
         $description = $args['description'] ?? null;
         $url = $args['url'] ?? null;
+        $media_urls = $args['media_urls'] ?? '';
+        
+        // Convert comma-separated string to array
+        $media_urls_array = [];
+        if (!empty($media_urls)) {
+            $media_urls_array = array_map('trim', explode(',', $media_urls));
+            $media_urls_array = array_filter($media_urls_array, function($url) {
+                return !empty($url) && filter_var($url, FILTER_VALIDATE_URL);
+            });
+        }
 
         // Validate required parameters
         if (empty($title)) {
@@ -86,6 +103,11 @@ class CreatePostTool extends CreateContentTool
         ];
 
         $post = Post::create($postData);
+
+        // Handle media URLs if provided
+        if (!empty($media_urls_array)) {
+            $this->attachMediaUrls($post->id, $media_urls_array);
+        }
 
         return $this->handleSuccess("Blog post created successfully with ID: {$post->id}") .
             $this->formatContentDetails($post);

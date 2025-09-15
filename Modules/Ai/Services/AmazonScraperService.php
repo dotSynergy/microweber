@@ -193,6 +193,8 @@ class AmazonScraperService
         // Get image
         $imageNode = $xpath->query('.//img[@class="s-image"]', $node)->item(0);
         $image = $imageNode ? $imageNode->getAttribute('src') : '';
+        $image = $image ?: '';
+        $image = html_entity_decode($image);
 
         // Get rating
         $ratingNode = $xpath->query('.//span[@class="a-icon-alt"]', $node)->item(0);

@@ -81,16 +81,10 @@ class AmazonScraperService
                 }
             }
 
-            Log::info('Amazon search completed', [
-                'query' => $searchQuery,
-                'found' => count($products),
-                'country' => $options['country']
-            ]);
 
             return $products;
 
         } catch (\Exception $e) {
-            Log::error('Amazon search failed: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -101,18 +95,15 @@ class AmazonScraperService
     public function getProductDetails($asin, $country = 'US')
     {
         $config = $this->marketplaceConfig[$country] ?? $this->marketplaceConfig['US'];
-        
+
         try {
             $url = "https://www.{$config['host']}/dp/{$asin}";
             $html = $this->fetchPage($url, $config);
-            
+
             return $this->parseProductDetails($html, $asin, $config);
-            
+
         } catch (\Exception $e) {
-            Log::error('Failed to get product details', [
-                'asin' => $asin,
-                'error' => $e->getMessage()
-            ]);
+
             throw $e;
         }
     }
@@ -159,7 +150,7 @@ class AmazonScraperService
     protected function parseSearchResults($html, $config)
     {
         $products = [];
-        
+
         $dom = new DOMDocument();
         @$dom->loadHTML($html);
         $xpath = new DOMXPath($dom);
@@ -174,7 +165,6 @@ class AmazonScraperService
                     $products[] = $product;
                 }
             } catch (\Exception $e) {
-                Log::warning('Failed to parse product node: ' . $e->getMessage());
                 continue;
             }
         }
@@ -410,7 +400,7 @@ class AmazonScraperService
         // Remove currency symbols and extract numeric value
         $cleaned = preg_replace('/[^\d.,]/', '', $priceText);
         $cleaned = str_replace(',', '', $cleaned);
-        
+
         return is_numeric($cleaned) ? (float) $cleaned : null;
     }
 

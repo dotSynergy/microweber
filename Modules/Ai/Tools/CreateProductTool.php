@@ -39,7 +39,13 @@ class CreateProductTool extends CreateContentTool
             new ToolProperty(
                 name: 'url',
                 type: PropertyType::STRING,
-                description: 'Product URL slug',
+                description: 'Product URL slug for the product page (if not provided, it will be generated from the title)',
+                required: false
+            ),
+            new ToolProperty(
+                name: 'original_url',
+                type: PropertyType::STRING,
+                description: 'Product original URL',
                 required: false
             ),
         ];
@@ -52,6 +58,7 @@ class CreateProductTool extends CreateContentTool
         $description = $args['description'] ?? null;
         $price = $args['price'] ?? null;
         $url = $args['url'] ?? null;
+
 
         // Validate required parameters
         if (empty($title)) {
@@ -81,16 +88,18 @@ class CreateProductTool extends CreateContentTool
 
         $product = Product::create($productData);
 
-        // Handle price as custom field if provided
-        if ($price !== null && function_exists('save_custom_field')) {
-            save_custom_field([
-                'field' => 'price',
-                'value' => $price,
-                'rel_type' => 'content',
-                'rel_id' => $product->id,
-                'type' => 'price'
-            ]);
-        }
+//        // Handle price as custom field if provided
+//        if ($price !== null && function_exists('save_custom_field')) {
+//            save_custom_field([
+//                'field' => 'price',
+//                'value' => $price,
+//                'rel_type' => 'content',
+//                'rel_id' => $product->id,
+//                'type' => 'price'
+//            ]);
+//        }
+
+
 
         return $this->handleSuccess("Product created successfully with ID: {$product->id}") .
                $this->formatProductDetails($product, $price);

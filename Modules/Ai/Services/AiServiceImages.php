@@ -4,6 +4,7 @@ namespace Modules\Ai\Services;
 
 use InvalidArgumentException;
 use Modules\Ai\Services\Drivers\AiServiceInterface;
+use Modules\Ai\Services\Drivers\FalAiDriver;
 use Modules\Ai\Services\Drivers\GeminiAiDriver;
 use Modules\Ai\Services\Drivers\OllamaAiDriver;
 use Modules\Ai\Services\Drivers\OpenAiDriver;
@@ -61,6 +62,7 @@ class AiServiceImages
 
         $driverClass = match ($driver) {
             'replicate' => ReplicateAiDriver::class,
+            'fal' => FalAiDriver::class,
             'gemini' => GeminiAiDriver::class,
 
             default => throw new InvalidArgumentException("Driver [{$driver}] not supported for image generation."),
@@ -99,6 +101,8 @@ class AiServiceImages
         } elseif ($driverName === 'gemini') {
     //        return $this->driver->processImageWithPrompt($prompt, $options['imageBase64'] ?? '', $options);
         } elseif ($driverName === 'replicate') {
+            return $this->driver->generateImage($messages, $options);
+        } elseif ($driverName === 'fal') {
             return $this->driver->generateImage($messages, $options);
         }
 

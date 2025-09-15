@@ -99,6 +99,7 @@ class AiSettingsPage extends AdminSettingsPage
                                 //   'gemini' => 'Google Gemini',
                                 //   'openai' => 'OpenAI (DALL-E)',
                                 'replicate' => 'Replicate',
+                                'fal' => 'FAL AI',
                             ])
                             ->helperText('Select the provider to use for AI image generation tasks')
                     ]),
@@ -418,6 +419,34 @@ class AiSettingsPage extends AdminSettingsPage
                             ->maxValue(2)
                             ->placeholder('0.7')
                             ->helperText('Controls randomness: 0 is deterministic, higher values are more random'),
+                    ]),
+
+                Section::make('FAL AI Settings')
+                    ->visible(fn(callable $get) => $get('options.ai.enabled'))
+                    ->view('filament-forms::sections.section')
+                    ->schema([
+                        Toggle::make('options.ai.fal_enabled')
+                            ->label('Enable FAL AI')
+                            ->live()
+                            ->onIcon('heroicon-m-check')
+                            ->offIcon('heroicon-m-x-mark')
+                            ->helperText('Enable FAL AI for fast image generation'),
+
+                        Select::make('options.ai.fal_model')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.fal_enabled'))
+                            ->label('FAL AI Model')
+                            ->options(config('modules.ai.drivers.fal.models', [
+                                'fal-ai/nano-banana' => 'Nano Banana',
+                            ]))
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://fal.ai/explore" target="_blank">Learn more</a> about available models.</small>')),
+
+                        TextInput::make('options.ai.fal_api_key')
+                            ->live()
+                            ->visible(fn(callable $get) => $get('options.ai.fal_enabled'))
+                            ->label('FAL API Key')
+                            ->placeholder('Enter your FAL API key')
+                            ->helperText(fn() => new HtmlString('<small class="mb-2 text-muted"><a href="https://fal.ai/dashboard" target="_blank">Get your API key</a> from FAL AI dashboard.</small>')),
                     ]),
             ]);
     }

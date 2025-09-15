@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Config;
 use MicroweberPackages\Filament\Facades\FilamentRegistry;
 use MicroweberPackages\LaravelModules\Providers\BaseModuleServiceProvider;
 use MicroweberPackages\LiveEdit\Facades\LiveEditManager;
- use Modules\Ai\Filament\Pages\AiSettingsPage;
+use Modules\Ai\Filament\Pages\AiSettingsPage;
 use Modules\Ai\Filament\Resources\AgentChatResource;
 use Modules\Ai\Services\AiService;
 use Modules\Ai\Services\AiServiceImages;
@@ -25,26 +25,26 @@ class AiServiceProvider extends BaseModuleServiceProvider
     {
 
 
-        Filament::serving(function () {
-            Filament::registerNavigationItems([
-                NavigationItem::make('AI Chat')
-                    ->url(AgentChatResource::getUrl())
-                    ->icon('heroicon-o-chat-bubble-left-right')
-                    ->group('AI Tools')
-                    ->sort(1),
-
-                //   NavigationItem::make('AI Settings')
-                //     ->url(AiSettingsPage::getUrl())
-                //     ->icon('heroicon-o-chat-bubble-left-right')
-                //     ->group('AI Tools')
-                //     ->sort(1),
-            ]);
-        });
+//        Filament::serving(function () {
+//            Filament::registerNavigationItems([
+//                NavigationItem::make('AI Chat')
+//                    ->url(AgentChatResource::getUrl())
+//                    ->icon('heroicon-o-chat-bubble-left-right')
+//                    ->group('AI Tools')
+//                    ->sort(1),
+//
+//                //   NavigationItem::make('AI Settings')
+//                //     ->url(AiSettingsPage::getUrl())
+//                //     ->icon('heroicon-o-chat-bubble-left-right')
+//                //     ->group('AI Tools')
+//                //     ->sort(1),
+//            ]);
+//        });
 
         $this->setAiConfig();
 
         // Register the agent factory
-        $this->app->singleton('ai.agents', function($app) {
+        $this->app->singleton('ai.agents', function ($app) {
             return new \Modules\Ai\Services\AgentFactory($app);
         });
 
@@ -83,11 +83,10 @@ class AiServiceProvider extends BaseModuleServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-         FilamentRegistry::registerResource(AgentChatResource::class);
+        FilamentRegistry::registerResource(AgentChatResource::class);
         FilamentRegistry::registerPage(AiSettingsPage::class);
 
         LiveEditManager::addScript('mw-ai', asset('modules/ai/js/mw-ai.js'));
-
 
 
     }
@@ -162,6 +161,11 @@ class AiServiceProvider extends BaseModuleServiceProvider
                 Config::set('modules.ai.drivers.anthropic.enabled', (bool)$anthropicEnabled);
             }
 
+            $falEnabled = get_option('fal_enabled', 'ai');
+            if ($falEnabled !== null) {
+                Config::set('modules.ai.drivers.fal.enabled', (bool)$falEnabled);
+            }
+
             // Load driver-specific settings
             $openAiModel = get_option('openai_model', 'ai');
             $openAiApiKey = get_option('openai_api_key', 'ai');
@@ -177,6 +181,9 @@ class AiServiceProvider extends BaseModuleServiceProvider
             $tavilySearchDepth = get_option('tavily_search_depth', 'ai');
             $tavilyMaxResults = get_option('tavily_max_results', 'ai');
             $supadataApiKey = get_option('supadata_api_key', 'ai');
+
+            $falApiKey = get_option('fal_api_key', 'ai');
+            $falModel = get_option('fal_model', 'ai');
 
             if ($openAiModel) {
                 Config::set('modules.ai.drivers.openai.model', $openAiModel);
@@ -225,6 +232,13 @@ class AiServiceProvider extends BaseModuleServiceProvider
 
             if ($supadataApiKey) {
                 Config::set('modules.ai.drivers.supadata.api_key', $supadataApiKey);
+            }
+
+            if ($falApiKey) {
+                Config::set('modules.ai.drivers.fal.api_key', $falApiKey);
+            }
+            if ($falModel) {
+                Config::set('modules.ai.drivers.fal.model', $falModel);
             }
         }
     }

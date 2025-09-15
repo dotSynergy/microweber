@@ -185,6 +185,45 @@ return [
                 'supadata-turbo' => 'Supadata Turbo',
             ],
         ],
+
+        'fal' => [
+            'enabled' => env('FAL_ENABLED', false),
+            'api_key' => env('FAL_API_KEY'),
+            'model' => env('FAL_MODEL', 'fal-ai/nano-banana'),
+            'api_endpoint' => env('FAL_API_ENDPOINT', 'https://fal.run'),
+            'timeout' => env('FAL_TIMEOUT', 300),
+            'models' => [
+                'fal-ai/nano-banana' => 'Nano Banana',
+            ],
+            'default_parameters' => [
+                'image_size' => 'square_hd',
+                'num_inference_steps' => 25,
+                'guidance_scale' => 7.5,
+                'num_images' => 1,
+                'safety_tolerance' => 2,
+            ],
+            'supported_image_sizes' => [
+                'square_hd' => 'Square HD (1024x1024)',
+                'square' => 'Square (512x512)',
+                'portrait_4_3' => 'Portrait 4:3 (768x1024)',
+                'portrait_16_9' => 'Portrait 16:9 (576x1024)',
+                'landscape_4_3' => 'Landscape 4:3 (1024x768)',
+                'landscape_16_9' => 'Landscape 16:9 (1024x576)',
+            ],
+            'field_mapping' => [
+                'fal-ai/nano-banana' => [
+                    'prompt' => 'prompt',
+                    'negative_prompt' => 'negative_prompt',
+                    'image_size' => 'image_size',
+                    'num_inference_steps' => 'num_inference_steps',
+                    'guidance_scale' => 'guidance_scale',
+                    'num_images' => 'num_images',
+                    'seed' => 'seed',
+                    'safety_tolerance' => 'safety_tolerance',
+                ],
+
+            ],
+        ],
     ],
 
 

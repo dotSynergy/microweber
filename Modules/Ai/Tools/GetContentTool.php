@@ -41,9 +41,9 @@ class GetContentTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $content_id = $args[0] ?? null;
-        $include_meta = $args[1] ?? 'yes';
+        // Extract parameters from args array using keys
+        $content_id = $args['content_id'] ?? null;
+        $include_meta = $args['include_meta'] ?? 'yes';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to view content.');

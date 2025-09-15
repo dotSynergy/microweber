@@ -25,14 +25,14 @@ class PostListTool extends AbstractContentTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $search_term = $args[0] ?? '';
-        $is_active = $args[1] ?? 'all';
-        $parent_id = $args[2] ?? null;
-        $category_id = $args[3] ?? null;
-        $custom_fields = $args[4] ?? '';
-        $limit = $args[5] ?? 20;
-        $sort_by = $args[6] ?? 'created_at';
+        // Extract parameters from args array using keys
+        $search_term = $args['search_term'] ?? '';
+        $is_active = $args['is_active'] ?? 'all';
+        $parent_id = $args['parent_id'] ?? null;
+        $category_id = $args['category_id'] ?? null;
+        $custom_fields = $args['custom_fields'] ?? '';
+        $limit = $args['limit'] ?? 20;
+        $sort_by = $args['sort_by'] ?? 'created_at';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to list posts.');

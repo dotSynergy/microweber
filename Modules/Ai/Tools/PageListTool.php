@@ -59,12 +59,12 @@ class PageListTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $is_active = $args[0] ?? 'all';
-        $parent_id = $args[1] ?? null;
-        $show_hierarchy = $args[2] ?? 'yes';
-        $search_term = $args[3] ?? '';
-        $limit = $args[4] ?? 30;
+        // Extract parameters from args array using keys
+        $is_active = $args['is_active'] ?? 'all';
+        $parent_id = $args['parent_id'] ?? null;
+        $show_hierarchy = $args['show_hierarchy'] ?? 'yes';
+        $search_term = $args['search_term'] ?? '';
+        $limit = $args['limit'] ?? 30;
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to list pages.');

@@ -71,14 +71,14 @@ class ContentEditTool extends AbstractContentTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $content_id = $args[0] ?? null;
-        $title = $args[1] ?? '';
-        $content_body = $args[2] ?? '';
-        $description = $args[3] ?? '';
-        $url = $args[4] ?? '';
-        $is_active = $args[5] ?? '';
-        $custom_fields = $args[6] ?? '';
+        // Extract parameters from args array using keys
+        $content_id = $args['content_id'] ?? null;
+        $title = $args['title'] ?? '';
+        $content_body = $args['content_body'] ?? '';
+        $description = $args['description'] ?? '';
+        $url = $args['url'] ?? '';
+        $is_active = $args['is_active'] ?? '';
+        $custom_fields = $args['custom_fields'] ?? '';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to edit content.');

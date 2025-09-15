@@ -59,12 +59,12 @@ class ProductSearchTool extends BaseTool
 
     public function __invoke(...$args): string 
     {
-        // Extract parameters from variadic args
-        $search_term = $args[0] ?? '';
-        $min_price = $args[1] ?? null;
-        $max_price = $args[2] ?? null;
-        $category = $args[3] ?? '';
-        $limit = $args[4] ?? 10;
+        // Extract parameters from args array using keys
+        $search_term = $args['search_term'] ?? '';
+        $min_price = $args['min_price'] ?? null;
+        $max_price = $args['max_price'] ?? null;
+        $category = $args['category'] ?? '';
+        $limit = $args['limit'] ?? 10;
         
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to search products.');

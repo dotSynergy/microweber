@@ -40,15 +40,15 @@ class ContentListTool extends AbstractContentTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $content_type = $args[0] ?? 'all';
-        $search_term = $args[1] ?? '';
-        $is_active = $args[2] ?? 'all';
-        $parent_id = $args[3] ?? null;
-        $category_id = $args[4] ?? null;
-        $custom_fields = $args[5] ?? '';
-        $limit = $args[6] ?? 20;
-        $sort_by = $args[7] ?? 'position';
+        // Extract parameters from args array using keys
+        $content_type = $args['content_type'] ?? 'all';
+        $search_term = $args['search_term'] ?? '';
+        $is_active = $args['is_active'] ?? 'all';
+        $parent_id = $args['parent_id'] ?? null;
+        $category_id = $args['category_id'] ?? null;
+        $custom_fields = $args['custom_fields'] ?? '';
+        $limit = $args['limit'] ?? 20;
+        $sort_by = $args['sort_by'] ?? 'position';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to list content.');

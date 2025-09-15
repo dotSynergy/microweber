@@ -68,7 +68,7 @@ class CreateContentTool extends BaseTool
         $content = $args['content'] ?? null;
         $content_body = $args['content_body'] ?? null;
         $url = $args['url'] ?? null;
-        $content_type = $params['content_type'] ?? 'page';
+        $content_type = $args['content_type'] ?? 'page';
         $is_active = $args['is_active'] ?? true;
 
         // Validate required parameters

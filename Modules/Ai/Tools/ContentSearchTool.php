@@ -47,10 +47,10 @@ class ContentSearchTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $search_term = $args[0] ?? '';
-        $content_type = $args[1] ?? 'all';
-        $limit = $args[2] ?? 10;
+        // Extract parameters from args array using keys
+        $search_term = $args['search_term'] ?? '';
+        $content_type = $args['content_type'] ?? 'all';
+        $limit = $args['limit'] ?? 10;
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to search content.');

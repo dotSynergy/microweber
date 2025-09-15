@@ -66,10 +66,10 @@ class GoogleTrendsTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $action = $args['action'] ??   '';
-        $keyword =  $args['keyword'] ?? '';
-        $geo =  $args['geo'] ?? 'US';
+        // Extract parameters from args array using keys
+        $action = $args['action'] ?? '';
+        $keyword = $args['keyword'] ?? '';
+        $geo = $args['geo'] ?? 'US';
         $time_range = $args['time_range'] ?? 'today 12-m';
         $limit = $args['limit'] ?? 20;
         $product_categories = $args['product_categories'] ?? '';

@@ -238,11 +238,6 @@ class FalAiDriver extends BaseDriver implements AiImageServiceInterface
             $urls[] = Storage::disk('public')->url($imagePath);
 
         } catch (\Exception $e) {
-            Log::error('Failed to save base64 image', [
-                'error' => $e->getMessage(),
-                'prompt' => $prompt,
-                'index' => $index
-            ]);
             throw $e;
         }
     }
@@ -274,12 +269,7 @@ class FalAiDriver extends BaseDriver implements AiImageServiceInterface
             $urls[] = Storage::disk('public')->url($imagePath);
 
         } catch (\Exception $e) {
-            Log::error('Failed to save URL image', [
-                'error' => $e->getMessage(),
-                'url' => $imageUrl,
-                'prompt' => $prompt,
-                'index' => $index
-            ]);
+
             throw $e;
         }
     }

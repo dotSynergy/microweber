@@ -52,17 +52,17 @@ class ProductListTool extends AbstractContentTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $price_min = $args[0] ?? '';
-        $price_max = $args[1] ?? '';
-        $in_stock = $args[2] ?? 'all';
-        $search_term = $args[3] ?? '';
-        $is_active = $args[4] ?? 'all';
-        $parent_id = $args[5] ?? null;
-        $category_id = $args[6] ?? null;
-        $custom_fields = $args[7] ?? '';
-        $limit = $args[8] ?? 20;
-        $sort_by = $args[9] ?? 'position';
+        // Extract parameters from args array using keys
+        $price_min = $args['price_min'] ?? '';
+        $price_max = $args['price_max'] ?? '';
+        $in_stock = $args['in_stock'] ?? 'all';
+        $search_term = $args['search_term'] ?? '';
+        $is_active = $args['is_active'] ?? 'all';
+        $parent_id = $args['parent_id'] ?? null;
+        $category_id = $args['category_id'] ?? null;
+        $custom_fields = $args['custom_fields'] ?? '';
+        $limit = $args['limit'] ?? 20;
+        $sort_by = $args['sort_by'] ?? 'position';
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to list products.');

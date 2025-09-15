@@ -59,12 +59,12 @@ class OrderSearchTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $search_term = $args[0] ?? '';
-        $status = $args[1] ?? '';
-        $date_from = $args[2] ?? '';
-        $date_to = $args[3] ?? '';
-        $limit = $args[4] ?? 10;
+        // Extract parameters from args array using keys
+        $search_term = $args['search_term'] ?? '';
+        $status = $args['status'] ?? '';
+        $date_from = $args['date_from'] ?? '';
+        $date_to = $args['date_to'] ?? '';
+        $limit = $args['limit'] ?? 10;
 
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to search orders.');

@@ -41,9 +41,9 @@ class CustomerLookupTool extends BaseTool
 
     public function __invoke(...$args): string
     {
-        // Extract parameters from variadic args
-        $search_term = $args[0] ?? '';
-        $search_type = $args[1] ?? 'all';
+        // Extract parameters from args array using keys
+        $search_term = $args['search_term'] ?? '';
+        $search_type = $args['search_type'] ?? 'all';
         
         if (!$this->authorize()) {
             return $this->handleError('You do not have permission to view customer information.');

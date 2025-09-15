@@ -82,7 +82,7 @@ class ViewAgentChat extends ViewRecord
 
         $this->isProcessing = true;
 
-        try {
+      //  try {
             // Get the appropriate agent with chat history
             $agentFactory = app(AgentFactory::class);
             $agent = $agentFactory->agentWithChat($this->record);
@@ -109,31 +109,32 @@ class ViewAgentChat extends ViewRecord
 
             // Reload messages to show the conversation
             $this->loadChatMessages();
+        $this->isProcessing = false;
 
-        } catch (\Exception $e) {
+     //   } catch (\Exception $e) {
 
-
-            Notification::make()
-                ->title('Error')
-                ->body('Sorry, there was an error processing your message: ' . $e->getMessage())
-                ->danger()
-                ->send();
-
-            // Add error message to chat manually since agent failed
-            AgentChatMessage::create([
-                'chat_id' => $this->record->id,
-                'role' => 'system',
-                'content' => 'Error: Unable to process message. Please try again.',
-                'metadata' => [
-                    'error' => $e->getMessage(),
-                    'timestamp' => now()->toISOString(),
-                ],
-            ]);
-
-            $this->loadChatMessages();
-        } finally {
-            $this->isProcessing = false;
-        }
+//
+//            Notification::make()
+//                ->title('Error')
+//                ->body('Sorry, there was an error processing your message: ' . $e->getMessage())
+//                ->danger()
+//                ->send();
+//
+//            // Add error message to chat manually since agent failed
+//            AgentChatMessage::create([
+//                'chat_id' => $this->record->id,
+//                'role' => 'system',
+//                'content' => 'Error: Unable to process message. Please try again.',
+//                'metadata' => [
+//                    'error' => $e->getMessage(),
+//                    'timestamp' => now()->toISOString(),
+//                ],
+//            ]);
+//
+//            $this->loadChatMessages();
+//        } finally {
+//            $this->isProcessing = false;
+//        }
     }
 
     protected function getErrorResponse(string $error): string

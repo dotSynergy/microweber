@@ -89,15 +89,15 @@ class CreateProductTool extends CreateContentTool
         $product = Product::create($productData);
 
 //        // Handle price as custom field if provided
-//        if ($price !== null && function_exists('save_custom_field')) {
-//            save_custom_field([
-//                'field' => 'price',
-//                'value' => $price,
-//                'rel_type' => 'content',
-//                'rel_id' => $product->id,
-//                'type' => 'price'
-//            ]);
-//        }
+        if ($price !== null && function_exists('save_custom_field')) {
+            save_custom_field([
+                'field' => 'price',
+                'value' => $price,
+                'rel_type' => 'content',
+                'rel_id' => $product->id,
+                'type' => 'price'
+            ]);
+        }
 
 
 

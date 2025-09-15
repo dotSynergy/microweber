@@ -82,7 +82,7 @@ abstract class AbstractContentTool extends BaseTool
         $sort_by = $params['sort_by'] ?? 'position';
 
         // Apply content type filter (already applied in buildContentQuery)
-        
+
         // Filter by active status
         if ($is_active !== 'all') {
             $query->where('is_active', (int)$is_active);
@@ -128,7 +128,7 @@ abstract class AbstractContentTool extends BaseTool
     {
         $result = [];
         $pairs = explode(',', $customFields);
-        
+
         foreach ($pairs as $pair) {
             $pair = trim($pair);
             if (strpos($pair, ':') !== false) {
@@ -136,24 +136,24 @@ abstract class AbstractContentTool extends BaseTool
                 $result[trim($field)] = trim($value);
             }
         }
-        
+
         return $result;
     }
 
     protected function formatContentAsHtml($content, string $contentType, array $params, int $limit): string
     {
         $totalFound = $content->count();
-        
+
         $searchInfo = !empty($params['search_term']) ? "Search: \"{$params['search_term']}\" " : '';
-        $statusInfo = isset($params['is_active']) && $params['is_active'] !== 'all' ? 
+        $statusInfo = isset($params['is_active']) && $params['is_active'] !== 'all' ?
             "Status: " . ($params['is_active'] ? 'Published' : 'Unpublished') . " " : '';
-        
+
         $header = "
         <div class='content-list-header mb-3'>
             <h4><i class='fas fa-file-alt text-primary me-2'></i>" . ucfirst($contentType) . " List</h4>
             <p class='mb-2'>
                 {$searchInfo}{$statusInfo}
-                <strong>Found:</strong> {$totalFound} item(s)" . 
+                <strong>Found:</strong> {$totalFound} item(s)" .
                 ($totalFound >= $limit ? " (showing first {$limit})" : '') . "
             </p>
         </div>";
@@ -162,30 +162,30 @@ abstract class AbstractContentTool extends BaseTool
         foreach ($content as $item) {
             $statusBadge = $this->getContentStatusBadge($item->is_active ?? 0);
             $typeBadge = $this->getContentTypeBadge($item->content_type ?? 'content');
-            
+
             $title = $item->title ?: 'Untitled';
-            $excerpt = $item->description ?: 
+            $excerpt = $item->description ?:
                        ($item->content_body ? \Str::limit(strip_tags($item->content_body), 100) : 'No description');
-            
-            $createdAt = $item->created_at ? 
-                $item->created_at->format('M j, Y H:i') : 
+
+            $createdAt = $item->created_at ?
+                $item->created_at->format('M j, Y H:i') :
                 'Unknown';
 
-            $url = $item->url ? 
-                "<small class='text-muted'>{$item->url}</small>" : 
+            $url = $item->url ?
+                "<small class='text-muted'>{$item->url}</small>" :
                 '<small class="text-muted">No URL</small>';
 
             $categories = $item->categories->pluck('title')->implode(', ');
-            $categoryInfo = $categories ? 
-                "<small class='text-muted'>Categories: {$categories}</small>" : 
+            $categoryInfo = $categories ?
+                "<small class='text-muted'>Categories: {$categories}</small>" :
                 '<small class="text-muted">No categories</small>';
 
             // Show custom fields if any
             $customFieldsInfo = $this->formatCustomFields($item);
 
             $tableData[] = [
-                'id' => "<strong>#{$item->id}</strong>",
-                'title' => "<strong>{$title}</strong><br>{$url}",
+                'id' => "{$item->id}",
+                'title' => "{$title}</strong><br>{$url}",
                 'type' => $typeBadge,
                 'status' => $statusBadge,
                 'excerpt' => $excerpt,
@@ -217,26 +217,26 @@ abstract class AbstractContentTool extends BaseTool
     protected function formatCustomFields($item): string
     {
         $customFields = [];
-        
+
         // Get custom fields for this content
         $fields = CustomField::where('rel_id', $item->id)
             ->where('rel_type', get_class($item))
             ->get();
-            
+
         foreach ($fields as $field) {
             $value = is_array($field->value) ? implode(', ', $field->value) : $field->value;
             if ($value) {
                 $customFields[] = "<small><strong>{$field->name}:</strong> {$value}</small>";
             }
         }
-        
+
         return $customFields ? implode('<br>', $customFields) : '<small class="text-muted">No custom fields</small>';
     }
 
     protected function getContentStatusBadge($isActive): string
     {
-        return $isActive ? 
-            "<span class='badge bg-success'>Published</span>" : 
+        return $isActive ?
+            "<span class='badge bg-success'>Published</span>" :
             "<span class='badge bg-warning'>Unpublished</span>";
     }
 
@@ -255,8 +255,6 @@ abstract class AbstractContentTool extends BaseTool
     protected function getContentById(int $id): ?Content
     {
         return Content::where('id', $id)
-            ->where('is_deleted', 0)
-            ->where('content_type', $this->contentType)
             ->first();
     }
 
@@ -294,7 +292,7 @@ abstract class AbstractContentTool extends BaseTool
         try {
             $content = new Content();
             $content->content_type = $this->contentType;
-            
+
             // Set basic fields
             $fillableFields = ['title', 'content_body', 'description', 'url', 'is_active', 'parent'];
             foreach ($fillableFields as $field) {
@@ -316,10 +314,10 @@ abstract class AbstractContentTool extends BaseTool
                     }
                     $content->save();
                 }
-                
+
                 return $content;
             }
-            
+
             return null;
         } catch (\Exception $e) {
             return null;

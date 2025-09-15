@@ -25,7 +25,7 @@ class ProductEditTool extends AbstractContentTool
     {
         return [
             new ToolProperty(
-                name: 'product_id',
+                name: 'id',
                 type: PropertyType::INTEGER,
                 description: 'ID of the product to edit.',
                 required: true,
@@ -90,7 +90,7 @@ class ProductEditTool extends AbstractContentTool
     public function __invoke(...$args): string
     {
         // Extract parameters from args array using keys
-        $product_id = $args['product_id'] ?? null;
+        $product_id = $args['id'] ?? null;
         $title = $args['title'] ?? '';
         $content_body = $args['content_body'] ?? '';
         $description = $args['description'] ?? '';
@@ -209,13 +209,13 @@ class ProductEditTool extends AbstractContentTool
     {
         $statusBadge = $this->getContentStatusBadge($product->is_active ?? 0);
         $typeBadge = $this->getContentTypeBadge($product->content_type ?? 'product');
-        
+
         $updatedFields = [];
         foreach (array_keys($updateData) as $field) {
             $updatedFields[] = "<span class='badge bg-info'>" . ucfirst(str_replace('_', ' ', $field)) . "</span>";
         }
         $fieldsUpdated = implode(' ', $updatedFields);
-        
+
         // Get product-specific data
         $price = 'Not set';
         try {
@@ -239,19 +239,19 @@ class ProductEditTool extends AbstractContentTool
         }
 
         $qty = $product->qty ?? 0;
-        $stockStatus = $qty > 0 ? 
-            "<span class='badge bg-success'>In Stock ({$qty})</span>" : 
+        $stockStatus = $qty > 0 ?
+            "<span class='badge bg-success'>In Stock ({$qty})</span>" :
             "<span class='badge bg-danger'>Out of Stock</span>";
 
         $customFieldsInfo = $this->formatCustomFields($product);
-        
+
         return "
         <div class='product-edit-result'>
             <div class='alert alert-success'>
                 <h5><i class='fas fa-check-circle me-2'></i>Product Updated Successfully</h5>
                 <p class='mb-2'>Updated fields: {$fieldsUpdated}</p>
             </div>
-            
+
             <div class='card'>
                 <div class='card-header d-flex justify-content-between align-items-center'>
                     <h6 class='mb-0'><i class='fas fa-shopping-bag me-2'></i>Product Details</h6>

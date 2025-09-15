@@ -47,6 +47,8 @@ class CreatePostTool extends CreateContentTool
 
     public function __invoke(...$args): string
     {
+
+
         // Extract parameters from args array using keys
         $title = $args['title'] ?? null;
         $content_body = $args['content_body'] ?? null;

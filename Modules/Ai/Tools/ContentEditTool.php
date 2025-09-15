@@ -25,7 +25,7 @@ class ContentEditTool extends AbstractContentTool
     {
         return [
             new ToolProperty(
-                name: 'content_id',
+                name: 'id',
                 type: PropertyType::INTEGER,
                 description: 'ID of the content to edit.',
                 required: true,
@@ -72,7 +72,7 @@ class ContentEditTool extends AbstractContentTool
     public function __invoke(...$args): string
     {
         // Extract parameters from args array using keys
-        $content_id = $args['content_id'] ?? null;
+        $content_id = $args['id'] ?? null;
         $title = $args['title'] ?? '';
         $content_body = $args['content_body'] ?? '';
         $description = $args['description'] ?? '';
@@ -129,22 +129,22 @@ class ContentEditTool extends AbstractContentTool
     {
         $statusBadge = $this->getContentStatusBadge($content->is_active ?? 0);
         $typeBadge = $this->getContentTypeBadge($content->content_type ?? 'content');
-        
+
         $updatedFields = [];
         foreach (array_keys($updateData) as $field) {
             $updatedFields[] = "<span class='badge bg-info'>" . ucfirst(str_replace('_', ' ', $field)) . "</span>";
         }
         $fieldsUpdated = implode(' ', $updatedFields);
-        
+
         $customFieldsInfo = $this->formatCustomFields($content);
-        
+
         return "
         <div class='content-edit-result'>
             <div class='alert alert-success'>
                 <h5><i class='fas fa-check-circle me-2'></i>Content Updated Successfully</h5>
                 <p class='mb-2'>Updated fields: {$fieldsUpdated}</p>
             </div>
-            
+
             <div class='card'>
                 <div class='card-header d-flex justify-content-between align-items-center'>
                     <h6 class='mb-0'><i class='fas fa-file-alt me-2'></i>Content Details</h6>

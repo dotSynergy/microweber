@@ -10,6 +10,7 @@ use Modules\Content\Models\Content;
 
 class CreateContentTool extends BaseTool
 {
+    protected ?int $maxTries = 5000;
     public function __construct(protected array $dependencies = [])
     {
         parent::__construct(

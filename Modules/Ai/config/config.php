@@ -189,10 +189,11 @@ return [
         'fal' => [
             'enabled' => env('FAL_ENABLED', false),
             'api_key' => env('FAL_API_KEY'),
-            'model' => env('FAL_MODEL', 'fal-ai/nano-banana'),
+            'model' => env('FAL_MODEL', 'fal-ai/imagen3/fast'),
             'api_endpoint' => env('FAL_API_ENDPOINT', 'https://fal.run'),
             'timeout' => env('FAL_TIMEOUT', 300),
             'models' => [
+                'fal-ai/imagen3/fast' => 'Imagen 3 Fast',
                 'fal-ai/nano-banana' => 'Nano Banana',
             ],
             'default_parameters' => [

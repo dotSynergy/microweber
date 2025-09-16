@@ -1,3 +1,9 @@
+
+
+mw.require("editor/events-handles.js");
+
+
+
 var EditorPredefinedControls = {
     default: [["bold", "italic", "underline"]],
     smallEditorDefault: [["bold", "italic", "|", "link"]],
@@ -1897,7 +1903,6 @@ mw.require("link-editor.js");
 mw.require("state.js");
 
 mw.require("editor/bar.js");
-mw.require("editor/events-handles.js");
 
 mw.require("editor/api.js");
 mw.require("editor/helpers.js");

@@ -8,8 +8,9 @@ use Modules\Ai\Services\AgentFactory;
 use Modules\Ai\Services\RagSearchService;
 use Modules\Ai\Tools\RagSearchTool;
 use Modules\Ai\Workflows\GeneralAgentWorkflow;
+use Modules\Ai\Events\ProgressEvent;
 use NeuronAI\SystemPrompt;
-use NeuronAI\Workflow\WorkflowState;
+use NeuronAI\Chat\Messages\UserMessage;
 use Illuminate\Support\Facades\Log;
 
 class GeneralAgent extends BaseAgent
@@ -35,25 +36,23 @@ class GeneralAgent extends BaseAgent
     {
         return (string)new SystemPrompt(
             background: [
-                'You are an intelligent routing agent for the Microweber CMS system.',
-                'Your primary job is to analyze user queries and route them to the appropriate specialized agent.',
-                'You have access to specialized agents for different domains: content, shop, customer, and general assistance.',
-                'You make routing decisions based on query analysis and intent detection.',
-                'When used as a routing agent, provide structured routing decisions.',
-                'When used for general assistance, provide helpful information about the system.',
+                'You are a General AI Assistant for Microweber CMS.',
+                'Your role is to understand user requests and either handle them directly or route them to specialized agents.',
+                'You can help with general questions and route specific requests to content, shop, or customer agents.',
+                'When routing, provide clear explanations of what the specialized agent will do.',
             ],
             steps: [
-                'Analyze the user query to understand the intent and domain.',
-                'Identify keywords and context that indicate which specialized agent should handle the request.',
-                'Make confident routing decisions when the domain is clear.',
-                'Use general assistance when the query doesn\'t fit specific domains.',
-                'Provide clear reasoning for routing decisions.',
+                'Analyze the user request to determine if it needs specialized handling.',
+                'For content-related requests (writing, SEO, blogs, posts), route to ContentAgent.',
+                'For shop-related requests (products, orders, inventory), route to ShopAgent.',
+                'For customer-related requests (users, accounts, support), route to CustomerAgent.',
+                'For general questions or help, provide direct assistance.',
+                'Always provide clear, helpful responses.',
             ],
             output: [
-                'For routing: Provide structured routing decisions with confidence scores.',
-                'For general help: Provide clear, helpful responses formatted with proper HTML.',
-                'Include explanations and reasoning in routing decisions.',
                 'Format responses appropriately for the context and intended use.',
+                'When routing, explain what the specialized agent will help with.',
+                'For general help, provide comprehensive assistance information.',
             ],
         );
     }
@@ -64,113 +63,182 @@ class GeneralAgent extends BaseAgent
     }
 
     /**
-     * Handle user query using workflow pattern
+     * Handle user query using workflow-based routing like the old agent patterns
      */
     public function handle(string $message): string
     {
         try {
-            // Create routing agent (using a simple base agent for routing decisions)
-            $routingAgent = new class($this->providerName, $this->model) extends BaseAgent {
-                protected function setupTools(): void {
-                    // Routing agent doesn't need tools
-                }
-
-                public function instructions(): string {
-                    return (string)new SystemPrompt(
-                        background: [
-                            'You are an intelligent agent router for the Microweber CMS system.',
-                            'Your job is to analyze user queries and determine which specialized agent should handle them.',
-                        ],
-                        steps: [
-                            'Analyze the user query to understand intent and domain.',
-                            'Choose the most appropriate agent type based on keywords and context.',
-                            'Provide confidence score and clear reasoning.',
-                        ],
-                        output: [
-                            'Provide structured routing decisions with agent_type, confidence, reasoning, and context.',
-                        ],
-                    );
-                }
-            };
-
-            // Create and execute the workflow
-            $workflow = new GeneralAgentWorkflow(
+            // Use the workflow system for proper routing and execution
+            $workflow = new \Modules\Ai\Workflows\GeneralAgentWorkflow(
                 userQuery: $message,
                 agentFactory: $this->agentFactory,
-                routingAgent: $routingAgent
+                routingAgent: $this
             );
 
-            $handler = $workflow->start();
+            // Execute the workflow and collect progress events
+            $responses = [];
+            $finalResponse = '';
 
-            // Collect progress events and final result
-            $progressMessages = [];
-            foreach ($handler->streamEvents() as $event) {
-                if (method_exists($event, 'message')) {
-                    $progressMessages[] = $event->message;
+            // Use reflection to access the execute method if it's protected
+            try {
+                $reflection = new \ReflectionMethod($workflow, 'execute');
+                if (!$reflection->isPublic()) {
+                    $reflection->setAccessible(true);
                 }
+                
+                foreach ($reflection->invoke($workflow) as $event) {
+                    if ($event instanceof \Modules\Ai\Events\ProgressEvent) {
+                        $responses[] = $event->message;
+                        Log::info('GeneralAgent Progress', ['message' => $event->message]);
+                    } elseif ($event instanceof \NeuronAI\Workflow\StopEvent) {
+                        // Get the final response from workflow state
+                        $state = $workflow->getState();
+                        $finalResponse = $state->get('agent_response', $this->getGeneralHelp());
+                        break;
+                    }
+                }
+            } catch (\ReflectionException $e) {
+                Log::error('Workflow reflection error', ['error' => $e->getMessage()]);
+                return $this->simpleRouting($message);
             }
 
-            $result = $handler->getResult();
-            $response = $result->get('agent_response', '');
-
-            // If we have a response, return it
-            if (!empty($response)) {
-                return $response;
+            // If we have a final response, return it
+            if (!empty($finalResponse)) {
+                return $finalResponse;
             }
 
-            // Fallback to general help if no response
-            return $this->getGeneralHelp();
+            // Fallback to simple routing if workflow fails
+            Log::warning('Workflow execution did not return response, falling back to simple routing');
+            return $this->simpleRouting($message);
 
         } catch (\Exception $e) {
             Log::error('GeneralAgent workflow error', [
-                'message' => $message,
-                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
 
-            // Fallback to direct agent handling
-            return $this->handleDirectly($message);
+            // Fallback to simple routing
+            return $this->simpleRouting($message);
         }
     }
 
     /**
-     * Direct handling fallback (original method)
+     * Fallback simple routing method
      */
-    protected function handleDirectly(string $message): string
+    protected function simpleRouting(string $message): string
     {
-        // Determine which agent to use based on simple keyword matching
         $domain = $this->detectDomain($message);
 
         if ($domain !== 'general') {
             return $this->routeToSpecializedAgent($domain, $message);
         }
 
-        // Handle as general query
         return $this->getGeneralHelp();
     }
 
     /**
-     * Simple domain detection based on keywords
+     * Enhanced domain detection with context and intent analysis
      */
     protected function detectDomain(string $message): string
     {
         $message = strtolower($message);
 
-        // Content domain keywords
-        if (preg_match('/\b(content|blog|post|page|write|seo|article|trending|trends|google trends)\b/', $message)) {
-            return 'content';
+        // Define domain patterns with priority scoring
+        $patterns = [
+            'content' => [
+                'high' => [
+                    '/\b(create|write|edit|update|publish)\s+(blog|post|page|content|article)\b/',
+                    '/\b(seo|search engine optimization|trending topics|google trends)\b/',
+                    '/\b(content management|cms)\b/',
+                    '/\b(blog posts?|articles?|pages?)\b/'
+                ],
+                'medium' => [
+                    '/\b(content|blog|post|page|article|write|seo|trending|trends)\b/',
+                    '/\b(social media|facebook|twitter|instagram)\b/',
+                    '/\b(keywords|meta description|title tag)\b/'
+                ],
+                'keywords' => ['content', 'blog', 'post', 'page', 'write', 'seo', 'article', 'trending', 'trends', 'google trends', 'social media']
+            ],
+            'shop' => [
+                'high' => [
+                    '/\b(create|add|edit|update|delete)\s+(product|item)\b/',
+                    '/\b(manage|view|search|find|show)\s+(product|inventory|order|stock)\b/',
+                    '/\b(e-commerce|online store|shopping cart)\b/',
+                    '/\bprice\s+(range|filter|under|over|between)\b/',
+                    '/\bproducts?\s+(under|over|below|above)\b/'
+                ],
+                'medium' => [
+                    '/\b(product|shop|order|price|inventory|sku|buy|sell|cart|checkout)\b/',
+                    '/\b(category|categories|catalog)\b/',
+                    '/\b(payment|shipping|delivery)\b/',
+                    '/\bmy\s+(product|shop|store|inventory)\b/'
+                ],
+                'keywords' => ['product', 'products', 'shop', 'order', 'price', 'inventory', 'sku', 'buy', 'sell', 'cart', 'checkout', 'ecommerce', 'store']
+            ],
+            'customer' => [
+                'high' => [
+                    '/\b(find|search|lookup|get)\s+(customer|user|client)\b/',
+                    '/\b(customer\s+(details|information|data|profile))\b/',
+                    '/\b(email|phone|address)\s+(search|lookup|find)\b/',
+                    '/\b(user\s+(account|management|profile))\b/'
+                ],
+                'medium' => [
+                    '/\b(customer|user|account|address|email|phone|client)\b/',
+                    '/\b(member|membership|subscriber)\b/',
+                    '/\b(contact|support|help desk)\b/'
+                ],
+                'keywords' => ['customer', 'user', 'account', 'address', 'email', 'phone', 'client', 'member', 'contact']
+            ]
+        ];
+
+        // Calculate scores for each domain
+        $scores = [];
+        
+        foreach ($patterns as $domain => $domainPatterns) {
+            $score = 0;
+            
+            // High priority patterns (score: 10)
+            foreach ($domainPatterns['high'] as $pattern) {
+                if (preg_match($pattern, $message)) {
+                    $score += 10;
+                }
+            }
+            
+            // Medium priority patterns (score: 5)
+            foreach ($domainPatterns['medium'] as $pattern) {
+                if (preg_match($pattern, $message)) {
+                    $score += 5;
+                }
+            }
+            
+            // Keyword counting (score: 1 per keyword)
+            foreach ($domainPatterns['keywords'] as $keyword) {
+                $score += substr_count($message, $keyword);
+            }
+            
+            $scores[$domain] = $score;
         }
 
-        // Shop domain keywords
-        if (preg_match('/\b(product|shop|order|price|inventory|sku|buy|sell|cart|checkout)\b/', $message)) {
-            return 'shop';
+        // Find the domain with the highest score
+        $maxScore = max($scores);
+        $bestDomain = array_search($maxScore, $scores);
+        
+        // Only return specialized domain if score is significant enough (lowered threshold)
+        if ($maxScore >= 1) {
+            Log::info('Domain detection', [
+                'message' => substr($message, 0, 100),
+                'scores' => $scores,
+                'detected' => $bestDomain
+            ]);
+            return $bestDomain;
         }
 
-        // Customer domain keywords
-        if (preg_match('/\b(customer|user|account|address|email|phone|client)\b/', $message)) {
-            return 'customer';
-        }
-
+        // Default to general if no clear domain detected
+        Log::info('Domain detection defaulted to general', [
+            'message' => substr($message, 0, 100),
+            'scores' => $scores
+        ]);
+        
         return 'general';
     }
 

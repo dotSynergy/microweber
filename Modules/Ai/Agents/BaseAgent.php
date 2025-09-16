@@ -210,6 +210,25 @@ abstract class BaseAgent extends Agent
                 model: $this->model,
             );
         }
+    }
 
+    public function getDomain(): string
+    {
+        return $this->domain;
+    }
+
+    public function getProviderName(): ?string
+    {
+        return $this->providerName;
+    }
+
+    public function getModel(): ?string
+    {
+        return $this->model;
+    }
+
+    public function getDependencies(): array
+    {
+        return $this->dependencies;
     }
 }

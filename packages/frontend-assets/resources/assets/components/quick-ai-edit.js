@@ -1424,7 +1424,11 @@ and add to the schema the content and children objects with the new text in the 
                 Make the image relevant to both the general subject "${about}" and the specific context provided focus on the context   "${contextText.substring(
                     0,
                     200
-                )}"  "
+                )}"
+
+                 Never write text or logos in the image. Do not use text or logos in the image.
+
+                 "
                 `;
 
                 // Update progress for each image

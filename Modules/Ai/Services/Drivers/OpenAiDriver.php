@@ -94,11 +94,11 @@ class OpenAiDriver extends BaseDriver
         $params = [
             'model' => $options['model'] ?? $this->model ?? 'gpt-4o-mini',
             'messages' => $messages,
-            'temperature' => $options['temperature'] ?? 0.0,
-            'max_tokens' => $options['max_tokens'] ?? null,
-            'top_p' => $options['top_p'] ?? 1.0,
-            'frequency_penalty' => $options['frequency_penalty'] ?? 0.0,
-            'presence_penalty' => $options['presence_penalty'] ?? 0.0,
+         //   'temperature' => $options['temperature'] ?? 0.0,
+         //   'max_tokens' => $options['max_tokens'] ?? 10000,
+        //    'top_p' => $options['top_p'] ?? 1.0,
+        //    'frequency_penalty' => $options['frequency_penalty'] ?? 0.0,
+        //    'presence_penalty' => $options['presence_penalty'] ?? 0.0,
             'stop' => $options['stop'] ?? null,
         ];
 

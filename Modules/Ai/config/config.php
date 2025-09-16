@@ -87,11 +87,12 @@ return [
         'replicate' => [
             'enabled' => env('REPLICATE_ENABLED', false),
             'api_key' => env('REPLICATE_API_KEY'),
-            'model' => env('REPLICATE_MODEL', 'google/imagen-3-fast'),
+            'model' => env('REPLICATE_MODEL', 'google/imagen-4-fast'),
             'max_tokens' => env('REPLICATE_MAX_TOKENS', null),
             'temperature' => env('REPLICATE_TEMPERATURE', 0.7),
             'api_endpoint' => env('REPLICATE_API_ENDPOINT', 'https://api.replicate.com'),
             'models' => [
+                'google/imagen-4-fast' => 'Imagen 4 Fast',
                 'google/imagen-3-fast' => 'Imagen 3 Fast',
                 'google/imagen-3' => 'Imagen 3',
                 'minimax/image-01' => 'Minimax Image 0.1',
@@ -189,7 +190,7 @@ return [
         'fal' => [
             'enabled' => env('FAL_ENABLED', false),
             'api_key' => env('FAL_API_KEY'),
-            'model' => env('FAL_MODEL', 'fal-ai/imagen3/fast'),
+            'model' => env('FAL_MODEL', 'fal-ai/nano-banana'),
             'api_endpoint' => env('FAL_API_ENDPOINT', 'https://fal.run'),
             'timeout' => env('FAL_TIMEOUT', 300),
             'models' => [

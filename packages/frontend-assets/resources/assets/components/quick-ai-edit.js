@@ -1397,11 +1397,11 @@ and add to the schema the content and children objects with the new text in the 
                 }
 
                 // Create contextual prompt for this specific image
-                let images_prompt = `Generate a image asset image related to the subject: ${about}`;
+                let images_prompt = `Generate a image asset for background or picture image related to the subject: ${about}`;
 
                 if (contextText) {
                     images_prompt += `
-                    The image should be contextually relevant to this specific content: "${contextText.substring(
+                    The image should be represent the a photorealistic interpretation of the mood of : "${contextText.substring(
                         0,
                         200
                     )}"
@@ -1409,24 +1409,11 @@ and add to the schema the content and children objects with the new text in the 
                 }
 
                 images_prompt += `
-                The image should represent a design asset related the subject and the specific context, and should be suitable for use as an background or a main image on a website.
-                The image should not contain any text or logos, and should be in a style that is consistent with modern web design trends.
-                The image is going to be used as a design element on a website, it must not represent a website, but should be relevant to the subject of the website.
-                The design asset must not have any text or logo in it.
-                The image should be in a style that is consistent with modern web design trends, and should be visually appealing and engaging.
-                The image should be relevant to the target audience of the website, and should help to convey the message and purpose of the website.
+
+                Important: Do not put text inside the image.
 
 
 
-                The image should be visually appealing and high quality, and should be appropriate for use on a professional website as an element.
-
-
-                Make the image relevant to both the general subject "${about}" and the specific context provided focus on the context   "${contextText.substring(
-                    0,
-                    200
-                )}"
-
-                 Never write text or logos in the image. Do not use text or logos in the image.
 
                  "
                 `;

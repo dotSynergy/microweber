@@ -72,6 +72,10 @@ class PaymentServiceProvider extends BaseModuleServiceProvider
             $paymentManager->extend('mollie', function () {
                 return new \Modules\Payment\Drivers\Mollie();
             });
+
+            $paymentManager->extend('momomtn', function () {
+                return new \Modules\Payment\Drivers\MomoMtn();
+            });
         });
 
 

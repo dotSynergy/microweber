@@ -12,7 +12,7 @@ use MicroweberPackages\Multilanguage\Models\Traits\HasMultilanguageTrait;
 class CustomField extends Model
 {
     use MaxPositionTrait;
-  //  use CacheableQueryBuilderTrait;
+   use CacheableQueryBuilderTrait;
     use HasCreatedByFieldsTrait;
     use HasMultilanguageTrait;
 
@@ -144,16 +144,27 @@ class CustomField extends Model
         $customFieldValueToSave = null;
         $setBackValueAttrbuteAfterSave = null;
         $setBackMultileValuesAttrbuteAfterSave = null;
+        $customFieldValueToSaveMultiple = [];
+
+        if (isset($this->value) and $this->value) {
 
 
-        $customFieldValueToSaveMultiple = $this->values ?? null;
+
+           $customFieldValueToSaveMultiple = [$this->value];
+           // $customFieldValueToSaveMultiple = $this->value ?? null;
+            $this->values = $this->value;
+            unset($this->value );
+        } else {
+            $customFieldValueToSaveMultiple = $this->values ?? null;
+
+        }
 
         if ($customFieldValueToSaveMultiple) {
             $customFieldValueToSaveMultiple = array_filter($customFieldValueToSaveMultiple, function ($value) {
                 return $value !== null && $value !== '' && $value != 0;
             });
         }
-
+//dd($this->values);
 //
 //        if(isset($this->values) and is_array($this->values)) {
 //            $this->values = array_filter($this->values, function ($value) {
@@ -161,45 +172,46 @@ class CustomField extends Model
 //            });
 //
 //        }
-
-        if (empty($customFieldValueToSaveMultiple)) {
-            // signel value
-
-            if (isset($this->value)) {
-
-
-                //cleaup the old value
-                CustomFieldValue::where('custom_field_id', $this->id)->delete();
-
-                $setBackValueAttrbuteAfterSave = $this->value;
-                if (is_collection($this->value)) {
-                    $customFieldValueToSave = $this->value->toArray();
-                } else {
-                    $customFieldValueToSave = $this->value;
-                }
-                if (is_array($customFieldValueToSave) and isset($customFieldValueToSave[0])) {
-                    $customFieldValueToSave = array_pop($customFieldValueToSave);
-                }
-
-                unset($this->value);
-            }
-
-        }
+//        if (empty($customFieldValueToSaveMultiple)) {
+//            // signel value
+//
+//            if (isset($this->value)) {
+//
+//
+//                //cleaup the old value
+//                CustomFieldValue::where('custom_field_id', $this->id)->delete();
+//
+//                $setBackValueAttrbuteAfterSave = $this->value;
+//                if (is_collection($this->value)) {
+//                    $customFieldValueToSave = $this->value->toArray();
+//                } else {
+//                    $customFieldValueToSave = $this->value;
+//                }
+//                if (is_array($customFieldValueToSave) and isset($customFieldValueToSave[0])) {
+//                    $customFieldValueToSave = array_pop($customFieldValueToSave);
+//                }
+//
+//                unset($this->value);
+//            }
+//
+//        }
         if (isset($this->value)) {
 
             unset($this->value);
         }
-        if (isset($this->values) and !empty($this->values)) {
 
-            if (is_collection($this->values)) {
-                $customFieldValueToSave = $this->values->toArray();
-            } else {
-                $customFieldValueToSave = $this->values;
+        if (!empty($customFieldValueToSaveMultiple)) {
+            if (isset($this->values) and !empty($this->values)) {
+
+                if (is_collection($this->values)) {
+                    $customFieldValueToSave = $this->values->toArray();
+                } else {
+                    $customFieldValueToSave = $this->values;
+                }
+                $setBackMultileValuesAttrbuteAfterSave = $this->values;
+                unset($this->values);
             }
-            $setBackMultileValuesAttrbuteAfterSave = $this->values;
-            unset($this->values);
         }
-
         if (isset($this->options) and is_string($this->options) and $this->options != '') {
             $this->options = @json_decode($this->options, true);
         }

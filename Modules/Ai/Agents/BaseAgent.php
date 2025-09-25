@@ -31,7 +31,7 @@ use NeuronAI\Tools\ProviderToolInterface;
 use NeuronAI\AgentInterface;
 use NeuronAI\Workflow\WorkflowState;
 
-abstract class BaseAgent extends Agent
+class BaseAgent extends Agent
 {
     protected array $tools = [];
     protected string $domain;
@@ -58,7 +58,9 @@ abstract class BaseAgent extends Agent
         $this->setupTools();
     }
 
-    abstract protected function setupTools(): void;
+    protected function setupTools(): void
+    {
+    }
 
     public function setState(WorkflowState $state): void
     {
@@ -83,7 +85,7 @@ abstract class BaseAgent extends Agent
         } else {
             $this->tools[] = $tools;
         }
-        
+
         return $this;
     }
 
@@ -133,7 +135,7 @@ abstract class BaseAgent extends Agent
     protected function getContextWindow(): int
     {
         $defaultContextWindow = 50000;
-        
+
         // Get context window based on model
         $contextWindows = [
             // OpenAI models
@@ -143,18 +145,18 @@ abstract class BaseAgent extends Agent
             'gpt-4o' => 128000,
             'gpt-3.5-turbo' => 16385,
             'gpt-3.5-turbo-16k' => 16385,
-            
+
             // Anthropic models
             'claude-3-opus-20240229' => 200000,
             'claude-3-sonnet-20240229' => 200000,
             'claude-3-haiku-20240307' => 200000,
             'claude-3-5-sonnet-20241022' => 200000,
-            
+
             // Gemini models
             'gemini-pro' => 30720,
             'gemini-1.5-pro' => 1000000,
             'gemini-1.5-flash' => 1000000,
-            
+
             // Other models
             'deepseek-chat' => 32768,
             'mistral-large-latest' => 32768,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e80a2a9fd6d549dfb88739c11c695ac",
+    "content-hash": "b9a08f078e0ac871b734e05f7e3bb21d",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -9544,6 +9544,51 @@
                 "symlink": true,
                 "relative": true
             }
+        },
+        {
+            "name": "microweber-packages/omnipay-momo-mtn",
+            "version": "0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/microweber-packages/omnipay-momo-mtn.git",
+                "reference": "766307b26adda4ef0fa3ae65ec5006a2c73bd115"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/microweber-packages/omnipay-momo-mtn/zipball/766307b26adda4ef0fa3ae65ec5006a2c73bd115",
+                "reference": "766307b26adda4ef0fa3ae65ec5006a2c73bd115",
+                "shasum": ""
+            },
+            "require": {
+                "omnipay/common": "^3.4"
+            },
+            "require-dev": {
+                "http-interop/http-factory-guzzle": "^1.2",
+                "omnipay/tests": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Omnipay\\MoMoMtn\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Ivanov",
+                    "email": "peter@microweber.com"
+                }
+            ],
+            "description": "MoMo payment gateway driver for Omnipay library",
+            "homepage": "https://github.com/microweber-packages/omnipay-momo-mtn",
+            "support": {
+                "issues": "https://github.com/microweber-packages/omnipay-momo-mtn/issues",
+                "source": "https://github.com/microweber-packages/omnipay-momo-mtn/tree/0.2"
+            },
+            "time": "2025-09-25T10:07:12+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

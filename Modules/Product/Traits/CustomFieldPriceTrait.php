@@ -27,12 +27,25 @@ trait CustomFieldPriceTrait
 
         static::saving(function ($model) {
 
+
+            if($model->isDirty('price')){
+          //      dd($model->price);
+            }
+
             if ($model->attributes and array_key_exists("price", $model->attributes)) {
-                if (isset($model->attributes['price'])) {
-                    $model->_addPriceField = $model->attributes['price'];
-                } else {
-                    $model->_removePriceField = true;
-                }
+
+           //    if($model->wasChanged('price')){
+                    if (isset($model->attributes['price'])) {
+                        $model->_addPriceField = $model->attributes['price'];
+                    } else {
+                        $model->_removePriceField = true;
+                    }
+       //          dd($model->isDirty('price'),$model->wasChanged('price'),$model->getChanges(),$model->_addPriceField, $model->_removePriceField);
+
+             //  }
+
+
+
                 unset($model->attributes['price']);
             }
 
@@ -53,7 +66,6 @@ trait CustomFieldPriceTrait
             if (isset($model->_addPriceField)) {
 
                 $price = ProductPrice::where('rel_id', $model->id)->where('rel_type', $model->getMorphClass())->first();
-
                 if (!$price) {
                     $price = new ProductPrice();
                     $price->name = 'price';
@@ -62,10 +74,13 @@ trait CustomFieldPriceTrait
 
                 $priceInputVal = trim($model->_addPriceField);
                 if (is_numeric($priceInputVal)) {
-                    $price->value = $priceInputVal;
+                    $price->values = [$priceInputVal];
                 } else {
-                    $price->value = floatval($priceInputVal);
+                    $price->values = [floatval($priceInputVal)];
                 }
+
+
+
 
                 $price->rel_id = $model->id;
                 $price->rel_type = $model->getMorphClass();

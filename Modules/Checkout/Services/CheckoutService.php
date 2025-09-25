@@ -477,7 +477,15 @@ class CheckoutService
             $orderData['taxes_amount'] = cart_get_tax();
         }
 
-        return $orderData;
+        //dd($data, $orderData);
+
+        $orderDataMerged = array_merge($orderData, $data);
+        if(isset($data['id'])){
+            unset($orderDataMerged['id']);
+        }
+
+        return $orderDataMerged;
+       // return $orderData;
     }
 
     /**

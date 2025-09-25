@@ -926,8 +926,6 @@ class ContentResource extends Resource
                                 ->searchable(),
 
 
-
-
                         ])
 
 

@@ -20,7 +20,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
         while (curr && curr.parentNode) {
             hasList = curr.nodeName === 'UL' || curr.nodeName === "OL";
-            if(hasList) {
+            if (hasList) {
                 break;
             }
             curr = curr.parentNode;
@@ -29,6 +29,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
         return hasList;
     }
+
     shouldShowCloneButtonInMoreButton(target) {
         const isVisible = this.isPlaceholder(target) && (target.classList.contains('cloneable') || target.classList.contains('mw-col'));
         if (!isVisible) {
@@ -38,7 +39,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             }
 
 
-            var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+            var hasClonableParent = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
             if (hasClonableParent) {
                 return true;
             }
@@ -48,6 +49,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         return isVisible;
 
     }
+
     shouldShowCloneButton(target) {
 
 
@@ -67,7 +69,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         if (hasCloneable) {
             return true;
         }
-        var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+        var hasClonableParent = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
         if (hasClonableParent) {
             return true;
         }
@@ -84,12 +86,13 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
         return isVisible;
     }
+
     shouldShowMoveForwardInMoreButton(target) {
         const hasCloneable = DomService.hasAnyOfClasses(target, ['cloneable', 'mw-col']);
         if (hasCloneable) {
             return true;
         }
-        var hasClonableParent =  DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
+        var hasClonableParent = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['cloneable']);
         if (hasClonableParent) {
             return true;
         }
@@ -129,7 +132,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
     shouldShowFitImageButton(target) {
         //has class mw-resized
         if (target && target.classList) {
-            const isImage = target.nodeName === 'IMG'  ;
+            const isImage = target.nodeName === 'IMG';
             if (isImage) {
                 return !target.parentNode.classList.contains('img-as-background');
             }
@@ -155,19 +158,20 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         var selfVisible = true;
 
 
-        if (  target.classList.contains('no-typing')) {
+        if (target.classList.contains('no-typing')) {
             target.contentEditable = false;
             selfVisible = false;
         }
         return selfVisible;
     }
+
     shouldShowBulletStyleButton(target) {
 
         let hasList = false, curr = target;
 
         while (curr && curr.parentNode) {
             hasList = curr.nodeName === 'UL' || curr.nodeName === "OL";
-            if(hasList) {
+            if (hasList) {
                 break;
             }
             curr = curr.parentNode;
@@ -181,17 +185,18 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         var selfVisible = false;
         // element to parent with background image
         const hasBg = DomService.firstParentOrCurrentWithAnyOfClasses(target, ['background-image-holder', 'img-holder']);
-        if(hasBg) {
+        if (hasBg) {
             selfVisible = true;
         }
         return selfVisible;
     }
+
     shouldShowBackroundImageEditorButton(target) {
 
         var selfVisible = false;
         // element to parent with background image
         const hasBg = DomService.hasAnyOfClasses(target, ['background-image-holder', 'img-holder']);
-        if(hasBg) {
+        if (hasBg) {
             selfVisible = true;
         }
 
@@ -207,12 +212,12 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             selfVisible = false;
         }
 
-        if (DomService.hasAnyOfClasses(target, [ 'no-drag'])) {
+        if (DomService.hasAnyOfClasses(target, ['no-drag'])) {
             selfVisible = false;
         } else if (DomService.hasAnyOfClassesOnNodeOrParent(target, ['img-as-background'])) {
             selfVisible = false;
         }
-        if(selfVisible){
+        if (selfVisible) {
             selfVisible = target.dataset.mwFreeElement !== 'true';
         }
         return selfVisible;
@@ -220,7 +225,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
     shouldShowEditImageButton(element) {
         var selfVisible = false;
-        if (element.nodeName === 'IMG' && element.src &&  element.src.toLowerCase().indexOf('.svg') === -1) {
+        if (element.nodeName === 'IMG' && element.src && element.src.toLowerCase().indexOf('.svg') === -1) {
             selfVisible = true;
         }
         return selfVisible;
@@ -259,7 +264,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             selfVisible = false;
         }
 
-        if( liveEditHelpers.targetIsIcon(target)) {
+        if (liveEditHelpers.targetIsIcon(target)) {
             target.contentEditable = false;
             selfVisible = true;
         }
@@ -288,13 +293,13 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
             selfVisible = true;
         }
 
-        if(target.classList.contains('mw-col')) {
+        if (target.classList.contains('mw-col')) {
             selfVisible = false;
         } else if (target.classList.contains('spacer')) {
             selfVisible = false;
-        } else if(this.isPlaceholder(target)) {
+        } else if (this.isPlaceholder(target)) {
             selfVisible = false;
-        } else if(this.shouldShowStyleEditorButton(target)) {
+        } else if (this.shouldShowStyleEditorButton(target)) {
             selfVisible = false;
         }
 
@@ -305,7 +310,7 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
         var selfVisible = false;
 
 
-        if (target.classList.contains('background-color-element') ) {
+        if (target.classList.contains('background-color-element')) {
             selfVisible = true;
         }
         return selfVisible;
@@ -313,11 +318,11 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
     shouldShowDeleteElementButton(target) {
         let selfVisible = true;
-        if(target.classList.contains('edit')) {
+        if (target.classList.contains('edit')) {
             selfVisible = false;
         }
 
-        if(!DomService.parentsOrCurrentOrderMatchOrOnlyFirst(target.parentNode, ['edit', 'module'])) {
+        if (!DomService.parentsOrCurrentOrderMatchOrOnlyFirst(target.parentNode, ['edit', 'module'])) {
             selfVisible = false;
         }
         return selfVisible;
@@ -342,6 +347,6 @@ export class ElementHandleButtonsVisibility extends MicroweberBaseClass {
 
 
     isPlaceholder(target) {
-        return target.classList.contains('mw-img-placeholder');
+        return target && target.classList && target.classList.contains('mw-img-placeholder');
     }
 }

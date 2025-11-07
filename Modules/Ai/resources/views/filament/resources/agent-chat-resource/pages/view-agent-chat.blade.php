@@ -111,7 +111,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="prose prose-sm max-w-none">
+                                            <div class="prose prose-sm max-w-full">
                                                 {!! $message['content'] !!}
                                             </div>
                                         </div>
@@ -159,7 +159,7 @@
                     <form wire:submit="sendMessage" class="space-y-3">
                         <div class="form-group">
                             <label for="userMessage" class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
-                            <textarea 
+                            <textarea
                                 wire:model="userMessage"
                                 id="userMessage"
                                 rows="3"
@@ -173,15 +173,15 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2 text-sm text-gray-500">
                                 <i class="fas fa-info-circle"></i>
                                 <span>Messages are processed by {{ ucfirst($record->agent_type) }} Assistant</span>
                             </div>
-                            
-                            <button 
-                                type="submit" 
+
+                            <button
+                                type="submit"
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 wire:loading.attr="disabled"
                                 wire:target="sendMessage"
@@ -214,8 +214,8 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
                     @switch($record->agent_type)
                         @case('customer')
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="p-2 text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 rounded border transition-colors"
                                 wire:click="$set('userMessage', 'Find customer with email john@example.com')"
                             >
@@ -223,8 +223,8 @@
                             </button>
                             @break
                         @case('shop')
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="p-2 text-xs bg-green-50 hover:bg-green-100 text-green-700 rounded border transition-colors"
                                 wire:click="$set('userMessage', 'Search for products under €50')"
                             >
@@ -232,8 +232,8 @@
                             </button>
                             @break
                         @case('content')
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="p-2 text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded border transition-colors"
                                 wire:click="$set('userMessage', 'Help me write SEO content')"
                             >
@@ -241,8 +241,8 @@
                             </button>
                             @break
                         @default
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 class="p-2 text-xs bg-gray-50 hover:bg-gray-100 text-gray-700 rounded border transition-colors"
                                 wire:click="$set('userMessage', 'What can you help me with?')"
                             >
@@ -284,39 +284,39 @@
         .chat-messages::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .chat-messages::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 3px;
         }
-        
+
         .chat-messages::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 3px;
         }
-        
+
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
-        
+
         .message-item {
             animation: fadeIn 0.3s ease-in;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
             margin-top: 1rem;
             margin-bottom: 0.5rem;
         }
-        
+
         .prose p {
             margin-bottom: 0.75rem;
         }
-        
+
         .prose ul, .prose ol {
             margin-bottom: 0.75rem;
         }

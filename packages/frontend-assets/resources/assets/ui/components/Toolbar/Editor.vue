@@ -353,7 +353,7 @@ export default {
                     }, 70)
 
 
-                } else if (element.classList.contains('mw-img-placeholder')) {
+                } else if (element && element.classList && element.classList.contains('mw-img-placeholder')) {
 
                     var dialog = imagePicker(function (res) {
 

@@ -2,6 +2,7 @@
 
 namespace Modules\Teamcard\Filament;
 
+use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Forms\Components\{
     Hidden,
     Textarea,
@@ -47,55 +48,60 @@ use NeuronAI\StructuredOutput\SchemaProperty;
  */
 class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTable
 {
+
     use InteractsWithTable;
     use InteractsWithForms;
+    use InteractsWithActions;
 
-    public ?string $rel_id = null;
-    public ?string $rel_type = null;
-    public ?string $module_id = null;
+    public string|null $rel_id = null;
+    public string|null $rel_type = null;
 
     /**
      * Define the form fields for creating/editing team cards
      */
-    protected function editFormArray(): array
+    public function editFormArray(): array
     {
         return [
             Hidden::make('multilanguage')
                 ->visible(MultilanguageHelpers::multilanguageIsEnabled()),
-
-            Hidden::make('rel_id')
-                ->default($this->rel_id),
-            Hidden::make('rel_type')
-                ->default($this->rel_type),
             TextInput::make('name')
                 ->label('Team Member Name')
+                ->reactive()
                 ->helperText('Enter the full name of the team member.')
                 ->hintAction(
                     TranslateFieldAction::make('name')->label('')
                 )
-                ->required(),
+            ,
             MwFileUpload::make('file')
                 ->label('Team Member Picture')
+                ->reactive()
                 ->helperText('Upload a picture of the team member.')
-                ->required(),
+            ,
             Textarea::make('bio')
                 ->label('Team Member Bio')
                 ->helperText('Provide a short biography of the team member.')
+                ->reactive()
                 ->hintAction(
                     TranslateFieldAction::make('bio')->label('')
                 )
-                ->required(),
+            ,
             TextInput::make('role')
                 ->label('Team Member Role')
                 ->helperText('Specify the role of the team member in the team.')
+                ->reactive()
                 ->hintAction(
                     TranslateFieldAction::make('role')->label('')
                 )
-                ->required(),
+            ,
             TextInput::make('website')
                 ->label('Team Member Website')
+                ->reactive()
                 ->helperText('Enter the personal or professional website of the team member.')
                 ->url(),
+            Hidden::make('rel_id')
+                ->default($this->rel_id),
+            Hidden::make('rel_type')
+                ->default($this->rel_type),
         ];
     }
 
@@ -113,11 +119,11 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
             ->columns([
                 ImageColumn::make('file')
                     ->label('Picture')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->circular(),
                 TextColumn::make('name')
                     ->label('Name')
-                    ->action( EditAction::make('edit'))
+                    ->action(EditAction::make('edit'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('role')
@@ -216,7 +222,7 @@ class TeamcardTableList extends LiveEditModuleTable implements HasForms, HasTabl
                     ->form($this->editFormArray())
             ])
             ->actions([
-                EditAction::make()
+                EditAction::make('edit')
                     ->slideOver()
                     ->form($this->editFormArray()),
 

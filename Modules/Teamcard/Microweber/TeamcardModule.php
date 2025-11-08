@@ -50,6 +50,7 @@ class TeamcardModule extends BaseModule
 
         $teamCards = Teamcard::where('rel_type', $relType)
             ->where('rel_id', $relId)
+            ->orderBy('position', 'asc')
             ->get();
 
         if ($teamCards->isEmpty()) {

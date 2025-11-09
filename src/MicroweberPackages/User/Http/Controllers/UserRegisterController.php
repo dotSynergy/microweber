@@ -96,6 +96,11 @@ class UserRegisterController extends Controller
             $should_login = false;
         }
 
+        $return_to = null;
+        if (isset($inputs['redirect']) and $inputs['redirect']) {
+            $return_to = $inputs['redirect'];
+        }
+
 
         $created = User::create($userData);
         if ($created) {
@@ -120,12 +125,16 @@ class UserRegisterController extends Controller
             }
         }
 
+        if($return_to != null){
+            $created['redirect'] = $return_to;
+        }
+
 
         return response()->json($created, 201);
 
-      //  $resource = new \MicroweberPackages\User\Http\Resources\UserResource($request, $created);
+        //  $resource = new \MicroweberPackages\User\Http\Resources\UserResource($request, $created);
 
-      //  return $resource->response()->setStatusCode(201);
+        //  return $resource->response()->setStatusCode(201);
 
     }
 }

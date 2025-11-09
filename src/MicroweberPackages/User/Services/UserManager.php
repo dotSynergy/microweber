@@ -1665,12 +1665,12 @@ class UserManager
         $template_dir = $this->app->template_manager->dir();
         $file = $template_dir . 'login.php';
         $default_url = false;
-        if (is_file($file)) {
-            $default_url = 'login';
-        } else {
-            $default_url = 'users/login';
-        }
-
+//        if (is_file($file)) {
+//            $default_url = 'login';
+//        } else {
+//            $default_url = 'users/login';
+//        }
+        $default_url = 'login';
         $login_url = $this->app->option_manager->get('login_url', 'users');
         if ($login_url != false and trim($login_url) != '') {
             $default_url = $login_url;

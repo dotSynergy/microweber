@@ -1422,6 +1422,8 @@ class UserManager
         if (!isset($_REQUEST['provider']) and isset($_REQUEST['hauth_done'])) {
             $_REQUEST['provider'] = $_REQUEST['hauth_done'];
         }
+
+
         if (!isset($_REQUEST['provider'])) {
             return $this->app->url_manager->redirect(site_url());
         }
@@ -1540,7 +1542,13 @@ class UserManager
             //do nothing
         }
 
+
+
         if ($user_after_login != false) {
+            if(!str_contains($user_after_login, $this->app->url_manager->site())) {
+                $user_after_login = site_url($user_after_login);
+            }
+
             return $this->app->url_manager->redirect($user_after_login);
         } else {
             return $this->app->url_manager->redirect(site_url());

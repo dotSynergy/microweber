@@ -120,9 +120,12 @@ class UserRegisterController extends Controller
             }
         }
 
-        $resource = new \MicroweberPackages\User\Http\Resources\UserResource($request, $created);
 
-        return $resource->response()->setStatusCode(201);
+        return response()->json($created, 201);
+
+      //  $resource = new \MicroweberPackages\User\Http\Resources\UserResource($request, $created);
+
+      //  return $resource->response()->setStatusCode(201);
 
     }
 }

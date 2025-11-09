@@ -1783,7 +1783,9 @@ class UserManager
 
     public function socialite_config($provider = false)
     {
-        $callback_url = api_url('social_login_process?provider=' . $provider);
+      //  $callback_url = api_url('social_login_process?provider=' . $provider);
+         $callback_url = api_url('social_login_process?provider=' . $provider);
+       // $callback_url  = url('oauth/callback/'.$provider);
 
         if (get_option('enable_user_fb_registration', 'users')) {
             Config::set('services.facebook.client_id', get_option('fb_app_id', 'users'));

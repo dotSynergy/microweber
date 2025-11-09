@@ -1,4 +1,5 @@
 <?php
+
 namespace MicroweberPackages\User\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,11 +23,13 @@ class RegisterRequest extends FormRequest
      */
     public function authorize()
     {
+
+
         $enable_user_gesitration = get_option('enable_user_registration', 'users');
         if ($enable_user_gesitration === 'n') {
             return false;
         }
-        if(user_id()){
+        if (user_id()) {
             //user is logged in so we will not allow him to register
             return false;
         }
@@ -41,7 +44,6 @@ class RegisterRequest extends FormRequest
 
         $validateEmail = false;
         $validateUsername = false;
-
 
 
         if (!isset($inputs['username']) || !isset($inputs['email'])) {
@@ -77,7 +79,7 @@ class RegisterRequest extends FormRequest
             $rules['email'] = $rules['email'] . '|temporary_email_check';
         }
 
-        if (get_option('require_terms', 'users') == 'y') {
+        if (get_option('require_terms', 'users')) {
             $rules['terms'] = 'terms:terms_user';
             if (isset($inputs['newsletter_subscribe']) and $inputs['newsletter_subscribe']) {
                 $rules['terms'] = $rules['terms'] . ', terms_newsletter';

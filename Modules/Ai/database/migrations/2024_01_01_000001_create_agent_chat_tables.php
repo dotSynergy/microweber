@@ -4,10 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
+        if (!Schema::hasTable('agent_chats')) {
+            return;
+        }
+
+
         Schema::create('agent_chats', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -17,11 +21,11 @@ return new class extends Migration
             $table->json('metadata')->nullable(); // For storing chat settings, context, etc.
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index(['user_id', 'agent_type']);
             $table->index(['is_active', 'created_at']);
         });
-        
+
         Schema::create('agent_chat_messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('chat_id');
@@ -31,12 +35,12 @@ return new class extends Migration
             $table->string('agent_type')->nullable(); // Which agent handled this message
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('chat_id')->references('id')->on('agent_chats')->onDelete('cascade');
             $table->index(['chat_id', 'created_at']);
             $table->index(['role', 'created_at']);
         });
-        
+
         Schema::create('agent_chat_searches', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('chat_id');
@@ -46,11 +50,10 @@ return new class extends Migration
             $table->json('metadata')->nullable(); // Search params, source info, etc.
             $table->float('relevance_score')->nullable();
             $table->timestamps();
-            
-            $table->foreign('chat_id')->references('id')->on('agent_chats')->onDelete('cascade');
-            $table->foreign('message_id')->references('id')->on('agent_chat_messages')->onDelete('set null');
+
+
             $table->index(['chat_id', 'query']);
-            
+
             // Add fulltext index only for MySQL/PostgreSQL, not SQLite
             if (Schema::getConnection()->getDriverName() !== 'sqlite') {
                 $table->fullText(['query', 'results']);

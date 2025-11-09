@@ -42,11 +42,11 @@ Route::name('api.auth.')
 
         Route::post('login', \MicroweberPackages\User\Http\Controllers\Api\AuthController::class . '@login')
             ->name('login')
-            ->middleware(['allowed_ips', 'throttle:60,1']);
+            ->middleware(['allowed_ips', 'throttle:60,1','web']);
 
         Route::post('logout', \MicroweberPackages\User\Http\Controllers\Api\AuthController::class . '@logout')
             ->name('logout')
-            ->middleware(['api']);
+            ->middleware(['api','web']);
     });
 
 
@@ -151,24 +151,25 @@ Route::name('api.user.')
     ->prefix('api/user')
     ->middleware([
         'api.public',
+        'web',
         //  \MicroweberPackages\App\Http\Middleware\VerifyCsrfToken::class,
         \MicroweberPackages\App\Http\Middleware\XSS::class
     ])
-    ->namespace('\MicroweberPackages\User\Http\Controllers')
-    ->group(function () {
+     ->group(function () {
 
-        Route::post('login', 'UserLoginController@login')->name('login')->middleware(['allowed_ips', 'throttle:60,1']);
-        Route::any('logout', 'UserLoginController@logout')->name('logout')->excludedMiddleware(
+        Route::post('login', \MicroweberPackages\User\Http\Controllers\UserLoginController::class.'@login')->name('login')->middleware(['allowed_ips', 'throttle:60,1']);
+        Route::any('logout', \MicroweberPackages\User\Http\Controllers\UserLoginController::class.'@logout')->name('logout')->excludedMiddleware(
             \MicroweberPackages\App\Http\Middleware\XSS::class
         );
-        Route::post('register', 'UserRegisterController@register')->name('register')->middleware(['allowed_ips']);
+        Route::post('register', \MicroweberPackages\User\Http\Controllers\UserRegisterController::class.'@register')
+            ->name('register')->middleware(['allowed_ips']);
 
-        Route::post('/forgot-password', 'UserForgotPasswordController@send')
+        Route::post('/forgot-password', \MicroweberPackages\User\Http\Controllers\UserForgotPasswordController::class.'@send')
             ->middleware(['throttle:120,10'])
             ->name('password.email');
-        Route::post('/reset-password', 'UserForgotPasswordController@update')->name('password.update');
+        Route::post('/reset-password', \MicroweberPackages\User\Http\Controllers\UserForgotPasswordController::class.'@update')->name('password.update');
 
-        Route::post('/profile-update', 'UserProfileController@update')->name('profile.update');
+        Route::post('/profile-update', \MicroweberPackages\User\Http\Controllers\UserProfileController::class.'@update')->name('profile.update');
 
     });
 

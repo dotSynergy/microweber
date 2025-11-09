@@ -592,6 +592,13 @@ export default {
         },
 
         updateCurrentElement() {
+
+            if(!mw.top().app.liveEdit){
+                this.currentElement = null;
+                this.resetContextMenuStates();
+                return;
+            }
+
             try {
                 const activeElement = mw.top().app.liveEdit.elementHandle.getTarget()
                     || window.mw.top().app.liveEdit.getSelectedNode()

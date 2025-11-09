@@ -36,6 +36,7 @@ class UserLoginController extends Controller
     public function __construct()
     {
         //event_trigger('mw.init');
+
     }
 
     /**
@@ -50,14 +51,18 @@ class UserLoginController extends Controller
             return redirect(admin_url());
         }
 
-        $parsed = view('user::admin.auth.index');
+        $parsed = view('user::admin.auth.index')
+            ->with('errors', session()->get('errors', new \Illuminate\Support\MessageBag()));
 
         return app()->parser->process($parsed);
     }
 
     public function loginForm()
     {
-        $parsed = view('user::admin.auth.index');
+
+
+        $parsed = view('user::admin.auth.index')
+            ->with('errors', session()->get('errors', new \Illuminate\Support\MessageBag()));
 
         return app()->parser->process($parsed);
     }

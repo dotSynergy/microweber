@@ -153,7 +153,10 @@ Route::group([
 
 });
 
-Route::get('login', \MicroweberPackages\User\Http\Controllers\UserLoginController::class.'@loginForm')->name('login');
+Route::get('login',
+    \MicroweberPackages\User\Http\Controllers\UserLoginController::class.'@loginForm')
+    ->middleware('web')
+    ->name('login');
 
 
 Route::post('/csrf-validate-token', function () {

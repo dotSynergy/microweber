@@ -23,9 +23,9 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 
     // Authentication...
     if ($enableViews) {
-        Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-            ->middleware(['guest:'.config('fortify.guard')])
-            ->name('login');
+//        Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+//            ->middleware(['guest:'.config('fortify.guard')])
+//            ->name('login');
     }
 
     $limiter = config('fortify.limiters.login');

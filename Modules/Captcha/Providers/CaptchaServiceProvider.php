@@ -50,7 +50,12 @@ class CaptchaServiceProvider extends BaseModuleServiceProvider
         });
 
         Validator::extendImplicit('captcha', CaptchaValidator::class.'@validate', 'Invalid captcha answer!');
-
+        template_head(function () {
+            $js = asset('modules/captcha/js/captcha-alpine.js');
+            return <<<HTML
+             <script src="{$js}" id="mw-captcha-alpine-js"></script>
+HTML;
+        });
 
     }
 

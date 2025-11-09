@@ -16,12 +16,12 @@ class MicroweberCaptcha
         $key = trim($key);
 
         $old_array = app()->user_manager->session_get('captcha_recent');
+
         if (is_array($old_array)) {
             $old_array = array_map(function ($piece) {
                 return (string)$piece;
             }, $old_array);
         }
-
         if (is_array($old_array) and in_array($key, $old_array)) {
             $found_key = array_search($key, $old_array);
             if ($found_key !== false) {
@@ -157,18 +157,22 @@ class MicroweberCaptcha
         if ($captcha_sid != 'captcha') {
             $old_array[$captcha_sid] = $answ;
         } else {
-            $old_array[] = $answ;
+
         }
+
+        $old_array[] = $answ;
+
+
         if ($old_array) {
             $old_array = array_unique($old_array);
-            if (count($old_array) > 20) {
-                $old_array = array_slice($old_array, 0, 20);
+            if (count($old_array) > 200) {
+                $old_array = array_slice($old_array, 0, 200);
             }
         }
         app()->user_manager->session_set('captcha_recent', $old_array);
 
-        //dd($old_array);
-        // dd($old_array);
+
+
         $sess = app()->user_manager->session_set($captcha_sid, $answ);
         //   dd($captcha_sid,$old_array);
         $col1z = rand(200, 242);

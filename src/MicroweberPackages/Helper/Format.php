@@ -1072,9 +1072,13 @@ class Format
         return true;
     }
 
-    public function is_fqdn($FQDN)
+    public function is_fqdn($fqdn)
     {
-        return !empty($FQDN) && preg_match('/(?=^.{1,254}$)(^(?:(?!\d|-)[a-z0-9\-]{1,63}(?<!-)\.)+(?:[a-z]{2,})$)/i', $FQDN) > 0;
+        return !empty($fqdn) &&
+            preg_match(
+                '/^(?=.{1,254}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i',
+                $fqdn
+            );
     }
 
    public function render_item_custom_fields_data($item)

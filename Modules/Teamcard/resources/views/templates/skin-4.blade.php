@@ -14,7 +14,7 @@ description: Skin-4
     $(document).ready(function ()
     { $(".mw-big-team-bio").each(function(i){
         var len=$(this).text().trim().length;
-        if(len>100)
+        if(len>10000)
         {
             $(this).text($(this).text().substr(0,300)+'...');
         }

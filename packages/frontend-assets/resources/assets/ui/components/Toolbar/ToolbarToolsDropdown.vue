@@ -593,7 +593,7 @@ export default {
 
         updateCurrentElement() {
 
-            if(!mw.top().app.liveEdit){
+            if(!mw.top().app.liveEdit ){
                 this.currentElement = null;
                 this.resetContextMenuStates();
                 return;

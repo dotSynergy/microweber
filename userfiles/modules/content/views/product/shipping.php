@@ -12,6 +12,8 @@
                         <div class="custom-control custom-checkbox my-2">
                             <input x-model="physicalProduct" type="checkbox" class="form-check-input" id="customCheck4"
                                    name="content_data[physical_product]" value="1">
+                            <input type="hidden" class="form-check-input"
+                                   name="content_data[physical_product]" value="0">
                             <label class="custom-control-label" for="customCheck4"><?php _e("This is a physical product"); ?></label>
                         </div>
                     </div>

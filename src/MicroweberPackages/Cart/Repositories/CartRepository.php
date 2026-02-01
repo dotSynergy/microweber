@@ -4,6 +4,7 @@ namespace MicroweberPackages\Cart\Repositories;
 
 
 use MicroweberPackages\Cart\Models\Cart;
+use MicroweberPackages\Product\Models\Product;
 use MicroweberPackages\Repository\Repositories\AbstractRepository;
 
 
@@ -60,6 +61,27 @@ class CartRepository extends AbstractRepository
         }
 
         return $different_items;
+
+    }
+
+
+    public function isOnlyDigitalItems()
+    {
+
+        $sumq = $this->getCartItems();
+
+        if (is_array($sumq)) {
+            foreach ($sumq as $value) {
+
+                $product = Product::find($value['rel_id'])->getContentData();
+
+                if ($product && (isset($product['physical_product']) && $product['physical_product'] == 1)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
 
     }
 }

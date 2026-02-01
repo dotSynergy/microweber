@@ -1437,7 +1437,12 @@ class CheckoutManager
                 unset($data['shipping_gw']);
             }
         }
-        return $shipping_cost;
+
+        if (!$this->app->cart_repository->isOnlyDigitalItems()) {
+            return $shipping_cost;
+        } else {
+            return 0;
+        }
 
     }
 

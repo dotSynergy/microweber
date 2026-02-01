@@ -584,7 +584,8 @@ class CheckoutManager
                     $enc_key_hash = md5(json_encode($vkey_data));
                     $enc_key_hash = $encrypter->encrypt($enc_key_hash);
 
-                    $mw_return_url = $this->app->url_manager->api_link('checkout') . '?mw_payment_success=1&order_id=' . $place_order['id'] . '&payment_gw=' . $place_order['payment_gw'] . '&payment_verify_token=' . $place_order['payment_verify_token'] . '&_vkey_url=' . $enc_key_hash . $return_url_after;
+                    $return_to = route('checkout.finish', $place_order['id']);
+                    $mw_return_url = $this->app->url_manager->api_link('checkout') . '?mw_payment_success=1&order_id=' . $place_order['id'] . '&payment_gw=' . $place_order['payment_gw'] . '&payment_verify_token=' . $place_order['payment_verify_token'] . '&_vkey_url=' . $enc_key_hash . '&return_to=' . urlencode($return_to) . $return_url_after;
                     $vkey_data_temp = $vkey_data;
 
 
@@ -1265,8 +1266,14 @@ class CheckoutManager
         }
         unset($bits);
         $bits = explode('.', $domainb);
+        if (count($bits) < 2) {
+            return $domainb;
+        }
         $idz = count($bits);
         $idz -= 3;
+        if ($idz < 0) {
+            $idz = 0;
+        }
         if (strlen($bits[($idz + 2)]) == 2) {
             $url = $bits[$idz] . '.' . $bits[($idz + 1)] . '.' . $bits[($idz + 2)];
         } elseif (strlen($bits[($idz + 2)]) == 0) {

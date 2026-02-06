@@ -17,6 +17,7 @@ use MicroweberPackages\Order\Events\OrderIsCreating;
 use MicroweberPackages\Order\Events\OrderWasCreated;
 use MicroweberPackages\Order\Events\OrderWasPaid;
 use MicroweberPackages\Order\Models\Order;
+use MicroweberPackages\Digital\Models\DigitalDownload;
 use MicroweberPackages\Product\Models\Product;
 use MicroweberPackages\Product\Notifications\ProductOutOfStockNotification;
 use MicroweberPackages\User\Models\User;
@@ -118,6 +119,7 @@ class OrderManager
             return $data['id'];
         } elseif (isset($data['id'])) {
             $c_id = intval($data['id']);
+            DigitalDownload::where('order_id', $c_id)->delete();
             $this->app->database_manager->delete_by_id($table, $c_id);
             $this->app->event_manager->trigger('mw.cart.delete_order', $c_id);
             $this->app->cart_manager->delete_cart('order_id=' . $data['id']);
@@ -227,6 +229,16 @@ class OrderManager
 
         $markAsPaid = false;
         $orderId = isset($params['id']) ? (int) $params['id'] : 0;
+        $existingOrder = $orderId > 0 ? Order::find($orderId) : null;
+
+        $shouldRevokeDownloads = false;
+
+        if (isset($params['payment_status'])) {
+            $paymentStatus = strtolower(trim($params['payment_status']));
+            if ($paymentStatus === 'refunded') {
+                $shouldRevokeDownloads = true;
+            }
+        }
 
         if (isset($params['is_paid'])) {
             if ($params['is_paid'] === 'y') {
@@ -234,11 +246,22 @@ class OrderManager
             } elseif ($params['is_paid'] === 'n') {
                 $params['is_paid'] = 0;
             }
+            $isPaidValue = intval($params['is_paid']);
             if ($orderId > 0 && intval($params['is_paid']) === 1) {
-                $existingOrder = Order::find($orderId);
                 if ($existingOrder && intval($existingOrder->is_paid) === 0) {
                     $markAsPaid = true;
                     unset($params['is_paid']);
+                }
+            }
+            if (!isset($params['payment_status'])) {
+                if ($isPaidValue === 1) {
+                    $params['payment_status'] = 'completed';
+                } else {
+                    if ($existingOrder && intval($existingOrder->is_paid) === 1) {
+                        $params['payment_status'] = 'refunded';
+                    } else {
+                        $params['payment_status'] = 'pending';
+                    }
                 }
             }
         }
@@ -256,6 +279,10 @@ class OrderManager
         $this->app->cache_manager->delete('shop');
 
         $saved = $this->app->database_manager->save($table, $params);
+
+        if ($shouldRevokeDownloads && $orderId > 0) {
+            DigitalDownload::where('order_id', $orderId)->delete();
+        }
 
         if ($markAsPaid && $orderId > 0) {
             $this->app->checkout_manager->mark_order_as_paid($orderId);

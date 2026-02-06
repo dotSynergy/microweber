@@ -262,7 +262,8 @@ Route::group(['middleware' => 'public.web', 'namespace' => '\MicroweberPackages\
     Route::any('rss-products', 'RssController@products')->name('rss.products');
     Route::any('rss-posts', 'RssController@posts')->name('rss.posts');
 
+    Route::get('digital-download/{token}', '\MicroweberPackages\Digital\Http\Controllers\DigitalDownloadController@show')->name('digital.download');
+
     Route::any('{all}', array('as' => 'all', 'uses' => 'FrontendController@index'))->where('all', '.*');
 
 });
-

@@ -45,6 +45,9 @@ class ProductRequest extends ContentSaveRequest
         'content_data.depth' => 'max:200',
         'content_data.label' => 'max:200',
         'content_data.label-color' => 'max:200',
+        'content_data.digital_file' => 'max:2000',
+        'content_data.digital_max_downloads' => 'nullable|integer|min:0',
+        'content_data.digital_expires_days' => 'nullable|integer|min:0',
     ];
 
 }

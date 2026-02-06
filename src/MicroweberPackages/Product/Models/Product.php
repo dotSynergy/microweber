@@ -91,7 +91,10 @@ class Product extends Content
         'weight' => '',
         'width' => '',
         'height' => '',
-        'depth' => ''
+        'depth' => '',
+        'digital_file' => '',
+        'digital_max_downloads' => '',
+        'digital_expires_days' => ''
     ];
 
     public $sortable = [

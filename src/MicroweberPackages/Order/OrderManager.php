@@ -225,11 +225,21 @@ class OrderManager
             $params = parse_params($params);
         }
 
+        $markAsPaid = false;
+        $orderId = isset($params['id']) ? (int) $params['id'] : 0;
+
         if (isset($params['is_paid'])) {
             if ($params['is_paid'] === 'y') {
                 $params['is_paid'] = 1;
             } elseif ($params['is_paid'] === 'n') {
                 $params['is_paid'] = 0;
+            }
+            if ($orderId > 0 && intval($params['is_paid']) === 1) {
+                $existingOrder = Order::find($orderId);
+                if ($existingOrder && intval($existingOrder->is_paid) === 0) {
+                    $markAsPaid = true;
+                    unset($params['is_paid']);
+                }
             }
         }
 
@@ -245,7 +255,13 @@ class OrderManager
         $this->app->cache_manager->delete('cart');
         $this->app->cache_manager->delete('shop');
 
-        return $this->app->database_manager->save($table, $params);
+        $saved = $this->app->database_manager->save($table, $params);
+
+        if ($markAsPaid && $orderId > 0) {
+            $this->app->checkout_manager->mark_order_as_paid($orderId);
+        }
+
+        return $saved;
     }
 
     public function export_orders()

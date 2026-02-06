@@ -75,3 +75,34 @@ if (isset($params['content-id'])) {
             <?php $i++; endforeach; ?>
     </div>
 <?php endif; ?>
+
+<?php
+$digitalLinks = [];
+if (is_logged() && isset($for_id) && $for_id) {
+    $downloads = \MicroweberPackages\Digital\Models\DigitalDownload::query()
+        ->where('product_id', (int) $for_id)
+        ->where('user_id', user_id())
+        ->whereHas('order', function ($query) {
+            $query->where('is_paid', 1);
+        })
+        ->orderBy('id', 'desc')
+        ->get();
+
+    foreach ($downloads as $download) {
+        if ($download->isAvailable()) {
+            $digitalLinks[] = route('digital.download', ['token' => $download->token]);
+        }
+    }
+}
+?>
+
+<?php if (!empty($digitalLinks)): ?>
+    <div class="mw-digital-downloads mt-3">
+        <strong><?php _e("Your download"); ?></strong>
+        <ul class="mb-0 mt-2">
+            <?php foreach ($digitalLinks as $digitalLink): ?>
+                <li><a href="<?php print $digitalLink; ?>"><?php _e("Download file"); ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

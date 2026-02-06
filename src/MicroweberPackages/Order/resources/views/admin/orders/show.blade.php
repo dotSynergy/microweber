@@ -304,6 +304,40 @@
                             </div>
                         </div>
 
+                        <?php
+                        $digitalDownloads = \MicroweberPackages\Digital\Models\DigitalDownload::with('product')
+                            ->where('order_id', $order['id'])
+                            ->get();
+                        ?>
+                        <?php if ($digitalDownloads->count() > 0): ?>
+                            <div class="mb-3">
+                                <label class="font-weight-bold"><?php _e("Digital downloads"); ?></label>
+                                <div class="text-muted">
+                                    <?php foreach ($digitalDownloads as $download): ?>
+                                        <?php
+                                        $productTitle = $download->product ? $download->product->title : _e('Product', true);
+                                        ?>
+                                        <div>
+                                            <?php print $productTitle; ?>:
+                                            <?php _e("Downloads"); ?> <?php print (int) $download->download_count; ?>
+                                            <?php if (!empty($download->max_downloads)): ?>
+                                                / <?php print (int) $download->max_downloads; ?>
+                                            <?php else: ?>
+                                                / <?php _e("Unlimited"); ?>
+                                            <?php endif; ?>
+                                            &nbsp;•&nbsp;
+                                            <?php _e("Expires"); ?>:
+                                            <?php if (!empty($download->expires_at)): ?>
+                                                <?php print $download->expires_at->format('Y-m-d'); ?>
+                                            <?php else: ?>
+                                                <?php _e("Never"); ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if (isset($order['created_at']) and $order['created_at'] != ''): ?>
                         <div class="mb-1">
                             <label class="font-weight-bold"><?php _e("Created at"); ?>: <?php print date('M d, Y H:i', strtotime($order['created_at'])); ?></label>
@@ -397,11 +431,6 @@
                             <?php if (isset($order['payer_id']) and $order['payer_id'] != ''): ?>
                             <div class="mb-3">
                                     <?php _e("Payer ID"); ?>: <?php print $order['payer_id']; ?>
-                            </div>
-                            <?php endif; ?>
-                            <?php if (isset($order['payment_status']) and $order['payment_status'] != ''): ?>
-                            <div class="mb-3">
-                                    <?php _e("Payment status"); ?>: <?php print $order['payment_status']; ?>
                             </div>
                             <?php endif; ?>
                         </div>

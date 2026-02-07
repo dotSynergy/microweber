@@ -33,7 +33,20 @@ description: default
             $contentTitle = isset($content['title']) ? $content['title'] : '';
             $contentDescription = isset($content['description']) ? $content['description'] : '';
             $contentImage = isset($content['image']) ? $content['image'] : '';
-            $contentButtonLink = isset($content['buttonLink']) ? json_decode($content['buttonLink'])->url : '';
+            $contentButtonLink = '';
+            if (isset($content['buttonLink'])) {
+                $buttonLinkValue = $content['buttonLink'];
+                if (is_string($buttonLinkValue)) {
+                    $decoded = json_decode($buttonLinkValue);
+                    if ($decoded && isset($decoded->url)) {
+                        $contentButtonLink = $decoded->url;
+                    }
+                } elseif (is_object($buttonLinkValue) && isset($buttonLinkValue->url)) {
+                    $contentButtonLink = $buttonLinkValue->url;
+                } elseif (is_array($buttonLinkValue) && isset($buttonLinkValue['url'])) {
+                    $contentButtonLink = $buttonLinkValue['url'];
+                }
+            }
             $contentButtonText = isset($content['buttonText']) ? $content['buttonText'] : '';
             ?>
             <div class="col-md-<?php echo $colMdCalculate; ?> py-md-0 py-3 text-<?php echo $align; ?>">

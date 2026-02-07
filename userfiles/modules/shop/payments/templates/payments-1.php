@@ -16,6 +16,11 @@ description: Payments 1
         <div class="row">
             <div class="col-xs-12 col-md-6 col-md-offset-6">
                 <h4 class="edit nodrop" field="checkout_payment_information_title" rel="global" rel_id="<?php print $params['id'] ?>"><?php _e("Payment method"); ?></h4>
+                <?php if (!empty($is_free_order)): ?>
+                    <div class="alert alert-success mt-2">
+                        <?php _e("No payment is required for this order."); ?>
+                    </div>
+                <?php endif; ?>
                 <hr/>
             </div>
         </div>
@@ -30,6 +35,7 @@ description: Payments 1
                                 <div class="wrap-valign">
                                     <div class="wrap-valign-inner">
                                         <input type="radio" id="option-<?php print $count; ?>" <?php if ($count == 1): ?> checked="checked" <?php endif; ?>
+                                               <?php if (!empty($is_free_order)): ?> disabled="disabled" <?php endif; ?>
                                                value="<?php print  $payment_option['gw_file']; ?>"
                                                name="payment_gw"/>
                                         <label for="option-<?php print $count; ?>"><?php print  _e($payment_option['name']); ?></label>
@@ -41,11 +47,13 @@ description: Payments 1
                     </ul>
                 </div>
                 <div class="col-xs-12 col-md-6 m-b-10">
-                    <div id="mw-payment-gateway-selected-<?php print $params['id']; ?>">
-                        <?php if (isset($payment_options[0])): ?>
-                            <module type="<?php print $payment_options[0]['gw_file'] ?>"/>
-                        <?php endif; ?>
-                    </div>
+                    <?php if (empty($is_free_order)): ?>
+                        <div id="mw-payment-gateway-selected-<?php print $params['id']; ?>">
+                            <?php if (isset($payment_options[0])): ?>
+                                <module type="<?php print $payment_options[0]['gw_file'] ?>"/>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                     <hr/>
                 </div>
             </div>

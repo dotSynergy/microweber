@@ -43,13 +43,18 @@ description: Payments 1
                        <div class="edit nodrop mt-2" field="checkout_payment_information_title" rel="global"
                             rel_id="<?php print $params['id'] ?>">
                            <label class="form-label"><?php _e("Choose Payment Method"); ?></label>
+                           <?php if (!empty($is_free_order)): ?>
+                               <div class="alert alert-success mt-2">
+                                   <?php _e("No payment is required for this order."); ?>
+                               </div>
+                           <?php endif; ?>
                            <small class="text-muted d-block mb-2"><?php _e("Choose from the available payment methods to pay this order."); ?></small>
                            <div class="text-center my-4 d-sm-inline-block d-md-flex flex-wrap">
                                <?php $count = 0;
                                foreach ($payment_options as $payment_option) : $count++; ?>
 
                                    <label class="btn btn-outline-primary btn-lg <?php if($count == 1) { print 'btn-primary';}   ?>  custom-control custom-radio mw-payment-gateway mw-payment-gateway-<?php print $params['id']; ?> mx-1">
-                                       <input style="display: none;" value="<?php print  $payment_option['gw_file']; ?>" name="payment_gw" type="radio" class="form-check-input" <?php if($count == 1) { print 'checked';} ?>>
+                                       <input style="display: none;" value="<?php print  $payment_option['gw_file']; ?>" name="payment_gw" type="radio" class="form-check-input" <?php if($count == 1) { print 'checked';} ?> <?php if (!empty($is_free_order)): ?> disabled="disabled" <?php endif; ?>>
                                        <span for="customRadio1"><?php _e($payment_option['name']); ?></span>
                                    </label>
                                <?php endforeach; ?>
@@ -61,11 +66,13 @@ description: Payments 1
                            <label class="form-label"><?php _e("Finish your order"); ?></label>
                            <small class="text-muted d-block mb-2"><?php _e("Please full the fields of the selected payment method below, if it has."); ?></small>
 
-                           <div class="mx-3 mt-4 mb-6" id="mw-payment-gateway-selected-<?php print $params['id']; ?>">
-                               <?php if (isset($payment_options[0])): ?>
-                                   <module type="<?php print $payment_options[0]['gw_file'] ?>"/>
-                               <?php endif; ?>
-                           </div>
+                           <?php if (empty($is_free_order)): ?>
+                               <div class="mx-3 mt-4 mb-6" id="mw-payment-gateway-selected-<?php print $params['id']; ?>">
+                                   <?php if (isset($payment_options[0])): ?>
+                                       <module type="<?php print $payment_options[0]['gw_file'] ?>"/>
+                                   <?php endif; ?>
+                               </div>
+                           <?php endif; ?>
                            <div class="mw-checkout-response"></div>
 
                            <div class="mt-5">

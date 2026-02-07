@@ -1,6 +1,8 @@
 <?php
 $payment_options = payment_options();
 $enable_payment_options_count = 0;
+$cart_total = cart_total();
+$is_free_order = ($cart_total !== null && floatval($cart_total) <= 0);
 ?>
 
 

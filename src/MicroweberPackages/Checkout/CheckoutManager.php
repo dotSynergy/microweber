@@ -60,6 +60,7 @@ class CheckoutManager
         $cart['for_checkout'] = true;
         //  $cart['limit'] = 1;
         $mw_process_payment = true;
+        $is_free_order = false;
         $mw_process_payment_success = false;
         $mw_process_payment_failed = false;
         if (isset($_REQUEST['mw_payment_success']) or isset($_REQUEST['mw_payment_failure'])) {
@@ -446,6 +447,15 @@ class CheckoutManager
                 $tax = 0;
             }
 
+            if ($amount !== null && floatval($amount) <= 0) {
+                $is_free_order = true;
+                $data['payment_gw'] = 'none';
+                $place_order['payment_gw'] = 'none';
+                if (isset($checkout_errors['payment_gw'])) {
+                    unset($checkout_errors['payment_gw']);
+                }
+            }
+
             if (!empty($checkout_errors)) {
                 return array('error' => $checkout_errors);
             }
@@ -641,7 +651,12 @@ class CheckoutManager
 
                 } else {
                     $place_order['order_completed'] = 1;
-                    $place_order['is_paid'] = 0;
+                    if ($is_free_order) {
+                        $place_order['is_paid'] = 1;
+                        $place_order['payment_type'] = 'free';
+                    } else {
+                        $place_order['is_paid'] = 0;
+                    }
                     $place_order['success'] = 'Your order has been placed successfully!';
                 }
 

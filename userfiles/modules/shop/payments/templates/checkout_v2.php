@@ -58,6 +58,11 @@ if (isset($params['selected_provider'])) {
             <div class="col-xs-12 col-md-6 col-md-offset-6 mb-3">
                 <h4 class="mb-1" field="checkout_payment_information_title" rel="global" rel_id="<?php print $params['id'] ?>"><?php _e("Payment method"); ?></h4>
                 <small class="text-muted d-block mb-2"> <?php _e("Select payment method"); ?></small>
+                <?php if (!empty($is_free_order)): ?>
+                    <div class="alert alert-success mt-2">
+                        <?php _e("No payment is required for this order."); ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -69,7 +74,7 @@ if (isset($params['selected_provider'])) {
 
                         <label class="mx-2 mb-0 d-flex align-self-center" for="payment-option-<?php print $count; ?>">
 
-                        <input type="radio" onchange="showPaymentModule('<?php echo md5($payment_option['gw_file']); ?>','<?php echo $payment_option['gw_file']; ?>');" id="payment-option-<?php print $count; ?>" value="<?php echo $payment_option['gw_file']; ?>" <?php if ($selected_payment_gateway == $payment_option['gw_file']): ?> checked="checked" <?php endif; ?> name="payment_gw" />
+                        <input type="radio" onchange="showPaymentModule('<?php echo md5($payment_option['gw_file']); ?>','<?php echo $payment_option['gw_file']; ?>');" id="payment-option-<?php print $count; ?>" value="<?php echo $payment_option['gw_file']; ?>" <?php if ($selected_payment_gateway == $payment_option['gw_file']): ?> checked="checked" <?php endif; ?> name="payment_gw" <?php if (!empty($is_free_order)): ?> disabled="disabled" <?php endif; ?> />
 
                             <!--<img src="<?php /*echo $payment_option['icon']; */?>" style="width:32px;" />
 -->
@@ -85,7 +90,7 @@ if (isset($params['selected_provider'])) {
            </div>
     <?php endif; ?>
 
-    <?php if (is_module($selected_payment_gateway)): ?>
+    <?php if (is_module($selected_payment_gateway) && empty($is_free_order)): ?>
         <script type="text/javascript">
             showPaymentModule('<?php echo md5($selected_payment_gateway); ?>','<?php echo $selected_payment_gateway ?>');
         </script>

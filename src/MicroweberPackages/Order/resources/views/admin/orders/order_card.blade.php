@@ -196,7 +196,10 @@ $item = $order->toArray();
                     <div>
                         <small class="text-muted"><?php _e("Payment method"); ?></small>
                         <p>
-                            <?php   $paymentGatewayModuleInfo = module_info($order['payment_gw']); ?>
+                            <?php $paymentGatewayModuleInfo = null; ?>
+                            <?php if (isset($order['payment_gw']) && $order['payment_gw']): ?>
+                                <?php $paymentGatewayModuleInfo = module_info($order['payment_gw']); ?>
+                            <?php endif; ?>
                             <?php if($paymentGatewayModuleInfo):  ?>
                                 <?php if (isset($paymentGatewayModuleInfo['settings']['icon_class'])): ?>
                                     <i class="<?php echo $paymentGatewayModuleInfo['settings']['icon_class'];?>" style="font-size:23px"></i>
@@ -206,6 +209,14 @@ $item = $order->toArray();
                                     <?php endif; ?>
                                 <?php endif; ?>
                                 <?php echo $paymentGatewayModuleInfo['name'];?>
+                            <?php else: ?>
+                                <?php if ((isset($order['payment_type']) && $order['payment_type'] === 'free') || (isset($order['payment_gw']) && $order['payment_gw'] === 'none') || (isset($order['amount']) && floatval($order['amount']) <= 0)): ?>
+                                    <?php _e("No payment required"); ?>
+                                <?php elseif (isset($order['payment_gw']) && $order['payment_gw']): ?>
+                                    <?php echo $order['payment_gw']; ?>
+                                <?php else: ?>
+                                    N/A
+                                <?php endif; ?>
                             <?php endif; ?>
                         </p>
                     </div>

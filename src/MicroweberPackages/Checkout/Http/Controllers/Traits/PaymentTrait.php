@@ -61,13 +61,21 @@ trait PaymentTrait {
         session_set('checkout', $checkoutData);
 
         if (empty($checkoutData['payment_gw'])) {
-            // check if we have any payment options enabled
-            $payment_options = payment_options();
-            if ($payment_options) {
-                session_set('errors', [
-                    'payment_errors' => ['error' => _e('Must select payment method', true)]
-                ]);
-                return redirect(route('checkout.payment_method'));
+            $total = cart_total();
+            if ($total !== null && floatval($total) <= 0) {
+                // Free orders (e.g., 100% coupon) do not require a payment method
+                $checkoutData['payment_gw'] = 'none';
+                session_set('checkout_v2', $checkoutData);
+                session_set('checkout', $checkoutData);
+            } else {
+                // check if we have any payment options enabled
+                $payment_options = payment_options();
+                if ($payment_options) {
+                    session_set('errors', [
+                        'payment_errors' => ['error' => _e('Must select payment method', true)]
+                    ]);
+                    return redirect(route('checkout.payment_method'));
+                }
             }
         }
 

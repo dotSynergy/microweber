@@ -12,10 +12,24 @@
 
         <form action="{{ route('admin.order.update', $order['id']) }}" method="POST">
 
-            <label class="form-label font-weight-bold mb-3"><?php _e('Shipping details'); ?></label>
-            <div class="card mb-5 ">
-                <div class="card-body">
-                    <div class="row py-0">
+            <?php
+            $hasShippingDetails =
+                !empty($order['shipping_service']) ||
+                !empty($order['address']) ||
+                !empty($order['address2']) ||
+                !empty($order['country']) ||
+                !empty($order['city']) ||
+                !empty($order['state']) ||
+                !empty($order['zip']) ||
+                !empty($order['phone']) ||
+                !empty($order['other_info']);
+            ?>
+
+            <?php if ($hasShippingDetails): ?>
+                <label class="form-label font-weight-bold mb-3"><?php _e('Shipping details'); ?></label>
+                <div class="card mb-5 ">
+                    <div class="card-body">
+                        <div class="row py-0">
 
                         <?php
                         if ($order['shipping_service'] == 'shop/shipping/gateways/country'):
@@ -67,9 +81,10 @@
                             <button type="submit" class="btn btn-outline-primary btn-sm "> <?php _e("Save") ?></button>
                         </div>
                         <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </form>
     </div>
 

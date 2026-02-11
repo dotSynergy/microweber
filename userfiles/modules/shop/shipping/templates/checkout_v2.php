@@ -29,13 +29,18 @@ if (isset($params['selected_provider'])) {
 <div class="mw-shipping-select">
     <div  class="my-3">
         <h4 class="mt-5"><?php _e("Shipping method"); ?></h4>
+        <?php if (!empty($is_digital_order)): ?>
+            <div class="alert alert-success mb-2">
+                <?php _e("No shipping is required for this order, it will be delivered digitally to your email."); ?>
+            </div>
+        <?php endif; ?>
         <small class="text-muted d-block mb-2"> <?php _e("Choose a shipping method:"); ?></small>
         <?php $count = 0;
          foreach ($shipping_options as $item) : $count++; ?>
                 <div class="form-group">
                     <div class="custom-control custom-radio checkout-v2-radio pl-0 pt-3">
                         <label class="form-label d-flex align-items-center">
-                        <input class="mr-2 ms-2" type="radio" onchange="showShippingModule('<?php echo md5($item['module_base']); ?>','<?php echo $item['module_base']; ?>');" name="shipping_gw" value="<?php print  $item['module_base']; ?>" <?php if ($selected_shipping_gateway == $item['module_base']): ?> checked="checked" <?php endif; ?>">
+                        <input class="mr-2 ms-2" type="radio" onchange="showShippingModule('<?php echo md5($item['module_base']); ?>','<?php echo $item['module_base']; ?>');" name="shipping_gw" value="<?php print  $item['module_base']; ?>" <?php if ($selected_shipping_gateway == $item['module_base']): ?> checked="checked" <?php endif; ?> <?php if (!empty($is_digital_order)): ?> disabled="disabled" <?php endif; ?>>
 
                             <?php
                             if (isset($item['settings']['icon_class'])):
@@ -63,11 +68,10 @@ if (isset($params['selected_provider'])) {
             <?php endforeach; ?>
     </div>
 
-    <?php if (is_module($selected_shipping_gateway)): ?>
+    <?php if (is_module($selected_shipping_gateway) && empty($is_digital_order)): ?>
     <script type="text/javascript">
         showShippingModule('<?php echo md5($selected_shipping_gateway); ?>','<?php echo $selected_shipping_gateway ?>');
     </script>
     <?php endif; ?>
 </div>
-
 

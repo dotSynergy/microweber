@@ -94,6 +94,11 @@ if ($template != false and strtolower($template) != 'none') {
 <?php $cart_show_payments = get_option('data-show-payments', $params['id']); ?>
 <?php $cart_show_shipping = get_option('data-show-shipping', $params['id']); ?>
 <?php
+if (app()->cart_repository->isOnlyDigitalItems()) {
+    $cart_show_shipping = 'n';
+}
+?>
+<?php
 if (is_file($template_file)) {
     include($template_file);
 }

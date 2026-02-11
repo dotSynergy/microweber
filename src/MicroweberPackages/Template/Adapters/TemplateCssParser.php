@@ -148,12 +148,22 @@ class TemplateCssParser
             mkdir_recursive($dn);
         }
 
+        $templateBasePath = '';
+        $templateBaseUrl = '';
+        if ($templateFolder) {
+            $templateBasePath = normalize_path(templates_dir() . $templateFolder . '/', false);
+            $templateBaseUrl = templates_url() . $templateFolder . '/';
+        }
+
         $parserOptions = array(
             'sourceMap' => true,
             'compress' => true,
             'sourceMapWriteTo' => $outputFileLocations['output']['fileMap'],
             'sourceMapURL' => $outputFileLocations['output']['fileMapUrl'],
-            'sourceMapBasepath' => $outputFileLocations['lessDirPath'],
+            // Strip absolute template path from source file entries.
+            'sourceMapBasepath' => $templateBasePath,
+            // Emit resolvable URLs for sources instead of filesystem paths.
+            'sourceMapRootpath' => $templateBaseUrl,
         );
 
 
@@ -260,13 +270,27 @@ class TemplateCssParser
         }
 
 
+        $templateBasePath = '';
+        $templateBaseUrl = '';
+        if ($templateFolder) {
+            $templateBasePath = normalize_path(templates_dir() . $templateFolder . '/', false);
+            $templateBaseUrl = templates_url() . $templateFolder . '/';
+        }
+
         $parserOptions = array(
             'sourceMap' => true,
             'compress' => true,
             'sourceMapWriteTo' => $outputFileLocations['output']['fileMap'],
             'sourceMapURL' => $outputFileLocations['output']['fileMapUrl'],
-            'sourceMapBasepath' => $outputFileLocations['lessDirPath'],
+            // Strip absolute template path from source file entries.
+            'sourceMapBasepath' => $templateBasePath,
+            // Emit resolvable URLs for sources instead of filesystem paths.
+            'sourceMapRootpath' => $templateBaseUrl,
         );
+
+        \Illuminate\Support\Facades\Log::info('Compiled css', [
+            $templateBasePath, $templateBaseUrl
+        ]);
 
         $cssContent = '';
         try {

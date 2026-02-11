@@ -3,6 +3,7 @@
 //$shipping_options = mw('shop\shipping\shipping_api')->get_active();
 $shipping_options =app()->shipping_manager->getShippingModules();
 $selected_shipping_gateway= $this->app->user_manager->session_get('shipping_provider');
+$is_digital_order = app()->cart_repository->isOnlyDigitalItems();
 
 if(!$selected_shipping_gateway and $shipping_options and isset($shipping_options[0]) and  isset($shipping_options[0]['module_base'])){
     $selected_shipping_gateway = $shipping_options[0]['module_base'];

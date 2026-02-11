@@ -163,11 +163,24 @@
             </div>
         </div>
 
+        <?php
+        $hasShippingDetails =
+            !empty($order['shipping_service']) ||
+            !empty($order['address']) ||
+            !empty($order['address2']) ||
+            !empty($order['country']) ||
+            !empty($order['city']) ||
+            !empty($order['state']) ||
+            !empty($order['zip']) ||
+            !empty($order['phone']) ||
+            !empty($order['other_info']);
+        ?>
 
-        <label class="form-label font-weight-bold mb-3"><?php _e('Shipping details'); ?></label>
-        <div class="card mb-5 ">
-            <div class="card-body">
-                <div class="row py-0">
+        <?php if ($hasShippingDetails): ?>
+            <label class="form-label font-weight-bold mb-3"><?php _e('Shipping details'); ?></label>
+            <div class="card mb-5 ">
+                <div class="card-body">
+                    <div class="row py-0">
 
                     <?php
                     if ($order['shipping_service'] == 'shop/shipping/gateways/country'):
@@ -269,9 +282,10 @@
                             class="btn btn-outline-primary btn-sm "> <?php _e("Edit") ?></a>
                     </div>
                     <?php endif; ?>
+                    </div>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <div class="row p-0 align-items-center">
             <div class="col-md-6 h-100 pe-md-3 pe-0">

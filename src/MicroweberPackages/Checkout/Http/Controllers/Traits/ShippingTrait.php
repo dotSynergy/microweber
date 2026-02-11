@@ -99,6 +99,10 @@ trait ShippingTrait {
 
     private function _validateShippingMethod()
     {
+        if (app()->cart_repository->isOnlyDigitalItems()) {
+            return ['valid' => true, 'errors' => []];
+        }
+
         $checkout_session = session_get('checkout_v2');
         if (empty($checkout_session['shipping_gw'])) {
             return ['valid' => false, 'errors' => [

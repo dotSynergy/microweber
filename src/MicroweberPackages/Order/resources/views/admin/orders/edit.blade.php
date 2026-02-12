@@ -21,7 +21,6 @@
                 !empty($order['city']) ||
                 !empty($order['state']) ||
                 !empty($order['zip']) ||
-                !empty($order['phone']) ||
                 !empty($order['other_info']);
             ?>
 
